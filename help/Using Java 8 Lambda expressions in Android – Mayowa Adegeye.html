@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!-- saved from url=(0082)https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/ -->
+<html class=" js no-touch cssanimations csstransitions" lang="en"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Using Java 8 Lambda expressions in Android – Mayowa Adegeye</title>
+<meta name="description" content="A guide on using Java 8 lambda expressions in Android">
+<meta name="keywords" content="Java 8, Lambda Expressions">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mayojava.github.io/images/">
+<meta name="twitter:title" content="Using Java 8 Lambda expressions in Android">
+<meta name="twitter:description" content="A guide on using Java 8 lambda expressions in Android">
+<meta name="twitter:creator" content="@mayojava">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using Java 8 Lambda expressions in Android">
+<meta property="og:description" content="A guide on using Java 8 lambda expressions in Android">
+<meta property="og:url" content="https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/">
+<meta property="og:site_name" content="Mayowa Adegeye">
+
+
+
+
+
+<link rel="canonical" href="https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/">
+<link href="https://mayojava.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="Mayowa Adegeye Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/main.css">
+<!-- Webfonts -->
+<link href="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/css" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<div class="fit-vids-style">­<style>               .fluid-width-video-wrapper {                 width: 100%;                              position: relative;                       padding: 0;                            }                                                                                   .fluid-width-video-wrapper iframe,        .fluid-width-video-wrapper object,        .fluid-width-video-wrapper embed {           position: absolute;                       top: 0;                                   left: 0;                                  width: 100%;                              height: 100%;                          }                                       </style></div><script type="text/javascript" async="" src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/linkid.js"></script><script async="" src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/analytics.js"></script><script src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://mayojava.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://mayojava.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://mayojava.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://mayojava.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://mayojava.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://mayojava.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+<script type="text/javascript" async="" src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/embed.js"></script><script async="" type="text/javascript" src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/count.js"></script><script src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/alfie.f51946af45e0b561c60f768335c9eb79.js" async="" charset="UTF-8"></script></head>
+
+<body id="post">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://mayojava.github.io/">Home</a></li>
+		<li>
+			<a href="https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/#">About</a>
+			<ul class="dl-submenu"><li class="dl-back"><a href="https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/#">back</a></li>
+				<li>
+					<img src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/avatar.jpg" alt="Mayowa Adegeye photo" class="author-photo">
+					<h4>Mayowa Adegeye</h4>
+					<p>Android Developer, Back-End REST API Developer [PHP &amp; NodeJS] and Algorithm Enthusiast.</p>
+				</li>
+				<li><a href="https://mayojava.github.io/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:adegeyemayowa@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				<li>
+					<a href="https://twitter.com/mayojava"><i class="fa fa-fw fa-twitter"></i> Twitter</a>
+				</li>
+				
+				
+				
+				<li>
+					<a href="https://github.com/mayojava"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/#">Posts</a>
+			<ul class="dl-submenu"><li class="dl-back"><a href="https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/#">back</a></li>
+				<li><a href="https://mayojava.github.io/posts/">All Posts</a></li>
+				<li><a href="https://mayojava.github.io/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/" rel="bookmark" title="Using Java 8 Lambda expressions in Android">Using Java 8 Lambda expressions in Android</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2016-06-06T00:00:00+01:00">June 06, 2016</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~2 minutes
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h2 id="what-are-lambda-expressions">What are Lambda expressions</h2>
+
+<p>Lambda Expressions are one of the most important features added to Java 8. Prior
+to Lambda Expressions, implementing functional interfaces i.e interfaces with
+only one abstract method has been done using syntax that may seem cumbersome and
+unclear. In cases like this, what we are trying to do is pass a functionality
+as an argument to a method, such as what happens when a button is clicked. Lambda
+expressions enables you to do just that, in a way that is much more compact and
+clear. In android for example, lambdas can replace anonymous inner
+class when providing event listeners.</p>
+
+<h2 id="syntax-of-lambda-expressions">Syntax of Lambda Expressions</h2>
+
+<p>A lambda expression consist of the following:</p>
+
+<ul>
+  <li>A comma separated list of formal parameters enclosed in parentheses. The data
+types of the parameters in a lambda expression can be omitted. Also the
+parenthesis can be omitted if there is only one parameter. For example:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">TextView</span> <span class="n">textView</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">text_view</span><span class="o">);</span>
+<span class="n">textView</span><span class="o">.</span><span class="na">setOnLongClickListener</span><span class="o">(</span><span class="n">v</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Long Click"</span><span class="o">));</span></code></pre></figure>
+
+<ul>
+  <li>The arrow token <code class="highlighter-rouge">-&gt;</code></li>
+  <li>A body which contains a single expression or a statement block. If a single
+expression is specified, the java runtime evaluates the expression and then return
+its value. To specify a statement block, enclose statements in curly braces <code class="highlighter-rouge">"{}"</code></li>
+</ul>
+
+<!-- more -->
+
+<h2 id="lambda-expressions-in-android">Lambda Expressions in Android</h2>
+<p>To use Lambda Expressions and other Java 8 features in Android, you need to use
+the new Jack toolchain. Open your module level <code class="highlighter-rouge">build.gradle</code> file and add the
+following:</p>
+
+<figure class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">android</span> <span class="o">{</span>
+  <span class="o">...</span>
+  <span class="n">defaultConfig</span> <span class="o">{</span>
+    <span class="o">...</span>
+    <span class="n">jackOptions</span> <span class="o">{</span>
+      <span class="n">enabled</span> <span class="kc">true</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  <span class="n">compileOptions</span> <span class="o">{</span>
+    <span class="n">sourceCompatibility</span> <span class="n">JavaVersion</span><span class="o">.</span><span class="na">VERSION_1_8</span>
+    <span class="n">targetCompatibility</span> <span class="n">JavaVersion</span><span class="o">.</span><span class="na">VERSION_1_8</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>sync your <code class="highlighter-rouge">build.gradle</code> file and if you are having any issue with build tools,
+you may need to update <code class="highlighter-rouge">buildToolsVersion</code> in your <code class="highlighter-rouge">build.gradle</code> file to <code class="highlighter-rouge">"24rc4"</code>
+or just download the latest Android SDK Build-tools from the SDK Manager, under
+the Tools (Preview channel).</p>
+
+<p><img src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/sdk_manager_build_tool.png" alt="Alt sdk manager build tools"></p>
+
+<h2 id="example">Example</h2>
+<p>Adding a click listener to a button</p>
+
+<p><strong>without lambda expression</strong></p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Button</span> <span class="n">button</span> <span class="o">=</span> <span class="o">(</span><span class="n">Button</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">button</span><span class="o">);</span>
+<span class="n">button</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">new</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">View</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">"Button clicked"</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_LONG</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+<p><strong>with lambda expressions</strong>
+It is as simple as:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Button</span> <span class="n">button</span> <span class="o">=</span> <span class="o">(</span><span class="n">Button</span><span class="o">)</span><span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">button</span><span class="o">);</span>
+<span class="n">button</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="n">v</span> <span class="o">-&gt;</span> <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="s">"Button clicked"</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_LONG</span><span class="o">).</span><span class="na">show</span><span class="o">());</span></code></pre></figure>
+
+<p>As we can see above, using lambda expressions makes implementing a functional
+interface clearer and compact. Standard functional interfaces can be found in
+the <code class="highlighter-rouge">java.util.function</code> package [included in Java 8]. These interfaces can be
+used as target types for lambda expressions and method references.</p>
+
+<p>Another way to have Java 8 features in your Android app is using the
+RetroLambda plugin. You can check out the RetroLambda github repo <a href="https://github.com/evant/gradle-retrolambda">here</a>.</p>
+
+<h2 id="references">References</h2>
+<p><a href="https://developer.android.com/preview/j8-jack.html#configuration">https://developer.android.com/preview/j8-jack.html#configuration</a>
+<a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html">https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html</a></p>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="https://mayojava.github.io/tags/#Java 8" title="Pages tagged Java 8" class="tag"><span class="term">Java 8</span></a><a href="https://mayojava.github.io/tags/#Lambda Expressions" title="Pages tagged Lambda Expressions" class="tag"><span class="term">Lambda Expressions</span></a></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://mayojava.github.io/android/java/using-java8-lambda-expressions-in-android/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    <section id="disqus_thread"><iframe id="dsq-app1" name="dsq-app1" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/saved_resource.html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 659px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe><iframe id="indicator-north" name="indicator-north" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" style="width: 640px !important; border: none !important; overflow: hidden !important; top: 0px !important; min-width: 640px !important; max-width: 640px !important; position: fixed !important; z-index: 2147483646 !important; height: 18px !important; min-height: 18px !important; max-height: 18px !important; display: none !important;" src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/saved_resource(1).html"></iframe><iframe id="indicator-south" name="indicator-south" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" style="width: 640px !important; border: none !important; overflow: hidden !important; bottom: 0px !important; min-width: 640px !important; max-width: 640px !important; position: fixed !important; z-index: 2147483646 !important; height: 18px !important; min-height: 18px !important; max-height: 18px !important; display: none !important;" src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/saved_resource(2).html"></iframe></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://mayojava.github.io/android/android-ui-instrumentation-test-with-espresso/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://mayojava.github.io/android/animated-vector-drawable-xml-bundle/" title="AnimatedVectorDrawable XML Bundles">AnimatedVectorDrawable XML Bundles</a></h3>
+      <p>Creating AnimatedVectorDrawable XML resource using a single XML file <a href="https://mayojava.github.io/android/animated-vector-drawable-xml-bundle/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://mayojava.github.io/android/android-support-annotations/" title="Android support Annotations">Android support Annotations</a></h4>
+        <span>Published on August 22, 2016</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://mayojava.github.io/android/bottom-sheets-android/" title="Bottom Sheets in Android">Bottom Sheets in Android</a></h4>
+        <span>Published on June 29, 2016</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>© 2016 Mayowa Adegeye. </span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://mayojava.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/scripts.min.js"></script>
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78289179-1', 'auto');  
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'adegeyemayowa'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the &lt;a href="http://disqus.com/?ref_noscript"&gt;comments powered by Disqus.&lt;/a&gt;</noscript>
+    
+	        
+
+
+
+<iframe style="display: none;" src="./Using Java 8 Lambda expressions in Android – Mayowa Adegeye_files/saved_resource(3).html"></iframe></body></html>
