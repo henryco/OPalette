@@ -9,10 +9,6 @@ import net.henryco.opalette.utils.GLESUtils;
 /**
  * Created by root on 13/02/17.
  */
-
-
-
-
 public class OPallCamera {
 
     public static final class HoldXYZ {
@@ -36,6 +32,7 @@ public class OPallCamera {
         }
     }
 
+	private int program;
 
     public final float[] mMVPMatrix;
     public final float[] mProjectionMatrix;
@@ -46,9 +43,15 @@ public class OPallCamera {
     public final HoldXYZ up;
 
 
+
 	public float zoom = 1;
 	private int width, height;
-	private float flipFacX = 1, flipFacY = 1;
+	private float
+			flipFacX = 1, flipFacY = 1,
+			pxFacX = 1, pxFacY = 1;
+
+
+
 
 
 	public OPallCamera(int width, int height, boolean flip) {
@@ -58,31 +61,40 @@ public class OPallCamera {
         eye = new HoldXYZ(0, 0, -3);
         center = new HoldXYZ(0, 0, 0);
         up = new HoldXYZ(0, 1, 0);
-		this.width = width;
-		this.height = height;
 		if (flip) flipXY();
+		set(width, height);
 	}
-
 	public OPallCamera(int width, int height) {
 		this(width, height, false);
 	}
-
 	public OPallCamera(boolean flip) {
 		this(0, 0, flip);
 	}
-
 	public OPallCamera() {
 		this(false);
 	}
 
-    private int program;
+
+
+
+
 
     public OPallCamera set(int width, int height){
 		this.width = width;
 		this.height = height;
+		System.out.println(width + " : " + height);
+		pxFacX = 1 / (width * 0.5f);
+		pxFacY = 1 / (height * 0.5f);
+		System.out.println(pxFacX + " :: " + pxFacY);
         return this;
     }
 
+
+
+
+	public OPallCamera update() {
+		return update(program);
+	}
     public OPallCamera update(int program) {
 
 		GLES20.glViewport(0, 0, width, height);
@@ -97,85 +109,126 @@ public class OPallCamera {
         return this;
     }
 
-    public OPallCamera update() {
-        return update(program);
-    }
+
+
 
     public OPallCamera setProgram(int program) {
         this.program = program;
         return this;
     }
 
+
+
 	public OPallCamera setZoom(float z) {
 		zoom = z >= 0 ? z : zoom;
 		return this;
 	}
 
+
+
+
 	public OPallCamera flipXY() {
 		return flipX().flipY();
 	}
-
 	public OPallCamera flipX() {
 		flipFacX *= (-1);
 		return this;
 	}
-
 	public OPallCamera flipY() {
 		flipFacY *= (-1);
 		return this;
 	}
 
-	public OPallCamera translateX(float x) {
+
+
+
+
+
+
+	public OPallCamera translateX_absolute(float x) {
 		eye.x += x;
 		center.x += x;
 		return this;
 	}
-	public OPallCamera translateY(float y) {
+	public OPallCamera translateY_absolute(float y) {
 		eye.y += y;
 		center.y += y;
 		return this;
 	}
-	public OPallCamera translateZ(float z) {
+	public OPallCamera translateZ_absolute(float z) {
 		eye.z += z;
 		center.z += z;
 		return this;
 	}
-
-	public OPallCamera translateXY(float x, float y) {
-		return translateX(x).translateY(y);
+	public OPallCamera translateXY_absolute(float x, float y) {
+		return translateX_absolute(x).translateY_absolute(y);
+	}
+	public OPallCamera translateXYZ_absolute(float x, float y, float z) {
+		return translateXY_absolute(x, y).translateZ_absolute(z);
 	}
 
-	public OPallCamera translateXYZ(float x, float y, float z) {
-		return translateXY(x, y).translateZ(z);
+
+
+
+
+	public OPallCamera translateX(float x_px) {
+		return translateX_absolute(x_px * pxFacX);
+	}
+	public OPallCamera translateY(float y_px) {
+		return translateY_absolute(y_px * pxFacY);
+	}
+	public OPallCamera translateXY(float x_px, float y_px) {
+		return translateX(x_px).translateY(y_px);
 	}
 
-	public OPallCamera setPosX(float x) {
+
+
+
+
+	public OPallCamera setPosX_absolute(float x) {
 		eye.x = x;
 		center.x = x;
 		return this;
 	}
-
-	public OPallCamera setPosY(float y) {
+	public OPallCamera setPosY_absolute(float y) {
 		eye.y = y;
 		center.y = y;
 		return this;
 	}
-
-	public OPallCamera setPosZ(float z) {
+	public OPallCamera setPosZ_absolute(float z) {
 		eye.z = z;
 		center.z = z;
 		return this;
 	}
-
-	public OPallCamera setPosXY(float x, float y) {
-		return setPosX(x).setPosY(y);
+	public OPallCamera setPosXY_absolute(float x, float y) {
+		return setPosX_absolute(x).setPosY_absolute(y);
+	}
+	public OPallCamera setPosXYZ_absolute(float x, float y, float z) {
+		return setPosXY_absolute(x, y).setPosZ_absolute(z);
 	}
 
-	public OPallCamera setPosXYZ(float x, float y, float z) {
-		return setPosXY(x, y).setPosZ(z);
+
+
+
+
+	public OPallCamera setPosX(float x_px) {
+		return setPosX_absolute(x_px * pxFacX);
+	}
+	public OPallCamera setPosY(float y_px) {
+		return setPosY_absolute(y_px * pxFacY);
+	}
+	public OPallCamera setPosXY(float x_px, float y_px) {
+		return setPosX(x_px).setPosY(y_px);
 	}
 
 
+
+
+
+
+
+
+	//TODO FIX CAMERA ROTATION
 	/**
 	 * 	<b>Don't work</b>
 	 *	@deprecated

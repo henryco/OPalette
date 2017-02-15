@@ -17,9 +17,9 @@
 			app:srcCompat="@android:drawable/ic_menu_gallery" app:fabSize="normal" app:elevation="4dp"/>
 
 	<net.henryco.opalette.graphicsCore.glES.layouts.OPallSurfaceView
-		android:layout_width="370dp"
-		android:layout_height="370dp"
+		android:layout_width="345dp"
 		android:id="@+id/gradSurfaceView"
-		android:layout_gravity="center_horizontal" />
+		android:layout_gravity="center_horizontal"
+		android:layout_height="345dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

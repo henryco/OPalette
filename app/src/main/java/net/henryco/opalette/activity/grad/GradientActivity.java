@@ -1,5 +1,6 @@
 package net.henryco.opalette.activity.grad;
 
+import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import net.henryco.opalette.graphicsCore.glES.layouts.OPallSurfaceView;
 import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
 import net.henryco.opalette.graphicsCore.glES.render.graphics.OPallTexture;
 import net.henryco.opalette.graphicsCore.glES.render.renderers.OPallRenderer;
+import net.henryco.opalette.utils.GLESUtils;
 import net.henryco.opalette.utils.Utils;
 
 public class GradientActivity extends AppCompatActivity {
@@ -28,6 +30,7 @@ public class GradientActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
+
         initGLES();
 
     }
@@ -36,24 +39,20 @@ public class GradientActivity extends AppCompatActivity {
     public void initGLES() {
 
         gradGLSurfaceView = (OPallSurfaceView) findViewById(R.id.gradSurfaceView);
-		OPallCamera camera = new OPallCamera(true);
+
+		int viewWidth = gradGLSurfaceView.getWidth();
+		int viewHeight = gradGLSurfaceView.getHeight();
+		OPallCamera camera = new OPallCamera(viewWidth, viewHeight, true);
+
+		Bitmap image = Utils.loadAssetsBitmap(this, false, R.drawable.bait);
 
 		gradGLSurfaceView.setRenderer(new OPallRenderer(this, camera, context ->
-				new OPallTexture(Utils.loadAssetsBitmap(context, false, R.drawable.bait), context, OPallTexture.filter.LINEAR)));
+				new OPallTexture(image, context, OPallTexture.filter.LINEAR))
+				.setOnDrawAction((gl10, cam) -> GLESUtils.clear()));
 
         gradGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+		gradGLSurfaceView.executeWhenReady(() -> Utils.loopStart(50, null, () -> gradGLSurfaceView.update(() -> camera.translateX(1))));
 
-
-
-		/*
-		Utils.loopStart(25, new Utils.Stopper().start(), () -> {
-			camera.translateY(0.0005f);
-			camera.translateX(0.0005f);
-			camera.zoom -= 0.001f;
-
-			gradGLSurfaceView.update();
-		});
-		//*/
 	}
 
     @Override

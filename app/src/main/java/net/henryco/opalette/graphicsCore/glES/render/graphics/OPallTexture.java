@@ -40,10 +40,16 @@ public class OPallTexture extends OPallShader {
 	@Override
 	protected short[] getOrder() {
 		return new short[]{
-				0, 3, 2,
-				1, 0, 2
+				0, 1, 2,
+				0, 2, 3
 		}; // triangle1 + triangle2 = square
 	}
+
+	/* VERTEX MATRIX:
+	 * 	|0 3|
+	 * 	|1 2|
+	 */
+
 
 
 	private static final String DEF_SHADER = "shaders/default/Default";
@@ -64,7 +70,7 @@ public class OPallTexture extends OPallShader {
 	public OPallTexture(Bitmap image, Context context, filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
 		textureGL_ID = GLESUtils.loadTexture(image, filter.type, filter.type);
-		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0, 1, 0, 0, 1, 0, 1, 1});
+		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
 	}
 
 	public OPallTexture(Bitmap image, Context context, String shaderVert, String shaderFrag) {
@@ -86,6 +92,7 @@ public class OPallTexture extends OPallShader {
 
 		int mTextureUniformHandle = GLES20.glGetUniformLocation(glProgram, GLESUtils.defTextureN(0));
 		int mTextureCoordinateHandle = GLES20.glGetAttribLocation(glProgram, GLESUtils.a_TexCoordinate);
+
 		uponRender(glProgram, positionHandle, textureGL_ID, mTextureUniformHandle, mTextureCoordinateHandle, vertexBuffer, orderBuffer, texelBuffer, camera);
 
 		GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, vertexCount, GLES20.GL_UNSIGNED_SHORT, orderBuffer);

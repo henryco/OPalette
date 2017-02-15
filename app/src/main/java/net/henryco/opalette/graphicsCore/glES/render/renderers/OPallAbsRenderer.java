@@ -16,17 +16,40 @@ import javax.microedition.khronos.opengles.GL10;
 
 public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 
+	@FunctionalInterface
+	public interface OnDrawAction {
+		void action(GL10 gl10, OPallCamera camera);
+	}
+	private OnDrawAction onDrawAction;
+
+
 	private OPallShader shader;
 	private Context context;
-
 	private OPallCamera camera;
 
+
+
+
 	public OPallAbsRenderer(Context context, OPallCamera camera) {
+		this(context, camera, (gl10, camera1) -> GLESUtils.clear(0.9f, 0.1f, 0.5f, 1f));
+	}
+	public OPallAbsRenderer(Context context, OPallCamera camera, OnDrawAction action) {
 		this.context = context;
-		setCamera(camera);
+		this.camera = camera;
+		setOnDrawAction(action);
 	}
 
 	protected abstract OPallShader createShader(Context context);
+
+
+
+
+	public GLSurfaceView.Renderer setOnDrawAction(OnDrawAction action) {
+		this.onDrawAction = action;
+		return this;
+	}
+
+
 
 
 	@Override
@@ -41,12 +64,8 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		GLESUtils.clear(0.9f, 0.1f, 0.5f, 1f);
+		onDrawAction.action(gl, camera);
 		shader.render(camera);
 	}
 
-	public OPallAbsRenderer setCamera(OPallCamera camera) {
-		this.camera = camera;
-		return this;
-	}
 }

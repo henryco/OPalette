@@ -10,7 +10,7 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 /**
- * Created by root on 13/02/17.
+ * Created by HenryCo on 13/02/17.
  */
 
 public class GLESUtils {

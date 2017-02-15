@@ -71,7 +71,6 @@ public abstract class OPallShader {
 	}
 
 	protected abstract float[] getVertices();
-
 	protected abstract short[] getOrder();
     protected abstract void render(final int glProgram, final int positionHandle, final FloatBuffer vertexBuffer, final ShortBuffer orderBuffer, OPallCamera camera);
 
