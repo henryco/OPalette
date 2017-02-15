@@ -12,7 +12,6 @@ import net.henryco.opalette.graphicsCore.glES.layouts.OPallSurfaceView;
 import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
 import net.henryco.opalette.graphicsCore.glES.render.graphics.OPallTexture;
 import net.henryco.opalette.graphicsCore.glES.render.renderers.OPallRenderer;
-import net.henryco.opalette.utils.GLESUtils;
 import net.henryco.opalette.utils.Utils;
 
 public class GradientActivity extends AppCompatActivity {
@@ -46,12 +45,16 @@ public class GradientActivity extends AppCompatActivity {
 
 		Bitmap image = Utils.loadAssetsBitmap(this, false, R.drawable.bait);
 
+		//camera.zoom = 0.5f;
+
 		gradGLSurfaceView.setRenderer(new OPallRenderer(this, camera, context ->
-				new OPallTexture(image, context, OPallTexture.filter.LINEAR))
-				.setOnDrawAction((gl10, cam) -> GLESUtils.clear()));
+				new OPallTexture(image, context, OPallTexture.filter.LINEAR).setBounds(0,0, 300, 300))
+		//		.setOnDrawAction((gl10, cam) -> GLESUtils.clear())
+		);
 
         gradGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-		gradGLSurfaceView.executeWhenReady(() -> Utils.loopStart(50, null, () -> gradGLSurfaceView.update(() -> camera.translateX(1))));
+
+		gradGLSurfaceView.executeWhenReady(() -> Utils.loopStart(50, null, () -> gradGLSurfaceView.update(() -> camera.translateX(0))));
 
 	}
 

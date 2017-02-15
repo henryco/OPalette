@@ -23,7 +23,8 @@ public abstract class OPallShader {
     public final int vertexCount;
     public final int vertexStride;
 
-	protected FloatBuffer vertexBuffer;
+	private FloatBuffer vertexBuffer;
+	private float scrW = 0, scrH = 0;
 
     /*  Requested in *.vert file:
 	 *
@@ -52,27 +53,29 @@ public abstract class OPallShader {
         GLES20.glAttachShader(program, GLESUtils.loadShader(GLES20.GL_FRAGMENT_SHADER, fragment));
         GLES20.glLinkProgram(program);
         GLES20.glUseProgram(program);
-        vertexBuffer = GLESUtils.createFloatBuffer(getVertices());
+		generateVertexBuffer(getVertices());
         orderBuffer = GLESUtils.createShortBuffer(getOrder());
         COORDS_PER_VERTEX = coordsPerVertex;
         vertexCount = getOrder().length;
         vertexStride = COORDS_PER_VERTEX * 4; //coz float = 4 byte
-		init();
+		outErrorLog();
 	}
 
-	/**
-	 * Optioanl init statement
-	 * for Override
-	 *
-	 * @return OPallShader
-	 */
-	public OPallShader init() {
-		return outErrorLog();
-	}
+
 
 	protected abstract float[] getVertices();
 	protected abstract short[] getOrder();
     protected abstract void render(final int glProgram, final int positionHandle, final FloatBuffer vertexBuffer, final ShortBuffer orderBuffer, OPallCamera camera);
+
+
+
+
+
+	protected final void generateVertexBuffer(float[] vertices) {
+		vertexBuffer = GLESUtils.createFloatBuffer(vertices);
+	}
+
+
 
 
     public void render(OPallCamera camera) {
@@ -82,11 +85,19 @@ public abstract class OPallShader {
         GLES20.glUseProgram(-1);
     }
 
-    public OPallShader outErrorLog() {
-		System.out.println(getErrorLog());
-		return this;
-    }
 
+	public void setScrDim(float w,float h) {
+		this.scrW = w;
+		this.scrH = h;
+	}
+	public float[] getScrDim() {
+		return new float[]{scrW, scrH};
+	}
+
+
+    public void outErrorLog() {
+		System.out.println(getErrorLog());
+    }
 	public String getErrorLog() {
 		return GLES20.glGetShaderInfoLog(program);
 	}

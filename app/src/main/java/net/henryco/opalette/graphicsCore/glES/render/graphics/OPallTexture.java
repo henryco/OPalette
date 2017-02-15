@@ -28,17 +28,17 @@ public class OPallTexture extends OPallShader {
 	}
 
 	@Override
-	protected float[] getVertices() {
+	protected final float[] getVertices() {
 		return new float[]{
-				-1, 1,
-				-1, -1,
-				1, -1,
-				1, 1
+				-1, 1,	// 0
+				-1, -1,	// 1
+				1, -1,	// 2
+				1, 1	// 3
 		};
 	}
 
 	@Override
-	protected short[] getOrder() {
+	protected final short[] getOrder() {
 		return new short[]{
 				0, 1, 2,
 				0, 2, 3
@@ -54,29 +54,79 @@ public class OPallTexture extends OPallShader {
 
 	private static final String DEF_SHADER = "shaders/default/Default";
 	public static final int COORDS_PER_TEXEL = 2;
-	public final static int texelStride = COORDS_PER_TEXEL * 4; // 1float = 4bytes
+	public final static int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
 	private final int textureGL_ID;
 	private final FloatBuffer texelBuffer;
+
+	private float width = 0, height = 0,
+			x = 0, y = 0, scale = 1;
+
+
 
 
 	public OPallTexture(Bitmap image, Context context) {
 		this(image, context, filter.LINEAR);
 	}
-
 	public OPallTexture(Bitmap image, Context context, filter filter) {
 		this(image, context, filter, DEF_SHADER + ".vert", DEF_SHADER + ".frag");
 	}
-
 	public OPallTexture(Bitmap image, Context context, filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
 		textureGL_ID = GLESUtils.loadTexture(image, filter.type, filter.type);
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
 	}
-
 	public OPallTexture(Bitmap image, Context context, String shaderVert, String shaderFrag) {
 		this(image, context, filter.LINEAR, shaderVert, shaderFrag);
 	}
 
+
+
+
+	public OPallTexture setBounds(float x, float y, float w, float h, float scale) {
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+		this.scale = scale;
+		recalculateVerts();
+		return this;
+	}
+	public OPallTexture setBounds(float x, float y, float w, float h){
+		return setBounds(x, y, w, h, scale);
+	}
+	public OPallTexture setPosition(float x, float y) {
+		return setBounds(x, y, width, height, scale);
+	}
+	public OPallTexture setWidth(float w) {
+		return setBounds(x, y, w, height, scale);
+	}
+	public OPallTexture setHeight(float h) {
+		return setBounds(x, y, width, h, scale);
+	}
+	public OPallTexture setSize(float w, float h) {
+		return setBounds(x, y, w, h, scale);
+	}
+	public OPallTexture setScale(float scale) {
+		return setBounds(x, y, width, height, scale);
+	}
+
+
+
+
+	private void recalculateVerts() {
+		if (width != 0 && height != 0) {
+			float[] verts = getVertices();
+			float sc_x = width / getScrDim()[0];
+			float sc_y = height / getScrDim()[1];
+			float tr_x = 2 * x / getScrDim()[0];
+			float tr_y = 2 * y / getScrDim()[1];
+			for (int i = 0; i < verts.length - 1; i+= 2) {
+				verts[i] = sc_x * scale * (verts[i] + 1) - 1 + tr_x;
+				verts[i+1] = sc_y * scale * (verts[i+1] + 1) - 1 + tr_y;
+			}
+			generateVertexBuffer(verts);
+		}
+	}
 
 
 
@@ -117,4 +167,9 @@ public class OPallTexture extends OPallShader {
 	}
 
 
+	@Override
+	public void setScrDim(float w, float h) {
+		super.setScrDim(w, h);
+		if (w != 0 && h != 0) recalculateVerts();
+	}
 }
