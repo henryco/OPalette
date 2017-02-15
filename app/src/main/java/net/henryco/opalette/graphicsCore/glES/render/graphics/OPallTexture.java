@@ -57,7 +57,6 @@ public class OPallTexture extends OPallShader {
 	public final static int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
 	private final int textureGL_ID;
 	private final FloatBuffer texelBuffer;
-
 	private float width = 0, height = 0,
 			x = 0, y = 0, scale = 1;
 
@@ -111,6 +110,15 @@ public class OPallTexture extends OPallShader {
 	}
 
 
+	public OPallTexture resetBounds() {
+		generateVertexBuffer(getVertices());
+		width = 0;
+		height = 0;
+		scale = 1;
+		x = 0;
+		y = 0;
+		return this;
+	}
 
 
 	private void recalculateVerts() {

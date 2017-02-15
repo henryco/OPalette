@@ -103,8 +103,8 @@ public class OPallCamera {
 		// mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7
 
         Matrix.setLookAtM(mViewMatrix, 0, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-        GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(program, GLESUtils.u_MVPMatrix), 1, false, mMVPMatrix, 0);
+		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+		GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(program, GLESUtils.u_MVPMatrix), 1, false, mMVPMatrix, 0);
 
         return this;
     }
@@ -233,10 +233,8 @@ public class OPallCamera {
 	 * 	<b>Don't work</b>
 	 *	@deprecated
 	 */
-	public OPallCamera rotate(float pitch, float yaw) {
-		//	center.x = eye.x + ( float ) Math.cos( Math.toRadians( pitch ) ) * ( float ) Math.cos( Math.toRadians( yaw ) );
-		center.y = eye.y - ( float ) Math.sin( Math.toRadians( pitch ) );
-	//	center.z = eye.z + ( float ) Math.cos( Math.toRadians( pitch ) ) * ( float ) Math.sin( Math.toRadians( yaw ) );
+	public OPallCamera rotate(float angle) {
+		Matrix.setRotateM(mMVPMatrix, 0, angle, 0,0,1);
 		return this;
 	}
 }

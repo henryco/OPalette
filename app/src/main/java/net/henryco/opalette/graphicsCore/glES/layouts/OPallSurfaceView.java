@@ -31,8 +31,6 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 
 
-
-
     public OPallSurfaceView(Context context) {
         super(context);
         reInit(context);
@@ -62,7 +60,6 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 	@Override
 	public void setRenderer(Renderer renderer) {
-
 		super.setRenderer(new Renderer() {
 			@Override
 			public void onSurfaceCreated(GL10 gl, EGLConfig config) {
