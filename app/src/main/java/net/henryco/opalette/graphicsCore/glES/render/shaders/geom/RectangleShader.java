@@ -1,10 +1,12 @@
-package net.henryco.opalette.graphicsCore.glES.render.shaders;
+package net.henryco.opalette.graphicsCore.glES.render.shaders.geom;
 
 import android.content.Context;
 import android.opengl.GLES20;
+
 import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
 import net.henryco.opalette.graphicsCore.glES.render.shaders.pure.UniShader;
 import net.henryco.opalette.utils.GLESUtils;
+
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
@@ -27,8 +29,8 @@ public class RectangleShader extends UniShader {
 
     @Override
     protected short[] getOrder() {
-        return new short[]{ 0, 3, 2, 1, 0, 3 }; // triangle1 + triangle2 = square
-    }
+		return new short[]{0, 3, 2, 1, 0, 2}; // triangle1 + triangle2 = square
+	}
 
     @Override
     protected void draw(int glProgram, int positionHandle, FloatBuffer vertexBuffer, ShortBuffer orderBuffer, OPallCamera camera) {

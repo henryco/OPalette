@@ -41,12 +41,16 @@ public class GLESUtils {
 
     public static final String a_Position = "a_Position";
     public static final String u_MVPMatrix = "u_MVPMatrix";
-	public static final String v_Position = "v_Position";
-	public static final String v_WorldPos = "v_WorldPos";
+	public static final String u_Texture_n = "u_Texture";
+	public static final String a_TexCoordinate = "a_TexCoordinate";
 
-    /**
-     * Initialize vertex byte buffer for shape coordinates with parameters
-     * (number of coordinate values * 4 bytes per float)<br>
+	public static String defTextureN(int numb) {
+		return u_Texture_n + numb;
+	}
+
+	/**
+	 * Initialize vertex byte buffer for shape coordinates with parameters
+	 * (number of coordinate values * 4 bytes per float)<br>
      * and use the device hardware's native byte order.<br>
      * @param arr - coordinates
      * @return FloatBuffer

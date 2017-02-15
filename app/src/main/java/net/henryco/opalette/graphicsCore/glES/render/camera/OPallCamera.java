@@ -47,22 +47,32 @@ public class OPallCamera {
 
 
 	public float zoom = 1;
+	private int width, height;
+	private float flipFacX = 1, flipFacY = 1;
 
-    public int width, height;
 
-    public OPallCamera(int width, int height) {
-        mMVPMatrix = new float[16];
-        mProjectionMatrix = new float[16];
+	public OPallCamera(int width, int height, boolean flip) {
+		mMVPMatrix = new float[16];
+		mProjectionMatrix = new float[16];
         mViewMatrix = new float[16];
         eye = new HoldXYZ(0, 0, -3);
         center = new HoldXYZ(0, 0, 0);
         up = new HoldXYZ(0, 1, 0);
 		this.width = width;
 		this.height = height;
-    }
+		if (flip) flipXY();
+	}
+
+	public OPallCamera(int width, int height) {
+		this(width, height, false);
+	}
+
+	public OPallCamera(boolean flip) {
+		this(0, 0, flip);
+	}
 
 	public OPallCamera() {
-		this(0,0);
+		this(false);
 	}
 
     private int program;
@@ -77,7 +87,7 @@ public class OPallCamera {
 
 		GLES20.glViewport(0, 0, width, height);
 		float ratio = (float) width / height;
-		Matrix.frustumM(mProjectionMatrix, 0, -ratio / zoom, ratio/ zoom, -1/ zoom, 1/ zoom, 3, 1);
+		Matrix.frustumM(mProjectionMatrix, 0, -ratio * flipFacX / zoom, ratio * flipFacX / zoom, -1 * flipFacY / zoom, 1 * flipFacY / zoom, 3, 1);
 		// mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7
 
         Matrix.setLookAtM(mViewMatrix, 0, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
@@ -98,6 +108,20 @@ public class OPallCamera {
 
 	public OPallCamera setZoom(float z) {
 		zoom = z >= 0 ? z : zoom;
+		return this;
+	}
+
+	public OPallCamera flipXY() {
+		return flipX().flipY();
+	}
+
+	public OPallCamera flipX() {
+		flipFacX *= (-1);
+		return this;
+	}
+
+	public OPallCamera flipY() {
+		flipFacY *= (-1);
 		return this;
 	}
 
@@ -157,7 +181,7 @@ public class OPallCamera {
 	 *	@deprecated
 	 */
 	public OPallCamera rotate(float pitch, float yaw) {
-		center.x = eye.x + ( float ) Math.cos( Math.toRadians( pitch ) ) * ( float ) Math.cos( Math.toRadians( yaw ) );
+		//	center.x = eye.x + ( float ) Math.cos( Math.toRadians( pitch ) ) * ( float ) Math.cos( Math.toRadians( yaw ) );
 		center.y = eye.y - ( float ) Math.sin( Math.toRadians( pitch ) );
 	//	center.z = eye.z + ( float ) Math.cos( Math.toRadians( pitch ) ) * ( float ) Math.sin( Math.toRadians( yaw ) );
 		return this;

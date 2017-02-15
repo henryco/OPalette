@@ -10,6 +10,7 @@ import android.opengl.GLES20;
 import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
 import net.henryco.opalette.utils.GLESUtils;
 import net.henryco.opalette.utils.Utils;
+
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
@@ -25,8 +26,12 @@ public abstract class OPallShader {
 	protected FloatBuffer vertexBuffer;
 
     /*  Requested in *.vert file:
-     *
+	 *
      *      attribute vec4 a_Position;
+     *      attribute vec2 a_TexCoordinate;
+     *      varying vec4 v_Position;
+     *      varying vec4 v_WorldPos;
+     *      varying vec2 v_TexCoordinate;
      *      uniform mat4 u_MVPMatrix;
      *
      *      void main() {
@@ -52,11 +57,22 @@ public abstract class OPallShader {
         COORDS_PER_VERTEX = coordsPerVertex;
         vertexCount = getOrder().length;
         vertexStride = COORDS_PER_VERTEX * 4; //coz float = 4 byte
-    }
+		init();
+	}
 
+	/**
+	 * Optioanl init statement
+	 * for Override
+	 *
+	 * @return OPallShader
+	 */
+	public OPallShader init() {
+		return outErrorLog();
+	}
 
-    protected abstract float[] getVertices();
-    protected abstract short[] getOrder();
+	protected abstract float[] getVertices();
+
+	protected abstract short[] getOrder();
     protected abstract void render(final int glProgram, final int positionHandle, final FloatBuffer vertexBuffer, final ShortBuffer orderBuffer, OPallCamera camera);
 
 

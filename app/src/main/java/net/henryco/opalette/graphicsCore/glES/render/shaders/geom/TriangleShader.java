@@ -1,4 +1,4 @@
-package net.henryco.opalette.graphicsCore.glES.render.shaders;
+package net.henryco.opalette.graphicsCore.glES.render.shaders.geom;
 
 import android.content.Context;
 import android.opengl.GLES20;
