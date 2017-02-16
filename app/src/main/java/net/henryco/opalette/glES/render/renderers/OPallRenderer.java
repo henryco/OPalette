@@ -1,9 +1,9 @@
-package net.henryco.opalette.graphicsCore.glES.render.renderers;
+package net.henryco.opalette.glES.render.renderers;
 
 import android.content.Context;
 
-import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
-import net.henryco.opalette.graphicsCore.glES.render.shaders.pure.OPallShader;
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
 
 /**
  * Created by root on 15/02/17.
@@ -18,7 +18,7 @@ public class OPallRenderer extends OPallAbsRenderer {
 
 	private ShaderMaker shaderMaker;
 
-	public OPallRenderer(Context context, OPallCamera camera, ShaderMaker shaderMaker) {
+	public OPallRenderer(Context context, OPallCamera2D camera, ShaderMaker shaderMaker) {
 		super(context, camera);
 		this.shaderMaker = shaderMaker;
 	}

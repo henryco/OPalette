@@ -8,11 +8,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.graphicsCore.glES.layouts.OPallSurfaceView;
-import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
-import net.henryco.opalette.graphicsCore.glES.render.graphics.OPallTexture;
-import net.henryco.opalette.graphicsCore.glES.render.renderers.OPallRenderer;
-import net.henryco.opalette.utils.GLESUtils;
+import net.henryco.opalette.glES.layouts.OPallSurfaceView;
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.textures.OPallTexture;
+import net.henryco.opalette.glES.render.renderers.OPallRenderer;
 import net.henryco.opalette.utils.Utils;
 
 public class GradientActivity extends AppCompatActivity {
@@ -42,17 +41,22 @@ public class GradientActivity extends AppCompatActivity {
 
 		int viewWidth = gradGLSurfaceView.getWidth();
 		int viewHeight = gradGLSurfaceView.getHeight();
-		OPallCamera camera = new OPallCamera(viewWidth, viewHeight, true);
+		OPallCamera2D camera = new OPallCamera2D(viewWidth, viewHeight, true);
 
 		Bitmap image = Utils.loadAssetsBitmap(this, false, R.drawable.bait);
 
 		gradGLSurfaceView.setRenderer(new OPallRenderer(this, camera, context ->
-				new OPallTexture(image, context, OPallTexture.filter.LINEAR))
-				.setOnDrawAction((gl10, cam) -> GLESUtils.clear())
+				new OPallTexture(image, context, OPallTexture.filter.LINEAR)
+						//.setSize(552, 465)
+				)
+				//.setOnDrawAction((gl10, cam) -> GLESUtils.clear())
 		);
 
         gradGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-		gradGLSurfaceView.executeWhenReady(() -> System.out.println("START"));
+		gradGLSurfaceView.executeWhenReady(() -> Utils.loopStart(50, null, () -> {
+			camera.rotateZ(1f);
+			gradGLSurfaceView.update();
+		}));
 
 	}
 

@@ -1,10 +1,10 @@
-package net.henryco.opalette.graphicsCore.glES.render.shaders.geom;
+package net.henryco.opalette.glES.render.graphics.shaders.universal.geometry;
 
 import android.content.Context;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
-import net.henryco.opalette.graphicsCore.glES.render.shaders.pure.UniShader;
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.shaders.universal.UniShader;
 import net.henryco.opalette.utils.GLESUtils;
 
 import java.nio.FloatBuffer;
@@ -39,7 +39,7 @@ public class TriangleShader extends UniShader {
 
 
     @Override
-    protected void draw(int glProgram, int positionHandle, FloatBuffer vertexBuffer, ShortBuffer orderBuffer, OPallCamera camera) {
+    protected void draw(int glProgram, int positionHandle, FloatBuffer vertexBuffer, ShortBuffer orderBuffer, OPallCamera2D camera) {
         GLESUtils.clear(0.9f, 0.9f, 0.9f, 0.9f);
         camera.update();
         GLES20.glUniform4fv(GLES20.glGetUniformLocation(glProgram, "u_Color"), 1, color, 0);

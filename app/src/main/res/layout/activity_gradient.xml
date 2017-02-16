@@ -16,7 +16,7 @@
 			android:layout_margin="@dimen/fab_margin"
 			app:srcCompat="@android:drawable/ic_menu_gallery" app:fabSize="normal" app:elevation="4dp"/>
 
-	<net.henryco.opalette.graphicsCore.glES.layouts.OPallSurfaceView
+	<net.henryco.opalette.glES.layouts.OPallSurfaceView
 		android:layout_width="345dp"
 		android:id="@+id/gradSurfaceView"
 		android:layout_gravity="center_horizontal"

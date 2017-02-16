@@ -1,4 +1,4 @@
-package net.henryco.opalette.graphicsCore.glES.layouts;
+package net.henryco.opalette.glES.layouts;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

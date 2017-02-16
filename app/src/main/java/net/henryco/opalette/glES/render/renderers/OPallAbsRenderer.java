@@ -1,10 +1,10 @@
-package net.henryco.opalette.graphicsCore.glES.render.renderers;
+package net.henryco.opalette.glES.render.renderers;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
-import net.henryco.opalette.graphicsCore.glES.render.shaders.pure.OPallShader;
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
 import net.henryco.opalette.utils.GLESUtils;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -18,22 +18,22 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 
 	@FunctionalInterface
 	public interface OnDrawAction {
-		void action(GL10 gl10, OPallCamera camera);
+		void action(GL10 gl10, OPallCamera2D camera);
 	}
 	private OnDrawAction onDrawAction;
 
 
 	private OPallShader shader;
 	private Context context;
-	private OPallCamera camera;
+	private OPallCamera2D camera;
 
 
 
 
-	public OPallAbsRenderer(Context context, OPallCamera camera) {
+	public OPallAbsRenderer(Context context, OPallCamera2D camera) {
 		this(context, camera, (gl10, camera1) -> GLESUtils.clear(0.9f, 0.1f, 0.5f, 1f));
 	}
-	public OPallAbsRenderer(Context context, OPallCamera camera, OnDrawAction action) {
+	public OPallAbsRenderer(Context context, OPallCamera2D camera, OnDrawAction action) {
 		this.context = context;
 		this.camera = camera;
 		setOnDrawAction(action);

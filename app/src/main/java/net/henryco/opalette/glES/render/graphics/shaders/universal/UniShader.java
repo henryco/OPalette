@@ -1,9 +1,10 @@
-package net.henryco.opalette.graphicsCore.glES.render.shaders.pure;
+package net.henryco.opalette.glES.render.graphics.shaders.universal;
 
 import android.content.Context;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -25,7 +26,7 @@ public abstract class UniShader extends OPallShader {
 
 
     @Override
-    protected void render(int glProgram, int positionHandle, FloatBuffer vertexBuffer, ShortBuffer orderBuffer, OPallCamera camera) {
+    protected void render(int glProgram, int positionHandle, FloatBuffer vertexBuffer, ShortBuffer orderBuffer, OPallCamera2D camera) {
 
         GLES20.glEnableVertexAttribArray(positionHandle);
         GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
@@ -39,6 +40,6 @@ public abstract class UniShader extends OPallShader {
 
     protected abstract void draw(final int glProgram, final int positionHandle,
                                  final FloatBuffer vertexBuffer, final ShortBuffer orderBuffer,
-                                 final OPallCamera camera);
+                                 final OPallCamera2D camera);
 
 }

@@ -1,11 +1,11 @@
-package net.henryco.opalette.graphicsCore.glES.render.graphics;
+package net.henryco.opalette.glES.render.graphics.textures;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
-import net.henryco.opalette.graphicsCore.glES.render.shaders.pure.OPallShader;
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
 import net.henryco.opalette.utils.GLESUtils;
 
 import java.nio.FloatBuffer;
@@ -141,7 +141,7 @@ public class OPallTexture extends OPallShader {
 
 
 	@Override
-	protected void render(int glProgram, int positionHandle, FloatBuffer vertexBuffer, ShortBuffer orderBuffer, OPallCamera camera) {
+	protected void render(int glProgram, int positionHandle, FloatBuffer vertexBuffer, ShortBuffer orderBuffer, OPallCamera2D camera) {
 
 		camera.update();
 
@@ -165,7 +165,7 @@ public class OPallTexture extends OPallShader {
 	 */
 	protected void uponRender(int glProgram, int positionHandle, int textureDataHandle, int mTextureUniformHandle,
 							  int mTextureCoordinateHandle,
-							  FloatBuffer vertexBuffer, ShortBuffer orderBuffer, FloatBuffer texelBuffer, OPallCamera camera) {
+							  FloatBuffer vertexBuffer, ShortBuffer orderBuffer, FloatBuffer texelBuffer, OPallCamera2D camera) {
 
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);

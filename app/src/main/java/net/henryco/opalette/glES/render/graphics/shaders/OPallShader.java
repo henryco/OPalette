@@ -1,4 +1,4 @@
-package net.henryco.opalette.graphicsCore.glES.render.shaders.pure;
+package net.henryco.opalette.glES.render.graphics.shaders;
 
 /**
  * Created by root on 13/02/17.
@@ -7,7 +7,7 @@ package net.henryco.opalette.graphicsCore.glES.render.shaders.pure;
 import android.content.Context;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.graphicsCore.glES.render.camera.OPallCamera;
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
 import net.henryco.opalette.utils.GLESUtils;
 import net.henryco.opalette.utils.Utils;
 
@@ -65,7 +65,7 @@ public abstract class OPallShader {
 
 	protected abstract float[] getVertices();
 	protected abstract short[] getOrder();
-    protected abstract void render(final int glProgram, final int positionHandle, final FloatBuffer vertexBuffer, final ShortBuffer orderBuffer, OPallCamera camera);
+    protected abstract void render(final int glProgram, final int positionHandle, final FloatBuffer vertexBuffer, final ShortBuffer orderBuffer, OPallCamera2D camera);
 
 
 
@@ -78,7 +78,7 @@ public abstract class OPallShader {
 
 
 
-    public void render(OPallCamera camera) {
+    public void render(OPallCamera2D camera) {
 
         GLES20.glUseProgram(program);
         render(program, GLES20.glGetAttribLocation(program, GLESUtils.a_Position), vertexBuffer, orderBuffer, camera.setProgram(program));
