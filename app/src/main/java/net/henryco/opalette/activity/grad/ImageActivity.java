@@ -14,7 +14,7 @@ import net.henryco.opalette.glES.render.graphics.textures.OPallTexture;
 import net.henryco.opalette.glES.render.renderers.OPallRenderer;
 import net.henryco.opalette.utils.Utils;
 
-public class GradientActivity extends AppCompatActivity {
+public class ImageActivity extends AppCompatActivity {
 
 
     private OPallSurfaceView gradGLSurfaceView;
@@ -22,7 +22,7 @@ public class GradientActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gradient);
+        setContentView(R.layout.activity_image);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view ->
@@ -44,19 +44,17 @@ public class GradientActivity extends AppCompatActivity {
 		OPallCamera2D camera = new OPallCamera2D(viewWidth, viewHeight, true);
 
 		Bitmap image = Utils.loadAssetsBitmap(this, false, R.drawable.bait);
+		
 
 		gradGLSurfaceView.setRenderer(new OPallRenderer(this, camera, context ->
-				new OPallTexture(image, context, OPallTexture.filter.LINEAR)
-						//.setSize(552, 465)
-				)
-				//.setOnDrawAction((gl10, cam) -> GLESUtils.clear())
-		);
+				new OPallTexture(image, context, OPallTexture.filter.LINEAR))
 
+		);
         gradGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-		gradGLSurfaceView.executeWhenReady(() -> Utils.loopStart(50, null, () -> {
-			camera.rotateZ(1f);
-			gradGLSurfaceView.update();
-		}));
+
+		gradGLSurfaceView.executeWhenReady(() -> {
+
+		});
 
 	}
 

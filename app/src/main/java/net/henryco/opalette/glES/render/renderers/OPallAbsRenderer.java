@@ -59,14 +59,14 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		camera.set(width, height);
-		shader.setScrDim(width, height);
+		if (camera != null) camera.set(width, height);
+		if (shader != null) shader.setScrDim(width, height);
 	}
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		onDrawAction.action(gl, camera);
-		shader.render(camera);
+		if (camera != null) onDrawAction.action(gl, camera);
+		if (shader != null) shader.render(camera);
 	}
 
 }

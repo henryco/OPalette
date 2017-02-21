@@ -4,6 +4,8 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import net.henryco.opalette.glES.render.renderers.OPallRenderer;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -34,14 +36,20 @@ public class OPallSurfaceView extends GLSurfaceView {
     public OPallSurfaceView(Context context) {
         super(context);
         reInit(context);
-    }
+		createDefaultRenderer(context);
+	}
 
     public OPallSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         reInit(context);
+		createDefaultRenderer(context);
     }
 
 
+
+	private void createDefaultRenderer(Context context) {
+		setRenderer(new OPallRenderer(context));
+	}
 
 
     public void reInit(Context context) {
@@ -83,9 +91,25 @@ public class OPallSurfaceView extends GLSurfaceView {
 	}
 
 
+	/**
+	 * Square area with percent relative size<br>
+	 * http://stackoverflow.com/a/8981478
+	 */
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		int width = MeasureSpec.getSize(widthMeasureSpec);
+		int height = MeasureSpec.getSize(heightMeasureSpec);
+		int size = width > height ? height : width;
+		setMeasuredDimension(size, size);
+	}
 
-
-	public OPallSurfaceView executeWhenReady(Runnable action) {
+	/**
+	 * Area where code will execute after context creation.
+	 * @param action action to execute
+	 * @return OPallSurfaceView
+	 */
+	public final OPallSurfaceView executeWhenReady(Runnable action) {
 		new Thread(() -> {
 			while (!surfaceInfo.isSurfaceCreated()
 					|| !surfaceInfo.isSurfaceChanged()) {

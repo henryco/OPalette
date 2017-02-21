@@ -1,11 +1,11 @@
 package net.henryco.opalette;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import net.henryco.opalette.activity.grad.GradientActivity;
+import android.support.v7.app.AppCompatActivity;
+
+import net.henryco.opalette.activity.grad.ImageActivity;
+import net.henryco.opalette.activity.t1.T1Activity;
 import net.henryco.opalette.activity.triangle.TriActivity;
 
 public class MainBlanc extends AppCompatActivity {
@@ -21,9 +21,11 @@ public class MainBlanc extends AppCompatActivity {
     public void init() {
 
         findViewById(R.id.startButton).setOnClickListener(
-                v -> startActivity(new Intent(this, GradientActivity.class)));
+                v -> startActivity(new Intent(this, ImageActivity.class)));
         findViewById(R.id.triButton).setOnClickListener(
                 v -> startActivity(new Intent(this, TriActivity.class)));
+        findViewById(R.id.t1Button).setOnClickListener(
+				v -> startActivity(new Intent(this, T1Activity.class)));
     }
 
 }

@@ -6,7 +6,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:fitsSystemWindows="true"
-		tools:context="net.henryco.opalette.activity.grad.GradientActivity">
+		tools:context="net.henryco.opalette.activity.grad.ImageActivity">
 
 	<android.support.design.widget.FloatingActionButton
 			android:id="@+id/fab"

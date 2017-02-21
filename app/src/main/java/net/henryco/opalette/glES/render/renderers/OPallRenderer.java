@@ -22,6 +22,9 @@ public class OPallRenderer extends OPallAbsRenderer {
 		super(context, camera);
 		this.shaderMaker = shaderMaker;
 	}
+	public OPallRenderer(Context context) {
+		this(context, null, c -> null);
+	}
 
 	@Override
 	protected OPallShader createShader(Context context) {
