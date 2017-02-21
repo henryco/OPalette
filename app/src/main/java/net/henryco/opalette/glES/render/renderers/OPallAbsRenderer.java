@@ -38,10 +38,25 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 		this.camera = camera;
 		setOnDrawAction(action);
 	}
+	public OPallAbsRenderer(GLSurfaceView.Renderer renderer) {
+		if (renderer instanceof OPallAbsRenderer) {
+			this.context = ((OPallAbsRenderer)renderer).context;
+			this.camera = ((OPallAbsRenderer)renderer).camera;
+			this.shader = ((OPallAbsRenderer) renderer).shader;
+			if (((OPallAbsRenderer)renderer).onDrawAction != null)
+				this.onDrawAction = ((OPallAbsRenderer)renderer).onDrawAction;
+		}
+	}
 
 	protected abstract OPallShader createShader(Context context);
 
-
+	public OPallShader getShader() {
+		return this.shader;
+	}
+	public OPallAbsRenderer setShader(OPallShader shader) {
+		this.shader = shader;
+		return this;
+	}
 
 
 	public GLSurfaceView.Renderer setOnDrawAction(OnDrawAction action) {

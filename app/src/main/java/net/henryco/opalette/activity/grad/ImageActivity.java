@@ -48,11 +48,10 @@ public class ImageActivity extends AppCompatActivity {
 
 		gradGLSurfaceView.setRenderer(new OPallRenderer(this, camera, context ->
 				new OPallTexture(image, context, OPallTexture.filter.LINEAR))
-
 		);
         gradGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
-		gradGLSurfaceView.executeWhenReady(() -> {
+		gradGLSurfaceView.enterWhenReady(() -> {
 
 		});
 

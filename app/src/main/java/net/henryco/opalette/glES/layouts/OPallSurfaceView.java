@@ -4,6 +4,8 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -44,6 +46,7 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 
 
+
 	private SurfaceDimension dimProcessor = DimensionProcessors.DEFAULT;
 	public interface SurfaceDimension {
 		int[] onMeasure(int widthMeasureSpec, int heightMeasureSpec);
@@ -51,20 +54,41 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 
 
+	private DrawAction drawAction;
+	public interface DrawAction {
+		void onDrawFrameAction(GL10 gl);
+	}
+	private List<DrawAction> actionQueue;
+
+
+
+	private Renderer renderer;
+
 
     public OPallSurfaceView(Context context) {
         super(context);
-        reInit(context);
+        init(context);
 	}
 
     public OPallSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        reInit(context);
+        init(context);
     }
 
-    public void reInit(Context context) {
+    private void init(Context context) {
         setEGLContextClientVersion(2);
+		actionQueue = new ArrayList<>();
+		drawAction = gl -> {
+			while (actionQueue.size() > 0)
+				actionQueue.remove(0).onDrawFrameAction(gl);
+		};
+
     }
+
+
+
+
+
     public void update() {
         requestRender();
     }
@@ -78,6 +102,13 @@ public class OPallSurfaceView extends GLSurfaceView {
 		this.dimProcessor = dimProcessor;
 		return this;
 	}
+
+
+	public OPallSurfaceView executeWhenDraw(DrawAction action) {
+		actionQueue.add(action);
+		return this;
+	}
+
 
 
 
@@ -101,10 +132,17 @@ public class OPallSurfaceView extends GLSurfaceView {
 			public void onDrawFrame(GL10 gl) {
 				surfaceInfo.surfaceDrawing.set(true);
 				renderer.onDrawFrame(gl);
+				drawAction.onDrawFrameAction(gl);
 				surfaceInfo.surfaceDrawing.set(false);
 			}
 		});
+		this.renderer = renderer;
 	}
+
+	public Renderer getRenderer() {
+		return this.renderer;
+	}
+
 
 
 	/**
@@ -118,12 +156,14 @@ public class OPallSurfaceView extends GLSurfaceView {
 		setMeasuredDimension(dim[0], dim[1]);
 	}
 
+
+
 	/**
 	 * Area where code will execute after context creation.
 	 * @param action action to execute
 	 * @return OPallSurfaceView
 	 */
-	public final OPallSurfaceView executeWhenReady(Runnable action) {
+	public final OPallSurfaceView enterWhenReady(Runnable action) {
 		new Thread(() -> {
 			while (!surfaceInfo.isSurfaceCreated()
 					|| !surfaceInfo.isSurfaceChanged()) {

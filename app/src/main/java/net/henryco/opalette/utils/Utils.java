@@ -50,7 +50,7 @@ public class Utils {
 		return BitmapFactory.decodeResource(context.getResources(), resID, options);
 	}
 
-	public static Bitmap loadUriBitmap(Context context, Intent intent) {
+	public static Bitmap loadURIBitmap(Context context, Intent intent) {
 		try {
 			return MediaStore.Images.Media.getBitmap(context.getContentResolver(), intent.getData());
 		} catch (IOException e) {

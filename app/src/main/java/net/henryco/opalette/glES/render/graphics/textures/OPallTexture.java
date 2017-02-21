@@ -55,8 +55,8 @@ public class OPallTexture extends OPallShader {
 	private static final String DEF_SHADER = "shaders/default/Default";
 	public static final int COORDS_PER_TEXEL = 2;
 	public final static int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
-	private final int textureGL_ID;
 	private final FloatBuffer texelBuffer;
+	private int textureGL_ID;
 	private float width = 0, height = 0,
 			x = 0, y = 0, scale = 1;
 
@@ -71,14 +71,21 @@ public class OPallTexture extends OPallShader {
 	}
 	public OPallTexture(Bitmap image, Context context, filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
-		textureGL_ID = GLESUtils.loadTexture(image, filter.type, filter.type);
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
+		setBitmap(image, filter);
 	}
 	public OPallTexture(Bitmap image, Context context, String shaderVert, String shaderFrag) {
 		this(image, context, filter.LINEAR, shaderVert, shaderFrag);
 	}
 
 
+	public OPallTexture setBitmap(Bitmap image, filter filterMin, filter filterMag) {
+		this.textureGL_ID = GLESUtils.loadTexture(image, filterMin.type, filterMag.type);
+		return this;
+	}
+	public OPallTexture setBitmap(Bitmap image, filter filter) {
+		return setBitmap(image, filter, filter);
+	}
 
 
 	public OPallTexture setBounds(float x, float y, float w, float h, float scale) {

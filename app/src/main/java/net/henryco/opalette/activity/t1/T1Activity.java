@@ -1,7 +1,6 @@
 package net.henryco.opalette.activity.t1;
 
 import android.content.Intent;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -14,52 +13,61 @@ import net.henryco.opalette.utils.Utils;
 
 public class T1Activity extends AppCompatActivity {
 
-	private static final int ACTIVITY_SELECT_IMAGE = 14662;
+	private static final int ACTIVITY_SELECT_IMAGE = 2137;
 
 	private OPallSurfaceView contentSurface;
-	private int width, height;
+
+
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_t1);
 
-		loadSurface(new OPallRenderer(this));
-		width = contentSurface.getWidth();
-		height = contentSurface.getHeight();
-
-		contentSurface.executeWhenReady(() -> {
-
-		});
-
-	}
-
-	//TODO FIXME
-	private void loadSurface(GLSurfaceView.Renderer renderer) {
 		contentSurface = (OPallSurfaceView) findViewById(R.id.contentSurface);
 		contentSurface.setDimProcessor(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		contentSurface.setOnClickListener(v -> loadImage());
-		contentSurface.setRenderer(renderer);
+		int width = contentSurface.getWidth();
+		int height = contentSurface.getHeight();
+
+		contentSurface.setRenderer(new OPallRenderer(this, new OPallCamera2D(width, height, true)));
+
+
 
 	}
+
+
+
+
+
 
 
 	private void loadImage() {
-		Intent i = new Intent(Intent.ACTION_PICK,
+		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		startActivityForResult(i, ACTIVITY_SELECT_IMAGE);
+		startActivityForResult(intent, ACTIVITY_SELECT_IMAGE);
 	}
+
+
+
+
 
 
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
-		if (resultCode == AppCompatActivity.RESULT_OK && requestCode == ACTIVITY_SELECT_IMAGE) {
-			loadSurface(new OPallRenderer(this, new OPallCamera2D(width, height, true),
-					context -> new OPallTexture(Utils.loadUriBitmap(this, data), context, OPallTexture.filter.LINEAR)));
-			contentSurface.update();
-		}
+		contentSurface.update(() -> contentSurface.executeWhenDraw(gl -> {
+			OPallRenderer renderer = (OPallRenderer) contentSurface.getRenderer();
+			renderer.setShader(new OPallTexture(Utils.loadURIBitmap(this, data), this, OPallTexture.filter.LINEAR));
+		}));
 	}
+
+
+
+
+
+
 }

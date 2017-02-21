@@ -1,6 +1,7 @@
 package net.henryco.opalette.glES.render.renderers;
 
 import android.content.Context;
+import android.opengl.GLSurfaceView;
 
 import net.henryco.opalette.glES.render.camera.OPallCamera2D;
 import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
@@ -22,12 +23,19 @@ public class OPallRenderer extends OPallAbsRenderer {
 		super(context, camera);
 		this.shaderMaker = shaderMaker;
 	}
-	public OPallRenderer(Context context) {
-		this(context, null, c -> null);
+	public OPallRenderer(Context context, OPallCamera2D camera) {
+		this(context, camera, context1 -> null);
+	}
+	public OPallRenderer(GLSurfaceView.Renderer renderer) {
+		super(renderer);
+		if (renderer instanceof OPallRenderer) {
+			this.shaderMaker = ((OPallRenderer) renderer).shaderMaker;
+		}
 	}
 
 	@Override
 	protected OPallShader createShader(Context context) {
 		return shaderMaker.createShader(context);
 	}
+
 }

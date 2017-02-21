@@ -21,7 +21,7 @@ public class TriActivity extends AppCompatActivity {
                 setEGLContextClientVersion (2);
                 setRenderer(new OPallAbsRenderer(context, new OPallCamera2D(0, 0)) {
                     @Override
-                    protected OPallShader createShader(Context context) {
+                    public OPallShader createShader(Context context) {
                         return new TriangleShader(context, "shaders/triangle/Tri.vert", "shaders/triangle/Tri.frag");
                     }
                 });
