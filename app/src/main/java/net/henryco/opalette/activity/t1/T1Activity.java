@@ -19,8 +19,10 @@ public class T1Activity extends AppCompatActivity {
 		setContentView(R.layout.activity_t1);
 
 		contentSurface = (OPallSurfaceView) findViewById(R.id.contentSurface);
-		contentSurface.executeWhenReady(this::loadImage);
+		contentSurface.setDimProcessor(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 
+
+		contentSurface.executeWhenReady(this::loadImage);
 
 	}
 

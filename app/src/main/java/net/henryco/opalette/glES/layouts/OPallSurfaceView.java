@@ -33,6 +33,27 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 
 
+
+	public static final class DimensionProcessors {
+		public static final SurfaceDimension DEFAULT = (w, h) -> new int[]{w, h};
+		public static final SurfaceDimension RELATIVE_SQUARE = (w, h) -> {
+			int width = MeasureSpec.getSize(w);
+			int height = MeasureSpec.getSize(h);
+			int size = width > height ? height : width;
+			return new int[]{size, size};
+		};
+	}
+
+
+
+	private SurfaceDimension dimProcessor = DimensionProcessors.DEFAULT;
+	public interface SurfaceDimension {
+		int[] onMeasure(int widthMeasureSpec, int heightMeasureSpec);
+	}
+
+
+
+
     public OPallSurfaceView(Context context) {
         super(context);
         reInit(context);
@@ -61,6 +82,12 @@ public class OPallSurfaceView extends GLSurfaceView {
 	public void update(Runnable runnable) {
 		runnable.run();
 		update();
+	}
+
+
+	public OPallSurfaceView setDimProcessor(SurfaceDimension dimProcessor) {
+		this.dimProcessor = dimProcessor;
+		return this;
 	}
 
 
@@ -98,10 +125,8 @@ public class OPallSurfaceView extends GLSurfaceView {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		int width = MeasureSpec.getSize(widthMeasureSpec);
-		int height = MeasureSpec.getSize(heightMeasureSpec);
-		int size = width > height ? height : width;
-		setMeasuredDimension(size, size);
+		int[] dim = dimProcessor.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		setMeasuredDimension(dim[0], dim[1]);
 	}
 
 	/**
