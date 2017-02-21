@@ -1,8 +1,10 @@
 package net.henryco.opalette.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +48,15 @@ public class Utils {
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inScaled = inScaled;
 		return BitmapFactory.decodeResource(context.getResources(), resID, options);
+	}
+
+	public static Bitmap loadUriBitmap(Context context, Intent intent) {
+		try {
+			return MediaStore.Images.Media.getBitmap(context.getContentResolver(), intent.getData());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
     public static void loopStart(long sleep, Stopper stop, Runnable runnable) {

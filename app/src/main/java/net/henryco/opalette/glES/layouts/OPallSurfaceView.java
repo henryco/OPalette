@@ -4,8 +4,6 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import net.henryco.opalette.glES.render.renderers.OPallRenderer;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -57,21 +55,12 @@ public class OPallSurfaceView extends GLSurfaceView {
     public OPallSurfaceView(Context context) {
         super(context);
         reInit(context);
-		createDefaultRenderer(context);
 	}
 
     public OPallSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         reInit(context);
-		createDefaultRenderer(context);
     }
-
-
-
-	private void createDefaultRenderer(Context context) {
-		setRenderer(new OPallRenderer(context));
-	}
-
 
     public void reInit(Context context) {
         setEGLContextClientVersion(2);
