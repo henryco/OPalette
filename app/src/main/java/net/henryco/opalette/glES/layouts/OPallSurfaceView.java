@@ -101,7 +101,7 @@ public class OPallSurfaceView extends GLSurfaceView {
 	}
 
 
-	public OPallSurfaceView setDimProcessor(SurfaceDimension dimProcessor) {
+	public OPallSurfaceView setDimProportions(SurfaceDimension dimProcessor) {
 		this.dimProcessor = dimProcessor;
 		return this;
 	}

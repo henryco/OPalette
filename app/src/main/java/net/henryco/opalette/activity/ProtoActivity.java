@@ -1,6 +1,7 @@
 package net.henryco.opalette.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.glES.layouts.OPallSurfaceView;
@@ -30,7 +32,7 @@ public class ProtoActivity extends AppCompatActivity
 
 	private OPallSurfaceView oPallSurfaceView;
 	private OPallCamera2D camera;
-
+	private Bitmap image;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +56,9 @@ public class ProtoActivity extends AppCompatActivity
 
 
 		oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
-		oPallSurfaceView.setDimProcessor(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
+		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		oPallSurfaceView.setRenderer(new OPallRenderer(this));
-		oPallSurfaceView.setOnClickListener(v -> Utils.loadImageActivity(this));
+		oPallSurfaceView.setOnClickListener(this::imageClickAction);
 		oPallSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
 		camera = new OPallCamera2D(oPallSurfaceView.getWidth(), oPallSurfaceView.getHeight(), true);
@@ -145,15 +147,27 @@ public class ProtoActivity extends AppCompatActivity
 	}
 
 
+
+
+
+	public void imageClickAction(View view) {
+		//TODO another actions: (share, pick, save)
+		Utils.loadImageActivity(this);
+	}
+
+
+
+
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == FragmentActivity.RESULT_OK) {
-			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
+			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE)
+				image = Utils.loadIntentBitmap(this, data);
 				oPallSurfaceView.update(() -> oPallSurfaceView.runInGLContext(gl ->
 						((OPallRenderer) oPallSurfaceView.getRenderer()).setCamera(camera)
-						.setShader(new OPallTexture(Utils.loadIntentBitmap(this, data), this))));
-			}
+								.setShader(new OPallTexture(image, this))));
 		}
 	}
 }

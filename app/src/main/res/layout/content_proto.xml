@@ -24,10 +24,22 @@
 
         <net.henryco.opalette.glES.layouts.OPallSurfaceView
             android:layout_width="match_parent"
-            android:layout_height="301dp"
+            android:layout_height="0dp"
             android:id="@+id/opallView"
             android:clickable="true"
             android:layout_gravity="center"
-            android:layout_weight="0.08"/>
+            android:layout_weight="0.67"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.16">
+
+        </HorizontalScrollView>
     </LinearLayout>
 </LinearLayout>

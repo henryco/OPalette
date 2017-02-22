@@ -27,7 +27,7 @@ public class T1Activity extends AppCompatActivity {
 		setContentView(R.layout.activity_t1);
 
 		contentSurface = (OPallSurfaceView) findViewById(R.id.contentSurface);
-		contentSurface.setDimProcessor(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
+		contentSurface.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		contentSurface.setOnClickListener(v -> loadImage());
 		int width = contentSurface.getWidth();
 		int height = contentSurface.getHeight();
