@@ -1,4 +1,4 @@
-package net.henryco.opalette.activity.t1;
+package net.henryco.opalette.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

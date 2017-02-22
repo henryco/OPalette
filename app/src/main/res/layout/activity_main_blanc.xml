@@ -12,7 +12,7 @@
     tools:context="net.henryco.opalette.MainBlanc">
 
     <Button
-            android:text="Image"
+            android:text="Proto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/startButton"
@@ -20,20 +20,11 @@
             android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
 
     <Button
-        android:text="triangle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/startButton"
-        android:layout_alignStart="@+id/startButton"
-        android:layout_marginTop="27dp"
-        android:id="@+id/triButton" />
-
-    <Button
         android:text="t1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/triButton"
-        android:layout_alignStart="@+id/triButton"
         android:layout_marginTop="23dp"
-        android:id="@+id/t1Button"/>
+        android:id="@+id/t1Button"
+        android:layout_below="@+id/startButton"
+        android:layout_alignStart="@+id/startButton"/>
 </RelativeLayout>

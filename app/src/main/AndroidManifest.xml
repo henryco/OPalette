@@ -19,12 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activity.T1Activity">
+        </activity>
         <activity
-            android:name=".activity.grad.ImageActivity"
-            android:label="@string/title_activity_gradient"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activity.triangle.TriActivity"/>
-        <activity android:name=".activity.t1.T1Activity">
+            android:name=".activity.ProtoActivity"
+            android:label="@string/title_activity_proto"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

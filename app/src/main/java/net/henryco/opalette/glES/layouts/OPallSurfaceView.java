@@ -4,6 +4,9 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.renderers.OPallAbsRenderer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -115,6 +118,12 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 	@Override
 	public void setRenderer(Renderer renderer) {
+
+		if (renderer instanceof OPallAbsRenderer) {
+			if (((OPallAbsRenderer) renderer).getCamera() == null)
+				((OPallAbsRenderer) renderer).setCamera(new OPallCamera2D(getWidth(), getHeight(), true));
+		}
+
 		super.setRenderer(new Renderer() {
 			@Override
 			public void onSurfaceCreated(GL10 gl, EGLConfig config) {

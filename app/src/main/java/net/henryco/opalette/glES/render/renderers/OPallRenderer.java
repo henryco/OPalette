@@ -26,6 +26,12 @@ public class OPallRenderer extends OPallAbsRenderer {
 	public OPallRenderer(Context context, OPallCamera2D camera) {
 		this(context, camera, context1 -> null);
 	}
+	public OPallRenderer(Context context, ShaderMaker shaderMaker) {
+		this(context, null, shaderMaker);
+	}
+	public OPallRenderer(Context context) {
+		this(context, context1 -> null);
+	}
 	public OPallRenderer(GLSurfaceView.Renderer renderer) {
 		super(renderer);
 		if (renderer instanceof OPallRenderer) {

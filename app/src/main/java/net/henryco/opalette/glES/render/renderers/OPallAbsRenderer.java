@@ -84,4 +84,10 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 		if (shader != null) shader.render(camera);
 	}
 
+	public OPallCamera2D getCamera() {
+		return camera;
+	}
+	public void setCamera(OPallCamera2D camera) {
+		this.camera = camera;
+	}
 }
