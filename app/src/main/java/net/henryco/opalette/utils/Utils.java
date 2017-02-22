@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,14 +17,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Utils {
 
-	public static final class Stopper {
+	public static final class activity {
+		public static final int REQUEST_PICK_IMAGE = 2137;
+	}
+
+
+	public static final class StopHold {
 
 		private volatile AtomicBoolean stop = new AtomicBoolean(false);
-		public synchronized Stopper stop(){
+		public synchronized StopHold stop(){
 			stop.set(true);
 			return this;
 		}
-		public synchronized Stopper start() {
+		public synchronized StopHold start() {
 			stop.set(false);
 			return this;
 		}
@@ -50,7 +56,7 @@ public class Utils {
 		return BitmapFactory.decodeResource(context.getResources(), resID, options);
 	}
 
-	public static Bitmap loadURIBitmap(Context context, Intent intent) {
+	public static Bitmap loadIntentBitmap(Context context, Intent intent) {
 		try {
 			return MediaStore.Images.Media.getBitmap(context.getContentResolver(), intent.getData());
 		} catch (IOException e) {
@@ -59,7 +65,7 @@ public class Utils {
 		}
 	}
 
-    public static void loopStart(long sleep, Stopper stop, Runnable runnable) {
+    public static void loopStart(long sleep, StopHold stop, Runnable runnable) {
 		new Thread(() -> {
 			while (stop == null || !stop.get()) {
 				runnable.run();
@@ -74,4 +80,10 @@ public class Utils {
 		}).start();
 	}
 
+
+	public static void loadImageActivity(FragmentActivity activity) {
+		Intent intent = new Intent(Intent.ACTION_PICK,
+				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		activity.startActivityForResult(intent, Utils.activity.REQUEST_PICK_IMAGE);
+	}
 }

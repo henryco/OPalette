@@ -21,6 +21,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_proto"
-        app:menu="@menu/activity_proto_drawer"/>
+        app:menu="@menu/activity_proto_drawer"
+        app:elevation="17dp"/>
 
 </android.support.v4.widget.DrawerLayout>

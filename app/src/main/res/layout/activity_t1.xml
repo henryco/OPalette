@@ -24,5 +24,6 @@
             android:layout_weight="0.72"
             android:clickable="true"
             android:layout_gravity="center"/>
+
     </LinearLayout>
 </RelativeLayout>

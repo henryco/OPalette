@@ -18,6 +18,13 @@ public class GLESUtils {
 
 	public static final class Color {
 
+		public static final Color BLACK = new Color(0.f,0.f,0.f,0.f);
+		public static final Color WHITE = new Color(1.f,1.f,1.f,1.f);
+		public static final Color PIKNY = new Color(.9f,.1f,.5f,1.f);
+		public static final Color RED = new Color(1.f, 0.f, 0.f,1.f);
+		public static final Color BLUE = new Color(0.f, 0.f,1.f,1.f);
+		public static final Color GREEN = new Color(0.f,1.f,0.f,1.f);
+
 		public float r, g, b, a;
 		public Color(int r255, int g255, int b255, int a255) {
 			this(r255 / 255f, g255 / 255f, b255 / 255f, a255 / 255f);
@@ -96,7 +103,9 @@ public class GLESUtils {
     public static void clear() {
         clear(0f, 0f, 0f, 0f);
     }
-
+	public static void clear(Color color) {
+		clear(color.r, color.g, color.b, color.a);
+	}
 
 	public static int loadTexture(final Bitmap bitmap, final int filter_min, final int filter_mag) {
 		final int[] textureHandle = new int[1];

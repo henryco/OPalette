@@ -27,6 +27,7 @@
             android:layout_height="301dp"
             android:id="@+id/opallView"
             android:clickable="true"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_weight="0.08"/>
     </LinearLayout>
 </LinearLayout>

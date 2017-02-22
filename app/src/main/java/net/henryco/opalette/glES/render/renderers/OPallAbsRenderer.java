@@ -31,7 +31,7 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 
 
 	public OPallAbsRenderer(Context context, OPallCamera2D camera) {
-		this(context, camera, (gl10, camera1) -> GLESUtils.clear(0.9f, 0.1f, 0.5f, 1f));
+		this(context, camera, (gl10, camera1) -> GLESUtils.clear(GLESUtils.Color.BLACK));
 	}
 	public OPallAbsRenderer(Context context, OPallCamera2D camera, OnDrawAction action) {
 		this.context = context;
@@ -59,7 +59,7 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 	}
 
 
-	public GLSurfaceView.Renderer setOnDrawAction(OnDrawAction action) {
+	public OPallAbsRenderer setOnDrawAction(OnDrawAction action) {
 		this.onDrawAction = action;
 		return this;
 	}
@@ -87,7 +87,8 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 	public OPallCamera2D getCamera() {
 		return camera;
 	}
-	public void setCamera(OPallCamera2D camera) {
+	public OPallAbsRenderer setCamera(OPallCamera2D camera) {
 		this.camera = camera;
+		return this;
 	}
 }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import net.henryco.opalette.activity.ProtoActivity;
 import net.henryco.opalette.activity.T1Activity;
+import net.henryco.opalette.activity.TestActivity;
 
 public class MainBlanc extends AppCompatActivity {
 
@@ -23,6 +24,8 @@ public class MainBlanc extends AppCompatActivity {
                 v -> startActivity(new Intent(this, ProtoActivity.class)));
         findViewById(R.id.t1Button).setOnClickListener(
 				v -> startActivity(new Intent(this, T1Activity.class)));
+        findViewById(R.id.buttonTest).setOnClickListener(
+                v -> startActivity(new Intent(this, TestActivity.class)));
     }
 
 }

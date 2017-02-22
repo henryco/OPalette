@@ -55,13 +55,11 @@ public class T1Activity extends AppCompatActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		contentSurface.update(() -> contentSurface.executeWhenDraw(gl -> {
+		contentSurface.update(() -> contentSurface.runInGLContext(gl -> {
 			OPallRenderer renderer = (OPallRenderer) contentSurface.getRenderer();
-			renderer.setShader(new OPallTexture(Utils.loadURIBitmap(this, data), this, OPallTexture.filter.LINEAR));
+			renderer.setShader(new OPallTexture(Utils.loadIntentBitmap(this, data), this, OPallTexture.filter.LINEAR));
 		}));
 	}
-
-
 
 
 

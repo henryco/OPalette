@@ -107,7 +107,7 @@ public class OPallSurfaceView extends GLSurfaceView {
 	}
 
 
-	public OPallSurfaceView executeWhenDraw(DrawAction action) {
+	public OPallSurfaceView runInGLContext(DrawAction action) {
 		actionQueue.add(action);
 		return this;
 	}
@@ -172,7 +172,7 @@ public class OPallSurfaceView extends GLSurfaceView {
 	 * @param action action to execute
 	 * @return OPallSurfaceView
 	 */
-	public final OPallSurfaceView enterWhenReady(Runnable action) {
+	public final OPallSurfaceView startWhenReady(Runnable action) {
 		new Thread(() -> {
 			while (!surfaceInfo.isSurfaceCreated()
 					|| !surfaceInfo.isSurfaceChanged()) {

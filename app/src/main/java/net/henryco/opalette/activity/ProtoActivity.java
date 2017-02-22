@@ -1,10 +1,13 @@
 package net.henryco.opalette.activity;
 
+import android.content.Intent;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,13 +18,18 @@ import android.view.MenuItem;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.glES.layouts.OPallSurfaceView;
+import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.textures.OPallTexture;
 import net.henryco.opalette.glES.render.renderers.OPallRenderer;
+import net.henryco.opalette.utils.Utils;
 
 public class ProtoActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
 
 
+	private OPallSurfaceView oPallSurfaceView;
+	private OPallCamera2D camera;
 
 
 	@Override
@@ -45,10 +53,17 @@ public class ProtoActivity extends AppCompatActivity
 		navigationView.setNavigationItemSelectedListener(this);
 
 
-		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
+		oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
 		oPallSurfaceView.setDimProcessor(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		oPallSurfaceView.setRenderer(new OPallRenderer(this));
+		oPallSurfaceView.setOnClickListener(v -> Utils.loadImageActivity(this));
+		oPallSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+
+		camera = new OPallCamera2D(oPallSurfaceView.getWidth(), oPallSurfaceView.getHeight(), true);
+
 	}
+
+
 
 
 
@@ -67,12 +82,17 @@ public class ProtoActivity extends AppCompatActivity
 
 
 
+
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.proto, menu);
 		return true;
 	}
+
+
 
 
 
@@ -92,6 +112,7 @@ public class ProtoActivity extends AppCompatActivity
 
 		return super.onOptionsItemSelected(item);
 	}
+
 
 
 
@@ -121,5 +142,18 @@ public class ProtoActivity extends AppCompatActivity
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
 		return true;
+	}
+
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == FragmentActivity.RESULT_OK) {
+			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
+				oPallSurfaceView.update(() -> oPallSurfaceView.runInGLContext(gl ->
+						((OPallRenderer) oPallSurfaceView.getRenderer()).setCamera(camera)
+						.setShader(new OPallTexture(Utils.loadIntentBitmap(this, data), this))));
+			}
+		}
 	}
 }
