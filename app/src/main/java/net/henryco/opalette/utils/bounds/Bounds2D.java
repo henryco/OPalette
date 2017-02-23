@@ -2,6 +2,8 @@ package net.henryco.opalette.utils.bounds;
 
 import net.henryco.opalette.utils.GLESUtils;
 import net.henryco.opalette.utils.Utils;
+import net.henryco.opalette.utils.bounds.consumer.BoundsConsumer;
+import net.henryco.opalette.utils.bounds.observer.OPallBoundsHolder;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 
 import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
-import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
+import net.henryco.opalette.glES.render.graphics.shaders.Shader;
 
 /**
  * Created by root on 15/02/17.
@@ -14,7 +14,7 @@ public class OPallRenderer extends OPallAbsRenderer {
 
 	@FunctionalInterface
 	public interface ShaderMaker {
-		OPallShader createShader(Context context);
+		Shader createShader(Context context);
 	}
 
 	private ShaderMaker shaderMaker;
@@ -40,7 +40,7 @@ public class OPallRenderer extends OPallAbsRenderer {
 	}
 
 	@Override
-	protected OPallShader createShader(Context context) {
+	protected Shader createShader(Context context) {
 		return shaderMaker.createShader(context);
 	}
 

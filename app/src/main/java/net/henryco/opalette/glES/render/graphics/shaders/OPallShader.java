@@ -1,34 +1,15 @@
 package net.henryco.opalette.glES.render.graphics.shaders;
 
-/**
- * Created by root on 13/02/17.
- */
-
-import android.content.Context;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
-import net.henryco.opalette.utils.GLESUtils;
-import net.henryco.opalette.utils.Utils;
 
-public abstract class OPallShader {
+/**
+ * Created by HenryCo on 23/02/17.
+ */
 
+public interface OPallShader {
 
-	public enum filter {
-		LINEAR(GLES20.GL_LINEAR),
-		NEAREST(GLES20.GL_NEAREST);
-
-		public int type;
-		filter(int type) {
-			this.type = type;
-		}
-	}
-
-
-
-	public final int program;
-    public final int COORDS_PER_VERTEX;
-    public final int vertexStride;
 
     /*  Requested in *.vert file:
 	 *
@@ -44,54 +25,31 @@ public abstract class OPallShader {
      *      }
      */
 
-    public OPallShader(Context context, String VERT, String FRAG) {
-        this(context, VERT, FRAG, 3);
-    }
-    public OPallShader(Context context, String VERT, String FRAG, int coordsPerVertex) {
 
-        String vertex = Utils.getSourceAssetsText(VERT, context);
-        String fragment = Utils.getSourceAssetsText(FRAG, context);
-        program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, GLESUtils.loadShader(GLES20.GL_VERTEX_SHADER, vertex));
-        GLES20.glAttachShader(program, GLESUtils.loadShader(GLES20.GL_FRAGMENT_SHADER, fragment));
-        GLES20.glLinkProgram(program);
-        GLES20.glUseProgram(program);
-        COORDS_PER_VERTEX = coordsPerVertex;
-        vertexStride = COORDS_PER_VERTEX * 4; //coz float = 4 byte
-		outErrorLog();
-	}
+
+	void render(OPallCamera2D camera);
 
 
 
-    protected abstract void render(final int glProgram, OPallCamera2D camera);
-	public abstract void setScreenDim(float w, float h);
+	String a_Position = "a_Position";
+	String u_MVPMatrix = "u_MVPMatrix";
+	String u_Texture_n = "u_Texture";
+	String a_TexCoordinate = "a_TexCoordinate";
 
 
-    public void render(OPallCamera2D camera) {
-
-        GLES20.glUseProgram(program);
-        render(program, camera.setProgram(program).update());
-        GLES20.glUseProgram(-1);
-    }
-
-
-
-
-    public void outErrorLog() {
-		System.out.println(getErrorLog());
-    }
-	public String getErrorLog() {
-		return GLES20.glGetShaderInfoLog(program);
-	}
-
-
-	protected int getPositionHandle() {
-		return GLES20.glGetAttribLocation(program, GLESUtils.a_Position);
-	}
-	protected int getTextureUniformHandle(int n) {
-		return GLES20.glGetUniformLocation(program, GLESUtils.defTextureN(n));
-	}
-	protected int getTextureCoordinateHandle() {
-		return GLES20.glGetAttribLocation(program, GLESUtils.a_TexCoordinate);
+	final class methods {
+		static String defTextureN(int numb) {
+			return OPallShader.u_Texture_n + numb;
+		}
+		static int loadShader(int type, String shaderCode) {
+			int shader = GLES20.glCreateShader(type);
+			GLES20.glShaderSource(shader, shaderCode);
+			GLES20.glCompileShader(shader);
+			return shader;
+		}
+		static void applyCameraMatrix(int program, float[] mMVPMatrix) {
+			GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(program, OPallShader.u_MVPMatrix), 1, false, mMVPMatrix, 0);
+		}
 	}
 }
+

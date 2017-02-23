@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import net.henryco.opalette.R;
 import net.henryco.opalette.glES.layouts.OPallSurfaceView;
 import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
-import net.henryco.opalette.glES.render.graphics.textures.OPallTexture;
+import net.henryco.opalette.glES.render.graphics.textures.Texture;
 import net.henryco.opalette.glES.render.renderers.OPallRenderer;
 import net.henryco.opalette.utils.Utils;
 
@@ -59,7 +59,7 @@ public class T1Activity extends AppCompatActivity {
 		contentSurface.update(() -> contentSurface.runInGLContext(gl -> {
 			OPallRenderer renderer = contentSurface.getRenderer();
 			Bitmap img = Utils.loadIntentBitmap(this, data);
-			renderer.setShader(new OPallTexture(img, this, OPallTexture.filter.LINEAR)
+			renderer.setShader(new Texture(img, this, Texture.filter.LINEAR)
 			//		.setBounds(0,0, contentSurface.getWidth(), contentSurface.getHeight(), 1f)
 			);
 		}));

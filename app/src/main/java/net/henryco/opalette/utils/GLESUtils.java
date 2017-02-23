@@ -1,8 +1,6 @@
 package net.henryco.opalette.utils;
 
-import android.graphics.Bitmap;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -52,26 +50,6 @@ public class GLESUtils {
 
 
 
-
-
-
-
-
-
-    public static final String a_Position = "a_Position";
-    public static final String u_MVPMatrix = "u_MVPMatrix";
-	public static final String u_Texture_n = "u_Texture";
-	public static final String a_TexCoordinate = "a_TexCoordinate";
-	public static String defTextureN(int numb) {
-		return u_Texture_n + numb;
-	}
-
-
-
-
-
-
-
 	/**
 	 * Initialize vertex byte buffer for shape coordinates with parameters
 	 * (number of coordinate values * 4 bytes per float)<br>
@@ -105,13 +83,6 @@ public class GLESUtils {
         return buffer;
     }
 
-    public static int loadShader(int type, String shaderCode) {
-        int shader = GLES20.glCreateShader(type);
-        GLES20.glShaderSource(shader, shaderCode);
-        GLES20.glCompileShader(shader);
-        return shader;
-    }
-
     public static void clear(float r, float g, float b, float a) {
         GLES20.glClearColor(r, g, b, a);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
@@ -124,17 +95,5 @@ public class GLESUtils {
 		clear(color.r, color.g, color.b, color.a);
 	}
 
-	public static int loadTexture(final Bitmap bitmap, final int filter_min, final int filter_mag) {
-		final int[] textureHandle = new int[1];
-		GLES20.glGenTextures(1, textureHandle, 0);
-		if (textureHandle[0] != 0) {
-			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, filter_min);
-			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, filter_mag);
-			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-			return textureHandle[0];
-		}
-		throw new RuntimeException("Error loading texture.");
-	}
 
 }

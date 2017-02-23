@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 
 import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
-import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
+import net.henryco.opalette.glES.render.graphics.shaders.Shader;
 import net.henryco.opalette.utils.GLESUtils;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -23,7 +23,7 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 	private OnDrawAction onDrawAction;
 
 
-	private OPallShader shader;
+	private Shader shader;
 	private Context context;
 	private OPallCamera2D camera;
 
@@ -48,12 +48,12 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 		}
 	}
 
-	protected abstract OPallShader createShader(Context context);
+	protected abstract Shader createShader(Context context);
 
-	public OPallShader getShader() {
+	public Shader getShader() {
 		return this.shader;
 	}
-	public OPallAbsRenderer setShader(OPallShader shader) {
+	public OPallAbsRenderer setShader(Shader shader) {
 		this.shader = shader;
 		return this;
 	}

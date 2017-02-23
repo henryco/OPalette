@@ -1,5 +1,8 @@
 package net.henryco.opalette.utils.bounds;
 
+import net.henryco.opalette.utils.bounds.consumer.BoundsConsumer;
+import net.henryco.opalette.utils.bounds.observer.OPallBoundsHolder;
+
 /**
  * Created by HenryCo on 23/02/17.
  */

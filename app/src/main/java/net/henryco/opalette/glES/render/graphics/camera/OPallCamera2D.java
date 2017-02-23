@@ -3,8 +3,6 @@ package net.henryco.opalette.glES.render.graphics.camera;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
-import net.henryco.opalette.utils.GLESUtils;
-
 
 /**
  * Created by root on 13/02/17.
@@ -36,8 +34,7 @@ public class OPallCamera2D {
         }
     }
 
-	private int program;
-
+	//Model View Projection Matrix
 	private final float[] mMVPMatrix;
 	private final float[] mProjectionMatrix;
 	private final float[] mViewMatrix;
@@ -98,10 +95,7 @@ public class OPallCamera2D {
 
 
 
-	public OPallCamera2D update() {
-		return update(program);
-	}
-    public OPallCamera2D update(int program) {
+    public OPallCamera2D update() {
 
 		GLES20.glViewport(0, 0, width, height);
 		float ratio = (float) width / height;
@@ -109,19 +103,14 @@ public class OPallCamera2D {
         Matrix.setLookAtM(mViewMatrix, 0, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 		Matrix.setRotateEulerM(mMVPMatrix, 0, 180 + rot.x, rot.y, rot.z);
-		GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(program, GLESUtils.u_MVPMatrix), 1, false, mMVPMatrix, 0);
-
-        return this;
+		//OPallShader.applyCameraMatrix(program, mMVPMatrix);
+        //return mMVPMatrix;
+		return this;
     }
 
-
-
-
-    public OPallCamera2D setProgram(int program) {
-        this.program = program;
-        return this;
-    }
-
+	public final float[] getMVPMatrix() {
+		return mMVPMatrix;
+	}
 
 
 	public OPallCamera2D setZoom(float z) {
