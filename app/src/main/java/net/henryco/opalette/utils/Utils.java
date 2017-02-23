@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -22,20 +23,28 @@ public class Utils {
 	}
 
 
-	public static final class StopHold {
+	public static final class Switcher {
 
 		private volatile AtomicBoolean stop = new AtomicBoolean(false);
-		public synchronized StopHold stop(){
+		public synchronized Switcher stop(){
 			stop.set(true);
 			return this;
 		}
-		public synchronized StopHold start() {
+		public synchronized Switcher start() {
 			stop.set(false);
 			return this;
 		}
 		public boolean get() {return stop.get();}
 	}
 
+
+	@SuppressWarnings("unchecked")
+	public static <T> T arrayFlatCopy(Object a) {
+		int l = Array.getLength(a);
+		Object arr = java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), l);
+		System.arraycopy(a, 0, arr, 0, l);
+		return (T) arr;
+	}
 
 
     public static String getSourceAssetsText(String file, Context context) {
@@ -47,8 +56,8 @@ public class Utils {
             return new String(buffer);
         } catch (IOException e) {
             e.printStackTrace();
+			return "";
         }
-        return "";
     }
 
 	public static Bitmap loadAssetsBitmap(Context context, boolean inScaled, int resID) {
@@ -66,7 +75,7 @@ public class Utils {
 		}
 	}
 
-    public static void loopStart(long sleep, StopHold stop, Runnable runnable) {
+    public static void loopStart(long sleep, Switcher stop, Runnable runnable) {
 		new Thread(() -> {
 			while (stop == null || !stop.get()) {
 				runnable.run();

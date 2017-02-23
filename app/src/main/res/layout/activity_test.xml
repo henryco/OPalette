@@ -11,4 +11,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="net.henryco.opalette.activity.TestActivity">
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <net.henryco.opalette.glES.layouts.OPallSurfaceView
+            android:layout_width="345dp"
+            android:layout_height="402dp"
+            android:id="@+id/surface"
+            android:foregroundGravity="center"
+            android:layout_row="0"
+            android:layout_column="0"/>
+    </GridLayout>
+
 </RelativeLayout>

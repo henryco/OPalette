@@ -82,8 +82,9 @@ public class OPallSurfaceView extends GLSurfaceView {
         setEGLContextClientVersion(2);
 		actionQueue = new ArrayList<>();
 		drawAction = gl -> {
-			while (actionQueue.size() > 0)
-				actionQueue.remove(0).onDrawFrameAction(gl);
+			int size = actionQueue.size();
+			for (int i = 0; i < size; i++) actionQueue.remove(0).onDrawFrameAction(gl);
+			//while (actionQueue.size() > 0) actionQueue.remove(0).onDrawFrameAction(gl);
 		};
 
     }
@@ -148,10 +149,15 @@ public class OPallSurfaceView extends GLSurfaceView {
 		this.renderer = renderer;
 	}
 
-	public Renderer getRenderer() {
-		return this.renderer;
-	}
 
+	@SuppressWarnings("unchecked")
+	public <T extends Renderer> T getRenderer() {
+		try {
+			return (T) this.renderer;
+		} catch (Exception e) {
+			throw new ClassCastException();
+		}
+	}
 
 
 	/**
@@ -186,4 +192,6 @@ public class OPallSurfaceView extends GLSurfaceView {
 		}).start();
 		return this;
 	}
+
+
 }

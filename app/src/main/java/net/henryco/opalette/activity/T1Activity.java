@@ -1,6 +1,7 @@
 package net.henryco.opalette.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -56,9 +57,13 @@ public class T1Activity extends AppCompatActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		contentSurface.update(() -> contentSurface.runInGLContext(gl -> {
-			OPallRenderer renderer = (OPallRenderer) contentSurface.getRenderer();
-			renderer.setShader(new OPallTexture(Utils.loadIntentBitmap(this, data), this, OPallTexture.filter.LINEAR));
+			OPallRenderer renderer = contentSurface.getRenderer();
+			Bitmap img = Utils.loadIntentBitmap(this, data);
+			renderer.setShader(new OPallTexture(img, this, OPallTexture.filter.LINEAR)
+			//		.setBounds(0,0, contentSurface.getWidth(), contentSurface.getHeight(), 1f)
+			);
 		}));
+
 	}
 
 

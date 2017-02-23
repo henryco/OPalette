@@ -34,6 +34,14 @@ public class ProtoActivity extends AppCompatActivity
 	private OPallCamera2D camera;
 	private Bitmap image;
 
+
+
+
+
+
+	// ================================================ AUTO-GENERATED SKELETON ==================================================== //
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,6 +61,10 @@ public class ProtoActivity extends AppCompatActivity
 
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
 
 
 		oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
@@ -93,8 +105,6 @@ public class ProtoActivity extends AppCompatActivity
 		getMenuInflater().inflate(R.menu.proto, menu);
 		return true;
 	}
-
-
 
 
 
@@ -149,11 +159,14 @@ public class ProtoActivity extends AppCompatActivity
 
 
 
+	// ============================================== END OF AUTO-GENERATED SKELETON ========================================== //
 
-	public void imageClickAction(View view) {
-		//TODO another actions: (share, pick, save)
-		Utils.loadImageActivity(this);
-	}
+
+
+
+
+
+
 
 
 
@@ -170,4 +183,35 @@ public class ProtoActivity extends AppCompatActivity
 								.setShader(new OPallTexture(image, this))));
 		}
 	}
+
+
+
+
+
+
+
+
+
+	public void imageClickAction(View view) {
+		//TODO another actions: (share, pick, save)
+		Utils.loadImageActivity(this);
+		setImageFilter();
+	}
+
+
+
+
+
+
+
+	public void setImageFilter() {
+		oPallSurfaceView.runInGLContext(gl -> {
+			OPallRenderer renderer = oPallSurfaceView.getRenderer();
+			renderer.setShader(renderer.getShader());
+			// TODO (actually doing nothing)
+		}).update();
+	}
+
+
+
 }

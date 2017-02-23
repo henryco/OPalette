@@ -29,38 +29,26 @@ public class OPallTexture extends OPallShader {
 
 	@Override
 	protected final float[] getVertices() {
-		return new float[]{
-				-1, 1,	// 0
-				-1, -1,	// 1
-				1, -1,	// 2
-				1, 1	// 3
-		};
+		return GLESUtils.Vertices.vertices.FLAT_SQUARE_2D();
 	}
 
 	@Override
 	protected final short[] getOrder() {
-		return new short[]{
-				0, 1, 2,
-				0, 2, 3
-		}; // triangle1 + triangle2 = square
+		return GLESUtils.Vertices.order.FLAT_SQUARE_2D();
 	}
 
-	/* VERTEX MATRIX:
-	 * 	|0 3|
-	 * 	|1 2|
-	 */
 
 
 
-	private static final String DEF_SHADER = "shaders/default/Default";
+	protected static final String DEF_SHADER = "shaders/default/Default";
 	public static final int COORDS_PER_TEXEL = 2;
 	public final static int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
-	private final FloatBuffer texelBuffer;
-	private int textureGL_ID;
-	private float width = 0, height = 0,
+	protected final FloatBuffer texelBuffer;
+	protected int textureGL_ID;
+	protected float width = 0, height = 0,
 			x = 0, y = 0, scale = 1;
 
-
+	private float bitmapWidth, bitmapHeight;
 
 
 	public OPallTexture(Bitmap image, Context context) {
@@ -80,7 +68,13 @@ public class OPallTexture extends OPallShader {
 
 
 	public OPallTexture setBitmap(Bitmap image, filter filterMin, filter filterMag) {
-		this.textureGL_ID = GLESUtils.loadTexture(image, filterMin.type, filterMag.type);
+		if (image != null && filterMin != null && filterMag != null) {
+			this.textureGL_ID = GLESUtils.loadTexture(image, filterMin.type, filterMag.type);
+			width = image.getWidth();
+			height = image.getHeight();
+			bitmapWidth = width;
+			bitmapHeight = height;
+		}
 		return this;
 	}
 	public OPallTexture setBitmap(Bitmap image, filter filter) {
@@ -117,30 +111,22 @@ public class OPallTexture extends OPallShader {
 	}
 
 
-	public OPallTexture resetBounds() {
+	public OPallTexture resetBounds(boolean full) {
 		generateVertexBuffer(getVertices());
-		width = 0;
-		height = 0;
+		width = full ? 0 : bitmapWidth;
+		height = full ? 0 : bitmapHeight;
 		scale = 1;
 		x = 0;
 		y = 0;
 		return this;
 	}
+	public OPallTexture resetBounds() {
+		return resetBounds(false);
+	}
 
 
-	private void recalculateVerts() {
-		if (width != 0 && height != 0) {
-			float[] verts = getVertices();
-			float sc_x = width / getScrDim()[0];
-			float sc_y = height / getScrDim()[1];
-			float tr_x = 2 * x / getScrDim()[0];
-			float tr_y = 2 * y / getScrDim()[1];
-			for (int i = 0; i < verts.length - 1; i+= 2) {
-				verts[i] = sc_x * scale * (verts[i] + 1) - 1 + tr_x;
-				verts[i+1] = sc_y * scale * (verts[i+1] + 1) - 1 + tr_y;
-			}
-			generateVertexBuffer(verts);
-		}
+	protected void recalculateVerts() {
+		generateVertexBuffer(GLESUtils.Vertices.calculate(getVertices(), 0, 0, width, height, getScrDim()[0], getScrDim()[1], scale));
 	}
 
 
