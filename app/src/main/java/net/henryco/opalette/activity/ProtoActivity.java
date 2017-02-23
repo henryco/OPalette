@@ -178,10 +178,9 @@ public class ProtoActivity extends AppCompatActivity
 		if (resultCode == FragmentActivity.RESULT_OK) {
 			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE)
 				image = Utils.loadIntentBitmap(this, data);
-				oPallSurfaceView.update(() -> oPallSurfaceView.runInGLContext(gl -> {
-					((OPallRenderer) oPallSurfaceView.getRenderer()).setCamera(camera)
-							.setShader(new Texture(image, this).setCameraForceUpdate(true));
-				}));
+				oPallSurfaceView.update(() -> oPallSurfaceView.runInGLContext(gl ->
+						((OPallRenderer) oPallSurfaceView.getRenderer()).setCamera(camera)
+						.setShader(new Texture(image, this).setCameraForceUpdate(true))));
 		}
 	}
 

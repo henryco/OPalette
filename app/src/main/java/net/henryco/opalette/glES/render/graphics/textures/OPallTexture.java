@@ -22,6 +22,19 @@ public interface OPallTexture {
 	}
 
 
+	int[] ACTIVE_TEXTURES = {
+			GLES20.GL_TEXTURE0,
+			GLES20.GL_TEXTURE1,
+			GLES20.GL_TEXTURE2,
+			GLES20.GL_TEXTURE3,
+			GLES20.GL_TEXTURE4,
+			GLES20.GL_TEXTURE5,
+			GLES20.GL_TEXTURE6,
+			GLES20.GL_TEXTURE7,
+			GLES20.GL_TEXTURE8,
+			GLES20.GL_TEXTURE9
+	};
+
 
 	int COORDS_PER_TEXEL = 2;
 	int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
@@ -40,6 +53,21 @@ public interface OPallTexture {
 			}
 			throw new RuntimeException("Error loading texture.");
 		}
+
+		static void bindTexture(int n, int textureDataHandle, int mTextureUniformHandle) {
+			GLES20.glActiveTexture(ACTIVE_TEXTURES[n]);
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);
+			GLES20.glUniform1i(mTextureUniformHandle, n);
+		}
+
+		static void glEnableVertexAttribArray(int ... atr) {
+			for (int i : atr) GLES20.glEnableVertexAttribArray(i);
+		}
+
+		static void glDisableVertexAttribArray(int ... atr) {
+			for (int i : atr) GLES20.glDisableVertexAttribArray(i);
+		}
+
 	}
 
 }

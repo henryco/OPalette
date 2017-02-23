@@ -83,7 +83,9 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 	public Bounds2D setDefSize(float w, float h) {
 		return setDefWidth(w).setDefHeight(h);
 	}
-
+	public Bounds2D setUniSize(float w, float h) {
+		return setSize(w, h).setDefSize(w, h);
+	}
 	public Bounds2D resetBounds(boolean full) {
 		generateVertexBuffer(0, 0);
 		width = full ? 0 : def_width;
