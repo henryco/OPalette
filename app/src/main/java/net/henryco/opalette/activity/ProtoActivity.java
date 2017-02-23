@@ -20,7 +20,7 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.glES.layouts.OPallSurfaceView;
-import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
 import net.henryco.opalette.glES.render.graphics.textures.OPallTexture;
 import net.henryco.opalette.glES.render.renderers.OPallRenderer;
 import net.henryco.opalette.utils.Utils;

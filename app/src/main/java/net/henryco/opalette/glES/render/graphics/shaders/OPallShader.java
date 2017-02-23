@@ -7,24 +7,28 @@ package net.henryco.opalette.glES.render.graphics.shaders;
 import android.content.Context;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
 import net.henryco.opalette.utils.GLESUtils;
 import net.henryco.opalette.utils.Utils;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
 public abstract class OPallShader {
 
-    public final int program;
-    public final ShortBuffer orderBuffer;
 
+	public enum filter {
+		LINEAR(GLES20.GL_LINEAR),
+		NEAREST(GLES20.GL_NEAREST);
+
+		public int type;
+		filter(int type) {
+			this.type = type;
+		}
+	}
+
+
+
+	public final int program;
     public final int COORDS_PER_VERTEX;
-    public final int vertexCount;
     public final int vertexStride;
-
-	private FloatBuffer vertexBuffer;
-	private float scrW = 0, scrH = 0;
 
     /*  Requested in *.vert file:
 	 *
@@ -43,7 +47,6 @@ public abstract class OPallShader {
     public OPallShader(Context context, String VERT, String FRAG) {
         this(context, VERT, FRAG, 3);
     }
-
     public OPallShader(Context context, String VERT, String FRAG, int coordsPerVertex) {
 
         String vertex = Utils.getSourceAssetsText(VERT, context);
@@ -53,46 +56,25 @@ public abstract class OPallShader {
         GLES20.glAttachShader(program, GLESUtils.loadShader(GLES20.GL_FRAGMENT_SHADER, fragment));
         GLES20.glLinkProgram(program);
         GLES20.glUseProgram(program);
-		generateVertexBuffer(getVertices());
-        orderBuffer = GLESUtils.createShortBuffer(getOrder());
         COORDS_PER_VERTEX = coordsPerVertex;
-        vertexCount = getOrder().length;
         vertexStride = COORDS_PER_VERTEX * 4; //coz float = 4 byte
 		outErrorLog();
 	}
 
 
 
-	protected abstract float[] getVertices();
-	protected abstract short[] getOrder();
-    protected abstract void render(final int glProgram, final int positionHandle, final FloatBuffer vertexBuffer, final ShortBuffer orderBuffer, OPallCamera2D camera);
-
-
-
-
-
-	protected final void generateVertexBuffer(float[] vertices) {
-		vertexBuffer = GLESUtils.createFloatBuffer(vertices);
-	}
-
-
+    protected abstract void render(final int glProgram, OPallCamera2D camera);
+	public abstract void setScreenDim(float w, float h);
 
 
     public void render(OPallCamera2D camera) {
 
         GLES20.glUseProgram(program);
-        render(program, GLES20.glGetAttribLocation(program, GLESUtils.a_Position), vertexBuffer, orderBuffer, camera.setProgram(program));
+        render(program, camera.setProgram(program).update());
         GLES20.glUseProgram(-1);
     }
 
 
-	public void setScrDim(float w,float h) {
-		this.scrW = w;
-		this.scrH = h;
-	}
-	public float[] getScrDim() {
-		return new float[]{scrW, scrH};
-	}
 
 
     public void outErrorLog() {
@@ -102,4 +84,14 @@ public abstract class OPallShader {
 		return GLES20.glGetShaderInfoLog(program);
 	}
 
+
+	protected int getPositionHandle() {
+		return GLES20.glGetAttribLocation(program, GLESUtils.a_Position);
+	}
+	protected int getTextureUniformHandle(int n) {
+		return GLES20.glGetUniformLocation(program, GLESUtils.defTextureN(n));
+	}
+	protected int getTextureCoordinateHandle() {
+		return GLES20.glGetAttribLocation(program, GLESUtils.a_TexCoordinate);
+	}
 }

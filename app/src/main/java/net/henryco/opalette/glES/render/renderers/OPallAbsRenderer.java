@@ -3,7 +3,7 @@ package net.henryco.opalette.glES.render.renderers;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
 import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
 import net.henryco.opalette.utils.GLESUtils;
 
@@ -75,7 +75,7 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 		if (camera != null) camera.set(width, height);
-		if (shader != null) shader.setScrDim(width, height);
+		if (shader != null) shader.setScreenDim(width, height);
 	}
 
 	@Override

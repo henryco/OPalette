@@ -3,7 +3,7 @@ package net.henryco.opalette.glES.render.renderers;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
 import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
 
 /**

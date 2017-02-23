@@ -4,9 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.glES.render.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
 import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
 import net.henryco.opalette.utils.GLESUtils;
+import net.henryco.opalette.utils.bounds.Bounds2D;
+import net.henryco.opalette.utils.bounds.BoundsConsumer;
+import net.henryco.opalette.utils.bounds.OPallBounds;
+import net.henryco.opalette.utils.bounds.OPallBoundsHolder;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -15,28 +19,7 @@ import java.nio.ShortBuffer;
  * Created by root on 14/02/17.
  */
 
-public class OPallTexture extends OPallShader {
-
-	public enum filter {
-		LINEAR(GLES20.GL_LINEAR),
-		NEAREST(GLES20.GL_NEAREST);
-
-		private int type;
-		filter(int type) {
-			this.type = type;
-		}
-	}
-
-	@Override
-	protected final float[] getVertices() {
-		return GLESUtils.Vertices.vertices.FLAT_SQUARE_2D();
-	}
-
-	@Override
-	protected final short[] getOrder() {
-		return GLESUtils.Vertices.order.FLAT_SQUARE_2D();
-	}
-
+public class OPallTexture extends OPallShader implements OPallBoundsHolder<Bounds2D> {
 
 
 
@@ -45,10 +28,11 @@ public class OPallTexture extends OPallShader {
 	public final static int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
 	protected final FloatBuffer texelBuffer;
 	protected int textureGL_ID;
-	protected float width = 0, height = 0,
-			x = 0, y = 0, scale = 1;
+	public final Bounds2D bounds2D;
+	private float screenWidth = 0, screenHeight = 0;
 
-	private float bitmapWidth, bitmapHeight;
+
+
 
 
 	public OPallTexture(Bitmap image, Context context) {
@@ -60,6 +44,10 @@ public class OPallTexture extends OPallShader {
 	public OPallTexture(Bitmap image, Context context, filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
+		bounds2D = new Bounds2D()
+				.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
+				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
+				.setHolder(this);
 		setBitmap(image, filter);
 	}
 	public OPallTexture(Bitmap image, Context context, String shaderVert, String shaderFrag) {
@@ -67,13 +55,16 @@ public class OPallTexture extends OPallShader {
 	}
 
 
+
+
+
+
+
 	public OPallTexture setBitmap(Bitmap image, filter filterMin, filter filterMag) {
 		if (image != null && filterMin != null && filterMag != null) {
 			this.textureGL_ID = GLESUtils.loadTexture(image, filterMin.type, filterMag.type);
-			width = image.getWidth();
-			height = image.getHeight();
-			bitmapWidth = width;
-			bitmapHeight = height;
+			bounds2D.setSize(image.getWidth(), image.getHeight());
+			bounds2D.setDefSize(image.getWidth(), image.getHeight());
 		}
 		return this;
 	}
@@ -82,75 +73,60 @@ public class OPallTexture extends OPallShader {
 	}
 
 
-	public OPallTexture setBounds(float x, float y, float w, float h, float scale) {
-		this.x = x;
-		this.y = y;
-		this.width = w;
-		this.height = h;
-		this.scale = scale;
-		recalculateVerts();
+
+
+
+
+	@Override
+	public OPallTexture bounds(BoundsConsumer<Bounds2D> processor) {
+		bounds2D.apply(processor);
 		return this;
 	}
-	public OPallTexture setBounds(float x, float y, float w, float h){
-		return setBounds(x, y, w, h, scale);
-	}
-	public OPallTexture setPosition(float x, float y) {
-		return setBounds(x, y, width, height, scale);
-	}
-	public OPallTexture setWidth(float w) {
-		return setBounds(x, y, w, height, scale);
-	}
-	public OPallTexture setHeight(float h) {
-		return setBounds(x, y, width, h, scale);
-	}
-	public OPallTexture setSize(float w, float h) {
-		return setBounds(x, y, w, h, scale);
-	}
-	public OPallTexture setScale(float scale) {
-		return setBounds(x, y, width, height, scale);
-	}
 
-
-	public OPallTexture resetBounds(boolean full) {
-		generateVertexBuffer(getVertices());
-		width = full ? 0 : bitmapWidth;
-		height = full ? 0 : bitmapHeight;
-		scale = 1;
-		x = 0;
-		y = 0;
+	@Override
+	public OPallTexture updateBounds() {
+		bounds2D.generateVertexBuffer(screenWidth, screenHeight);
 		return this;
 	}
-	public OPallTexture resetBounds() {
-		return resetBounds(false);
-	}
 
 
-	protected void recalculateVerts() {
-		generateVertexBuffer(GLESUtils.Vertices.calculate(getVertices(), 0, 0, width, height, getScrDim()[0], getScrDim()[1], scale));
+	@Override
+	public void setScreenDim(float w, float h) {
+		screenWidth = w;
+		screenHeight = h;
+		if (w != 0 && h != 0) updateBounds();
 	}
+
 
 
 
 
 
 	@Override
-	protected void render(int glProgram, int positionHandle, FloatBuffer vertexBuffer, ShortBuffer orderBuffer, OPallCamera2D camera) {
+	protected void render(int glProgram, OPallCamera2D camera) {
 
-		camera.update();
+		int positionHandle = getPositionHandle();
+		int mTextureUniformHandle = getTextureUniformHandle(0);
+		int mTextureCoordinateHandle = getTextureCoordinateHandle();
 
 		GLES20.glEnableVertexAttribArray(positionHandle);
-		GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
+		GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
 
-		int mTextureUniformHandle = GLES20.glGetUniformLocation(glProgram, GLESUtils.defTextureN(0));
-		int mTextureCoordinateHandle = GLES20.glGetAttribLocation(glProgram, GLESUtils.a_TexCoordinate);
 
-		uponRender(glProgram, positionHandle, textureGL_ID, mTextureUniformHandle, mTextureCoordinateHandle, vertexBuffer, orderBuffer, texelBuffer, camera);
 
-		GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, vertexCount, GLES20.GL_UNSIGNED_SHORT, orderBuffer);
+		uponRender(glProgram, positionHandle, textureGL_ID, mTextureUniformHandle, mTextureCoordinateHandle,
+				bounds2D.vertexBuffer, bounds2D.orderBuffer, texelBuffer, camera);
+
+		GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
 		GLES20.glDisableVertexAttribArray(positionHandle);
 		GLES20.glDisableVertexAttribArray(mTextureCoordinateHandle);
 
 	}
+
+
+
+
+
 
 	/**
 	 * Optional for Override,
@@ -168,9 +144,4 @@ public class OPallTexture extends OPallShader {
 	}
 
 
-	@Override
-	public void setScrDim(float w, float h) {
-		super.setScrDim(w, h);
-		if (w != 0 && h != 0) recalculateVerts();
-	}
 }

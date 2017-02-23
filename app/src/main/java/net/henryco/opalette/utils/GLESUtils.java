@@ -16,6 +16,10 @@ import java.nio.ShortBuffer;
 public class GLESUtils {
 
 
+
+
+
+
 	public static final class Color {
 
 		public static final Color BLACK = new Color(0.f,0.f,0.f,0.f);
@@ -44,46 +48,29 @@ public class GLESUtils {
 	}
 
 
-	public static final class Vertices {
-		public static final class vertices {
-			public static float[] FLAT_SQUARE_2D(){
-				return new float[]{-1,1, -1,-1, 1,-1, 1,1};
-			}
-
-		}
-
-		public static final class order {
-			public static short[] FLAT_SQUARE_2D(){
-				return new short[]{0,1,2, 0,2,3};
-			}
-		}
 
 
-		public static float[] calculate(float[] verts, float x, float y, float width, float height, float dimX, float dimY, float scale) {
-			if (width != 0 && height != 0 && dimX != 0 && dimY != 0) {
-				float sc_x = width / dimX;
-				float sc_y = height / dimY;
-				float tr_x = 2 * x / dimX;
-				float tr_y = 2 * y / dimY;
-				for (int i = 0; i < verts.length - 1; i+= 2) {
-					verts[i] = sc_x * scale * (verts[i] + 1) - 1 + tr_x;
-					verts[i+1] = sc_y * scale * (verts[i+1] + 1) - 1 + tr_y;
-				}
-			}
-			return verts;
-		}
 
-	}
+
+
+
+
+
 
 
     public static final String a_Position = "a_Position";
     public static final String u_MVPMatrix = "u_MVPMatrix";
 	public static final String u_Texture_n = "u_Texture";
 	public static final String a_TexCoordinate = "a_TexCoordinate";
-
 	public static String defTextureN(int numb) {
 		return u_Texture_n + numb;
 	}
+
+
+
+
+
+
 
 	/**
 	 * Initialize vertex byte buffer for shape coordinates with parameters
