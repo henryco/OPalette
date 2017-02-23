@@ -29,9 +29,14 @@ public class Utils {
 		public float z;
 
 		public HoldXYZ(float x, float y, float z) {
+			setXYZ(x, y, z);
+		}
+
+		public HoldXYZ setXYZ(float x, float y, float z) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
+			return this;
 		}
 
 		@Override

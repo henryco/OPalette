@@ -1,10 +1,5 @@
 package net.henryco.opalette.glES.render.graphics.camera;
 
-import android.opengl.GLES20;
-import android.opengl.Matrix;
-
-import net.henryco.opalette.utils.Utils;
-
 
 /**
  * Created by root on 13/02/17.
@@ -16,36 +11,18 @@ import net.henryco.opalette.utils.Utils;
 public class OPallCamera2D {
 
 
-	//Model View Projection Matrix
-	private final float[] mMVPMatrix;
-	private final float[] mProjectionMatrix;
-	private final float[] mViewMatrix;
+	private final OPallCameraMatrix matrix;
 
-    private final Utils.HoldXYZ eye;
-	private final Utils.HoldXYZ center;
-	private final Utils.HoldXYZ up;
-	private final Utils.HoldXYZ rot;
-
-
-
+	private boolean flipX = true, flipY = true;
+	private float pxFacX = 1, pxFacY = 1;
 	private float zoom = 1;
 	private int width, height;
-	private float
-			flipFacX = 1, flipFacY = 1,
-			pxFacX = 1, pxFacY = 1;
-
 
 
 
 
 	public OPallCamera2D(int width, int height, boolean flip) {
-		mMVPMatrix = new float[16];
-		mProjectionMatrix = new float[16];
-        mViewMatrix = new float[16];
-        eye = new Utils.HoldXYZ(0, 0, -3);
-        center = new Utils.HoldXYZ(0, 0, 0);
-        up = new Utils.HoldXYZ(0, 1, 0);
-		rot = new Utils.HoldXYZ(0, 0, 0);
+		matrix = new OPallCameraMatrix();
 		if (flip) flipXY();
 		set(width, height);
 	}
@@ -79,17 +56,12 @@ public class OPallCamera2D {
 
     public OPallCamera2D update() {
 
-		GLES20.glViewport(0, 0, width, height);
-		float ratio = (float) width / height;
-		Matrix.frustumM(mProjectionMatrix, 0, -ratio * flipFacX / zoom, ratio * flipFacX / zoom, -1 * flipFacY / zoom, 1 * flipFacY / zoom, 3, 1);
-        Matrix.setLookAtM(mViewMatrix, 0, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
-		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-		Matrix.setRotateEulerM(mMVPMatrix, 0, 180 + rot.x, rot.y, rot.z);
+		matrix.update(0, 0, width, height, zoom, flipX, flipY);
 		return this;
     }
 
 	public final float[] getMVPMatrix() {
-		return mMVPMatrix;
+		return matrix.mMVPMatrix;
 	}
 
 
@@ -105,11 +77,11 @@ public class OPallCamera2D {
 		return flipX().flipY();
 	}
 	public OPallCamera2D flipX() {
-		flipFacX *= (-1);
+		flipX = !flipX;
 		return this;
 	}
 	public OPallCamera2D flipY() {
-		flipFacY *= (-1);
+		flipY = !flipY;
 		return this;
 	}
 
@@ -120,18 +92,18 @@ public class OPallCamera2D {
 
 
 	public OPallCamera2D translateX_absolute(float x) {
-		eye.x += x;
-		center.x += x;
+		matrix.eye.x += x;
+		matrix.center.x += x;
 		return this;
 	}
 	public OPallCamera2D translateY_absolute(float y) {
-		eye.y += y;
-		center.y += y;
+		matrix.eye.y += y;
+		matrix.center.y += y;
 		return this;
 	}
 	public OPallCamera2D translateZ_absolute(float z) {
-		eye.z += z;
-		center.z += z;
+		matrix.eye.z += z;
+		matrix.center.z += z;
 		return this;
 	}
 	public OPallCamera2D translateXY_absolute(float x, float y) {
@@ -160,18 +132,18 @@ public class OPallCamera2D {
 
 
 	public OPallCamera2D setPosX_absolute(float x) {
-		eye.x = x;
-		center.x = x;
+		matrix.eye.x = x;
+		matrix.center.x = x;
 		return this;
 	}
 	public OPallCamera2D setPosY_absolute(float y) {
-		eye.y = y;
-		center.y = y;
+		matrix.eye.y = y;
+		matrix.center.y = y;
 		return this;
 	}
 	public OPallCamera2D setPosZ_absolute(float z) {
-		eye.z = z;
-		center.z = z;
+		matrix.eye.z = z;
+		matrix.center.z = z;
 		return this;
 	}
 	public OPallCamera2D setPosXY_absolute(float x, float y) {
@@ -203,31 +175,36 @@ public class OPallCamera2D {
 
 
 	public OPallCamera2D rotateX(float deg) {
-		return rotate(deg, 0, 0);
+		return rotate(deg,0,  0);
 	}
 	public OPallCamera2D rotateY(float deg) {
 		return rotate(0, deg, 0);
 	}
 	public OPallCamera2D rotateZ(float deg) {
-		return rotate(0, 0, deg);
+		return rotate(0,  0,deg);
 	}
 	public OPallCamera2D rotate(float deg_x, float deg_y, float deg_z) {
-		rot.x += deg_x;
-		rot.y += deg_y;
-		rot.z += deg_z;
+		matrix.rot.x += deg_x;
+		matrix.rot.y += deg_y;
+		matrix.rot.z += deg_z;
 		return this;
 	}
+
+
+
+
+
 	public OPallCamera2D setRotationX(float deg) {
-		return setRotation(deg, rot.y, rot.z);
+		return setRotation(deg, matrix.rot.y, matrix.rot.z);
 	}
 	public OPallCamera2D setRotationY(float deg) {
-		return setRotation(rot.x, deg, rot.z);
+		return setRotation(matrix.rot.x, deg, matrix.rot.z);
 	}
 	public OPallCamera2D setRotationZ(float deg) {
-		return setRotation(rot.x, rot.y, deg);
+		return setRotation(matrix.rot.x, matrix.rot.y, deg);
 	}
 	public OPallCamera2D setRotation(float deg_x, float deg_y, float deg_z) {
-		return rotate(deg_x - rot.x, deg_y - rot.y, deg_z - rot.z);
+		return rotate(deg_x - matrix.rot.x, deg_y - matrix.rot.y, deg_z - matrix.rot.z);
 	}
 
 }
