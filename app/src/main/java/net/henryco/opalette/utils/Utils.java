@@ -23,6 +23,28 @@ public class Utils {
 	}
 
 
+	public static final class HoldXYZ {
+		public float x;
+		public float y;
+		public float z;
+
+		public HoldXYZ(float x, float y, float z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+
+		@Override
+		public String toString() {
+			return "HoldXYZ{" +
+					"x=" + x +
+					", y=" + y +
+					", z=" + z +
+					'}';
+		}
+	}
+
+
 	public static final class Switcher {
 
 		private volatile AtomicBoolean stop = new AtomicBoolean(false);

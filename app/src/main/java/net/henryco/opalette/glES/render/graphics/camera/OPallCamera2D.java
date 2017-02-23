@@ -3,6 +3,8 @@ package net.henryco.opalette.glES.render.graphics.camera;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
+import net.henryco.opalette.utils.Utils;
+
 
 /**
  * Created by root on 13/02/17.
@@ -13,36 +15,16 @@ import android.opengl.Matrix;
  */
 public class OPallCamera2D {
 
-    public static final class HoldXYZ {
-        public float x;
-        public float y;
-        public float z;
-
-        public HoldXYZ(float x, float y, float z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        @Override
-        public String toString() {
-            return "HoldXYZ{" +
-                    "x=" + x +
-                    ", y=" + y +
-                    ", z=" + z +
-                    '}';
-        }
-    }
 
 	//Model View Projection Matrix
 	private final float[] mMVPMatrix;
 	private final float[] mProjectionMatrix;
 	private final float[] mViewMatrix;
 
-    private final HoldXYZ eye;
-	private final HoldXYZ center;
-	private final HoldXYZ up;
-	private final HoldXYZ rot;
+    private final Utils.HoldXYZ eye;
+	private final Utils.HoldXYZ center;
+	private final Utils.HoldXYZ up;
+	private final Utils.HoldXYZ rot;
 
 
 
@@ -60,10 +42,10 @@ public class OPallCamera2D {
 		mMVPMatrix = new float[16];
 		mProjectionMatrix = new float[16];
         mViewMatrix = new float[16];
-        eye = new HoldXYZ(0, 0, -3);
-        center = new HoldXYZ(0, 0, 0);
-        up = new HoldXYZ(0, 1, 0);
-		rot = new HoldXYZ(0, 0, 0);
+        eye = new Utils.HoldXYZ(0, 0, -3);
+        center = new Utils.HoldXYZ(0, 0, 0);
+        up = new Utils.HoldXYZ(0, 1, 0);
+		rot = new Utils.HoldXYZ(0, 0, 0);
 		if (flip) flipXY();
 		set(width, height);
 	}
@@ -103,8 +85,6 @@ public class OPallCamera2D {
         Matrix.setLookAtM(mViewMatrix, 0, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 		Matrix.setRotateEulerM(mMVPMatrix, 0, 180 + rot.x, rot.y, rot.z);
-		//OPallShader.applyCameraMatrix(program, mMVPMatrix);
-        //return mMVPMatrix;
 		return this;
     }
 
