@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.glES.layouts.OPallSurfaceView;
+import net.henryco.opalette.glES.glView.OPallSurfaceView;
 import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
 import net.henryco.opalette.glES.render.graphics.textures.Texture;
 import net.henryco.opalette.glES.render.renderers.OPallRenderer;

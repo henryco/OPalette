@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <net.henryco.opalette.glES.layouts.OPallSurfaceView
+        <net.henryco.opalette.glES.glView.OPallSurfaceView
             android:layout_width="345dp"
             android:layout_height="402dp"
             android:id="@+id/surface"

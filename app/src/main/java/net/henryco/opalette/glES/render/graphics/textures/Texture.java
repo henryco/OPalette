@@ -67,7 +67,9 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	public Texture setBitmap(Bitmap image, filter filter) {
 		return setBitmap(image, filter, filter);
 	}
-
+	public Texture setBitmap(Bitmap image) {
+		return setBitmap(image, filter.LINEAR);
+	}
 
 
 

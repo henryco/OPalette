@@ -4,11 +4,14 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
+import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
+
+
 /**
  * Created by HenryCo on 23/02/17.
  */
 
-public interface OPallTexture {
+public interface OPallTexture extends OPallShader {
 
 
 	enum filter {
@@ -40,8 +43,23 @@ public interface OPallTexture {
 	int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
 
 
+
+
+
+
+
+	OPallTexture setBitmap(Bitmap image, filter filterMin, filter filterMag);
+	OPallTexture setBitmap(Bitmap image, filter filter);
+	OPallTexture setBitmap(Bitmap image);
+
+
+
+
+
+
+
 	final class methods {
-		static int loadTexture(final Bitmap bitmap, final int filter_min, final int filter_mag) {
+		public static int loadTexture(final Bitmap bitmap, final int filter_min, final int filter_mag) {
 			final int[] textureHandle = new int[1];
 			GLES20.glGenTextures(1, textureHandle, 0);
 			if (textureHandle[0] != 0) {
@@ -54,17 +72,25 @@ public interface OPallTexture {
 			throw new RuntimeException("Error loading texture.");
 		}
 
-		static void bindTexture(int n, int textureDataHandle, int mTextureUniformHandle) {
+		public static void bindTexture(int n, int textureDataHandle, int mTextureUniformHandle) {
 			GLES20.glActiveTexture(ACTIVE_TEXTURES[n]);
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);
 			GLES20.glUniform1i(mTextureUniformHandle, n);
 		}
+		public static void bindTexture(int texNumb, int[] textureDataHandle, int[] mTextureUniformHandle) {
+			for (int i = 0; i < texNumb; i++)
+				GLES20.glUniform1i(mTextureUniformHandle[i], i);
+			for (int i = 0; i < texNumb; i++) {
+				GLES20.glActiveTexture(ACTIVE_TEXTURES[i]);
+				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle[i]);
+			}
+		}
 
-		static void glEnableVertexAttribArray(int ... atr) {
+		public static void glEnableVertexAttribArray(int ... atr) {
 			for (int i : atr) GLES20.glEnableVertexAttribArray(i);
 		}
 
-		static void glDisableVertexAttribArray(int ... atr) {
+		public static void glDisableVertexAttribArray(int ... atr) {
 			for (int i : atr) GLES20.glDisableVertexAttribArray(i);
 		}
 

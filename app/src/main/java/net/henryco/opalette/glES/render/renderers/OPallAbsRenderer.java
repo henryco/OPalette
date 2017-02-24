@@ -50,8 +50,9 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 
 	protected abstract Shader createShader(Context context);
 
-	public Shader getShader() {
-		return this.shader;
+	@SuppressWarnings("unchecked")
+	public <T extends Shader> T getShader() {
+		return (T) this.shader;
 	}
 	public OPallAbsRenderer setShader(Shader shader) {
 		this.shader = shader;

@@ -1,4 +1,4 @@
-package net.henryco.opalette.glES.layouts;
+package net.henryco.opalette.glES.glView;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -93,12 +93,13 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 
 
-    public void update() {
+    public OPallSurfaceView update() {
         requestRender();
+		return this;
     }
-	public void update(Runnable runnable) {
+	public OPallSurfaceView update(Runnable runnable) {
 		runnable.run();
-		update();
+		return update();
 	}
 
 
@@ -130,12 +131,14 @@ public class OPallSurfaceView extends GLSurfaceView {
 			public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 				surfaceInfo.surfaceCreated.set(false);
 				renderer.onSurfaceCreated(gl, config);
+				drawAction.onDrawFrameAction(gl);
 				surfaceInfo.surfaceCreated.set(true);
 			}
 			@Override
 			public void onSurfaceChanged(GL10 gl, int width, int height) {
 				surfaceInfo.surfaceChanged.set(false);
 				renderer.onSurfaceChanged(gl, width, height);
+				drawAction.onDrawFrameAction(gl);
 				surfaceInfo.surfaceChanged.set(true);
 			}
 			@Override

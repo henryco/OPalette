@@ -38,16 +38,16 @@ public interface OPallShader {
 
 
 	final class methods {
-		static String defTextureN(int numb) {
+		public static String defTextureN(int numb) {
 			return OPallShader.u_Texture_n + numb;
 		}
-		static int loadShader(int type, String shaderCode) {
+		public static int loadShader(int type, String shaderCode) {
 			int shader = GLES20.glCreateShader(type);
 			GLES20.glShaderSource(shader, shaderCode);
 			GLES20.glCompileShader(shader);
 			return shader;
 		}
-		static void applyCameraMatrix(int program, float[] mMVPMatrix) {
+		public static void applyCameraMatrix(int program, float[] mMVPMatrix) {
 			GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(program, OPallShader.u_MVPMatrix), 1, false, mMVPMatrix, 0);
 		}
 	}
