@@ -95,5 +95,34 @@ public class GLESUtils {
 		clear(color.r, color.g, color.b, color.a);
 	}
 
+	public static void glEnableVertexAttribArray(int ... atr) {
+		for (int i : atr) GLES20.glEnableVertexAttribArray(i);
+	}
+
+
+	public static void glDisableVertexAttribArray(int ... atr) {
+		for (int i : atr) GLES20.glDisableVertexAttribArray(i);
+	}
+
+	public static void glUseProgram(int program, Runnable runnable) {
+		GLES20.glUseProgram(program);
+		runnable.run();
+		GLES20.glUseProgram(-1);
+	}
+
+	/**
+	 * <br>Invoke glEnableVertexAttribArray(...), <br>
+	 *     do action and then invoke glDisableVertexAttribArray(...). <br><br>
+	 * <b>Example: </b> <br>glUseVertexAttribArray( p1, p2, (Runnable) () -> doStuff() );
+	 * @param ob array of objects, where: <br>
+	 *           All elements except last are (int) glAttributes, <br>
+	 *           Last element is (Runnable) action.
+	 */
+	public static void glUseVertexAttribArray(Object ... ob) {
+		int n = ob.length;
+		for (int i = 0; i < n - 1; i++) GLES20.glEnableVertexAttribArray(i);
+		((Runnable) ob[n-1]).run();
+		for (int i = 0; i < n - 1; i++) GLES20.glDisableVertexAttribArray(i);
+	}
 
 }

@@ -10,6 +10,7 @@ import net.henryco.opalette.glES.glView.OPallSurfaceView;
 import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
 import net.henryco.opalette.glES.render.graphics.textures.MultiTexture;
 import net.henryco.opalette.glES.render.renderers.OPallRenderer;
+import net.henryco.opalette.utils.GLESUtils;
 import net.henryco.opalette.utils.Utils;
 
 public class TestActivity extends AppCompatActivity {
@@ -29,10 +30,10 @@ public class TestActivity extends AppCompatActivity {
 
 		surfaceView.setRenderer(new OPallRenderer(this, camera2D, context ->
 				new MultiTexture(this, 2)
-						//.bounds(1, b -> b.setScale(0.25f))
+						//.bounds(1, b -> b.setScale(0.75f))
 						.setFocusOn(1)
 						.setCameraForceUpdate(true)
-		));
+		).setOnDrawAction((gl10, camera) -> GLESUtils.clear(GLESUtils.Color.PIKNY)));
 
 
 

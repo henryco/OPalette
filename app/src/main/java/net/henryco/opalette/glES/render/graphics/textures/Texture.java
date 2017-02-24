@@ -31,13 +31,16 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 
-
+	public Texture(Bitmap image, Context context, String shaderVert, String shaderFrag) {
+		this(image, context, filter.LINEAR, shaderVert, shaderFrag);
+	}
 	public Texture(Bitmap image, Context context) {
 		this(image, context, filter.LINEAR);
 	}
 	public Texture(Bitmap image, Context context, filter filter) {
 		this(image, context, filter, DEF_SHADER + ".vert", DEF_SHADER + ".frag");
 	}
+
 	public Texture(Bitmap image, Context context, filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
@@ -47,9 +50,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 				.setHolder(this);
 		setBitmap(image, filter);
 	}
-	public Texture(Bitmap image, Context context, String shaderVert, String shaderFrag) {
-		this(image, context, filter.LINEAR, shaderVert, shaderFrag);
-	}
 
 
 
@@ -57,19 +57,29 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 
+	@Override
 	public Texture setBitmap(Bitmap image, filter filterMin, filter filterMag) {
-		if (image != null && filterMin != null && filterMag != null) {
+		if (image == null || filterMin == null || filterMag == null) return this;
+		GLESUtils.glUseProgram(program, () -> {
 			this.textureGL_ID = OPallTexture.methods.loadTexture(image, filterMin.type, filterMag.type);
 			bounds2D.setUniSize(image.getWidth(), image.getHeight());
-		}
+		});
 		return this;
 	}
+
+	@Override
 	public Texture setBitmap(Bitmap image, filter filter) {
 		return setBitmap(image, filter, filter);
 	}
+	@Override
 	public Texture setBitmap(Bitmap image) {
 		return setBitmap(image, filter.LINEAR);
 	}
+
+
+
+
+
 
 
 
@@ -105,16 +115,14 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		int mTextureUniformHandle = getTextureUniformHandle(0);
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();
 
-		OPallTexture.methods.glEnableVertexAttribArray(positionHandle, mTextureCoordinateHandle);
-		GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
-		GLES20.glVertexAttribPointer(mTextureCoordinateHandle, COORDS_PER_TEXEL, GLES20.GL_FLOAT, false, texelStride, texelBuffer);
+		GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
 
+			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
+			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, COORDS_PER_TEXEL, GLES20.GL_FLOAT, false, texelStride, texelBuffer);
+			OPallTexture.methods.bindTexture(textureGL_ID, mTextureUniformHandle);
+			GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
 
-		OPallTexture.methods.bindTexture(0, textureGL_ID, mTextureUniformHandle);
-		GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
-
-
-		OPallTexture.methods.glDisableVertexAttribArray(positionHandle, mTextureCoordinateHandle);
+		});
 
 	}
 
