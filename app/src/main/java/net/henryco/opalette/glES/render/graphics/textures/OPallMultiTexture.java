@@ -1,6 +1,7 @@
 package net.henryco.opalette.glES.render.graphics.textures;
 
 import android.graphics.Bitmap;
+import android.opengl.GLES20;
 
 /**
  * Created by HenryCo on 24/02/17.
@@ -32,8 +33,45 @@ public interface OPallMultiTexture extends OPallTexture {
 
 
 
-	OPallMultiTexture setBitmap(int n, Bitmap image, filter filterMin, filter filterMag);
-	OPallMultiTexture setBitmap(int n, Bitmap image, filter filter);
+	String DEF_SHADER = methods.createDefaultShader();
+
+
+
+
+
+	OPallMultiTexture setBitmap(int n, Bitmap image, Filter filterMin, Filter filterMag);
+	OPallMultiTexture setBitmap(int n, Bitmap image, Filter filter);
 	OPallMultiTexture setBitmap(int n, Bitmap image);
 
+
+
+
+
+	final class methods {
+
+
+		private static String createDefaultShader() {
+			// TODO
+			return "shaders/multiTexture/MultiTexture";
+		}
+
+
+		public static void bindTextures(int texNumb, int[] textureDataHandle, int[] mTextureUniformHandle) {
+			for (int i = 0; i < texNumb; i++)
+				GLES20.glUniform1i(mTextureUniformHandle[i], i);
+			for (int i = 0; i < texNumb; i++) {
+				GLES20.glActiveTexture(ACTIVE_TEXTURES[i]);
+				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle[i]);
+			}
+		}
+
+
+		public static void bindTextures(int[] textureDataHandle, int[] mTextureUniformHandle) {
+			if (textureDataHandle.length != mTextureUniformHandle.length)
+				throw new IllegalArgumentException("Arrays length must be the same!");
+			bindTextures(textureDataHandle.length, textureDataHandle, mTextureUniformHandle);
+		}
+
+
+	}
 }

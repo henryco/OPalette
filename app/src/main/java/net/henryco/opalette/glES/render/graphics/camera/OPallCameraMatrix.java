@@ -19,7 +19,7 @@ public final class OPallCameraMatrix {
 	public final Utils.HoldXYZ eye;
 	public final Utils.HoldXYZ center;
 	public final Utils.HoldXYZ up;
-	public final Utils.HoldXYZ rot;
+	public final Utils.HoldXYZ rotation;
 
 
 	public OPallCameraMatrix() {
@@ -29,7 +29,7 @@ public final class OPallCameraMatrix {
 		eye = new Utils.HoldXYZ(0, 0, -3);
 		center = new Utils.HoldXYZ(0, 0, 0);
 		up = new Utils.HoldXYZ(0, 1, 0);
-		rot = new Utils.HoldXYZ(0, 0, 0);
+		rotation = new Utils.HoldXYZ(0, 0, 0);
 	}
 
 
@@ -43,7 +43,7 @@ public final class OPallCameraMatrix {
 		Matrix.frustumM(mProjectionMatrix, 0, -ratio * flipFacX / zoom, ratio * flipFacX / zoom, -1 * flipFacY / zoom, flipFacY / zoom, 3, 1);
 		Matrix.setLookAtM(mViewMatrix, 0, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-		Matrix.setRotateEulerM(mMVPMatrix, 0, 180 + rot.x, rot.y, rot.z);
+		Matrix.setRotateEulerM(mMVPMatrix, 0, 180 + rotation.x, rotation.y, rotation.z);
 	}
 
 

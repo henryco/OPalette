@@ -23,7 +23,6 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 
-	protected static final String DEF_SHADER = "shaders/multiTexture/MultiTexture";
 	protected final FloatBuffer texelBuffer;
 	protected final int[] textureGL_ID;
 	protected final int[] textureData_ID;
@@ -89,10 +88,10 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 	@Override
-	public MultiTexture setBitmap(int n, Bitmap image, filter filterMin, filter filterMag) {
+	public MultiTexture setBitmap(int n, Bitmap image, Filter filterMin, Filter filterMag) {
 		if (image == null || filterMin == null || filterMag == null) return this;
 		GLESUtils.glUseProgram(program, () -> {
-			textureData_ID[n] = OPallTexture.methods.loadTexture(n, image, filterMin.type, filterMag.type);
+			textureData_ID[n] = OPallTexture.methods.loadTexture(n, image, filterMin, filterMag);
 			textureGL_ID[n] = getTextureUniformHandle(n);
 			bounds2D[n].setUniSize(image.getWidth(), image.getHeight());
 		});
@@ -100,19 +99,19 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 	}
 
 	@Override
-	public MultiTexture setBitmap(int n, Bitmap image, filter filter) {
+	public MultiTexture setBitmap(int n, Bitmap image, Filter filter) {
 		return setBitmap(n, image, filter, filter);
 	}
 	@Override
 	public MultiTexture setBitmap(int n, Bitmap image) {
-		return setBitmap(n, image, filter.LINEAR);
+		return setBitmap(n, image, Filter.LINEAR);
 	}
 	@Override
-	public MultiTexture setBitmap(Bitmap image, filter filterMin, filter filterMag) {
+	public MultiTexture setBitmap(Bitmap image, Filter filterMin, Filter filterMag) {
 		return setBitmap(focus, image, filterMin, filterMag);
 	}
 	@Override
-	public MultiTexture setBitmap(Bitmap image, filter filter) {
+	public MultiTexture setBitmap(Bitmap image, Filter filter) {
 		return setBitmap(focus, image, filter);
 	}
 	@Override
@@ -169,7 +168,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D[focus].vertexBuffer);
 			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, COORDS_PER_TEXEL, GLES20.GL_FLOAT, false, texelStride, texelBuffer);
-			OPallTexture.methods.bindTextures(textureData_ID, textureGL_ID);
+			OPallMultiTexture.methods.bindTextures(textureData_ID, textureGL_ID);
 			GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D[focus].getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D[focus].orderBuffer);
 
 		});

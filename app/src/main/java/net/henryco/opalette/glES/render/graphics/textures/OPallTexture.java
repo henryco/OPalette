@@ -31,12 +31,13 @@ public interface OPallTexture extends OPallShader {
 	 */
 
 
-	enum filter {
+
+	enum Filter {
 		LINEAR(GLES20.GL_LINEAR),
 		NEAREST(GLES20.GL_NEAREST);
 
 		public int type;
-		filter(int type) {
+		Filter(int type) {
 			this.type = type;
 		}
 	}
@@ -58,15 +59,15 @@ public interface OPallTexture extends OPallShader {
 
 	int COORDS_PER_TEXEL = 2;
 	int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
+	String DEF_SHADER = methods.createDefaultShader();
 
 
 
 
 
 
-
-	OPallTexture setBitmap(Bitmap image, filter filterMin, filter filterMag);
-	OPallTexture setBitmap(Bitmap image, filter filter);
+	OPallTexture setBitmap(Bitmap image, Filter filterMin, Filter filterMag);
+	OPallTexture setBitmap(Bitmap image, Filter filter);
 	OPallTexture setBitmap(Bitmap image);
 
 
@@ -76,6 +77,12 @@ public interface OPallTexture extends OPallShader {
 
 
 	final class methods {
+
+
+		private static String createDefaultShader() {
+			// TODO
+			return "shaders/default/Default";
+		}
 
 
 		public static int loadTexture(int n, final Bitmap bitmap, final int filter_min, final int filter_mag) {
@@ -98,6 +105,16 @@ public interface OPallTexture extends OPallShader {
 		}
 
 
+		public static int loadTexture(final Bitmap bitmap, final Filter filter_min, final Filter filter_mag) {
+			return loadTexture(0, bitmap, filter_min, filter_mag);
+		}
+
+
+		public static int loadTexture(int n, final Bitmap bitmap, final Filter filter_min, final Filter filter_mag) {
+			return loadTexture(n, bitmap, filter_min.type, filter_mag.type);
+		}
+
+
 		public static void bindTexture(int n, int textureDataHandle, int mTextureUniformHandle) {
 			GLES20.glActiveTexture(ACTIVE_TEXTURES[n]);
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);
@@ -107,23 +124,6 @@ public interface OPallTexture extends OPallShader {
 
 		public static void bindTexture(int textureDataHandle, int mTextureUniformHandle) {
 			bindTexture(0, textureDataHandle, mTextureUniformHandle);
-		}
-
-
-		public static void bindTextures(int texNumb, int[] textureDataHandle, int[] mTextureUniformHandle) {
-			for (int i = 0; i < texNumb; i++)
-				GLES20.glUniform1i(mTextureUniformHandle[i], i);
-			for (int i = 0; i < texNumb; i++) {
-				GLES20.glActiveTexture(ACTIVE_TEXTURES[i]);
-				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle[i]);
-			}
-		}
-
-
-		public static void bindTextures(int[] textureDataHandle, int[] mTextureUniformHandle) {
-			if (textureDataHandle.length != mTextureUniformHandle.length)
-				throw new IllegalArgumentException("Arrays length must be the same!");
-			bindTextures(textureDataHandle.length, textureDataHandle, mTextureUniformHandle);
 		}
 
 	}

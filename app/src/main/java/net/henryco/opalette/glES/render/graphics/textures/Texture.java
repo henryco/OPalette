@@ -22,7 +22,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 
-	protected static final String DEF_SHADER = "shaders/default/Default";
 
 	protected final FloatBuffer texelBuffer;
 	protected int textureGL_ID;
@@ -32,16 +31,16 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 	public Texture(Bitmap image, Context context, String shaderVert, String shaderFrag) {
-		this(image, context, filter.LINEAR, shaderVert, shaderFrag);
+		this(image, context, Filter.LINEAR, shaderVert, shaderFrag);
 	}
 	public Texture(Bitmap image, Context context) {
-		this(image, context, filter.LINEAR);
+		this(image, context, Filter.LINEAR);
 	}
-	public Texture(Bitmap image, Context context, filter filter) {
+	public Texture(Bitmap image, Context context, Filter filter) {
 		this(image, context, filter, DEF_SHADER + ".vert", DEF_SHADER + ".frag");
 	}
 
-	public Texture(Bitmap image, Context context, filter filter, String shaderVert, String shaderFrag) {
+	public Texture(Bitmap image, Context context, Filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
 		bounds2D = new Bounds2D()
@@ -58,22 +57,22 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 	@Override
-	public Texture setBitmap(Bitmap image, filter filterMin, filter filterMag) {
+	public Texture setBitmap(Bitmap image, Filter filterMin, Filter filterMag) {
 		if (image == null || filterMin == null || filterMag == null) return this;
 		GLESUtils.glUseProgram(program, () -> {
-			this.textureGL_ID = OPallTexture.methods.loadTexture(image, filterMin.type, filterMag.type);
+			this.textureGL_ID = OPallTexture.methods.loadTexture(image, filterMin, filterMag);
 			bounds2D.setUniSize(image.getWidth(), image.getHeight());
 		});
 		return this;
 	}
 
 	@Override
-	public Texture setBitmap(Bitmap image, filter filter) {
+	public Texture setBitmap(Bitmap image, Filter filter) {
 		return setBitmap(image, filter, filter);
 	}
 	@Override
 	public Texture setBitmap(Bitmap image) {
-		return setBitmap(image, filter.LINEAR);
+		return setBitmap(image, Filter.LINEAR);
 	}
 
 
