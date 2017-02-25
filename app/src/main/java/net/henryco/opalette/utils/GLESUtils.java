@@ -85,7 +85,7 @@ public class GLESUtils {
 
     public static void clear(float r, float g, float b, float a) {
         GLES20.glClearColor(r, g, b, a);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
     }
 
     public static void clear() {

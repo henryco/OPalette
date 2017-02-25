@@ -1,11 +1,11 @@
-package net.henryco.opalette.glES.glView;
+package net.henryco.opalette.glES.glSurface.view;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
-import net.henryco.opalette.glES.render.renderers.OPallAbsRenderer;
+import net.henryco.opalette.glES.camera.OPallCamera2D;
+import net.henryco.opalette.glES.glSurface.renderers.OPallAbsRenderer;
 
 import java.util.ArrayList;
 import java.util.List;

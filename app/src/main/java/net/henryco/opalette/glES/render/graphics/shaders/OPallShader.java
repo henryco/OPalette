@@ -2,13 +2,13 @@ package net.henryco.opalette.glES.render.graphics.shaders;
 
 import android.opengl.GLES20;
 
-import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.OPallRenderable;
 
 /**
  * Created by HenryCo on 23/02/17.
  */
 
-public interface OPallShader {
+public interface OPallShader extends OPallRenderable {
 
 
     /*  Requested in *.vert file:
@@ -37,8 +37,7 @@ public interface OPallShader {
 
 
 
-	void render(OPallCamera2D camera);
-
+	void setScreenDim(float w, float h);
 
 
 	String a_Position = "a_Position";

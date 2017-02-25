@@ -1,9 +1,9 @@
-package net.henryco.opalette.glES.render.renderers;
+package net.henryco.opalette.glES.glSurface.renderers;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
+import net.henryco.opalette.glES.camera.OPallCamera2D;
 import net.henryco.opalette.glES.render.graphics.shaders.Shader;
 
 /**

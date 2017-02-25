@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:weightSum="1">
 
-        <net.henryco.opalette.glES.glView.OPallSurfaceView
+        <net.henryco.opalette.glES.glSurface.view.OPallSurfaceView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/contentSurface"

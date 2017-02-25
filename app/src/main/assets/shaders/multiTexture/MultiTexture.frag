@@ -6,6 +6,14 @@ varying vec2 v_TexCoordinate;
 
 uniform sampler2D u_Texture0;
 uniform sampler2D u_Texture1;
+uniform sampler2D u_Texture2;
+uniform sampler2D u_Texture3;
+uniform sampler2D u_Texture4;
+uniform sampler2D u_Texture5;
+uniform sampler2D u_Texture6;
+uniform sampler2D u_Texture7;
+uniform sampler2D u_Texture8;
+uniform sampler2D u_Texture9;
 
 
 void main() {

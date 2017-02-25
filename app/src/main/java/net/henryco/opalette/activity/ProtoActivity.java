@@ -19,10 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.glES.glView.OPallSurfaceView;
-import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
+import net.henryco.opalette.glES.camera.OPallCamera2D;
+import net.henryco.opalette.glES.glSurface.renderers.OPallRenderer;
+import net.henryco.opalette.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.glES.render.graphics.textures.Texture;
-import net.henryco.opalette.glES.render.renderers.OPallRenderer;
 import net.henryco.opalette.utils.Utils;
 
 public class ProtoActivity extends AppCompatActivity

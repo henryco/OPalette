@@ -95,6 +95,20 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 		y = 0;
 		return this;
 	}
+
+	public float getWidth(){
+		return width;
+	}
+	public float getHeight(){
+		return height;
+	}
+	public float getDef_width() {
+		return def_width;
+	}
+	public float getDef_height() {
+		return def_height;
+	}
+
 	public Bounds2D resetBounds() {
 		return resetBounds(false);
 	}

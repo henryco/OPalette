@@ -1,4 +1,4 @@
-package net.henryco.opalette.glES.render.graphics.camera;
+package net.henryco.opalette.glES.camera;
 
 
 /**
@@ -184,9 +184,9 @@ public class OPallCamera2D {
 		return rotate(0,  0,deg);
 	}
 	public OPallCamera2D rotate(float deg_x, float deg_y, float deg_z) {
-		matrix.rot.x += deg_x;
-		matrix.rot.y += deg_y;
-		matrix.rot.z += deg_z;
+		matrix.rotation.x += deg_x;
+		matrix.rotation.y += deg_y;
+		matrix.rotation.z += deg_z;
 		return this;
 	}
 
@@ -195,16 +195,16 @@ public class OPallCamera2D {
 
 
 	public OPallCamera2D setRotationX(float deg) {
-		return setRotation(deg, matrix.rot.y, matrix.rot.z);
+		return setRotation(deg, matrix.rotation.y, matrix.rotation.z);
 	}
 	public OPallCamera2D setRotationY(float deg) {
-		return setRotation(matrix.rot.x, deg, matrix.rot.z);
+		return setRotation(matrix.rotation.x, deg, matrix.rotation.z);
 	}
 	public OPallCamera2D setRotationZ(float deg) {
-		return setRotation(matrix.rot.x, matrix.rot.y, deg);
+		return setRotation(matrix.rotation.x, matrix.rotation.y, deg);
 	}
 	public OPallCamera2D setRotation(float deg_x, float deg_y, float deg_z) {
-		return rotate(deg_x - matrix.rot.x, deg_y - matrix.rot.y, deg_z - matrix.rot.z);
+		return rotate(deg_x - matrix.rotation.x, deg_y - matrix.rotation.y, deg_z - matrix.rotation.z);
 	}
 
 }

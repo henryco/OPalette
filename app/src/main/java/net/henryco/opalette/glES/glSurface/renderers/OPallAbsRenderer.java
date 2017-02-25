@@ -1,10 +1,12 @@
-package net.henryco.opalette.glES.render.renderers;
+package net.henryco.opalette.glES.glSurface.renderers;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import net.henryco.opalette.glES.render.graphics.camera.OPallCamera2D;
+import net.henryco.opalette.glES.camera.OPallCamera2D;
+import net.henryco.opalette.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.glES.render.graphics.shaders.Shader;
+import net.henryco.opalette.glES.render.graphics.textures.Texture;
 import net.henryco.opalette.utils.GLESUtils;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -27,7 +29,7 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 	private Context context;
 	private OPallCamera2D camera;
 
-
+	private FrameBuffer testBuffer = new FrameBuffer();
 
 
 	public OPallAbsRenderer(Context context, OPallCamera2D camera) {
@@ -71,18 +73,25 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		shader = createShader(context);
+		testBuffer.setTargetTexture(new Texture(null, context));
 	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
+		FrameBuffer.debug = true;
 		if (camera != null) camera.set(width, height);
 		if (shader != null) shader.setScreenDim(width, height);
+		testBuffer.createFBO(width, height, false);
 	}
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		if (camera != null) onDrawAction.action(gl, camera);
-		if (shader != null) shader.render(camera);
+
+	//	testBuffer.beginFBO(() -> {
+			if (camera != null) onDrawAction.action(gl, camera);
+			if (shader != null) shader.render(camera);
+	//	}).render(camera);
+
 	}
 
 	public OPallCamera2D getCamera() {
