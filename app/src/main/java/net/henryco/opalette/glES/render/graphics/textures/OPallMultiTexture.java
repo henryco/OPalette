@@ -16,40 +16,34 @@ public interface OPallMultiTexture extends OPallTexture {
 			"\n" +
 			"varying vec4    v_Position;\n" +
 			"varying vec4    v_WorldPos;\n" +
-			"varying vec2    v_TexCoordinate[10];\n" +
+			"varying vec2    v_TexCoordinate[5];\n" +
 			"\n" +
 			"uniform mat4    u_MVPMatrix;\n" +
-			"uniform float   u_FlipX[10];\n" +
-			"uniform float   u_FlipY[10];\n" +
 			"uniform int     u_texNumb;\n" +
-			"\n" +
+			"uniform vec2    u_Flip[5];\n" +
 			"\n" +
 			"vec2 flip(vec2 f, vec2 tex) {\n" +
+			"\n" +
 			"    float x = min(1., f.x + 1.) - f.x * tex.x;\n" +
 			"    float y = min(1., f.y + 1.) - f.y * tex.y;\n" +
 			"    return vec2(x, y);\n" +
 			"}\n" +
 			"\n" +
-			"\n" +
 			"void main() {\n" +
 			"\n" +
 			"    v_Position = a_Position;\n" +
 			"    v_WorldPos = u_MVPMatrix * a_Position;\n" +
-			"\n" +
 			"    for (int i = 0; i < u_texNumb; i++)\n" +
-			"        v_TexCoordinate[i] = flip(vec2(u_FlipX[i], u_FlipY[i]), a_TexCoordinate);\n" +
-			"\n" +
+			"        v_TexCoordinate[i] = flip(vec2(u_Flip[i].x, u_Flip[i].y), a_TexCoordinate);\n" +
 			"    gl_Position = v_WorldPos;\n" +
 			"}";
 
 
 	String DEFAULT_FRAG_FILE =
 
-			"precision mediump float;\n" +
-			"\n" +
 			"varying vec4 v_Position;\n" +
 			"varying vec4 v_WorldPos;\n" +
-			"varying vec2 v_TexCoordinate[10];\n" +
+			"varying vec2 v_TexCoordinate[5];\n" +
 			"\n" +
 			"uniform sampler2D u_Texture0;\n" +
 			"uniform sampler2D u_Texture1;\n" +
@@ -65,7 +59,10 @@ public interface OPallMultiTexture extends OPallTexture {
 			"\n" +
 			"\n" +
 			"void main() {\n" +
-			"    gl_FragColor = texture2D(u_Texture0, v_TexCoordinate0).rgba;\n" +
+			"    vec4 col1 = texture2D(u_Texture0, v_TexCoordinate[0]).rgba;\n" +
+			"    vec4 col2 = texture2D(u_Texture1, v_TexCoordinate[1]).rgba;\n" +
+			"\n" +
+			"    gl_FragColor = vec4(vec3(col2.rgb * col1.rgb), 1);\n" +
 			"}";
 
 

@@ -24,8 +24,7 @@ public interface OPallTexture extends OPallShader {
 			"varying vec2 v_TexCoordinate;\n" +
 			"\n" +
 			"uniform mat4 u_MVPMatrix;\n" +
-			"uniform float u_FlipX;\n" +
-			"uniform float u_FlipY;\n" +
+			"uniform vec2 u_Flip;\n" +
 			"\n" +
 			"vec2 flip(vec2 f, vec2 tex) {\n" +
 			"\n" +
@@ -34,13 +33,11 @@ public interface OPallTexture extends OPallShader {
 			"    return vec2(x, y);\n" +
 			"}\n" +
 			"\n" +
-			"\n" +
 			"void main() {\n" +
 			"\n" +
 			"    v_Position = a_Position;\n" +
 			"    v_WorldPos = u_MVPMatrix * a_Position;\n" +
-			"    v_TexCoordinate = flip(vec2(u_FlipX, u_FlipY), a_TexCoordinate);\n" +
-			"\n" +
+			"    v_TexCoordinate = flip(u_Flip, a_TexCoordinate);\n" +
 			"    gl_Position = v_WorldPos;\n" +
 			"}";
 

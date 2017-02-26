@@ -15,13 +15,11 @@ vec2 flip(vec2 f, vec2 tex) {
     return vec2(x, y);
 }
 
-
 void main() {
 
     v_Position = a_Position;
     v_WorldPos = u_MVPMatrix * a_Position;
     v_TexCoordinate = flip(u_Flip, a_TexCoordinate);
-
     gl_Position = v_WorldPos;
 }
 
