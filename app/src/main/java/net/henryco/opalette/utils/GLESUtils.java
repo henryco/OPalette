@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 /**
@@ -74,6 +75,15 @@ public class GLESUtils {
         orderBuffer.put(arr).position(0);
         return orderBuffer;
     }
+
+	public static IntBuffer createIntBuffer(int[] arr) {
+		if (arr == null) return null;
+		IntBuffer orderBuffer = ByteBuffer.allocateDirect(arr.length * 4)
+				.order(ByteOrder.nativeOrder())
+				.asIntBuffer();
+		orderBuffer.put(arr).position(0);
+		return orderBuffer;
+	}
 
     public static ByteBuffer createByteBuffer(byte[] arr) {
         ByteBuffer buffer = ByteBuffer.allocate(arr.length)

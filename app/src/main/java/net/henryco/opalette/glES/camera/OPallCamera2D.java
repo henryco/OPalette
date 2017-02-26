@@ -5,6 +5,8 @@ package net.henryco.opalette.glES.camera;
  * Created by root on 13/02/17.
  */
 
+import net.henryco.opalette.utils.lambda.functions.OPallFunction;
+
 /**
  * GL camera class, tuned for 2D, but implements some 3D functionality
  */
@@ -55,7 +57,6 @@ public class OPallCamera2D {
 
 
     public OPallCamera2D update() {
-
 		matrix.update(0, 0, width, height, zoom, flipX, flipY);
 		return this;
     }
@@ -69,7 +70,9 @@ public class OPallCamera2D {
 		zoom = z >= 0 ? z : zoom;
 		return this;
 	}
-
+	public OPallCamera2D zoom(OPallFunction<Float, Float> zoom) {
+		return setZoom(zoom.apply(this.zoom));
+	}
 
 
 

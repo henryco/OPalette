@@ -26,7 +26,7 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	protected final FloatBuffer texelBuffer;
 	protected int textureGL_ID;
 	public final Bounds2D bounds2D;
-
+	private final boolean[] textureFlip;
 
 
 
@@ -43,11 +43,13 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	public Texture(Bitmap image, Context context, Filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
+		textureFlip = new boolean[2];
 		bounds2D = new Bounds2D()
 				.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
 				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
 				.setHolder(this);
 		setBitmap(image, filter);
+		setFlip(false, false);
 	}
 
 
@@ -79,7 +81,12 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 
-
+	@Override
+	public Texture setFlip(boolean x, boolean y) {
+		textureFlip[0] = x;
+		textureFlip[1] = y;
+		return this;
+	}
 
 
 
@@ -127,8 +134,9 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		int mTextureUniformHandle = getTextureUniformHandle(0);
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();
 
-		GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
+		OPallTexture.methods.applyFlip(glProgram, textureFlip);
 
+		GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
 			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
 			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, COORDS_PER_TEXEL, GLES20.GL_FLOAT, false, texelStride, texelBuffer);
 			OPallTexture.methods.bindTexture(textureGL_ID, mTextureUniformHandle);

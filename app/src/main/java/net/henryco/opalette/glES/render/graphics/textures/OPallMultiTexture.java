@@ -9,32 +9,71 @@ import android.opengl.GLES20;
 
 public interface OPallMultiTexture extends OPallTexture {
 
+	String DEFAULT_VERT_FILE =
 
-	/*	Requested in *.frag file:
-	 *
-	 *		precision mediump float;
-	 *
-	 *		varying vec4 v_Position;
-	 *		varying vec4 v_WorldPos;
-	 *		varying vec2 v_TexCoordinate;
-	 *
-	 *		uniform sampler2D u_Texture0;
-	 *		uniform sampler2D u_Texture1;
-	 *		.
-	 *		.
-	 *		.
-	 *		uniform sampler2D u_Texture(n); // {0, 1, ..., n}
-	 *
-	 *		void main() {
-	 *			...
-	 *			gl_FragColor = vec4(...);
-	 *		}
-	 */
+			"attribute vec4  a_Position;\n" +
+			"attribute vec2  a_TexCoordinate;\n" +
+			"\n" +
+			"varying vec4    v_Position;\n" +
+			"varying vec4    v_WorldPos;\n" +
+			"varying vec2    v_TexCoordinate[10];\n" +
+			"\n" +
+			"uniform mat4    u_MVPMatrix;\n" +
+			"uniform float   u_FlipX[10];\n" +
+			"uniform float   u_FlipY[10];\n" +
+			"uniform int     u_texNumb;\n" +
+			"\n" +
+			"\n" +
+			"vec2 flip(vec2 f, vec2 tex) {\n" +
+			"    float x = min(1., f.x + 1.) - f.x * tex.x;\n" +
+			"    float y = min(1., f.y + 1.) - f.y * tex.y;\n" +
+			"    return vec2(x, y);\n" +
+			"}\n" +
+			"\n" +
+			"\n" +
+			"void main() {\n" +
+			"\n" +
+			"    v_Position = a_Position;\n" +
+			"    v_WorldPos = u_MVPMatrix * a_Position;\n" +
+			"\n" +
+			"    for (int i = 0; i < u_texNumb; i++)\n" +
+			"        v_TexCoordinate[i] = flip(vec2(u_FlipX[i], u_FlipY[i]), a_TexCoordinate);\n" +
+			"\n" +
+			"    gl_Position = v_WorldPos;\n" +
+			"}";
+
+
+	String DEFAULT_FRAG_FILE =
+
+			"precision mediump float;\n" +
+			"\n" +
+			"varying vec4 v_Position;\n" +
+			"varying vec4 v_WorldPos;\n" +
+			"varying vec2 v_TexCoordinate[10];\n" +
+			"\n" +
+			"uniform sampler2D u_Texture0;\n" +
+			"uniform sampler2D u_Texture1;\n" +
+			"uniform sampler2D u_Texture2;\n" +
+			"uniform sampler2D u_Texture3;\n" +
+			"uniform sampler2D u_Texture4;\n" +
+			"uniform sampler2D u_Texture5;\n" +
+			"uniform sampler2D u_Texture6;\n" +
+			"uniform sampler2D u_Texture7;\n" +
+			"uniform sampler2D u_Texture8;\n" +
+			"uniform sampler2D u_Texture9;\n" +
+			"uniform int u_texNumb;\n" +
+			"\n" +
+			"\n" +
+			"void main() {\n" +
+			"    gl_FragColor = texture2D(u_Texture0, v_TexCoordinate0).rgba;\n" +
+			"}";
+
+
 
 
 
 	String DEF_SHADER = methods.createDefaultShader();
-
+	String u_texNumb = "u_texNumb";
 
 
 
@@ -42,6 +81,7 @@ public interface OPallMultiTexture extends OPallTexture {
 	OPallMultiTexture setBitmap(int n, Bitmap image, Filter filterMin, Filter filterMag);
 	OPallMultiTexture setBitmap(int n, Bitmap image, Filter filter);
 	OPallMultiTexture setBitmap(int n, Bitmap image);
+	OPallMultiTexture setFlip(int n, boolean x, boolean y);
 
 
 
@@ -53,6 +93,22 @@ public interface OPallMultiTexture extends OPallTexture {
 		private static String createDefaultShader() {
 			// TODO
 			return "shaders/multiTexture/MultiTexture";
+		}
+
+
+		public static void applyTexNumb(int program, int texNumb) {
+			System.out.println(texNumb);
+			GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_texNumb), texNumb);
+		}
+
+
+		public static void applyFlip(int program, boolean[][] xy) {
+			float[] flip = {0,0,0,0,0,0,0,0,0,0};
+			for (int i = 0; i < 2 * (xy.length - 1); i++) {
+				flip[2*i] = OPallTexture.methods.flipValue(xy[i][0]);
+				flip[2*i+1] = OPallTexture.methods.flipValue(xy[i][1]);
+			}
+			GLES20.glUniform2fv(GLES20.glGetUniformLocation(program, u_Flip), 5, flip, 0);
 		}
 
 

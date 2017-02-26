@@ -20,6 +20,7 @@ public class FrameBuffer implements OPallFBO {
 	private int width = 0, height = 0;
 	private Bitmap textureBitmap = null;
 	private OPallTexture texture = null;
+	private boolean flip = true;
 
 	public FrameBuffer(){}
 	public FrameBuffer(int width, int height, boolean depth) {
@@ -64,13 +65,22 @@ public class FrameBuffer implements OPallFBO {
 		if (texture != null) {
 			texture.setScreenDim(width, height);
 			texture.setBitmap(textureBitmap, OPallTexture.Filter.NEAREST);
+			setFlip(flip);
 		}
+		return this;
+	}
+
+	@Override
+	public OPallFBO setFlip(boolean f) {
+		this.flip = f;
+		if (texture != null) texture.setFlip(false, f);
 		return this;
 	}
 
 	@Override
 	public FrameBuffer setTargetTexture(OPallTexture targetTexture) {
 		this.texture = targetTexture;
+		setFlip(flip);
 		return this;
 	}
 

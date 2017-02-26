@@ -35,7 +35,9 @@ public class T1Activity extends AppCompatActivity {
 
 		contentSurface.setRenderer(new OPallRenderer(this, new OPallCamera2D(width, height, true)));
 
+		contentSurface.addToGLContextQueue(gl -> {
 
+		}).update();
 
 	}
 
@@ -56,7 +58,7 @@ public class T1Activity extends AppCompatActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		contentSurface.update(() -> contentSurface.runInGLContext(gl -> {
+		contentSurface.update(() -> contentSurface.addToGLContextQueue(gl -> {
 			OPallRenderer renderer = contentSurface.getRenderer();
 			Bitmap img = Utils.loadIntentBitmap(this, data);
 			renderer.setShader(new Texture(img, this, Texture.Filter.LINEAR)

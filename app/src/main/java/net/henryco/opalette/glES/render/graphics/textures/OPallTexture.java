@@ -14,21 +14,54 @@ import net.henryco.opalette.glES.render.graphics.shaders.OPallShader;
 public interface OPallTexture extends OPallShader {
 
 
-	/*	Requested in *.frag file:
-	 *
-	 *		precision mediump float;
-	 *
-	 *		varying vec4 v_Position;
-	 *		varying vec4 v_WorldPos;
-	 *		varying vec2 v_TexCoordinate;
-	 *
-	 *		uniform sampler2D u_Texture0;
-	 *
-	 *		void main() {
-	 *			...
-	 *			gl_FragColor = vec4(...);
-	 *		}
-	 */
+	String DEFAULT_VERT_FILE =
+
+			"attribute vec4 a_Position;\n" +
+			"attribute vec2 a_TexCoordinate;\n" +
+			"\n" +
+			"varying vec4 v_Position;\n" +
+			"varying vec4 v_WorldPos;\n" +
+			"varying vec2 v_TexCoordinate;\n" +
+			"\n" +
+			"uniform mat4 u_MVPMatrix;\n" +
+			"uniform float u_FlipX;\n" +
+			"uniform float u_FlipY;\n" +
+			"\n" +
+			"vec2 flip(vec2 f, vec2 tex) {\n" +
+			"\n" +
+			"    float x = min(1., f.x + 1.) - f.x * tex.x;\n" +
+			"    float y = min(1., f.y + 1.) - f.y * tex.y;\n" +
+			"    return vec2(x, y);\n" +
+			"}\n" +
+			"\n" +
+			"\n" +
+			"void main() {\n" +
+			"\n" +
+			"    v_Position = a_Position;\n" +
+			"    v_WorldPos = u_MVPMatrix * a_Position;\n" +
+			"    v_TexCoordinate = flip(vec2(u_FlipX, u_FlipY), a_TexCoordinate);\n" +
+			"\n" +
+			"    gl_Position = v_WorldPos;\n" +
+			"}";
+
+
+
+	String DEFAULT_FRAG_FILE =
+
+			"precision mediump float;\n" +
+			"\n" +
+			"varying vec4 v_Position;\n" +
+			"varying vec4 v_WorldPos;\n" +
+			"varying vec2 v_TexCoordinate;\n" +
+			"\n" +
+			"uniform sampler2D u_Texture0;\n" +
+			"\n" +
+			"\n" +
+			"void main() {\n" +
+			"    gl_FragColor = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
+			"}";
+
+
 
 
 
@@ -60,7 +93,7 @@ public interface OPallTexture extends OPallShader {
 	int COORDS_PER_TEXEL = 2;
 	int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
 	String DEF_SHADER = methods.createDefaultShader();
-
+	String u_Flip = "u_Flip";
 
 
 
@@ -69,8 +102,7 @@ public interface OPallTexture extends OPallShader {
 	OPallTexture setBitmap(Bitmap image, Filter filterMin, Filter filterMag);
 	OPallTexture setBitmap(Bitmap image, Filter filter);
 	OPallTexture setBitmap(Bitmap image);
-
-
+	OPallTexture setFlip(boolean x, boolean y);
 
 
 
@@ -82,6 +114,21 @@ public interface OPallTexture extends OPallShader {
 		private static String createDefaultShader() {
 			// TODO
 			return "shaders/default/Default";
+		}
+
+
+		public static void applyFlip(int program, boolean[] xy) {
+			applyFlip(program, xy[0], xy[1]);
+		}
+
+
+		public static void applyFlip(int program, boolean x, boolean y) {
+			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_Flip), flipValue(x), flipValue(y));
+		}
+
+
+		public static int flipValue(boolean f) {
+			return f ? 1 : -1;
 		}
 
 

@@ -86,7 +86,6 @@ public abstract class OPallAbsRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-
 	//	testBuffer.beginFBO(() -> {
 			if (camera != null) onDrawAction.action(gl, camera);
 			if (shader != null) shader.render(camera);

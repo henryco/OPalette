@@ -9,7 +9,7 @@ import net.henryco.opalette.utils.Utils;
  * Created by HenryCo on 23/02/17.
  */
 
-public final class OPallCameraMatrix {
+public class OPallCameraMatrix {
 
 	//Model View Projection Matrix
 	public final float[] mMVPMatrix;
@@ -43,9 +43,18 @@ public final class OPallCameraMatrix {
 		Matrix.frustumM(mProjectionMatrix, 0, -ratio * flipFacX / zoom, ratio * flipFacX / zoom, -1 * flipFacY / zoom, flipFacY / zoom, 3, 1);
 		Matrix.setLookAtM(mViewMatrix, 0, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-		Matrix.setRotateEulerM(mMVPMatrix, 0, 180 + rotation.x, rotation.y, rotation.z);
+		//Matrix.setRotateEulerM(mMVPMatrix, 0, 180 + rotation.x, rotation.y, rotation.z);
+		//Matrix.translateM(mMVPMatrix, 0, eye.x, eye.y, eye.z);
+
 	}
 
-
-
+	@Override
+	public String toString() {
+		return "OPallCameraMatrix{" +
+				"eye=" + eye +
+				", center=" + center +
+				", up=" + up +
+				", rotation=" + rotation +
+				'}';
+	}
 }

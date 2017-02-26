@@ -19,7 +19,6 @@ public abstract class Shader implements OPallShader {
     public final int vertexStride;
 
 	private float screenWidth = 0, screenHeight = 0;
-
 	protected boolean cameraForceUpdate;
 
 
@@ -51,7 +50,6 @@ public abstract class Shader implements OPallShader {
 		screenWidth = w;
 		screenHeight = h;
 	};
-
 
 
 	@Override

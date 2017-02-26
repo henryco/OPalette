@@ -20,6 +20,7 @@ public interface OPallFBO extends OPallRenderable {
 	OPallFBO beginFBO();
 	OPallFBO beginFBO(Runnable runnable);
 	OPallFBO endFBO();
+	OPallFBO setFlip(boolean f);
 	Bitmap getBitmap();
 	OPallTexture getTexture();
 	OPallFBO setTargetTexture(OPallTexture targetTexture);

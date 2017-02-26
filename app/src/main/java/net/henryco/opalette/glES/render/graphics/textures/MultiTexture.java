@@ -24,6 +24,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 	protected final FloatBuffer texelBuffer;
+	protected final boolean[][] textureFlip;
 	protected final int[] textureGL_ID;
 	protected final int[] textureData_ID;
 	public final Bounds2D[] bounds2D;
@@ -48,15 +49,17 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 	public MultiTexture(Context context, String VERT, String FRAG, int texNumb) {
 		super(context, VERT, FRAG, 2);
+		this.texNumb = (texNumb <= 5 && texNumb > 0) ? texNumb : 1;
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
-		textureGL_ID = new int[texNumb];
-		textureData_ID = new int[texNumb];
-		bounds2D = new Bounds2D[texNumb];
+		textureGL_ID = new int[this.texNumb];
+		textureData_ID = new int[this.texNumb];
+		this.textureFlip = new boolean[this.texNumb][2];
+		bounds2D = new Bounds2D[this.texNumb];
 		for (int i = 0; i < bounds2D.length; i++)
 			bounds2D[i] = new Bounds2D().setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
 					.setOrder(OPallBounds.order.FLAT_SQUARE_2D()).setHolder(this);
-		this.texNumb = (texNumb <= 10 && texNumb > 0) ? texNumb : 1;
 		this.focus = this.texNumb - 1;
+		setFlip(false, false);
 	}
 
 
@@ -123,9 +126,18 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 
+	@Override
+	public MultiTexture setFlip(int n, boolean x, boolean y) {
+		textureFlip[n] = new boolean[]{x, y};
+		return this;
+	}
 
-
-
+	@Override
+	public MultiTexture setFlip(boolean x, boolean y) {
+		for (int i = 0; i < texNumb; i++)
+			setFlip(i, x, y);
+		return this;
+	}
 
 	@Override
 	public MultiTexture bounds(int n, BoundsConsumer<Bounds2D> processor) {
@@ -167,13 +179,15 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 
-
-
 	@Override
 	protected void render(int glProgram, OPallCamera2D camera) {
 
 		int positionHandle = getPositionHandle();
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();
+
+		OPallMultiTexture.methods.applyTexNumb(program, texNumb);
+		OPallMultiTexture.methods.applyFlip(program, textureFlip);
+
 
 		GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
 

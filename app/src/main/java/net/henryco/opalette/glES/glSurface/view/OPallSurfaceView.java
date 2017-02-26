@@ -109,7 +109,7 @@ public class OPallSurfaceView extends GLSurfaceView {
 	}
 
 
-	public OPallSurfaceView runInGLContext(DrawAction action) {
+	public OPallSurfaceView addToGLContextQueue(DrawAction action) {
 		actionQueue.add(action);
 		return this;
 	}

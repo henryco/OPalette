@@ -63,18 +63,17 @@ public class ProtoActivity extends AppCompatActivity
 		navigationView.setNavigationItemSelectedListener(this);
 
 
-
-
-
-
 		oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		oPallSurfaceView.setRenderer(new OPallRenderer(this));
 		oPallSurfaceView.setOnClickListener(this::imageClickAction);
 		oPallSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
-		camera = new OPallCamera2D(oPallSurfaceView.getWidth(), oPallSurfaceView.getHeight(), true);
 
+		oPallSurfaceView.startWhenReady(() -> {
+			camera = new OPallCamera2D(oPallSurfaceView.getWidth(), oPallSurfaceView.getHeight(), true);
+			//.update();
+		}).update();
 	}
 
 
@@ -178,9 +177,12 @@ public class ProtoActivity extends AppCompatActivity
 		if (resultCode == FragmentActivity.RESULT_OK) {
 			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE)
 				image = Utils.loadIntentBitmap(this, data);
-				oPallSurfaceView.update(() -> oPallSurfaceView.runInGLContext(gl ->
-						((OPallRenderer) oPallSurfaceView.getRenderer()).setCamera(camera)
-						.setShader(new Texture(image, this).setCameraForceUpdate(true))));
+				oPallSurfaceView.update(() -> oPallSurfaceView.addToGLContextQueue(gl -> {
+					((OPallRenderer) oPallSurfaceView.getRenderer()).setCamera(camera)
+							.setShader(new Texture(image, this).setFlip(false, false).setCameraForceUpdate(false));
+					camera.update();
+
+				}));
 		}
 	}
 
@@ -205,7 +207,7 @@ public class ProtoActivity extends AppCompatActivity
 
 
 	public void setImageFilter() {
-		oPallSurfaceView.runInGLContext(gl -> {
+		oPallSurfaceView.addToGLContextQueue(gl -> {
 			OPallRenderer renderer = oPallSurfaceView.getRenderer();
 			renderer.setShader(renderer.getShader());
 			// TODO (actually doing nothing)

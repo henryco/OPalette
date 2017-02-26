@@ -38,7 +38,7 @@ public class TestActivity extends AppCompatActivity {
 
 
 		surfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-		surfaceView.update(() -> surfaceView.runInGLContext(gl10 -> {
+		surfaceView.update(() -> surfaceView.addToGLContextQueue(gl10 -> {
 			OPallRenderer renderer = surfaceView.getRenderer();
 			MultiTexture texture = renderer.getShader();
 
