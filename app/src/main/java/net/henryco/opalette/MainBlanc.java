@@ -4,9 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import net.henryco.opalette.activity.ProtoActivity;
-import net.henryco.opalette.activity.T1Activity;
-import net.henryco.opalette.activity.TestActivity;
+import net.henryco.opalette.application.main.ProtoActivity;
+import net.henryco.opalette.application.test.TestActivity;
 
 public class MainBlanc extends AppCompatActivity {
 
@@ -26,8 +25,6 @@ public class MainBlanc extends AppCompatActivity {
 
         findViewById(R.id.startButton).setOnClickListener(
                 v -> startActivity(new Intent(this, ProtoActivity.class)));
-        findViewById(R.id.t1Button).setOnClickListener(
-				v -> startActivity(new Intent(this, T1Activity.class)));
         findViewById(R.id.buttonTest).setOnClickListener(
                 v -> startActivity(new Intent(this, TestActivity.class)));
     }

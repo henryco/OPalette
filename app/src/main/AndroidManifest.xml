@@ -19,14 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.T1Activity">
-        </activity>
         <activity
-            android:name=".activity.ProtoActivity"
+            android:name=".application.main.ProtoActivity"
             android:label="@string/title_activity_proto"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".activity.TestActivity">
+        <activity android:name=".application.test.TestActivity">
         </activity>
     </application>
 

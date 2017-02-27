@@ -20,20 +20,11 @@
             android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
 
     <Button
-        android:text="t1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:id="@+id/t1Button"
-        android:layout_below="@+id/startButton"
-        android:layout_alignStart="@+id/startButton"/>
-
-    <Button
         android:text="Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/t1Button"
-        android:layout_alignStart="@+id/t1Button"
-        android:layout_marginTop="21dp"
-        android:id="@+id/buttonTest"/>
+        android:layout_marginTop="40dp"
+        android:id="@+id/buttonTest"
+        android:layout_below="@+id/startButton"
+        android:layout_alignStart="@+id/startButton"/>
 </RelativeLayout>
