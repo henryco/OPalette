@@ -140,7 +140,7 @@ public interface OPallTexture extends OPallShader {
 				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, n);
 				return textureHandle[0];
 			}
-			throw new RuntimeException("Error loading texture.");
+			throw new RuntimeException("Error loading texture, probably lost GL_context or bad pass arguments");
 		}
 
 

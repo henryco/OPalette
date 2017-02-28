@@ -185,13 +185,9 @@ public class ProtoActivity extends AppCompatActivity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == FragmentActivity.RESULT_OK) {
-			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
-				//TODO
-				stateRequester.sendRequest(new Request(123, Utils.loadIntentBitmap(this, data)).destination(Request.Destination::all));
-
-			}
-		}
+		if (resultCode == FragmentActivity.RESULT_OK)
+			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE)
+				stateRequester.sendRequest(new Request("LoadImage", Utils.loadIntentBitmap(this, data)));
 	}
 
 

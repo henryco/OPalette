@@ -20,7 +20,7 @@ public abstract class OPallUniRenderer <T extends Context> implements GLSurfaceV
 
 	private T context;
 	private long id;
-	private OPallSurfaceView surfaceView;
+	private OPallSurfaceView surfaceView = null;
 
 	public OPallUniRenderer(T context) {
 		this(context, (int) System.nanoTime());
@@ -38,7 +38,7 @@ public abstract class OPallUniRenderer <T extends Context> implements GLSurfaceV
 		setSuperSurface(view);
 	}
 
-	protected abstract void onSurfaceCreated(GL10 gl, EGLConfig config, T context);
+	protected abstract void onSurfaceCreated(GL10 gl, EGLConfig config, int width, int height, T context);
 	protected abstract void onSurfaceChanged(GL10 gl, int width, int height, T context);
 	protected abstract void onDrawFrame(GL10 gl, T context);
 
@@ -48,7 +48,8 @@ public abstract class OPallUniRenderer <T extends Context> implements GLSurfaceV
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		onSurfaceCreated(gl, config, context);
+		if (surfaceView == null) throw new RuntimeException("Super surface: <OPallSurfaceView> lost!");
+		onSurfaceCreated(gl, config, getWidth(), getHeight(), context);
 	}
 
 	@Override
@@ -97,12 +98,12 @@ public abstract class OPallUniRenderer <T extends Context> implements GLSurfaceV
 	}
 
 
-	public OPallUniRenderer requestUpDate() {
+	public OPallUniRenderer forceUpDate() {
 		surfaceView.update();
 		return this;
 	}
 
-	public OPallUniRenderer requestUpDate(Runnable runnable) {
+	public OPallUniRenderer forceUpDate(Runnable runnable) {
 		surfaceView.update(runnable);
 		return this;
 	}
@@ -111,4 +112,13 @@ public abstract class OPallUniRenderer <T extends Context> implements GLSurfaceV
 		surfaceView.addToGLContextQueue(gl -> action.consume(gl, context));
 		return this;
 	}
+
+
+	protected int getWidth() {
+		return surfaceView.getWidth();
+	}
+	protected int getHeight() {
+		return surfaceView.getHeight();
+	}
+
 }

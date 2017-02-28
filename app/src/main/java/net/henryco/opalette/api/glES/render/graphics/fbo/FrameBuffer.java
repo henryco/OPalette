@@ -29,6 +29,7 @@ public class FrameBuffer implements OPallFBO {
 
 	@Override
 	public FrameBuffer createFBO(int w, int h, boolean d) {
+		if (textureBitmap != null) textureBitmap.recycle();
 		OPallFBO.methods.wipe(frameBHandle, texBHandle, depthBHandle);
 		frameBHandle = OPallFBO.methods.genGeneralBuff();
 		texBHandle = OPallFBO.methods.genTextureBuff(w, h);
@@ -60,6 +61,7 @@ public class FrameBuffer implements OPallFBO {
 
 	@Override
 	public FrameBuffer endFBO() {
+		if (textureBitmap!= null) textureBitmap.recycle();
 		textureBitmap = Bitmap.createBitmap(OPallFBO.methods.endFBO(width, height),
 				width, height, Bitmap.Config.ARGB_8888);
 		if (texture != null) {
