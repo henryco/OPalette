@@ -188,7 +188,7 @@ public class ProtoActivity extends AppCompatActivity
 		if (resultCode == FragmentActivity.RESULT_OK) {
 			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
 				//TODO
-				stateRequester.sendRequest(new Request().destination(Request.Destination::all));
+				stateRequester.sendRequest(new Request(123, Utils.loadIntentBitmap(this, data)).destination(Request.Destination::all));
 
 			}
 		}

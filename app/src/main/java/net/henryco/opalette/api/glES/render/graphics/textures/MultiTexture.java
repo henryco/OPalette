@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.api.glES.camera.OPallCamera2D;
+import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.bounds.Bounds2D;
@@ -180,7 +180,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 	@Override
-	protected void render(int glProgram, OPallCamera2D camera) {
+	protected void render(int glProgram, Camera2D camera) {
 
 		int positionHandle = getPositionHandle();
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();

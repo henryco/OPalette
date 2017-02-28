@@ -3,7 +3,7 @@ package net.henryco.opalette.api.glES.glSurface.renderers.solo;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import net.henryco.opalette.api.glES.camera.OPallCamera2D;
+import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
 
 /**
@@ -19,11 +19,11 @@ public class SoloRenderer extends OPallSoloRenderer {
 
 	private ShaderMaker shaderMaker;
 
-	public SoloRenderer(Context context, OPallCamera2D camera, ShaderMaker shaderMaker) {
+	public SoloRenderer(Context context, Camera2D camera, ShaderMaker shaderMaker) {
 		super(context, camera);
 		this.shaderMaker = shaderMaker;
 	}
-	public SoloRenderer(Context context, OPallCamera2D camera) {
+	public SoloRenderer(Context context, Camera2D camera) {
 		this(context, camera, context1 -> null);
 	}
 	public SoloRenderer(Context context, ShaderMaker shaderMaker) {

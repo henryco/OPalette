@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.api.glES.camera.OPallCamera2D;
+import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.bounds.Bounds2D;
@@ -29,7 +29,18 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	private final boolean[] textureFlip;
 
 
-
+	public Texture(Context context, String shaderVert, String shaderFrag) {
+		this(null, context, shaderVert, shaderFrag);
+	}
+	public Texture(Context context) {
+		this(null, context);
+	}
+	public Texture(Context context, Filter filter) {
+		this(null, context, filter);
+	}
+	public Texture(Context context, Filter filter, String shaderVert, String shaderFrag) {
+		this(null, context, filter, shaderVert, shaderFrag);
+	}
 	public Texture(Bitmap image, Context context, String shaderVert, String shaderFrag) {
 		this(image, context, Filter.LINEAR, shaderVert, shaderFrag);
 	}
@@ -39,7 +50,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	public Texture(Bitmap image, Context context, Filter filter) {
 		this(image, context, filter, DEF_SHADER + ".vert", DEF_SHADER + ".frag");
 	}
-
 	public Texture(Bitmap image, Context context, Filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
@@ -51,9 +61,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		setBitmap(image, filter);
 		setFlip(false, false);
 	}
-
-
-
 
 
 
@@ -128,7 +135,7 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 	@Override
-	protected void render(int glProgram, OPallCamera2D camera) {
+	protected void render(int glProgram, Camera2D camera) {
 
 		int positionHandle = getPositionHandle();
 		int mTextureUniformHandle = getTextureUniformHandle(0);

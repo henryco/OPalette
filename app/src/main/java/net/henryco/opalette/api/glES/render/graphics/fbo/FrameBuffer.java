@@ -2,7 +2,7 @@ package net.henryco.opalette.api.glES.render.graphics.fbo;
 
 import android.graphics.Bitmap;
 
-import net.henryco.opalette.api.glES.camera.OPallCamera2D;
+import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.textures.OPallTexture;
 
 /**
@@ -40,7 +40,7 @@ public class FrameBuffer implements OPallFBO {
 	}
 
 	@Override
-	public void render(OPallCamera2D camera){
+	public void render(Camera2D camera){
 		if (texture != null) texture.render(camera);
 	}
 

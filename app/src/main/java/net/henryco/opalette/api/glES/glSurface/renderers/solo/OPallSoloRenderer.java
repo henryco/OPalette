@@ -3,7 +3,7 @@ package net.henryco.opalette.api.glES.glSurface.renderers.solo;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 
-import net.henryco.opalette.api.glES.camera.OPallCamera2D;
+import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
 import net.henryco.opalette.api.utils.GLESUtils;
@@ -19,21 +19,21 @@ public abstract class OPallSoloRenderer implements GLSurfaceView.Renderer {
 
 	@FunctionalInterface
 	public interface OnDrawAction {
-		void action(GL10 gl10, OPallCamera2D camera);
+		void action(GL10 gl10, Camera2D camera);
 	}
 	private OnDrawAction onDrawAction;
 
 
 	private Shader shader;
 	private Context context;
-	private OPallCamera2D camera;
+	private Camera2D camera;
 
 
 
-	public OPallSoloRenderer(Context context, OPallCamera2D camera) {
+	public OPallSoloRenderer(Context context, Camera2D camera) {
 		this(context, camera, (gl10, camera1) -> GLESUtils.clear(GLESUtils.Color.BLACK));
 	}
-	public OPallSoloRenderer(Context context, OPallCamera2D camera, OnDrawAction action) {
+	public OPallSoloRenderer(Context context, Camera2D camera, OnDrawAction action) {
 		this.context = context;
 		this.camera = camera;
 		setOnDrawAction(action);
@@ -86,10 +86,10 @@ public abstract class OPallSoloRenderer implements GLSurfaceView.Renderer {
 			if (shader != null) shader.render(camera);
 	}
 
-	public OPallCamera2D getCamera() {
+	public Camera2D getCamera() {
 		return camera;
 	}
-	public OPallSoloRenderer setCamera(OPallCamera2D camera) {
+	public OPallSoloRenderer setCamera(Camera2D camera) {
 		this.camera = camera;
 		return this;
 	}

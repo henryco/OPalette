@@ -7,7 +7,7 @@ package net.henryco.opalette.api.glES.render.graphics.shaders;
 import android.content.Context;
 import android.opengl.GLES20;
 
-import net.henryco.opalette.api.glES.camera.OPallCamera2D;
+import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.Utils;
 
@@ -42,18 +42,18 @@ public abstract class Shader implements OPallShader {
 	}
 
 
-    protected abstract void render(final int glProgram, OPallCamera2D camera);
+    protected abstract void render(final int glProgram, Camera2D camera);
 
 
 	@Override
 	public void setScreenDim(float w, float h) {
 		screenWidth = w;
 		screenHeight = h;
-	};
+	}
 
 
 	@Override
-    public void render(OPallCamera2D camera) {
+    public void render(Camera2D camera) {
 		GLESUtils.glUseProgram(program, () -> {
 			if (cameraForceUpdate) camera.update();
 			OPallShader.methods.applyCameraMatrix(program, camera.getMVPMatrix());
