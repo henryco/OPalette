@@ -18,11 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
+import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
+import net.henryco.opalette.application.main.program.StdPaletteProgram;
 
 public class ProtoActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
@@ -157,14 +160,15 @@ public class ProtoActivity extends AppCompatActivity
 
 
 
-	long id = 0;
+	long renderID = 0;
 
 	private void initialization() {
 
-		OPallUniRenderer renderer = new ProtoRender(this);
-		stateRequester.addRequestListener(renderer);
-		id = renderer.getID();
-		System.out.println("<"+id+">");
+		OPallUnderProgram<ProtoActivity> defProgram = new StdPaletteProgram();
+		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, defProgram);
+
+		renderID = stateRequester.addRequestListener(renderer);
+		System.out.println("<"+ renderID +">");
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);

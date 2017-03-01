@@ -21,21 +21,21 @@ public class OPallRequester {
 
 
 
-	public OPallRequester addRequestListener(OPallRequestListener listener) {
+	public long addRequestListener(OPallRequestListener listener) {
 		listeners.add(listener);
 		listenerMap.put(listener.getID(), listener);
-		return this;
+		return listener.getID();
 	}
 
 
-	public OPallRequester removeRequestListener(OPallRequestListener listener) {
+	public OPallRequestListener removeRequestListener(OPallRequestListener listener) {
 		listenerMap.remove(listener.getID());
 		listeners.remove(listener);
-		return this;
+		return listener;
 	}
 
 
-	public OPallRequester removeRequestListener(int id) {
+	public OPallRequestListener removeRequestListener(int id) {
 		return removeRequestListener(listenerMap.get(id));
 	}
 
