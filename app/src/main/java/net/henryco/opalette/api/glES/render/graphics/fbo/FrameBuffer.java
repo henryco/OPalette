@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.textures.OPallTexture;
+import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
 
 /**
  * Created by HenryCo on 25/02/17.
@@ -20,7 +21,7 @@ public class FrameBuffer implements OPallFBO {
 	private int width = 0, height = 0;
 	private int scrW = 0, scrH = 0;
 	private Bitmap textureBitmap = null;
-	private OPallTexture texture = null;
+	private Texture texture = null;
 	private boolean flip = true;
 
 	public FrameBuffer(){}
@@ -93,7 +94,9 @@ public class FrameBuffer implements OPallFBO {
 
 	@Override
 	public FrameBuffer setTargetTexture(OPallTexture targetTexture) {
-		this.texture = targetTexture;
+		if (!(targetTexture instanceof Texture))
+			throw new RuntimeException("<targetTexture> must be the <Texture> instance!");
+		this.texture = (Texture) targetTexture;
 		setFlip(flip);
 		return this;
 	}
@@ -115,9 +118,10 @@ public class FrameBuffer implements OPallFBO {
 	}
 
 	@Override
-	public OPallTexture getTexture() {
+	public Texture getTexture() {
 		return texture;
 	}
+
 
 
 	public int getFrameBufferHandle() {

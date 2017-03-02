@@ -6,6 +6,7 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
+import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.main.ProtoActivity;
 
@@ -25,7 +26,7 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	private Texture texture1;
 
 	private FrameBuffer frameBuffer;
-	private FrameBuffer onePxBuffer;
+	private FrameBuffer slimBuffer;
 
 	private MultiTexture multiTexture1;
 
@@ -45,15 +46,15 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 		camera2D = new Camera2D(width, height, true);
 		texture1 = new Texture(context);
 		frameBuffer = OPallFBOCreator.FrameBuffer(context);
-		onePxBuffer = OPallFBOCreator.FrameBuffer(context);
-		multiTexture1 = new MultiTexture(context);
+		slimBuffer = OPallFBOCreator.FrameBuffer(context);
+		multiTexture1 = new MultiTexture(context, 2);
 	}
 
 	@Override
 	public void onSurfaceChange(GL10 gl, ProtoActivity context, int width, int height) {
 		camera2D.set(width, height).update();
-	//	frameBuffer.createFBO(width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.BLUE));
-	//	onePxBuffer.createFBO(width, 200, width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.RED));
+		frameBuffer.createFBO(width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.BLUE));
+		slimBuffer.createFBO(width, 200, width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.RED));
 		texture1.setScreenDim(width, height);
 		multiTexture1.setScreenDim(width, height);
 
@@ -63,8 +64,11 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	@Override
 	public void onDraw(GL10 gl, ProtoActivity context) {
 
+
+
 		multiTexture1.render(camera2D.update());
-	//	texture1.render(camera2D.update());
+
+
 	}
 
 	@Override
@@ -72,6 +76,8 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 		request.openRequest("loadImage", () -> {
 			texture1.setBitmap(request.getData());
 			multiTexture1.setTexture(0, texture1);
+			multiTexture1.setTexture(1, slimBuffer.getTexture());
+			multiTexture1.setFocusOn(1);
 		});
 	}
 
