@@ -3,8 +3,9 @@ package net.henryco.opalette.application.main.program;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
+import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
+import net.henryco.opalette.api.glES.render.graphics.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
-import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.main.ProtoActivity;
 
@@ -22,9 +23,11 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 
 	private Camera2D camera2D;
 	private Texture texture1;
-	private FrameBuffer frameBuffer;
 
+	private FrameBuffer frameBuffer;
 	private FrameBuffer onePxBuffer;
+
+	private MultiTexture multiTexture1;
 
 
 	public StdPaletteProgram(){
@@ -41,28 +44,37 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	public void create(GL10 gl, int width, int height, ProtoActivity context) {
 		camera2D = new Camera2D(width, height, true);
 		texture1 = new Texture(context);
-		frameBuffer = new FrameBuffer().setTargetTexture(new Texture(context));
-		onePxBuffer = new FrameBuffer().setTargetTexture(new Texture(context));
+		frameBuffer = OPallFBOCreator.FrameBuffer(context);
+		onePxBuffer = OPallFBOCreator.FrameBuffer(context);
+		multiTexture1 = new MultiTexture(context, 2);
 	}
 
 	@Override
 	public void onSurfaceChange(GL10 gl, ProtoActivity context, int width, int height) {
 		camera2D.set(width, height).update();
-		frameBuffer.createFBO(width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.BLUE));
-		onePxBuffer.createFBO(width, 200, width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.RED));
+	//	frameBuffer.createFBO(width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.BLUE));
+	//	onePxBuffer.createFBO(width, 200, width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.RED));
+		texture1.setScreenDim(width, height);
+		multiTexture1.setScreenDim(width, height);
+
+
 	}
 
 	@Override
 	public void onDraw(GL10 gl, ProtoActivity context) {
 
-	//	frameBuffer.render(camera2D.update());
-		onePxBuffer.render(camera2D.update());
-
+		multiTexture1.render(camera2D.update());
+	//	texture1.render(camera2D.update());
 	}
 
 	@Override
 	public void acceptRequest(Request request) {
-		request.openRequest("loadImage", () -> texture1.setBitmap(request.getData()));
+		request.openRequest("loadImage", () -> {
+			texture1.setBitmap(request.getData());
+		//	multiTexture1.setTexture(0, texture1);
+			multiTexture1.setBitmap(0, request.getData());
+			multiTexture1.setBitmap(1, request.getData());
+		});
 	}
 
 	@Override

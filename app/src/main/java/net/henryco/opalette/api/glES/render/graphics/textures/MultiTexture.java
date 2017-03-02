@@ -25,6 +25,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 	protected final FloatBuffer texelBuffer;
 	protected final boolean[][] textureFlip;
+	protected final Bitmap[] bitmaps;
 	protected final int[] textureGL_ID;
 	protected final int[] textureData_ID;
 	public final Bounds2D[] bounds2D;
@@ -51,6 +52,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 		super(context, VERT, FRAG, 2);
 		this.texNumb = (texNumb <= 5 && texNumb > 0) ? texNumb : 1;
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
+		bitmaps = new Bitmap[this.texNumb];
 		textureGL_ID = new int[this.texNumb];
 		textureData_ID = new int[this.texNumb];
 		this.textureFlip = new boolean[this.texNumb][2];
@@ -76,10 +78,9 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 	public MultiTexture setTexture(int n, Texture texture) {
+		setBitmap(n, texture.bitmap);
 		this.bounds2D[n] = texture.bounds2D;
 		this.textureFlip[n] = texture.textureFlip;
-		this.textureGL_ID[n] = texture.textureGL_ID;
-		this.textureData_ID[n] = texture.textureData_ID;
 		return this;
 	}
 
@@ -104,6 +105,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 			textureData_ID[n] = OPallTexture.methods.loadTexture(n, image, filterMin, filterMag);
 			textureGL_ID[n] = getTextureUniformHandle(n);
 			bounds2D[n].setUniSize(image.getWidth(), image.getHeight());
+			bitmaps[n] = image;
 		});
 		return this;
 	}

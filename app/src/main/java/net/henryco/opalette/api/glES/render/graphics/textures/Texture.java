@@ -26,6 +26,7 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	protected final FloatBuffer texelBuffer;
 	protected int textureData_ID;
 	protected int textureGL_ID;
+	protected Bitmap bitmap;
 	public final Bounds2D bounds2D;
 
 
@@ -68,11 +69,11 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	@Override
 	public Texture setBitmap(Bitmap image, Filter filterMin, Filter filterMag) {
 		if (image == null || filterMin == null || filterMag == null) return this;
+		bitmap = image;
 		GLESUtils.glUseProgram(program, () -> {
 			this.textureData_ID = OPallTexture.methods.loadTexture(image, filterMin, filterMag);
 			this.textureGL_ID = getTextureUniformHandle(0);
 			bounds2D.setUniSize(image.getWidth(), image.getHeight());
-			image.recycle();
 		});
 		return this;
 	}
