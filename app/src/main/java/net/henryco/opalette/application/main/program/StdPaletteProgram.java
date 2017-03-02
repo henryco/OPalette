@@ -46,7 +46,7 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 		texture1 = new Texture(context);
 		frameBuffer = OPallFBOCreator.FrameBuffer(context);
 		onePxBuffer = OPallFBOCreator.FrameBuffer(context);
-		multiTexture1 = new MultiTexture(context, 2);
+		multiTexture1 = new MultiTexture(context);
 	}
 
 	@Override
@@ -71,9 +71,7 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	public void acceptRequest(Request request) {
 		request.openRequest("loadImage", () -> {
 			texture1.setBitmap(request.getData());
-		//	multiTexture1.setTexture(0, texture1);
-			multiTexture1.setBitmap(0, request.getData());
-			multiTexture1.setBitmap(1, request.getData());
+			multiTexture1.setTexture(0, texture1);
 		});
 	}
 

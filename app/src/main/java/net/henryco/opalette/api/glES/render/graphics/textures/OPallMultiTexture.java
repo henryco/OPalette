@@ -3,6 +3,8 @@ package net.henryco.opalette.api.glES.render.graphics.textures;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
+import java.util.Arrays;
+
 /**
  * Created by HenryCo on 24/02/17.
  */
@@ -100,11 +102,12 @@ public interface OPallMultiTexture extends OPallTexture {
 
 
 		public static void applyFlip(int program, boolean[][] xy) {
-			float[] flip = {0,0,0,0,0,0,0,0,0,0};
-			for (int i = 0; i < 2 * (xy.length - 1); i++) {
+			float[] flip = {0,0, 0,0, 0,0, 0,0, 0,0};
+			for (int i = 0; i < xy.length; i++) {
 				flip[2*i] = OPallTexture.methods.flipValue(xy[i][0]);
 				flip[2*i+1] = OPallTexture.methods.flipValue(xy[i][1]);
 			}
+			System.out.println(Arrays.toString(flip));
 			GLES20.glUniform2fv(GLES20.glGetUniformLocation(program, u_Flip), 5, flip, 0);
 		}
 

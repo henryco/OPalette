@@ -206,7 +206,6 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 		OPallMultiTexture.methods.applyTexNumb(program, texNumb);
 		OPallMultiTexture.methods.applyFlip(program, textureFlip);
 
-
 		GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
 
 			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D[focus].vertexBuffer);
