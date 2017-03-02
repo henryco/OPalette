@@ -1,7 +1,6 @@
 package net.henryco.opalette.application.main;
 
 import android.content.Intent;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
@@ -164,18 +162,14 @@ public class ProtoActivity extends AppCompatActivity
 
 	private void initialization() {
 
-		OPallUnderProgram<ProtoActivity> defProgram = new StdPaletteProgram();
-		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, defProgram);
+		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, new StdPaletteProgram());
 
 		renderID = stateRequester.addRequestListener(renderer);
-		System.out.println("<"+ renderID +">");
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		oPallSurfaceView.setOnClickListener(this::imageClickAction);
 		oPallSurfaceView.setRenderer(renderer);
-		oPallSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-
 
 
 	}

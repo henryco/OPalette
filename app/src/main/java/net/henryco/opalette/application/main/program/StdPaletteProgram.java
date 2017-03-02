@@ -20,19 +20,15 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	private final long id;
 
 
-	private static long genID() {
-		return (long) (System.currentTimeMillis() * 0.5 - 1);
-	}
-
-
 	private Camera2D camera2D;
 	private Texture texture1;
 	private FrameBuffer frameBuffer;
 
+	private FrameBuffer onePxBuffer;
 
 
 	public StdPaletteProgram(){
-		this(genID());
+		this(OPallUnderProgram.methods.genID());
 	}
 	public StdPaletteProgram(long id){
 		this.id = id;
@@ -45,24 +41,22 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	public void create(GL10 gl, int width, int height, ProtoActivity context) {
 		camera2D = new Camera2D(width, height, true);
 		texture1 = new Texture(context);
-		frameBuffer = new FrameBuffer(width, height, false).setTargetTexture(new Texture(context));
+		frameBuffer = new FrameBuffer().setTargetTexture(new Texture(context));
+		onePxBuffer = new FrameBuffer().setTargetTexture(new Texture(context));
 	}
 
 	@Override
 	public void onSurfaceChange(GL10 gl, ProtoActivity context, int width, int height) {
 		camera2D.set(width, height).update();
-		frameBuffer.createFBO(width, height, false);
+		frameBuffer.createFBO(width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.BLUE));
+		onePxBuffer.createFBO(width, 200, width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.RED));
 	}
 
 	@Override
 	public void onDraw(GL10 gl, ProtoActivity context) {
 
-		frameBuffer.beginFBO(() -> {
-			camera2D.update();
-			GLESUtils.clear(GLESUtils.Color.PIKNY);
-			texture1.render(camera2D);
-
-		}).render(camera2D);
+	//	frameBuffer.render(camera2D.update());
+		onePxBuffer.render(camera2D.update());
 
 	}
 

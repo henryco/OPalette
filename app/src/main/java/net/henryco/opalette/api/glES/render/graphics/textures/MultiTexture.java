@@ -75,6 +75,13 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 
+	public MultiTexture setTexture(int n, Texture texture) {
+		this.bounds2D[n] = texture.bounds2D;
+		this.textureFlip[n] = texture.textureFlip;
+		this.textureGL_ID[n] = texture.textureGL_ID;
+		this.textureData_ID[n] = texture.textureData_ID;
+		return this;
+	}
 
 
 
@@ -123,7 +130,17 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 	}
 
 
+	@Override
+	public MultiTexture setSize(int n, int w, int h) {
+		bounds2D[n].setSize(w, h);
+		return this;
+	}
 
+	@Override
+	public MultiTexture setSize(int w, int h) {
+		for (int i = 0; i < texNumb; i++) setSize(i, w, h);
+		return this;
+	}
 
 
 	@Override
@@ -134,8 +151,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 	@Override
 	public MultiTexture setFlip(boolean x, boolean y) {
-		for (int i = 0; i < texNumb; i++)
-			setFlip(i, x, y);
+		for (int i = 0; i < texNumb; i++) setFlip(i, x, y);
 		return this;
 	}
 

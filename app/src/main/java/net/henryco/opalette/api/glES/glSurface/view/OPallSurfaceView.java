@@ -151,6 +151,7 @@ public class OPallSurfaceView extends GLSurfaceView {
 			}
 		});
 		this.renderer = renderer;
+		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	}
 
 

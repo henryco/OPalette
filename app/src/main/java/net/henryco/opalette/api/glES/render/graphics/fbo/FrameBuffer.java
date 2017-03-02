@@ -18,17 +18,26 @@ public class FrameBuffer implements OPallFBO {
 	private int[] depthBHandle = null;
 
 	private int width = 0, height = 0;
+	private int scrW = 0, scrH = 0;
 	private Bitmap textureBitmap = null;
 	private OPallTexture texture = null;
 	private boolean flip = true;
 
 	public FrameBuffer(){}
 	public FrameBuffer(int width, int height, boolean depth) {
-		createFBO(width, height, depth);
+		this(width, height, width, height, depth);
+	}
+	public FrameBuffer(int width, int height, int screenW, int screenH, boolean depth) {
+		createFBO(width, height, screenW, screenH, depth);
+	}
+
+
+	public FrameBuffer createFBO(int w, int h, boolean d) {
+		return createFBO(w, h, w, h, d);
 	}
 
 	@Override
-	public FrameBuffer createFBO(int w, int h, boolean d) {
+	public FrameBuffer createFBO(int w, int h, int screenW, int screenH, boolean d) {
 		if (textureBitmap != null) textureBitmap.recycle();
 		OPallFBO.methods.wipe(frameBHandle, texBHandle, depthBHandle);
 		frameBHandle = OPallFBO.methods.genGeneralBuff();
@@ -37,6 +46,8 @@ public class FrameBuffer implements OPallFBO {
 		OPallFBO.methods.finishAndCheckStat(debug);
 		width = w;
 		height = h;
+		scrW = screenW;
+		scrH = screenH;
 		return this;
 	}
 
@@ -65,8 +76,9 @@ public class FrameBuffer implements OPallFBO {
 		textureBitmap = Bitmap.createBitmap(OPallFBO.methods.endFBO(width, height),
 				width, height, Bitmap.Config.ARGB_8888);
 		if (texture != null) {
-			texture.setScreenDim(width, height);
+			texture.setScreenDim(scrW, scrH);
 			texture.setBitmap(textureBitmap, OPallTexture.Filter.NEAREST);
+			texture.setSize(width, height);
 			setFlip(flip);
 		}
 		return this;
@@ -85,6 +97,7 @@ public class FrameBuffer implements OPallFBO {
 		setFlip(flip);
 		return this;
 	}
+
 
 	@Override
 	public int getWidth() {

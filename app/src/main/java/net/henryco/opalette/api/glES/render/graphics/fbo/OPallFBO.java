@@ -16,7 +16,7 @@ public interface OPallFBO extends OPallRenderable {
 
 
 
-	OPallFBO createFBO(int w, int h, boolean d);
+	OPallFBO createFBO(int w, int h, int screenW, int screenH, boolean d);
 	OPallFBO beginFBO();
 	OPallFBO beginFBO(Runnable runnable);
 	OPallFBO endFBO();

@@ -15,4 +15,10 @@ public interface OPallUnderProgram <T extends Context> extends OPallRequestListe
 	void create(GL10 gl, int width, int height, T context);
 	void onSurfaceChange(GL10 gl, T context, int width, int height);
 	void onDraw(GL10 gl, T context);
+
+	final class methods  {
+		public static long genID() {
+			return (long) (System.nanoTime() * 0.5 - 1);
+		}
+	}
 }
