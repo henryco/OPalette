@@ -2,7 +2,9 @@ package net.henryco.opalette.api.glES.render.graphics.shaders;
 
 import android.opengl.GLES20;
 
+import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 /**
  * Created by HenryCo on 23/02/17.
@@ -44,7 +46,14 @@ public interface OPallShader extends OPallRenderable {
      */
 
 
+	/**
+	 * IN ASSETS DIR: /assets/.../SHADERS_DIR
+	 * */
+	String SHADERS_DIR = "shaders";
+
 	void setScreenDim(float w, float h);
+	void render(Camera2D camera2D, OPallConsumer<Integer> setter);
+
 
 
 	String a_Position = "a_Position";

@@ -33,7 +33,7 @@ public class TestActivity extends AppCompatActivity {
 						//.bounds(1, b -> b.setScale(0.75f))
 						.setFocusOn(1)
 						.setCameraForceUpdate(true)
-		).setOnDrawAction((gl10, camera) -> GLESUtils.clear(GLESUtils.Color.PINKY)));
+		).setOnDrawAction((gl10, camera) -> GLESUtils.clear(GLESUtils.Color.PINK)));
 
 
 

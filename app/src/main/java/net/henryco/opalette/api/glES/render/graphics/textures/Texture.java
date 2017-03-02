@@ -11,6 +11,7 @@ import net.henryco.opalette.api.utils.bounds.Bounds2D;
 import net.henryco.opalette.api.utils.bounds.OPallBounds;
 import net.henryco.opalette.api.utils.bounds.consumer.BoundsConsumer;
 import net.henryco.opalette.api.utils.bounds.observer.OPallBoundsHolder;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 import java.nio.FloatBuffer;
 
@@ -142,7 +143,7 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 	@Override
-	protected void render(int glProgram, Camera2D camera) {
+	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
 
 		int positionHandle = getPositionHandle();
 		int mTextureUniformHandle = textureGL_ID;
@@ -151,6 +152,9 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		OPallTexture.methods.applyFlip(glProgram, textureFlip);
 
 		GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
+
+			setter.consume(glProgram);
+
 			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
 			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, COORDS_PER_TEXEL, GLES20.GL_FLOAT, false, texelStride, texelBuffer);
 			OPallTexture.methods.bindTexture(textureData_ID, mTextureUniformHandle);

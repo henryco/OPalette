@@ -11,6 +11,7 @@ import net.henryco.opalette.api.utils.bounds.Bounds2D;
 import net.henryco.opalette.api.utils.bounds.OPallBounds;
 import net.henryco.opalette.api.utils.bounds.consumer.BoundsConsumer;
 import net.henryco.opalette.api.utils.bounds.observer.OPallMultiBoundsHolder;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 import java.nio.FloatBuffer;
 
@@ -198,7 +199,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 	@Override
-	protected void render(int glProgram, Camera2D camera) {
+	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
 
 		int positionHandle = getPositionHandle();
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();
@@ -207,6 +208,8 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 		OPallMultiTexture.methods.applyFlip(program, textureFlip);
 
 		GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
+
+			setter.consume(glProgram);
 
 			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D[focus].vertexBuffer);
 			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, COORDS_PER_TEXEL, GLES20.GL_FLOAT, false, texelStride, texelBuffer);

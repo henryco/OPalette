@@ -16,6 +16,7 @@ public class UniRenderer<T extends Context> extends OPallUniRenderer<T> {
 
 
 	private OPallUnderProgram<T> underProgram;
+	private int[] dimension = {0, 0};
 
 	public UniRenderer(T context) {
 		super(context);
@@ -73,16 +74,18 @@ public class UniRenderer<T extends Context> extends OPallUniRenderer<T> {
 	@Override
 	protected void onSurfaceCreated(GL10 gl, EGLConfig config, int width, int height, T context) {
 		if (underProgram != null) underProgram.create(gl, width, height, context);
+		dimension = new int[]{width, height};
 	}
 
 	@Override
 	protected void onSurfaceChanged(GL10 gl, int width, int height, T context) {
 		if (underProgram != null) underProgram.onSurfaceChange(gl, context, width, height);
+		dimension = new int[]{width, height};
 	}
 
 	@Override
 	protected void onDrawFrame(GL10 gl, T context) {
-		if (underProgram != null) underProgram.onDraw(gl, context);
+		if (underProgram != null) underProgram.onDraw(gl, context, dimension[0], dimension[1]);
 	}
 
 

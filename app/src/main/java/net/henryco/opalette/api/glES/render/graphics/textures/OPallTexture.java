@@ -87,11 +87,16 @@ public interface OPallTexture extends OPallShader {
 	};
 
 
+
+
 	int COORDS_PER_TEXEL = 2;
 	int texelStride = COORDS_PER_TEXEL * 4; // float = 4bytes
-	String DEF_SHADER = methods.createDefaultShader();
-	String u_Flip = "u_Flip";
 
+
+
+	String DEF_SHADER = methods.createDefaultShader();
+	String FRAG_DIR = SHADERS_DIR+"/default/frags";
+	String u_Flip = "u_Flip";
 
 
 
@@ -110,7 +115,7 @@ public interface OPallTexture extends OPallShader {
 
 		private static String createDefaultShader() {
 			// TODO
-			return "shaders/default/Default";
+			return SHADERS_DIR+"/default/Default";
 		}
 
 

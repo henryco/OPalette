@@ -10,6 +10,7 @@ import android.opengl.GLES20;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.Utils;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 public abstract class Shader implements OPallShader {
 
@@ -42,7 +43,7 @@ public abstract class Shader implements OPallShader {
 	}
 
 
-    protected abstract void render(final int glProgram, Camera2D camera);
+    protected abstract void render(final int glProgram, Camera2D camera, OPallConsumer<Integer> setter);
 
 
 	@Override
@@ -53,12 +54,17 @@ public abstract class Shader implements OPallShader {
 
 
 	@Override
-    public void render(Camera2D camera) {
+	public void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
 		GLESUtils.glUseProgram(program, () -> {
-			if (cameraForceUpdate) camera.update();
-			OPallShader.methods.applyCameraMatrix(program, camera.getMVPMatrix());
-			render(program, camera);
+			if (cameraForceUpdate) camera2D.update();
+			OPallShader.methods.applyCameraMatrix(program, camera2D.getMVPMatrix());
+			render(program, camera2D, setter);
 		});
+	}
+
+	@Override
+    public void render(Camera2D camera) {
+		render(camera, integer -> {});
     }
 
 

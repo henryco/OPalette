@@ -50,19 +50,11 @@ public interface OPallMultiTexture extends OPallTexture {
 			"uniform sampler2D u_Texture2;\n" +
 			"uniform sampler2D u_Texture3;\n" +
 			"uniform sampler2D u_Texture4;\n" +
-			"uniform sampler2D u_Texture5;\n" +
-			"uniform sampler2D u_Texture6;\n" +
-			"uniform sampler2D u_Texture7;\n" +
-			"uniform sampler2D u_Texture8;\n" +
-			"uniform sampler2D u_Texture9;\n" +
 			"uniform int u_texNumb;\n" +
 			"\n" +
 			"\n" +
 			"void main() {\n" +
-			"    vec4 col1 = texture2D(u_Texture0, v_TexCoordinate[0]).rgba;\n" +
-			"    vec4 col2 = texture2D(u_Texture1, v_TexCoordinate[1]).rgba;\n" +
-			"\n" +
-			"    gl_FragColor = vec4(vec3(col2.rgb * col1.rgb), 1);\n" +
+			"    gl_FragColor = texture2D(u_Texture0, v_TexCoordinate[0]).rgba;\n" +
 			"}";
 
 
@@ -70,6 +62,7 @@ public interface OPallMultiTexture extends OPallTexture {
 
 
 	String DEF_SHADER = methods.createDefaultShader();
+	String FRAG_DIR = SHADERS_DIR+"/multiTexture/frags";
 	String u_texNumb = "u_texNumb";
 
 
@@ -89,7 +82,7 @@ public interface OPallMultiTexture extends OPallTexture {
 
 		private static String createDefaultShader() {
 			// TODO
-			return "shaders/multiTexture/MultiTexture";
+			return SHADERS_DIR+"/multiTexture/MultiTexture";
 		}
 
 
