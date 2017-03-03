@@ -123,4 +123,20 @@ public class Utils {
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		activity.startActivityForResult(intent, Utils.activity.REQUEST_PICK_IMAGE);
 	}
+
+	public static long millisTimer(Runnable runnable) {
+		long t0 = System.currentTimeMillis();
+		runnable.run();
+		return System.currentTimeMillis() - t0;
+	}
+
+	public static long nanosTimer(Runnable runnable) {
+		long t0 = System.nanoTime();
+		runnable.run();
+		return System.nanoTime() - t0;
+	}
+
+	public static float secTimer(Runnable runnable) {
+		return millisTimer(runnable) * 0.001f;
+	}
 }
