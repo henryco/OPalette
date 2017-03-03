@@ -15,6 +15,22 @@ import java.nio.ShortBuffer;
 public class Bounds2D implements OPallBounds <Bounds2D> {
 
 
+	public Bounds2D() {
+	}
+	public Bounds2D(Bounds2D other) {
+		x = other.x;
+		y = other.y;
+		width = other.width;
+		height = other.height;
+		scale = other.scale;
+		def_width = other.def_width;
+		def_height = other.def_height;
+		vertices = other.getVertices();
+		order = other.getOrder();
+		generateOrderBuffer();
+	}
+
+
 	public float[] calculate(float dimX, float dimY) {
 		float[] verts = Utils.arrayFlatCopy(vertices);
 		if (width != 0 && height != 0 && dimX != 0 && dimY != 0) {

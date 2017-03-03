@@ -55,6 +55,8 @@ public abstract class Shader implements OPallShader {
 
 	@Override
 	public void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
+
+
 		GLESUtils.glUseProgram(program, () -> {
 			if (cameraForceUpdate) camera2D.update();
 			OPallShader.methods.applyCameraMatrix(program, camera2D.getMVPMatrix());

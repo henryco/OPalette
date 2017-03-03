@@ -50,7 +50,6 @@ public interface OPallFBO extends OPallRenderable {
 			GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, intBuffer);
 			GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
 			for (int i = 0; i < pixels.length; i++)
-				// ARGB (255,255,255,255): 0 -> 0, 255 -> FF
 				pixels[i] = (pixels[i] & (0xFF00FF00)) | ((pixels[i] >> 16) & 0x000000FF) | ((pixels[i] << 16) & 0x00FF0000);
 			return pixels;
 		}

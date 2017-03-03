@@ -1,5 +1,6 @@
 package net.henryco.opalette.application.main.program;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
@@ -84,22 +85,23 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 		if (uCan) {
 
 			camera2D.setPosY_absolute(0).update();
-
+			//texture1.setSize(ww, hh);
 
 			twoPxBuffer.beginFBO(() -> texture1.render(camera2D));
 			twoPxBuffer.render(camera2D);
-
 			multiTexture1.setTexture(0, twoPxBuffer.getTexture());
 			multiTexture1.setTexture(1, onePxBuffer.getTexture());
 			multiTexture1.setFocusOn(1);
 
 			//*
 
-			frameBuffer.beginFBO(()
-					-> multiTexture1.render(camera2D, program
-					-> GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), width, height)
-			));
-			camera2D.setPosY_absolute(-1.7f).update();
+			frameBuffer.beginFBO(() -> {
+				GLESUtils.clear(0,0,0,0);
+				multiTexture1.render(camera2D, program
+						-> GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), width, height)
+				);
+			});
+			camera2D.setPosY_absolute(-1.6f).update();
 
 
 			float time = Utils.secTimer(() -> drawBar(frameBuffer, camera2D, 75, buffer_quantum, step));
@@ -112,6 +114,9 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 		}
 	}
 
+	private int ww = 0;
+	private int hh = 0;
+
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest("loadImage", () -> {
@@ -119,6 +124,9 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 			multiTexture1.setTexture(0, texture1);
 			multiTexture1.setTexture(1, onePxBuffer.getTexture());
 			multiTexture1.setFocusOn(1);
+			ww = ((Bitmap) request.getData()).getWidth();
+			hh = ((Bitmap) request.getData()).getHeight();
+
 			uCan = true;
 		});
 	}

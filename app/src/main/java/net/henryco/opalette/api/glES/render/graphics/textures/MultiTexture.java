@@ -80,8 +80,10 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 	public MultiTexture setTexture(int n, Texture texture) {
 		setBitmap(n, texture.bitmap);
-		this.bounds2D[n] = texture.bounds2D;
-		this.textureFlip[n] = texture.textureFlip;
+		this.bounds2D[n] = new Bounds2D(texture.bounds2D).setHolder(this);
+		this.textureFlip[n][0] = texture.textureFlip[0];
+		this.textureFlip[n][1] = texture.textureFlip[1];
+		updateBounds(n);
 		return this;
 	}
 
