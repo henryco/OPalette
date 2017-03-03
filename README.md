@@ -1,5 +1,4 @@
-# OPalette
-O!Palette!
+# O!Palette!
 Work in progress...<br>
 <br>
 <b>First screenshoot!</b><br>
