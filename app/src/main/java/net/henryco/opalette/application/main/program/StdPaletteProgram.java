@@ -1,6 +1,8 @@
 package net.henryco.opalette.application.main.program;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
@@ -133,10 +135,16 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest("loadImage", () -> {
+
 			imageTexture.setBitmap(request.getData());
+			float bmpWidth = ((Bitmap)request.getData()).getWidth();
+			float barWidth = barSrcBuffer.getWidth();
+			imageTexture.bounds(b -> b.setScale(barWidth / bmpWidth));
+
 			multiTexture.setTexture(0, imageTexture);
 			multiTexture.setTexture(1, barSrcBuffer.getTexture());
 			multiTexture.setFocusOn(1);
+
 			uCan = true;
 		});
 	}
