@@ -3,7 +3,6 @@ package net.henryco.opalette.api.glES.render.graphics.textures;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
@@ -78,11 +77,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 			bounds2D.setUniSize(image.getWidth(), image.getHeight());
 		});
 
-		Log.d("texture", "<SET>");
-		Log.d("texture", "SW: "+getScreenWidth() + "| SH: "+getScreenHeight());
-		Log.d("texture", "W: "+ getWidth() + "| H: "+ getHeight());
-		Log.d("texture", "</SET>");
-
 		return this;
 	}
 
@@ -151,11 +145,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
-
-		Log.d("texture", "<REND>");
-		Log.d("texture", "SW: "+getScreenWidth() + "| SH: "+getScreenHeight());
-		Log.d("texture", "W: "+ getWidth() + "| H: "+ getHeight());
-		Log.d("texture", "</REND>");
 
 		int positionHandle = getPositionHandle();
 		int mTextureUniformHandle = textureGL_ID;
