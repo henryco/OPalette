@@ -32,7 +32,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 	public static final class BackBar {
 
-		public GLESUtils.Color color = GLESUtils.Color.PINK;
+		public GLESUtils.Color color = GLESUtils.Color.WHITE;
 
 
 		public float height_pct = 0.2f;
@@ -137,7 +137,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public final void onDraw(GL10 gl, ProtoActivity context, int width, int height) {
 
 
-		GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
+		GLESUtils.clear(GLESUtils.Color.WHITE);
 
 		if (uCan) {
 
@@ -147,7 +147,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 //			PREPARE TEXTURE
 			imageBuffer.beginFBO(() -> {
-				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
+				GLESUtils.clear(GLESUtils.Color.BLACK);
 				imageTexture.render(camera2D);
 			});
 			imageBuffer.render(camera2D);
@@ -164,11 +164,6 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 			backBar.render(camera2D, barImageBuffer);
-
-
-//			DRAW GRADIENT BAR
-//			camera2D.setPosY_absolute(-1.55f).update();
-//			drawBar(barImageBuffer, camera2D, 75, buffer_quantum, step);
 
 
 

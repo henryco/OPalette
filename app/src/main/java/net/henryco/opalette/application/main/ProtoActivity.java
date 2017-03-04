@@ -63,6 +63,7 @@ public class ProtoActivity extends AppCompatActivity
 
 
 		// -------- CUSTOM PART -------- //
+		getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
 
 		initialization();
 	}
