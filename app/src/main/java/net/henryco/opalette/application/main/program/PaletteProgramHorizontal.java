@@ -25,27 +25,54 @@ import javax.microedition.khronos.opengles.GL10;
 public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity> {
 
 
+	public static final int buffer_quantum = 5;
+	public static final float step = 4.75f;
+
+
+
 	public static final class BackBar {
 
 		public GLESUtils.Color color = GLESUtils.Color.PINK;
+
+
 		public float height_pct = 0.2f;
 		public float yPos_pct = 0.8f;
+		public float cellHeight_pct = 0.65f;
+
+
 		private FrameBuffer buffer;
 
 		public BackBar(Context context) {
 			buffer = OPallFBOCreator.FrameBuffer(context);
 		}
+
 		public void createBar(int scrWidth, int scrHeight, int height, GLESUtils.Color color) {
 			buffer.createFBO(scrWidth, height, scrWidth, scrHeight, false);
 			buffer.beginFBO(() -> GLESUtils.clear(color));
 		}
+
 		public void createBar(int scrWidth, int scrHeight) {
 			createBar(scrWidth, scrHeight, (int) (scrHeight * height_pct), color);
 		}
-		public void render(Camera2D camera) {
+
+		public void render(Camera2D camera, OPallRenderable renderable) {
 			float[] camYPos = camera.getPosition();
 			buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
+			float cellHeight = (float)buffer.getHeight() * cellHeight_pct;
+			float cellPtc = ((float)buffer.getHeight() - cellHeight) / (float) buffer.getScreenHeight();
+			float margin = cellPtc * 0.5f;
+
+			camera.translateY_absolute(-margin).update();
+			drawBar(renderable, camera, (int) cellHeight, buffer_quantum, step);
+
 			camera.setPosition(camYPos).update();
+
+		}
+
+		private void drawBar(OPallRenderable barLine, Camera2D camera2D, int barHeight, int buffer_quantum, float step) {
+			int loss = Math.round((buffer_quantum - step) * barHeight);
+			int it = Math.max(Math.round((barHeight + loss) / buffer_quantum), buffer_quantum);
+			for (int i = 0; i < it; i++) barLine.render(camera2D.translateY(-step).update());
 		}
 	}
 
@@ -57,8 +84,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPalette.frag";
 
 	private final long id;
-	private final int buffer_quantum = 5;
-	private final float step = 4.75f;
+
 
 	private Camera2D camera2D;
 	private Texture imageTexture;
@@ -137,7 +163,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			});
 
 
-			backBar.render(camera2D);
+			backBar.render(camera2D, barImageBuffer);
 
 
 //			DRAW GRADIENT BAR
@@ -151,17 +177,6 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 	}
 
-
-
-
-
-
-	private void drawBar(OPallRenderable renderable, Camera2D camera2D, int barHeight, int buffer_quantum, float step) {
-
-		int loss = Math.round((buffer_quantum - step) * barHeight);
-		int it = Math.max(Math.round((barHeight + loss) / buffer_quantum), buffer_quantum);
-		for (int i = 0; i < it; i++) renderable.render(camera2D.translateY(-step).update());
-	}
 
 
 

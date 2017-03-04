@@ -122,7 +122,13 @@ public class FrameBuffer implements OPallFBO {
 		return texture;
 	}
 
+	public int getScreenHeight() {
+		return scrH;
+	}
 
+	public int getScreenWidth() {
+		return scrW;
+	}
 
 	public int getFrameBufferHandle() {
 		return frameBHandle[0];
