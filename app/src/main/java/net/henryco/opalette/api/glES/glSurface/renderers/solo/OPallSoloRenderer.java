@@ -31,7 +31,7 @@ public abstract class OPallSoloRenderer implements GLSurfaceView.Renderer {
 
 
 	public OPallSoloRenderer(Context context, Camera2D camera) {
-		this(context, camera, (gl10, camera1) -> GLESUtils.clear(GLESUtils.Color.BLACK));
+		this(context, camera, (gl10, camera1) -> GLESUtils.clear(GLESUtils.Color.TRANSPARENT));
 	}
 	public OPallSoloRenderer(Context context, Camera2D camera, OnDrawAction action) {
 		this.context = context;

@@ -2,7 +2,6 @@ package net.henryco.opalette.application.main.program;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
@@ -82,36 +81,35 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	@Override
 	public void onDraw(GL10 gl, ProtoActivity context, int width, int height) {
 
-		GLESUtils.clear();
+
+		GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
 
 		if (uCan) {
 
 			camera2D.setPosY_absolute(0).update();
 			prepareTexture();
 
-
 			barImageBuffer.beginFBO(() -> {
-				GLESUtils.clear(0,0,0,0);
-				multiTexture.render(camera2D, program
-						-> GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), width, height)
-				);
+				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
+				multiTexture.render(camera2D, program -> GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), width, height));
 			});
 
-
-
-			camera2D.setPosY_absolute(-1.6f).update();
+			camera2D.setPosY_absolute(-1.55f).update();
 			drawBar(barImageBuffer, camera2D, 75, buffer_quantum, step);
 
-
-
 		}
+
+
 	}
 
 
 
 
 	private void prepareTexture() {
-		imageBuffer.beginFBO(() -> imageTexture.render(camera2D));
+		imageBuffer.beginFBO(() -> {
+			GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
+			imageTexture.render(camera2D);
+		});
 		imageBuffer.render(camera2D);
 		multiTexture.setTexture(0, imageBuffer.getTexture());
 		multiTexture.setTexture(1, barSrcBuffer.getTexture());

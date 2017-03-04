@@ -1,12 +1,14 @@
 package net.henryco.opalette.api.glES.glSurface.view;
 
 import android.content.Context;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.solo.OPallSoloRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
+import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 import java.util.ArrayList;
@@ -130,24 +132,30 @@ public class OPallSurfaceView extends GLSurfaceView {
 		super.setRenderer(new Renderer() {
 			@Override
 			public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-				surfaceInfo.surfaceCreated.set(false);
-				renderer.onSurfaceCreated(gl, config);
-				drawAction.onDrawFrameAction(gl);
-				surfaceInfo.surfaceCreated.set(true);
+				GLESUtils.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA, () -> {
+					surfaceInfo.surfaceCreated.set(false);
+					renderer.onSurfaceCreated(gl, config);
+					drawAction.onDrawFrameAction(gl);
+					surfaceInfo.surfaceCreated.set(true);
+				});
 			}
 			@Override
 			public void onSurfaceChanged(GL10 gl, int width, int height) {
-				surfaceInfo.surfaceChanged.set(false);
-				renderer.onSurfaceChanged(gl, width, height);
-				drawAction.onDrawFrameAction(gl);
-				surfaceInfo.surfaceChanged.set(true);
+				GLESUtils.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA, () -> {
+					surfaceInfo.surfaceChanged.set(false);
+					renderer.onSurfaceChanged(gl, width, height);
+					drawAction.onDrawFrameAction(gl);
+					surfaceInfo.surfaceChanged.set(true);
+				});
 			}
 			@Override
 			public void onDrawFrame(GL10 gl) {
-				surfaceInfo.surfaceDrawing.set(true);
-				renderer.onDrawFrame(gl);
-				drawAction.onDrawFrameAction(gl);
-				surfaceInfo.surfaceDrawing.set(false);
+				GLESUtils.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA, () -> {
+					surfaceInfo.surfaceDrawing.set(true);
+					renderer.onDrawFrame(gl);
+					drawAction.onDrawFrameAction(gl);
+					surfaceInfo.surfaceDrawing.set(false);
+				});
 			}
 		});
 		this.renderer = renderer;

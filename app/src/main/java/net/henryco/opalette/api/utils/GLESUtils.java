@@ -21,9 +21,10 @@ public class GLESUtils {
 
 	public static final class Color {
 
-		public static final Color BLACK = new Color(0.f,0.f,0.f,0.f);
+		public static final Color BLACK = new Color(0.f,0.f,0.f,1.f);
+		public static final Color TRANSPARENT = new Color(0.f,0.f,0.f, 0.f);
 		public static final Color WHITE = new Color(1.f,1.f,1.f,1.f);
-		public static final Color PINK = new Color(.9f,.1f,.5f,1.f);
+		public static final Color PINK = new Color(.9f,.1f,.5f, 1.f);
 		public static final Color RED = new Color(1.f, 0.f, 0.f,1.f);
 		public static final Color BLUE = new Color(0.f, 0.f,1.f,1.f);
 		public static final Color GREEN = new Color(0.f,1.f,0.f,1.f);
@@ -133,6 +134,13 @@ public class GLESUtils {
 		for (int i = 0; i < n - 1; i++) GLES20.glEnableVertexAttribArray(i);
 		((Runnable) ob[n-1]).run();
 		for (int i = 0; i < n - 1; i++) GLES20.glDisableVertexAttribArray(i);
+	}
+
+	public static void glBlendFunc(int src, int dst, Runnable run) {
+		GLES20.glBlendFunc(src, dst);
+		GLES20.glEnable(GLES20.GL_BLEND);
+		run.run();
+		GLES20.glDisable(GLES20.GL_BLEND);
 	}
 
 }

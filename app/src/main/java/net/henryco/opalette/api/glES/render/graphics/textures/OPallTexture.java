@@ -141,7 +141,7 @@ public interface OPallTexture extends OPallShader {
 				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
 				GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, filter_min);
 				GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, filter_mag);
-				GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+				GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, bitmap, 0);
 				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, n);
 				return textureHandle[0];
 			}
