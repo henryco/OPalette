@@ -23,7 +23,7 @@ import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
-import net.henryco.opalette.application.main.program.StdPaletteProgram;
+import net.henryco.opalette.application.main.program.PaletteProgramHorizontal;
 
 public class ProtoActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
@@ -162,7 +162,7 @@ public class ProtoActivity extends AppCompatActivity
 
 	private void initialization() {
 
-		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, new StdPaletteProgram());
+		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, new PaletteProgramHorizontal());
 
 		renderID = stateRequester.addRequestListener(renderer);
 

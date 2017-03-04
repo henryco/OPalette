@@ -1,5 +1,6 @@
 package net.henryco.opalette.application.main.program;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
@@ -21,7 +22,35 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
+public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity> {
+
+
+	public static final class BackBar {
+
+		public GLESUtils.Color color = GLESUtils.Color.PINK;
+		public float height_pct = 0.2f;
+		public float yPos_pct = 0.8f;
+		private FrameBuffer buffer;
+
+		public BackBar(Context context) {
+			buffer = OPallFBOCreator.FrameBuffer(context);
+		}
+		public void createBar(int scrWidth, int scrHeight, int height, GLESUtils.Color color) {
+			buffer.createFBO(scrWidth, height, scrWidth, scrHeight, false);
+			buffer.beginFBO(() -> GLESUtils.clear(color));
+		}
+		public void createBar(int scrWidth, int scrHeight) {
+			createBar(scrWidth, scrHeight, (int) (scrHeight * height_pct), color);
+		}
+		public void render(Camera2D camera) {
+			float[] camYPos = camera.getPosition();
+			buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
+			camera.setPosition(camYPos).update();
+		}
+	}
+
+
+
 
 
 	public static final String VERT_FILE = OPallMultiTexture.DEF_SHADER+".vert";
@@ -38,15 +67,14 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 	private FrameBuffer barSrcBuffer;
 	private FrameBuffer imageBuffer;
 
-
 	private MultiTexture multiTexture;
 	private boolean uCan = false;
+	private BackBar backBar;
 
-
-	public StdPaletteProgram(){
+	public PaletteProgramHorizontal(){
 		this(OPallUnderProgram.methods.genID());
 	}
-	public StdPaletteProgram(long id){
+	public PaletteProgramHorizontal(long id){
 		this.id = id;
 	}
 
@@ -54,48 +82,69 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 
 
 	@Override
-	public void create(GL10 gl, int width, int height, ProtoActivity context) {
+	public final void create(GL10 gl, int width, int height, ProtoActivity context) {
 		camera2D = new Camera2D(width, height, true);
 		imageTexture = new Texture(context);
 		barImageBuffer = OPallFBOCreator.FrameBuffer(context);
 		barSrcBuffer = OPallFBOCreator.FrameBuffer(context);
 		imageBuffer = OPallFBOCreator.FrameBuffer(context);
 		multiTexture = new MultiTexture(context, VERT_FILE, FRAG_FILE, 2);
+		backBar = new BackBar(context);
 	}
 
 
 
 	@Override
-	public void onSurfaceChange(GL10 gl, ProtoActivity context, int width, int height) {
+	public final void onSurfaceChange(GL10 gl, ProtoActivity context, int width, int height) {
 		camera2D.set(width, height).update();
 		barImageBuffer.createFBO(width, height, false).beginFBO(GLESUtils::clear);
 		barSrcBuffer.createFBO(width, buffer_quantum, width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.PINK));
 		imageBuffer.createFBO(width, height, false).beginFBO(GLESUtils::clear);
 		imageTexture.setScreenDim(width, height);
 		multiTexture.setScreenDim(width, height);
-
+		backBar.createBar(width, height);
 	}
 
 
 
 	@Override
-	public void onDraw(GL10 gl, ProtoActivity context, int width, int height) {
+	public final void onDraw(GL10 gl, ProtoActivity context, int width, int height) {
 
 
 		GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
 
 		if (uCan) {
 
+//			RESET CAMERA
 			camera2D.setPosY_absolute(0).update();
-			prepareTexture();
 
+
+//			PREPARE TEXTURE
+			imageBuffer.beginFBO(() -> {
+				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
+				imageTexture.render(camera2D);
+			});
+			imageBuffer.render(camera2D);
+			multiTexture.setTexture(0, imageBuffer.getTexture());
+			multiTexture.setTexture(1, barSrcBuffer.getTexture());
+			multiTexture.setFocusOn(1);
+
+
+//			CREATE GRADIENT BAR
 			barImageBuffer.beginFBO(() -> {
 				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
 				multiTexture.render(camera2D, program -> GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), width, height));
 			});
 
-			camera2D.setPosY_absolute(-1.55f).update();
-			drawBar(barImageBuffer, camera2D, 75, buffer_quantum, step);
+
+			backBar.render(camera2D);
+
+
+//			DRAW GRADIENT BAR
+//			camera2D.setPosY_absolute(-1.55f).update();
+//			drawBar(barImageBuffer, camera2D, 75, buffer_quantum, step);
+
+
 
 		}
 
@@ -104,17 +153,6 @@ public class StdPaletteProgram implements OPallUnderProgram<ProtoActivity> {
 
 
 
-
-	private void prepareTexture() {
-		imageBuffer.beginFBO(() -> {
-			GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
-			imageTexture.render(camera2D);
-		});
-		imageBuffer.render(camera2D);
-		multiTexture.setTexture(0, imageBuffer.getTexture());
-		multiTexture.setTexture(1, barSrcBuffer.getTexture());
-		multiTexture.setFocusOn(1);
-	}
 
 
 

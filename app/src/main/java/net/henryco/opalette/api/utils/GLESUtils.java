@@ -45,6 +45,17 @@ public class GLESUtils {
 		public Color(float r, float g, float b) {
 			this(r, g, b, 1f);
 		}
+		public Color(Color other) {
+			set(other);
+		}
+
+		public void set(Color color) {
+			this.r = color.r;
+			this.g = color.g;
+			this.b = color.b;
+			this.a = color.a;
+		}
+
 	}
 
 

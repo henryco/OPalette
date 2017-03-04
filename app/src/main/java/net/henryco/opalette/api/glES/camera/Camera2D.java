@@ -132,6 +132,13 @@ public class Camera2D {
 
 
 
+	public float[] getPosition() {
+		return new float[]{matrix.eye.x, matrix.eye.y};
+	}
+	public Camera2D setPosition(float[] vec) {
+		return setPosXY_absolute(vec[0], vec[1]);
+	}
+
 
 
 	public Camera2D setPosX_absolute(float x) {
