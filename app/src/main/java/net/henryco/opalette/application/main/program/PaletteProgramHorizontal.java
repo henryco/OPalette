@@ -83,6 +83,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 	public static final String VERT_FILE = OPallMultiTexture.DEF_SHADER+".vert";
 	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPaletteHorizontal.frag";
+	public static final String u_dimension = "u_dimension";
 
 	private final long id;
 
@@ -113,6 +114,8 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 	@Override
 	public final void create(GL10 gl, int width, int height, ProtoActivity context) {
+		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
+		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 		camera2D = new Camera2D(width, height, true);
 		imageTexture = new Texture(context);
 		barImageBuffer = OPallFBOCreator.FrameBuffer(context);
@@ -141,17 +144,18 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public final void onDraw(GL10 gl, ProtoActivity context, int width, int height) {
 
 
-		GLESUtils.clear(GLESUtils.Color.BLACK);
+		GLESUtils.clear(GLESUtils.Color.SILVER);
 
 		if (uCan) {
 
-//			RESET CAMERA
+			//RESET CAMERA
 			camera2D.setPosY_absolute(0).update();
 
 
-//			PREPARE TEXTURE
+
+			//PREPARE TEXTURE
 			imageBuffer.beginFBO(() -> {
-				GLESUtils.clear(GLESUtils.Color.SILVER);
+				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
 				imageTexture.render(camera2D);
 			});
 			imageBuffer.render(camera2D);
@@ -160,18 +164,18 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			multiTexture.setFocusOn(1);
 
 
-			//*
-//			CREATE GRADIENT BAR
+
+			//CREATE GRADIENT BAR
 			barImageBuffer.beginFBO(() -> {
 				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
 				multiTexture.render(camera2D, program -> {
-					GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), bitmap_size[0], bitmap_size[1]);
+					GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), width, height);
 				});
 			});
 
 
 			backBar.render(camera2D, barImageBuffer);
-			//*/
+
 
 
 		}

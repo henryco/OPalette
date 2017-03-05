@@ -164,8 +164,10 @@ public class ProtoActivity extends AppCompatActivity
 
 	private void initialization() {
 
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-	//		getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
+			getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
+			System.out.println("SDK!!!!!");
 		}
 
 

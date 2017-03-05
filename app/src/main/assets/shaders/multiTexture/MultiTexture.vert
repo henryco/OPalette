@@ -12,8 +12,8 @@ uniform vec2    u_Flip[5];
 
 vec2 flip(vec2 f, vec2 tex) {
 
-    float x = min(1., f.x + 1.) - f.x * tex.x;
-    float y = min(1., f.y + 1.) - f.y * tex.y;
+    float x = min(1.0, f.x + 1.0) - f.x * tex.x;
+    float y = min(1.0, f.y + 1.0) - f.y * tex.y;
     return vec2(x, y);
 }
 

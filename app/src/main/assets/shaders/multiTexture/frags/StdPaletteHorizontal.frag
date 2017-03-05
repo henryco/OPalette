@@ -1,4 +1,4 @@
-
+#version 100
 precision mediump float;
 
 varying vec4 v_Position;
@@ -16,17 +16,21 @@ uniform int u_texNumb;
 
 void main() {
 
-    vec3 p_col = vec3(0);
+    vec3 p_col = vec3(0.0);
+    float trueHeight = 0.0;
 
     for (float y = 0.0; y < u_dimension.y; y += 1.0) {
         vec2 point = vec2(v_TexCoordinate[1].s, y / u_dimension.y);
         vec4 p_c = texture2D(u_Texture0, point).rgba;
-        p_col += p_c.rgb;
 
+        if (p_c.a != 0.0) {
+            p_col += p_c.rgb;
+            trueHeight += 1.0;
+        }
     }
 
-    vec3 color = p_col / u_dimension.y;
-    gl_FragColor = vec4(color, 1);
+    vec3 color = p_col / max(trueHeight, 1.0);
+    gl_FragColor = vec4(color, 1.0);
 
 
 }
