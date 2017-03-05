@@ -7,6 +7,7 @@ import net.henryco.opalette.api.utils.bounds.observer.OPallBoundsHolder;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 /**
  * Created by HenryCo on 23/02/17.
@@ -169,5 +170,24 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 	public Bounds2D setHolder(OPallBoundsHolder<Bounds2D> holder) {
 		this.holder = holder;
 		return this;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Bounds2D{" +
+				"x=" + x +
+				", y=" + y +
+				", width=" + width +
+				", height=" + height +
+				", scale=" + scale +
+				", def_width=" + def_width +
+				", def_height=" + def_height +
+				", vertices=" + Arrays.toString(vertices) +
+				", order=" + Arrays.toString(order) +
+				", vertexBuffer=" + vertexBuffer +
+				", orderBuffer=" + orderBuffer +
+				", holder=" + holder +
+				'}';
 	}
 }

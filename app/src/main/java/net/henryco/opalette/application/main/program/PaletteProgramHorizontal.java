@@ -9,6 +9,7 @@ import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderPro
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
+import net.henryco.opalette.api.glES.render.graphics.shapes.ChessBox;
 import net.henryco.opalette.api.glES.render.graphics.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
@@ -94,6 +95,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	private FrameBuffer barImageBuffer;
 	private FrameBuffer barSrcBuffer;
 	private FrameBuffer imageBuffer;
+	private ChessBox chessBox;
 
 	private MultiTexture multiTexture;
 	private boolean uCan = false;
@@ -116,6 +118,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public final void create(GL10 gl, int width, int height, ProtoActivity context) {
 		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
+
 		camera2D = new Camera2D(width, height, true);
 		imageTexture = new Texture(context);
 		barImageBuffer = OPallFBOCreator.FrameBuffer(context);
@@ -123,6 +126,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		imageBuffer = OPallFBOCreator.FrameBuffer(context);
 		multiTexture = new MultiTexture(context, VERT_FILE, FRAG_FILE, 2);
 		backBar = new BackBar(context);
+		chessBox = new ChessBox(context);
 	}
 
 
@@ -131,11 +135,13 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public final void onSurfaceChange(GL10 gl, ProtoActivity context, int width, int height) {
 		camera2D.set(width, height).update();
 		barImageBuffer.createFBO(width, height, false).beginFBO(GLESUtils::clear);
-		barSrcBuffer.createFBO(width, buffer_quantum, width, height, false).beginFBO(() -> GLESUtils.clear(GLESUtils.Color.PINK));
+		barSrcBuffer.createFBO(width, buffer_quantum, width, height, false).beginFBO(GLESUtils::clear);
 		imageBuffer.createFBO(width, height, false).beginFBO(GLESUtils::clear);
 		imageTexture.setScreenDim(width, height);
 		multiTexture.setScreenDim(width, height);
 		backBar.createBar(width, height);
+		chessBox.setScreenDim(width, height);
+
 	}
 
 
@@ -143,14 +149,13 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	@Override
 	public final void onDraw(GL10 gl, ProtoActivity context, int width, int height) {
 
+		//RESET CAMERA
+		camera2D.setPosY_absolute(0).update();
 
-		GLESUtils.clear(GLESUtils.Color.SILVER);
+
+		chessBox.render(camera2D);
 
 		if (uCan) {
-
-			//RESET CAMERA
-			camera2D.setPosY_absolute(0).update();
-
 
 
 			//PREPARE TEXTURE
@@ -174,6 +179,8 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			});
 
 
+
+			//RENDER GRADIENT BAR
 			backBar.render(camera2D, barImageBuffer);
 
 

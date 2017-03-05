@@ -79,6 +79,15 @@ public class GLESUtils {
 			this.a = color.a;
 		}
 
+		@Override
+		public String toString() {
+			return "Color{" +
+					"r=" + r +
+					", g=" + g +
+					", b=" + b +
+					", a=" + a +
+					'}';
+		}
 	}
 
 
