@@ -27,7 +27,30 @@ public class GLESUtils {
 		public static final Color PINK = new Color(.9f,.1f,.5f, 1.f);
 		public static final Color RED = new Color(1.f, 0.f, 0.f,1.f);
 		public static final Color BLUE = new Color(0.f, 0.f,1.f,1.f);
-		public static final Color GREEN = new Color(0.f,1.f,0.f,1.f);
+		public static final Color LIME = new Color(0.f,1.f,0.f,1.f);
+		public static final Color SILVER = new Color(.75f, .75f, .75f, 1f);
+		public static final Color GREY = new Color(.5f, .5f, .5f, 1f);
+		public static final Color TEAL = new Color(.0f, .5f, .5f, 1f);
+		public static final Color GREEN = new Color(0.f,.5f,0.f,1.f);
+		public static final Color YELLOW = new Color(1.f,1.f,.0f,1.f);
+
+
+		public static final GLESUtils.Color[] COLORS = {
+				GLESUtils.Color.BLACK,
+				GLESUtils.Color.BLUE,
+				GLESUtils.Color.GREEN,
+				GLESUtils.Color.GREY,
+				GLESUtils.Color.LIME,
+				GLESUtils.Color.PINK,
+				GLESUtils.Color.RED,
+				GLESUtils.Color.SILVER,
+				GLESUtils.Color.TEAL,
+				GLESUtils.Color.TRANSPARENT,
+				GLESUtils.Color.WHITE,
+				GLESUtils.Color.YELLOW
+		};
+
+
 
 		public float r, g, b, a;
 		public Color(int r255, int g255, int b255, int a255) {

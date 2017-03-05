@@ -1,3 +1,4 @@
+
 precision mediump float;
 
 varying vec4 v_Position;
@@ -19,11 +20,12 @@ void main() {
 
     for (float y = 0.0; y < u_dimension.y; y += 1.0) {
         vec2 point = vec2(v_TexCoordinate[1].s, y / u_dimension.y);
-        p_col += texture2D(u_Texture0, point).rgb;
+        vec4 p_c = texture2D(u_Texture0, point).rgba;
+        p_col += p_c.rgb;
+
     }
 
     vec3 color = p_col / u_dimension.y;
-
     gl_FragColor = vec4(color, 1);
 
 

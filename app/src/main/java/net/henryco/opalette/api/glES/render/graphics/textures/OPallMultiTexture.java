@@ -76,7 +76,6 @@ public interface OPallMultiTexture extends OPallTexture {
 
 
 
-
 	final class methods {
 
 

@@ -1,6 +1,7 @@
 package net.henryco.opalette.application.main;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -63,7 +64,7 @@ public class ProtoActivity extends AppCompatActivity
 
 
 		// -------- CUSTOM PART -------- //
-		getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
+
 
 		initialization();
 	}
@@ -162,6 +163,11 @@ public class ProtoActivity extends AppCompatActivity
 	long renderID = 0;
 
 	private void initialization() {
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+	//		getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
+		}
+
 
 		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, new PaletteProgramHorizontal());
 

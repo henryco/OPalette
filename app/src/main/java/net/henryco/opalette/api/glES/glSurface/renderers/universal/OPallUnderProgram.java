@@ -2,6 +2,7 @@ package net.henryco.opalette.api.glES.glSurface.renderers.universal;
 
 import android.content.Context;
 
+import net.henryco.opalette.api.utils.observer.OPallObservated;
 import net.henryco.opalette.api.utils.requester.OPallRequestListener;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -10,7 +11,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public interface OPallUnderProgram <T extends Context> extends OPallRequestListener {
+public interface OPallUnderProgram <T extends Context> extends OPallRequestListener, OPallObservated{
 
 	void create(GL10 gl, int width, int height, T context);
 	void onSurfaceChange(GL10 gl, T context, int width, int height);

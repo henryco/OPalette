@@ -141,9 +141,17 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 		return this;
 	}
 
+
+
 	@Override
 	public MultiTexture setSize(int w, int h) {
 		for (int i = 0; i < texNumb; i++) setSize(i, w, h);
+		return this;
+	}
+
+	@Override
+	public MultiTexture setRegion(int x, int y, int width, int height) {
+		for (int i = 0; i < texNumb; i++) ;// TODO
 		return this;
 	}
 
@@ -205,6 +213,8 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 		int positionHandle = getPositionHandle();
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();
+
+		System.out.println("GLSL: "+GLES20.glGetError()+" | "+GLES20.glGetShaderInfoLog(program));
 
 		OPallMultiTexture.methods.applyTexNumb(program, texNumb);
 		OPallMultiTexture.methods.applyFlip(program, textureFlip);

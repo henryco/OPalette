@@ -16,14 +16,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/startButton"
-            android:layout_marginTop="40dp"
-            android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+            android:layout_marginTop="147dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
 
     <Button
         android:text="Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="48dp"
         android:id="@+id/buttonTest"
         android:layout_below="@+id/startButton"
         android:layout_alignStart="@+id/startButton"/>

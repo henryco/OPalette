@@ -13,6 +13,7 @@ import net.henryco.opalette.api.glES.render.graphics.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.observer.OPallObservator;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.main.ProtoActivity;
 
@@ -81,7 +82,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 	public static final String VERT_FILE = OPallMultiTexture.DEF_SHADER+".vert";
-	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPalette.frag";
+	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPaletteHorizontal.frag";
 
 	private final long id;
 
@@ -96,6 +97,9 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	private MultiTexture multiTexture;
 	private boolean uCan = false;
 	private BackBar backBar;
+	private final float[] bitmap_size = {0,0};
+
+	private OPallObservator observator;
 
 	public PaletteProgramHorizontal(){
 		this(OPallUnderProgram.methods.genID());
@@ -137,7 +141,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public final void onDraw(GL10 gl, ProtoActivity context, int width, int height) {
 
 
-		GLESUtils.clear(GLESUtils.Color.WHITE);
+		GLESUtils.clear(GLESUtils.Color.BLACK);
 
 		if (uCan) {
 
@@ -147,7 +151,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 //			PREPARE TEXTURE
 			imageBuffer.beginFBO(() -> {
-				GLESUtils.clear(GLESUtils.Color.BLACK);
+				GLESUtils.clear(GLESUtils.Color.SILVER);
 				imageTexture.render(camera2D);
 			});
 			imageBuffer.render(camera2D);
@@ -156,15 +160,18 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			multiTexture.setFocusOn(1);
 
 
+			//*
 //			CREATE GRADIENT BAR
 			barImageBuffer.beginFBO(() -> {
 				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
-				multiTexture.render(camera2D, program -> GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), width, height));
+				multiTexture.render(camera2D, program -> {
+					GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), bitmap_size[0], bitmap_size[1]);
+				});
 			});
 
 
 			backBar.render(camera2D, barImageBuffer);
-
+			//*/
 
 
 		}
@@ -173,25 +180,31 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	}
 
 
-
-
-
+	@Override
+	public void setObservator(OPallObservator observator) {
+		this.observator = observator;
+	}
 
 
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest("loadImage", () -> {
 
+
 			imageTexture.setBitmap(request.getData());
 			float bmpWidth = ((Bitmap)request.getData()).getWidth();
+			float bmpHeight = ((Bitmap)request.getData()).getHeight();
 			float barWidth = barSrcBuffer.getWidth();
-			imageTexture.bounds(b -> b.setScale(barWidth / bmpWidth));
+			float scale = barWidth / bmpWidth;
+			imageTexture.bounds(b -> b.setScale(scale));
 
 			multiTexture.setTexture(0, imageTexture);
 			multiTexture.setTexture(1, barSrcBuffer.getTexture());
 			multiTexture.setFocusOn(1);
-
+			bitmap_size[0] = bmpWidth * scale;
+			bitmap_size[1] = bmpHeight * scale;
 			uCan = true;
+
 		});
 	}
 

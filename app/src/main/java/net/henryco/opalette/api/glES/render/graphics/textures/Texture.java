@@ -22,9 +22,9 @@ import java.nio.FloatBuffer;
 public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPallTexture {
 
 
-
+	protected final float[] region;
 	protected final boolean[] textureFlip;
-	protected final FloatBuffer texelBuffer;
+	protected FloatBuffer texelBuffer;
 	protected int textureData_ID;
 	protected int textureGL_ID;
 	protected Bitmap bitmap;
@@ -56,6 +56,8 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		super(context, shaderVert, shaderFrag, 2);
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
 		textureFlip = new boolean[2];
+		region = new float[5];
+		region[4] = 0;
 		bounds2D = new Bounds2D()
 				.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
 				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
@@ -117,6 +119,21 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	@Override
 	public Texture updateBounds() {
 		bounds2D.generateVertexBuffer(getScreenWidth(), getScreenHeight());
+
+		if (region[4] != 0) {
+			float sw = getScreenWidth();
+			float sh = getScreenHeight();
+
+			float x = region[0] / sw;
+			float y = region[1] / sh;
+			float w = region[2] / sw;
+			float h = region[3] / sh;
+
+			texelBuffer = GLESUtils.createFloatBuffer(new float[]{x,h, x,y, w,y, w,h});
+			return this;
+		}
+		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
+
 		return this;
 	}
 
@@ -127,8 +144,26 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	}
 
 
+	@Override
+	public Texture setRegion(int x, int y, int width, int height) {
 
+		region[0] = x;
+		region[1] = y;
+		region[2] = width;
+		region[3] = height;
+		region[4] = 1;
+		updateBounds();
+		return this;
+	}
 
+	public Texture setRegion(int w, int h) {
+		return setRegion(0,0,w,h);
+	}
+
+	public Texture resetRegion() {
+		region[4] = 0;
+		return this;
+	}
 
 	@Override
 	public int getWidth() {
