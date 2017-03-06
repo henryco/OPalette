@@ -12,7 +12,7 @@ import net.henryco.opalette.api.utils.GLESUtils;
  * Created by HenryCo on 06/03/17.
  */
 
-public class BackBarHorizontal implements OPallBackBar {
+public class BarHorizontal implements OPallBar {
 
 	public static final float cameraTranslationStep = 4.75f;
 
@@ -23,7 +23,7 @@ public class BackBarHorizontal implements OPallBackBar {
 	private FrameBuffer buffer;
 
 
-	public BackBarHorizontal(Context context) {
+	public BarHorizontal(Context context) {
 		buffer = OPallFBOCreator.FrameBuffer(context);
 	}
 
@@ -64,32 +64,32 @@ public class BackBarHorizontal implements OPallBackBar {
 	}
 
 	@Override
-	public BackBarHorizontal setColor(GLESUtils.Color color) {
+	public BarHorizontal setColor(GLESUtils.Color color) {
 		this.color.set(color);
 		return this;
 	}
 
 	@Override
-	public BackBarHorizontal setRelativeSize(float size_pct) {
+	public BarHorizontal setRelativeSize(float size_pct) {
 		this.height_pct = size_pct;
 		return this;
 	}
 
 	@Override
-	public BackBarHorizontal setRelativePosition(float pos_pct) {
+	public BarHorizontal setRelativePosition(float pos_pct) {
 		this.yPos_pct = pos_pct;
 		return this;
 	}
 
 	@Override
-	public BackBarHorizontal setRelativeContentSize(float size_pct) {
+	public BarHorizontal setRelativeContentSize(float size_pct) {
 		this.cellHeight_pct = size_pct;
 		return this;
 	}
 
 	@Override
 	public String toString() {
-		return "BackBarHorizontal{" +
+		return "BarHorizontal{" +
 				"color=" + color +
 				", height_pct=" + height_pct +
 				", yPos_pct=" + yPos_pct +

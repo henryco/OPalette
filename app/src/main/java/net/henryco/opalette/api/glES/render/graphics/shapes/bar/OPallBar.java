@@ -8,13 +8,13 @@ import net.henryco.opalette.api.utils.GLESUtils;
  * Created by HenryCo on 06/03/17.
  */
 
-public interface OPallBackBar {
+public interface OPallBar {
 
 	void createBar(int scrWidth, int scrHeight);
 	void render(Camera2D camera, OPallRenderable renderable, int buffer_quantum);
 
-	OPallBackBar setColor(GLESUtils.Color color);
-	OPallBackBar setRelativeSize(float size_pct);
-	OPallBackBar setRelativePosition(float pos_pct);
-	OPallBackBar setRelativeContentSize(float size_pct);
+	OPallBar setColor(GLESUtils.Color color);
+	OPallBar setRelativeSize(float size_pct);
+	OPallBar setRelativePosition(float pos_pct);
+	OPallBar setRelativeContentSize(float size_pct);
 }

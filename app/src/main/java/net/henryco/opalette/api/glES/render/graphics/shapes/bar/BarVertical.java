@@ -8,7 +8,7 @@ import net.henryco.opalette.api.utils.GLESUtils;
  * Created by HenryCo on 06/03/17.
  */
 //TODO
-public class BackBarVertical implements OPallBackBar {
+public class BarVertical implements OPallBar {
 
 
 
@@ -24,22 +24,22 @@ public class BackBarVertical implements OPallBackBar {
 	}
 
 	@Override
-	public OPallBackBar setColor(GLESUtils.Color color) {
+	public OPallBar setColor(GLESUtils.Color color) {
 		return null;
 	}
 
 	@Override
-	public OPallBackBar setRelativeSize(float size_pct) {
+	public OPallBar setRelativeSize(float size_pct) {
 		return null;
 	}
 
 	@Override
-	public OPallBackBar setRelativePosition(float pos_pct) {
+	public OPallBar setRelativePosition(float pos_pct) {
 		return null;
 	}
 
 	@Override
-	public OPallBackBar setRelativeContentSize(float size_pct) {
+	public OPallBar setRelativeContentSize(float size_pct) {
 		return null;
 	}
 }

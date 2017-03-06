@@ -8,12 +8,13 @@ import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderPro
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shapes.ChessBox;
-import net.henryco.opalette.api.glES.render.graphics.shapes.bar.BackBarHorizontal;
-import net.henryco.opalette.api.glES.render.graphics.shapes.bar.OPallBackBar;
+import net.henryco.opalette.api.glES.render.graphics.shapes.bar.BarHorizontal;
+import net.henryco.opalette.api.glES.render.graphics.shapes.bar.OPallBar;
 import net.henryco.opalette.api.glES.render.graphics.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.geom.OPallGeometry;
 import net.henryco.opalette.api.utils.observer.OPallObservator;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.main.ProtoActivity;
@@ -44,7 +45,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 	private MultiTexture multiTexture;
 	private boolean uCan = false;
-	private OPallBackBar backBar;
+	private OPallBar backBar;
 	private final float[] bitmap_size = {0,0};
 
 	private OPallObservator observator;
@@ -70,7 +71,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		barSrcBuffer = OPallFBOCreator.FrameBuffer(context);
 		imageBuffer = OPallFBOCreator.FrameBuffer(context);
 		multiTexture = new MultiTexture(context, VERT_FILE, FRAG_FILE, 2);
-		backBar = new BackBarHorizontal(context);
+		backBar = new BarHorizontal(context);
 		chessBox = new ChessBox(context);
 	}
 
@@ -86,6 +87,16 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		multiTexture.setScreenDim(width, height);
 		backBar.createBar(width, height);
 		chessBox.setScreenDim(width, height);
+
+		float[] p1 = new float[]{100,0};
+		float[] p2 = new float[]{200, 100};
+
+
+		float a = OPallGeometry.lineAx(p1, p2);
+		float b = OPallGeometry.lineBy(p1, p2);
+		float c = OPallGeometry.lineC(p1, p2);
+
+		System.out.println("COEFF: "+a+" | "+b+" | "+c);
 
 	}
 

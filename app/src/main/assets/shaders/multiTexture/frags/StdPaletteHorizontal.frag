@@ -10,9 +10,10 @@ uniform sampler2D u_Texture1;
 uniform sampler2D u_Texture2;
 uniform sampler2D u_Texture3;
 uniform sampler2D u_Texture4;
+
 uniform vec2 u_dimension;
 uniform int u_texNumb;
-
+uniform vec3 u_line[2]; // Ax + By + C = 0
 
 void main() {
 

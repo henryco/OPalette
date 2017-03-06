@@ -23,9 +23,40 @@ import java.util.Arrays;
 
 public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
 
+	private static final String FRAG_FILE =
+			"#version 100\n" +
+			"\n" +
+			"precision mediump float;\n" +
+			"\n" +
+			"uniform vec4 u_color[2];\n" +
+			"uniform float u_cellSize;\n" +
+			"\n" +
+			"void main() {\n" +
+			"    vec2 position = gl_FragCoord.st / u_cellSize;\n" +
+			"    float px_m = (mod(ceil(position.x), 2.));\n" +
+			"    float py_m = (mod(ceil(position.y), 2.));\n" +
+			"\n" +
+			"    if ((px_m != 0. && py_m != 0.) || (px_m == 0. && py_m == 0.))\n" +
+			"        gl_FragColor = u_color[0];\n" +
+			"    else\n" +
+			"        gl_FragColor = u_color[1];\n" +
+			"}";
+
+	private static final String VERT_FILE =
+			"#version 100\n" +
+			"\n" +
+			"attribute vec4 a_Position;\n" +
+			"uniform mat4 u_MVPMatrix;\n" +
+			"\n" +
+			"void main() {\n" +
+			"    gl_Position = u_MVPMatrix * a_Position;\n" +
+			"}";
 	private static final String FILE = OPallShader.SHADERS_DIR+"/shapes/chessBox/ChessBox";
 	private static final String u_cellSize = "u_cellSize";
 	private static final String u_color = "u_color";
+
+
+
 
 	private final FrameBuffer imageBuffer;
 	private final Bounds2D bounds2D;
@@ -46,7 +77,7 @@ public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
 				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
 				.setHolder(this);
 		colors = new GLESUtils.Color[]
-				{GLESUtils.Color.WHITE, GLESUtils.Color.SILVER};
+				{GLESUtils.Color.GREY, GLESUtils.Color.SILVER};
 		colorsUpDate();
 	}
 
