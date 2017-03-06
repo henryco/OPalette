@@ -1,15 +1,15 @@
 package net.henryco.opalette.application.main.program;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
-import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shapes.ChessBox;
+import net.henryco.opalette.api.glES.render.graphics.shapes.bar.BackBarHorizontal;
+import net.henryco.opalette.api.glES.render.graphics.shapes.bar.OPallBackBar;
 import net.henryco.opalette.api.glES.render.graphics.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
@@ -28,66 +28,11 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 	public static final int buffer_quantum = 5;
-	public static final float step = 4.75f;
-
-
-
-	public static final class BackBar {
-
-		public GLESUtils.Color color = GLESUtils.Color.WHITE;
-
-
-		public float height_pct = 0.2f;
-		public float yPos_pct = 0.8f;
-		public float cellHeight_pct = 0.65f;
-
-
-		private FrameBuffer buffer;
-
-		public BackBar(Context context) {
-			buffer = OPallFBOCreator.FrameBuffer(context);
-		}
-
-		public void createBar(int scrWidth, int scrHeight, int height, GLESUtils.Color color) {
-			buffer.createFBO(scrWidth, height, scrWidth, scrHeight, false);
-			buffer.beginFBO(() -> GLESUtils.clear(color));
-		}
-
-		public void createBar(int scrWidth, int scrHeight) {
-			createBar(scrWidth, scrHeight, (int) (scrHeight * height_pct), color);
-		}
-
-		public void render(Camera2D camera, OPallRenderable renderable) {
-			float[] camYPos = camera.getPosition();
-			buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
-			float cellHeight = (float)buffer.getHeight() * cellHeight_pct;
-			float cellPtc = ((float)buffer.getHeight() - cellHeight) / (float) buffer.getScreenHeight();
-			float margin = cellPtc * 0.5f;
-
-			camera.translateY_absolute(-margin).update();
-			drawBar(renderable, camera, (int) cellHeight, buffer_quantum, step);
-
-			camera.setPosition(camYPos).update();
-
-		}
-
-		private void drawBar(OPallRenderable barLine, Camera2D camera2D, int barHeight, int buffer_quantum, float step) {
-			int loss = Math.round((buffer_quantum - step) * barHeight);
-			int it = Math.max(Math.round((barHeight + loss) / buffer_quantum), buffer_quantum);
-			for (int i = 0; i < it; i++) barLine.render(camera2D.translateY(-step).update());
-		}
-	}
-
-
-
-
-
 	public static final String VERT_FILE = OPallMultiTexture.DEF_SHADER+".vert";
 	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPaletteHorizontal.frag";
 	public static final String u_dimension = "u_dimension";
 
 	private final long id;
-
 
 	private Camera2D camera2D;
 	private Texture imageTexture;
@@ -99,7 +44,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 	private MultiTexture multiTexture;
 	private boolean uCan = false;
-	private BackBar backBar;
+	private OPallBackBar backBar;
 	private final float[] bitmap_size = {0,0};
 
 	private OPallObservator observator;
@@ -125,7 +70,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		barSrcBuffer = OPallFBOCreator.FrameBuffer(context);
 		imageBuffer = OPallFBOCreator.FrameBuffer(context);
 		multiTexture = new MultiTexture(context, VERT_FILE, FRAG_FILE, 2);
-		backBar = new BackBar(context);
+		backBar = new BackBarHorizontal(context);
 		chessBox = new ChessBox(context);
 	}
 
@@ -181,7 +126,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 			//RENDER GRADIENT BAR
-			backBar.render(camera2D, barImageBuffer);
+			backBar.render(camera2D, barImageBuffer, buffer_quantum);
 
 
 
@@ -195,6 +140,15 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public void setObservator(OPallObservator observator) {
 		this.observator = observator;
 	}
+
+
+	@Override
+	public long getID() {
+		return id;
+	}
+
+
+
 
 
 	@Override
@@ -219,10 +173,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		});
 	}
 
-	@Override
-	public long getID() {
-		return id;
-	}
+
 
 
 
