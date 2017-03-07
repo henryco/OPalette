@@ -28,16 +28,20 @@ public abstract class Shader implements OPallShader {
         this(context, VERT, FRAG, 3);
     }
     public Shader(Context context, String VERT, String FRAG, int coordsPerVertex) {
+		this(Utils.getSourceAssetsText(VERT, context), Utils.getSourceAssetsText(FRAG, context), coordsPerVertex);
+	}
+	public Shader(String vertex, String fragment) {
+		this(vertex, fragment, 3);
+	}
+	public Shader(String vertex, String fragment, int coordsPerVertex) {
 
-        String vertex = Utils.getSourceAssetsText(VERT, context);
-        String fragment = Utils.getSourceAssetsText(FRAG, context);
-        program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, OPallShader.methods.loadShader(GLES20.GL_VERTEX_SHADER, vertex));
-        GLES20.glAttachShader(program, OPallShader.methods.loadShader(GLES20.GL_FRAGMENT_SHADER, fragment));
-        GLES20.glLinkProgram(program);
-        GLES20.glUseProgram(program);
-        COORDS_PER_VERTEX = coordsPerVertex;
-        vertexStride = COORDS_PER_VERTEX * 4; //coz float = 4 byte
+		program = GLES20.glCreateProgram();
+		GLES20.glAttachShader(program, OPallShader.methods.loadShader(GLES20.GL_VERTEX_SHADER, vertex));
+		GLES20.glAttachShader(program, OPallShader.methods.loadShader(GLES20.GL_FRAGMENT_SHADER, fragment));
+		GLES20.glLinkProgram(program);
+		GLES20.glUseProgram(program);
+		COORDS_PER_VERTEX = coordsPerVertex;
+		vertexStride = COORDS_PER_VERTEX * 4; //coz float = 4 byte
 		setCameraForceUpdate(false);
 		outErrorLog();
 	}

@@ -90,7 +90,12 @@ public class Camera2D {
 
 
 
-
+	public Camera2D backTranslate(Runnable r) {
+		float[] position = getPosition();
+		r.run();
+		setPosition(position);
+		return this;
+	}
 
 
 

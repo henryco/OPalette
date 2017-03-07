@@ -7,21 +7,17 @@ import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.OPallShader;
-import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.bounds.Bounds2D;
-import net.henryco.opalette.api.utils.bounds.OPallBounds;
 import net.henryco.opalette.api.utils.bounds.consumer.BoundsConsumer;
-import net.henryco.opalette.api.utils.bounds.observer.OPallBoundsHolder;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
-import java.util.Arrays;
 
 /**
  * Created by HenryCo on 05/03/17.
  */
 
-public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
+public class ChessBox extends OPallShape {
 
 	private static final String FRAG_FILE =
 			"#version 100\n" +
@@ -41,7 +37,6 @@ public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
 			"    else\n" +
 			"        gl_FragColor = u_color[1];\n" +
 			"}";
-
 	private static final String VERT_FILE =
 			"#version 100\n" +
 			"\n" +
@@ -51,6 +46,7 @@ public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
 			"void main() {\n" +
 			"    gl_Position = u_MVPMatrix * a_Position;\n" +
 			"}";
+
 	private static final String FILE = OPallShader.SHADERS_DIR+"/shapes/chessBox/ChessBox";
 	private static final String u_cellSize = "u_cellSize";
 	private static final String u_color = "u_color";
@@ -59,7 +55,6 @@ public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
 
 
 	private final FrameBuffer imageBuffer;
-	private final Bounds2D bounds2D;
 	private final GLESUtils.Color[] colors;
 
 	private float[] colorsArray;
@@ -67,17 +62,14 @@ public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
 	private boolean needUpDate;
 
 
+
 	public ChessBox(Context context) {
-		super(context, FILE+".vert", FILE+".frag", 2);
+		//super(context, FILE+".vert", FILE+".frag", 2);
+		super(VERT_FILE, FRAG_FILE, 2);
 		cellSize = 25;
 		needUpDate = false;
 		imageBuffer = OPallFBOCreator.FrameBuffer(context);
-		bounds2D = new Bounds2D()
-				.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
-				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
-				.setHolder(this);
-		colors = new GLESUtils.Color[]
-				{GLESUtils.Color.GREY, GLESUtils.Color.SILVER};
+		colors = new GLESUtils.Color[]{GLESUtils.Color.GREY, GLESUtils.Color.SILVER};
 		colorsUpDate();
 	}
 
@@ -121,49 +113,45 @@ public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
 	}
 
 
-	@Override
-	public int getWidth() {
-		return (int) getScreenWidth();
-	}
+
 
 	@Override
-	public int getHeight() {
-		return (int) getScreenHeight();
+	public void render(int program, Camera2D camera) {
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellSize), cellSize);
+		GLES20.glUniform4fv(GLES20.glGetUniformLocation(program, u_color), 2, colorsArray, 0);
 	}
+
 
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
-		float[] position = camera.getPosition();
-		camera.setPosXY_absolute(0,0);
+
 		if (needUpDate) {
 			imageBuffer.beginFBO(() -> {
 				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
-				int positionHandle = getPositionHandle();
-				GLESUtils.glUseVertexAttribArray(positionHandle, (Runnable) () -> {
-					GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellSize), cellSize);
-					GLES20.glUniform4fv(GLES20.glGetUniformLocation(program, u_color), 2, colorsArray, 0);
-					GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
-					GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
-				});
+				super.render(glProgram, camera, setter);
 			});
 			needUpDate = false;
 		}
-		imageBuffer.render(camera);
-		camera.setPosition(position);
+		camera.backTranslate(() -> {
+			camera.setPosXY_absolute(0,0);
+			imageBuffer.render(camera);
+		});
+
 	}
+
 
 
 
 	@Override
 	public ChessBox bounds(BoundsConsumer<Bounds2D> processor) {
-		processor.boundApply(bounds2D);
+		super.bounds(processor);
 		needUpDate = true;
 		return this;
 	}
 
 	@Override
 	public ChessBox updateBounds() {
-		bounds2D.generateVertexBuffer(getScreenWidth(), getScreenHeight());
+		super.updateBounds();
 		needUpDate = true;
 		return this;
 	}
@@ -177,15 +165,5 @@ public class ChessBox extends Shader implements OPallBoundsHolder <Bounds2D>{
 	}
 
 
-
-	@Override
-	public String toString() {
-		return "ChessBox{" +
-				"bounds2D=" + bounds2D +
-				", colors=" + Arrays.toString(colors) +
-				", colorsArray=" + Arrays.toString(colorsArray) +
-				", cellSize=" + cellSize +
-				'}';
-	}
 
 }
