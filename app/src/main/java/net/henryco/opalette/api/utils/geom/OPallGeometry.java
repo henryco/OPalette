@@ -264,20 +264,24 @@ public class OPallGeometry {
 	}
 
 	/**
-	 * Line coeff A B C perp.
-	 *
-	 * @param point0         the point 0
+	 * Line coeff A B C perp
+	 * @param ABC         Ax + By + C = 0
 	 * @param pointIntersect the point intersect
 	 * @return the float[]
 	 */
-	public static float[] lineCoeff_A_B_C_perp(float[] point0, float[] pointIntersect) {
-		if (point0[0] == pointIntersect[0])
-			return new float[]{1, 0, (-1) * pointIntersect[1]};
-		if (point0[1] == pointIntersect[1])
-			return new float[]{0, 1, (-1) * pointIntersect[1]};
+	public static float[] lineCoeffABCperp(float[] ABC, float[] pointIntersect) {
 
-		float[] peprLine_ab = linePerpCoeff_a_b(lineCoeff_a(point0, pointIntersect), pointIntersect);
-		return new float[]{1, (-1) * peprLine_ab[0], (-1) * peprLine_ab[1]};
+		float[] ab = linePerpCoeff_a_b((-1f) * ABC[0] / ABC[1], pointIntersect);
+		return new float[]{ab[0], -1, ab[1]};
+	}
+
+	public static float[] lineABC_cmnPerp(float x1, float y1, float px, float py) {
+		return lineABC_cmnPerp(new float[]{x1, y1}, new float[]{px, py});
+	}
+
+	public static float[] lineABC_cmnPerp(float[] p1, float[] pointPerp) {
+		float[] lineABC1 = OPallGeometry.getLineAxByC(p1, pointPerp);
+		return lineCoeffABCperp(lineABC1, pointPerp);
 	}
 
 	public static float pointToLineDist(float[] coeffABC, float... point) {

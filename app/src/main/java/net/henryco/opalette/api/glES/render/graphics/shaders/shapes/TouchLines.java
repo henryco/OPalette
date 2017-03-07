@@ -32,22 +32,25 @@ public class TouchLines extends OPallShape {
 
 	}
 
+	/**
+	 * Calculate region bounded by 2 perpendicular lines between 2 fingers position.<br>
+	 * (finger1) <----------> (finger2) <br>
+	 * @param p1 point where is first finger
+	 * @param p2 point where is second finger
+	 */
 	public TouchLines setPoints(float[] p1, float[] p2) {
 
-		float[] point11 = {p1[0], p1[1]};
-		float[] point12 = {p1[2], p1[3]};
-		float[] point21 = {p2[0], p2[1]};
-		float[] point22 = {p2[2], p2[3]};
+		float x1 = p1[0] == p2[0] ? p1[0] + 0.1f : p1[0];
+		float y1 = p1[1] == p2[1] ? p1[1] + 0.1f : p1[1];
+		float x2 = p2[0];
+		float y2 = p2[1];
 
-		float a1 = OPallGeometry.lineAx(point11, point12);
-		float b1 = OPallGeometry.lineBy(point11, point12);
-		float c1 = OPallGeometry.lineC(point11, point12);
+		float[] c1 = OPallGeometry.lineABC_cmnPerp(x1, y1, x2, y2);
+		float[] c2 = OPallGeometry.lineABC_cmnPerp(x2, y2, x1, y1);
 
-		float a2 = OPallGeometry.lineAx(point21, point22);
-		float b2 = OPallGeometry.lineBy(point21, point22);
-		float c2 = OPallGeometry.lineC(point21, point22);
-
-		linesCoefficients = new float[]{a1, b1, c1, a2, b2, c2};
+		linesCoefficients = new float[] {
+				c1[0], c1[1], c1[2], c2[0], c2[1], c2[2]
+		};
 		return this;
 	}
 
@@ -57,8 +60,7 @@ public class TouchLines extends OPallShape {
 
 	public TouchLines reset(float width, float height) {
 		return setPoints(
-				new float[]{0, 0, width, 0},
-				new float[]{0, height, width, height}
+				new float[]{0, 0}, new float[]{0, width}
 		);
 	}
 

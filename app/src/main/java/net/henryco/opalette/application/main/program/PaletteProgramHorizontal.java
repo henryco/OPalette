@@ -173,7 +173,6 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			multiTexture.setFocusOn(1);
 			uCan = true;
 
-
 		});
 	}
 
