@@ -15,12 +15,15 @@ public class TouchLines extends OPallShape {
 	private static final String FRAG_PROGRAM = "";
 
 
-	private float[] linesCoefficents;
-
+	private float[] linesCoefficients;
 
 	public TouchLines() {
+		this(0,0);
+	}
+	public TouchLines(int w, int h) {
 		super(VERT_PROGRAM, FRAG_PROGRAM, 2);
-
+		setScreenDim(w, h);
+		reset();
 	}
 
 
@@ -44,15 +47,23 @@ public class TouchLines extends OPallShape {
 		float b2 = OPallGeometry.lineBy(point21, point22);
 		float c2 = OPallGeometry.lineC(point21, point22);
 
-		linesCoefficents = new float[]{a1, b1, c1, a2, b2, c2};
+		linesCoefficients = new float[]{a1, b1, c1, a2, b2, c2};
 		return this;
 	}
 
-	public TouchLines reset() {
+	public float[] getCoefficients() {
+		return linesCoefficients;
+	}
+
+	public TouchLines reset(float width, float height) {
 		return setPoints(
-				new float[]{0, 0, getWidth(), 0},
-				new float[]{0, getHeight(), getWidth(), getHeight()}
+				new float[]{0, 0, width, 0},
+				new float[]{0, height, width, height}
 		);
+	}
+
+	public TouchLines reset() {
+		return reset(getWidth(), getHeight());
 	}
 
 

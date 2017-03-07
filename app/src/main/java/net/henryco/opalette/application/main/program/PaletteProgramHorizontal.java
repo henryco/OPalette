@@ -10,11 +10,11 @@ import net.henryco.opalette.api.glES.render.graphics.bar.OPallBar;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.geom.OPallGeometry;
 import net.henryco.opalette.api.utils.observer.OPallObservator;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.main.ProtoActivity;
@@ -48,7 +48,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	private boolean uCan = false;
 	private OPallBar backBar;
 
-	private float[] lineCoeffs;
+	private TouchLines touchLines;
 
 	private OPallObservator observator;
 
@@ -75,8 +75,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		multiTexture = new MultiTexture(context, VERT_FILE, FRAG_FILE, 2);
 		backBar = new BarHorizontal(context);
 		chessBox = new ChessBox(context);
-
-		lineCoeffs = new float[6];
+		touchLines = new TouchLines(width, height);
 	}
 
 
@@ -91,6 +90,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		multiTexture.setScreenDim(width, height);
 		backBar.createBar(width, height);
 		chessBox.setScreenDim(width, height);
+		touchLines.setScreenDim(width, height);
 	}
 
 
@@ -124,7 +124,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
 				multiTexture.render(camera2D, program -> {
 					GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), width, height);
-					GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, lineCoeffs, 0);
+					GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, touchLines.getCoefficients(), 0);
 				});
 			});
 
@@ -173,21 +173,6 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			multiTexture.setFocusOn(1);
 			uCan = true;
 
-			float[] point11 = {0,0};
-			float[] point12 = {bmpWidth * scale, 0};
-
-			float[] point21 = {0, bmpHeight * scale};
-			float[] point22 = {bmpWidth * scale, bmpHeight * scale};
-
-			float a1 = OPallGeometry.lineAx(point11, point12);
-			float b1 = OPallGeometry.lineBy(point11, point12);
-			float c1 = OPallGeometry.lineC(point11, point12);
-
-			float a2 = OPallGeometry.lineAx(point21, point22);
-			float b2 = OPallGeometry.lineBy(point21, point22);
-			float c2 = OPallGeometry.lineC(point21, point22);
-
-			lineCoeffs = new float[]{a1, b1, c1, a2, b2, c2};
 
 		});
 	}
