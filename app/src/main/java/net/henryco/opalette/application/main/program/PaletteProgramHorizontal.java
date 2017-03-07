@@ -205,9 +205,6 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			"\n" +
 			"    float trueHeight = 0.0;\n" +
 			"    vec3 p_col = vec3(0.0);\n" +
-			"    vec3 coeff[2];\n" +
-			"    coeff[0] = u_line[0];\n" +
-			"    coeff[1] = u_line[1];\n" +
 			"\n" +
 			"    for (float y = 0.0; y < u_dimension.y; y += 1.0) {\n" +
 			"\n" +
@@ -217,13 +214,8 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			"\n" +
 			"        if (pointColor.a != 0.0) {\n" +
 			"\n" +
-			"            for (int i = 0; i < 2; i++) {\n" +
-			"                if (coeff[i].x == 0.) coeff[i].x += 0.1;\n" +
-			"                if (coeff[i].y == 0.) coeff[i].y += 0.1;\n" +
-			"            }\n" +
-			"\n" +
-			"            float py1 = (-1.) * ((coeff[0].x * point.x) + coeff[0].z) / coeff[0].y;\n" +
-			"            float py2 = (-1.) * ((coeff[1].x * point.x) + coeff[1].z) / coeff[1].y;\n" +
+			"            float py1 = (-1.) * ((u_line[0].x * point.x) + u_line[0].z) / u_line[0].y;\n" +
+			"            float py2 = (-1.) * ((u_line[1].x * point.x) + u_line[1].z) / u_line[1].y;\n" +
 			"\n" +
 			"            if ((point.y > py1 && point.y < py2) || (point.y > py2 && point.y < py1)) {\n" +
 			"                p_col += pointColor.rgb;\n" +
