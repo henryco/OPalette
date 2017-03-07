@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.render.OPallRenderable;
-import net.henryco.opalette.api.glES.render.graphics.textures.OPallTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
 
 import java.nio.IntBuffer;
 

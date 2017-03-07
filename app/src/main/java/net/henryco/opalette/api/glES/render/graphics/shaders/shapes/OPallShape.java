@@ -1,4 +1,4 @@
-package net.henryco.opalette.api.glES.render.graphics.shapes;
+package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -19,6 +19,11 @@ import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 public abstract class OPallShape extends Shader implements OPallBoundsHolder<Bounds2D> {
 
 	protected final Bounds2D bounds2D = new Bounds2D();
+
+
+
+	public abstract void render(int program, Camera2D camera);
+
 
 
 	public OPallShape(Context context, String VERT, String FRAG) {
@@ -42,12 +47,6 @@ public abstract class OPallShape extends Shader implements OPallBoundsHolder<Bou
 				.setHolder(this);
 	}
 
-
-
-	public abstract void render(int program, Camera2D camera);
-
-
-
 	public void render(Camera2D camera) {
 		render(camera, program -> render(program, camera));
 	}
@@ -55,18 +54,15 @@ public abstract class OPallShape extends Shader implements OPallBoundsHolder<Bou
 
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
-
-		float[] position = camera.getPosition();
-		camera.setPosXY_absolute(0,0);
-		int positionHandle = getPositionHandle();
-		GLESUtils.glUseVertexAttribArray(positionHandle, (Runnable) () -> {
-			setter.consume(glProgram);
-			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
-			GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
+		camera.backTranslate(() -> {
+			camera.setPosXY_absolute(0,0);
+			int positionHandle = getPositionHandle();
+			GLESUtils.glUseVertexAttribArray(positionHandle, (Runnable) () -> {
+				setter.consume(glProgram);
+				GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
+				GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
+			});
 		});
-
-		camera.setPosition(position);
-
 	}
 
 	@Override

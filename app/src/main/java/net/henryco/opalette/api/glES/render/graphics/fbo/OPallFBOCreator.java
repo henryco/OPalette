@@ -2,7 +2,7 @@ package net.henryco.opalette.api.glES.render.graphics.fbo;
 
 import android.content.Context;
 
-import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 
 /**
  * Created by HenryCo on 02/03/17.

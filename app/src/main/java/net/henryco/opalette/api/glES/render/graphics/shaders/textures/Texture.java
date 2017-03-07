@@ -1,4 +1,4 @@
-package net.henryco.opalette.api.glES.render.graphics.textures;
+package net.henryco.opalette.api.glES.render.graphics.shaders.textures;
 
 import android.content.Context;
 import android.graphics.Bitmap;

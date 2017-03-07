@@ -1,15 +1,14 @@
-package net.henryco.opalette.api.glES.render.graphics.shapes.bar;
+package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
 
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.shapes.OPallShape;
 import net.henryco.opalette.api.utils.geom.OPallGeometry;
 
 /**
  * Created by HenryCo on 07/03/17.
  */
 
-public class OPallTouchLines extends OPallShape {
+public class TouchLines extends OPallShape {
 
 
 	private static final String VERT_PROGRAM = "";
@@ -19,7 +18,7 @@ public class OPallTouchLines extends OPallShape {
 	private float[] linesCoefficents;
 
 
-	public OPallTouchLines() {
+	public TouchLines() {
 		super(VERT_PROGRAM, FRAG_PROGRAM, 2);
 
 	}
@@ -30,7 +29,7 @@ public class OPallTouchLines extends OPallShape {
 
 	}
 
-	public OPallTouchLines setPoints(float[] p1, float[] p2) {
+	public TouchLines setPoints(float[] p1, float[] p2) {
 
 		float[] point11 = {p1[0], p1[1]};
 		float[] point12 = {p1[2], p1[3]};
@@ -49,7 +48,7 @@ public class OPallTouchLines extends OPallShape {
 		return this;
 	}
 
-	public OPallTouchLines reset() {
+	public TouchLines reset() {
 		return setPoints(
 				new float[]{0, 0, getWidth(), 0},
 				new float[]{0, getHeight(), getWidth(), getHeight()}

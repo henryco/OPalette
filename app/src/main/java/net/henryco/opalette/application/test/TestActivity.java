@@ -9,7 +9,7 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.solo.SoloRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
-import net.henryco.opalette.api.glES.render.graphics.textures.MultiTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.Utils;
 

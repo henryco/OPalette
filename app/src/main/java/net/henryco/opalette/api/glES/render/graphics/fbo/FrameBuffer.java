@@ -3,8 +3,8 @@ package net.henryco.opalette.api.glES.render.graphics.fbo;
 import android.graphics.Bitmap;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.textures.OPallTexture;
-import net.henryco.opalette.api.glES.render.graphics.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 
 /**
  * Created by HenryCo on 25/02/17.

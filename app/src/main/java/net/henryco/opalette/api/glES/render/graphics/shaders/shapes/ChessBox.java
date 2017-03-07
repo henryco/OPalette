@@ -1,4 +1,4 @@
-package net.henryco.opalette.api.glES.render.graphics.shapes;
+package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
 
 import android.content.Context;
 import android.opengl.GLES20;
