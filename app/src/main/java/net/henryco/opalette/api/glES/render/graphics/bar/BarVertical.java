@@ -42,4 +42,15 @@ public class BarVertical implements OPallBar {
 	public OPallBar setRelativeContentSize(float size_pct) {
 		return null;
 	}
+
+
+	@Override
+	public float getWidth() {
+		return 0;
+	}
+
+	@Override
+	public float getHeight() {
+		return 0;
+	}
 }

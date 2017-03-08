@@ -13,6 +13,9 @@ public interface OPallBar {
 	void createBar(int scrWidth, int scrHeight);
 	void render(Camera2D camera, OPallRenderable renderable, int buffer_quantum);
 
+	float getWidth();
+	float getHeight();
+
 	OPallBar setColor(GLESUtils.Color color);
 	OPallBar setRelativeSize(float size_pct);
 	OPallBar setRelativePosition(float pos_pct);

@@ -22,6 +22,7 @@ public class BarHorizontal implements OPallBar {
 	public float cellHeight_pct = 0.65f;
 	private FrameBuffer buffer;
 
+	private float width = 0, height = 0;
 
 	public BarHorizontal(Context context) {
 		buffer = OPallFBOCreator.FrameBuffer(context);
@@ -31,6 +32,8 @@ public class BarHorizontal implements OPallBar {
 	public void createBar(int scrWidth, int scrHeight, int height, GLESUtils.Color color) {
 		buffer.createFBO(scrWidth, height, scrWidth, scrHeight, false);
 		buffer.beginFBO(() -> GLESUtils.clear(color));
+		this.width = scrWidth;
+		this.height = height;
 	}
 
 	private void drawBar(OPallRenderable barLine, Camera2D camera2D,
@@ -53,8 +56,8 @@ public class BarHorizontal implements OPallBar {
 	public void render(Camera2D camera, OPallRenderable renderable, int buffer_quantum) {
 		float[] camYPos = camera.getPosition();
 		buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
-		float cellHeight = (float)buffer.getHeight() * cellHeight_pct;
-		float cellPtc = ((float)buffer.getHeight() - cellHeight) / (float) buffer.getScreenHeight();
+		float cellHeight = getHeight() * cellHeight_pct;
+		float cellPtc = (getHeight() - cellHeight) / (float) buffer.getScreenHeight();
 		float margin = cellPtc * 0.5f;
 
 		camera.translateY_absolute(-margin).update();
@@ -85,6 +88,16 @@ public class BarHorizontal implements OPallBar {
 	public BarHorizontal setRelativeContentSize(float size_pct) {
 		this.cellHeight_pct = size_pct;
 		return this;
+	}
+
+	@Override
+	public float getWidth() {
+		return width;
+	}
+
+	@Override
+	public float getHeight() {
+		return height;
 	}
 
 	@Override

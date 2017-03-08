@@ -111,8 +111,8 @@ public class TouchLines extends OPallShape {
 	 */
 	public TouchLines setPoints(float[] p1, float[] p2) {
 
-		float x1 = p1[0] == p2[0] ? p1[0] + 0.1f : p1[0];
-		float y1 = p1[1] == p2[1] ? p1[1] + 0.1f : p1[1];
+		float x1 = p1[0] == p2[0] ? p1[0] + 0.01f : p1[0];
+		float y1 = p1[1] == p2[1] ? p1[1] + 0.01f : p1[1];
 		float x2 = p2[0];
 		float y2 = p2[1];
 
