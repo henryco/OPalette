@@ -1,4 +1,4 @@
-package net.henryco.opalette.api.glES.render.graphics.bar;
+package net.henryco.opalette.api.glES.render.graphics.units.bar;
 
 import android.content.Context;
 

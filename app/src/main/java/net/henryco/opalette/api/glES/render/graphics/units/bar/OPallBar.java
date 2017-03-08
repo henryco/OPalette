@@ -1,4 +1,4 @@
-package net.henryco.opalette.api.glES.render.graphics.bar;
+package net.henryco.opalette.api.glES.render.graphics.units.bar;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;

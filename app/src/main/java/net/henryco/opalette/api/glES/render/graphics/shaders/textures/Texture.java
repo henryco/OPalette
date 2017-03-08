@@ -67,7 +67,9 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	}
 
 
-
+	public Texture setBitmap(OPallTexture texture) {
+		return setBitmap(texture.getBitmap());
+	}
 
 	@Override
 	public Texture setBitmap(Bitmap image, Filter filterMin, Filter filterMag) {
@@ -91,8 +93,10 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		return setBitmap(image, Filter.LINEAR);
 	}
 
-
-
+	@Override
+	public Bitmap getBitmap() {
+		return bitmap;
+	}
 
 	@Override
 	public Texture setFlip(boolean x, boolean y) {

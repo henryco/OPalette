@@ -51,7 +51,7 @@ public interface OPallShader extends OPallRenderable {
 	 * */
 	String SHADERS_DIR = "shaders";
 
-	void setScreenDim(float w, float h);
+
 	void render(Camera2D camera2D, OPallConsumer<Integer> setter);
 
 

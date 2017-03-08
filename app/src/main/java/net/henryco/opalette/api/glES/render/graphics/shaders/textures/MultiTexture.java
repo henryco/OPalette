@@ -136,6 +136,17 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 	@Override
+	public Bitmap getBitmap(int n) {
+		return bitmaps[n];
+	}
+
+	@Override
+	public Bitmap getBitmap() {
+		return getBitmap(0);
+	}
+
+
+	@Override
 	public MultiTexture setSize(int n, int w, int h) {
 		bounds2D[n].setSize(w, h);
 		return this;

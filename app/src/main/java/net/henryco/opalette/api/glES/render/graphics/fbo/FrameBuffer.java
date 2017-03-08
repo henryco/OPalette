@@ -45,10 +45,9 @@ public class FrameBuffer implements OPallFBO {
 		texBHandle = OPallFBO.methods.genTextureBuff(w, h);
 		if (d) depthBHandle = OPallFBO.methods.genDepthBuff(w, h);
 		OPallFBO.methods.finishAndCheckStat(debug);
+		setScreenDim(screenW, screenH);
 		width = w;
 		height = h;
-		scrW = screenW;
-		scrH = screenH;
 		return this;
 	}
 
@@ -101,6 +100,12 @@ public class FrameBuffer implements OPallFBO {
 		return this;
 	}
 
+
+	@Override
+	public void setScreenDim(float w, float h) {
+		this.scrW = (int) w;
+		this.scrH = (int) h;
+	}
 
 	@Override
 	public int getWidth() {

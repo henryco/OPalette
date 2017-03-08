@@ -107,7 +107,7 @@ public interface OPallTexture extends OPallShader {
 	OPallTexture setFlip(boolean x, boolean y);
 	OPallTexture setSize(int w, int h);
 	OPallTexture setRegion(int x, int y, int width, int height);
-
+	Bitmap getBitmap();
 
 
 	final class methods {

@@ -5,8 +5,6 @@ import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
-import net.henryco.opalette.api.glES.render.graphics.bar.BarHorizontal;
-import net.henryco.opalette.api.glES.render.graphics.bar.OPallBar;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
@@ -14,6 +12,9 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.units.bar.BarHorizontal;
+import net.henryco.opalette.api.glES.render.graphics.units.bar.OPallBar;
+import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallObservator;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -35,22 +36,23 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public static final String u_line = "u_line";
 
 	private final long id;
+	private boolean uCan = false;
 
 	private Camera2D camera2D;
-	private Texture imageTexture;
-
-	private FrameBuffer barImageBuffer;
-	private FrameBuffer barSrcBuffer;
-	private FrameBuffer imageBuffer;
-	private ChessBox chessBox;
 
 	private MultiTexture multiTexture;
-	private boolean uCan = false;
-	private OPallBar backBar;
+	private Texture imageTexture;
 
+	private FrameBuffer barGradientBuffer;
+	private FrameBuffer barSrcBuffer;
+	private FrameBuffer imageBuffer;
+
+	private ChessBox chessBox;
 	private TouchLines touchLines;
+	private CellPaletter cellPaletter;
 
 	private OPallObservator observator;
+	private OPallBar backBar;
 
 	public PaletteProgramHorizontal(){
 		this(OPallUnderProgram.methods.genID());
@@ -69,13 +71,14 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 		camera2D = new Camera2D(width, height, true);
 		imageTexture = new Texture(context);
-		barImageBuffer = OPallFBOCreator.FrameBuffer(context);
+		barGradientBuffer = OPallFBOCreator.FrameBuffer(context);
 		barSrcBuffer = OPallFBOCreator.FrameBuffer(context);
 		imageBuffer = OPallFBOCreator.FrameBuffer(context);
 		multiTexture = new MultiTexture(context, VERT_FILE, FRAG_FILE, 2);
 		backBar = new BarHorizontal(context);
 		chessBox = new ChessBox(context);
 		touchLines = new TouchLines(width, height);
+		cellPaletter = new CellPaletter(context);
 	}
 
 
@@ -83,14 +86,15 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	@Override
 	public final void onSurfaceChange(GL10 gl, ProtoActivity context, int width, int height) {
 		camera2D.set(width, height).update();
-		barImageBuffer.createFBO(width, height, false).beginFBO(GLESUtils::clear);
+		barGradientBuffer.createFBO(width, height, false);
 		barSrcBuffer.createFBO(width, buffer_quantum, width, height, false).beginFBO(GLESUtils::clear);
-		imageBuffer.createFBO(width, height, false).beginFBO(GLESUtils::clear);
+		imageBuffer.createFBO(width, height, false);
 		imageTexture.setScreenDim(width, height);
 		multiTexture.setScreenDim(width, height);
 		backBar.createBar(width, height);
 		chessBox.setScreenDim(width, height);
 		touchLines.setScreenDim(width, height);
+		cellPaletter.setScreenDim(width, height);
 	}
 
 
@@ -108,31 +112,29 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 			//PREPARE TEXTURE
-			imageBuffer.beginFBO(() -> {
-				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
-				imageTexture.render(camera2D);
-			});
+			imageBuffer.beginFBO(() -> imageTexture.render(camera2D, program -> GLESUtils.clear()));
 			imageBuffer.render(camera2D);
+
 			multiTexture.setTexture(0, imageBuffer.getTexture());
 			multiTexture.setTexture(1, barSrcBuffer.getTexture());
 			multiTexture.setFocusOn(1);
 
 
+
 			//CREATE GRADIENT BAR
-			barImageBuffer.beginFBO(() -> {
-				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
-				multiTexture.render(camera2D, program -> {
-					GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), width, height - backBar.getHeight());
-					GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, touchLines.getCoefficients(), 0);
-				});
-			});
+			barGradientBuffer.beginFBO(() -> multiTexture.render(camera2D, program -> {
+				GLESUtils.clear();
+				GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), width, height - backBar.getHeight());
+				GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, touchLines.getCoefficients(), 0);
+			}));
 
 
 			touchLines.render(camera2D);
 
-			//RENDER GRADIENT BAR
-			backBar.render(camera2D, barImageBuffer, buffer_quantum);
+			cellPaletter.generate(barGradientBuffer.getTexture(), camera2D);
 
+			//RENDER GRADIENT BAR
+			backBar.render(camera2D, cellPaletter, buffer_quantum);
 
 
 		}
@@ -160,9 +162,10 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public void acceptRequest(Request request) {
 		request.openRequest("loadImage", () -> {
 
-			imageTexture.setBitmap(request.getData());
-			float bmpWidth = ((Bitmap)request.getData()).getWidth();
-			float bmpHeight = ((Bitmap)request.getData()).getHeight();
+			Bitmap image = request.getData();
+			imageTexture.setBitmap(image);
+			float bmpWidth = (image).getWidth();
+			float bmpHeight = (image).getHeight();
 			float barWidth = barSrcBuffer.getWidth();
 			float scale = barWidth / bmpWidth;
 			imageTexture.bounds(b -> b.setScale(scale));

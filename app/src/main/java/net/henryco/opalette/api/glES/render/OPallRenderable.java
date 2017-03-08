@@ -9,6 +9,7 @@ import net.henryco.opalette.api.glES.camera.Camera2D;
 public interface OPallRenderable {
 
 	void render(Camera2D camera);
+	void setScreenDim(float w, float h);
 	int getWidth();
 	int getHeight();
 }
