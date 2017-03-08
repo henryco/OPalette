@@ -129,6 +129,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			});
 
 
+			touchLines.render(camera2D);
 
 			//RENDER GRADIENT BAR
 			backBar.render(camera2D, barImageBuffer, buffer_quantum);
@@ -173,6 +174,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			multiTexture.setFocusOn(1);
 			uCan = true;
 
+			touchLines.setPoints(new float[]{90, 90}, new float[]{110, 310}).setVisible(true);
 		});
 	}
 

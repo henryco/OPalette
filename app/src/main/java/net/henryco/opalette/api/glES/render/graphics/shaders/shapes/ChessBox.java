@@ -116,7 +116,7 @@ public class ChessBox extends OPallShape {
 
 
 	@Override
-	public void render(int program, Camera2D camera) {
+	protected void render(int program, Camera2D camera) {
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellSize), cellSize);
 		GLES20.glUniform4fv(GLES20.glGetUniformLocation(program, u_color), 2, colorsArray, 0);
 	}

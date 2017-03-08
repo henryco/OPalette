@@ -22,7 +22,7 @@ public abstract class OPallShape extends Shader implements OPallBoundsHolder<Bou
 
 
 
-	public abstract void render(int program, Camera2D camera);
+	protected abstract void render(int program, Camera2D camera);
 
 
 
