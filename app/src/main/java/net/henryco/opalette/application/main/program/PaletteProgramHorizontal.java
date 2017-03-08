@@ -160,7 +160,6 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 	public void acceptRequest(Request request) {
 		request.openRequest("loadImage", () -> {
 
-
 			imageTexture.setBitmap(request.getData());
 			float bmpWidth = ((Bitmap)request.getData()).getWidth();
 			float bmpHeight = ((Bitmap)request.getData()).getHeight();
@@ -173,9 +172,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			multiTexture.setFocusOn(1);
 			uCan = true;
 
-			touchLines.setVisible(true);
-
-			touchLines.setPoints(new float[]{0, 0}, new float[]{0, bmpHeight * scale}).setVisible(true);
+			touchLines.setVisible(true).setDefaultSize(barWidth, bmpHeight * scale).reset();
 		});
 	}
 

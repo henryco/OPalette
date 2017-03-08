@@ -71,6 +71,10 @@ public class TouchLines extends OPallShape {
 	private static final String u_line = "u_line";
 
 
+	private float defaultWidth = 0;
+	private float defaultHeight = 0;
+
+
 
 	private float[] linesCoefficients;
 
@@ -131,15 +135,24 @@ public class TouchLines extends OPallShape {
 
 	public TouchLines reset(float width, float height) {
 		return setPoints(
-				new float[]{0, 0}, new float[]{0, width}
+				new float[]{0, 0}, new float[]{0, height}
 		);
 	}
 
 	public TouchLines reset() {
-		return reset(getWidth(), getHeight());
+
+		return reset(
+				defaultWidth > 0 ? defaultWidth : getWidth(),
+				defaultHeight > 0 ? defaultHeight : getHeight()
+		);
 	}
 
 
+	public TouchLines setDefaultSize(float w, float h) {
+		defaultWidth = w;
+		defaultHeight = h;
+		return this;
+	}
 
 
 	public TouchLines setLines_dx(float lines_dx) {
