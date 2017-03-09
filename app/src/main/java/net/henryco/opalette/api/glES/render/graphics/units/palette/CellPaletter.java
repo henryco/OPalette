@@ -1,6 +1,7 @@
 package net.henryco.opalette.api.glES.render.graphics.units.palette;
 
 import android.content.Context;
+import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
@@ -58,16 +59,22 @@ public class CellPaletter implements OPallRenderable {
 	 */
 	public void generate(OPallTexture source, Camera2D camera2D) {
 
-
-		buffer.beginFBO(() -> {
-			GLESUtils.clear();
-			source.render(camera2D);
-		});
-
-//		texture.setBitmap(source);
-//		buffer.beginFBO(() -> texture.render(camera2D, program -> {
+//		buffer.beginFBO(() -> {
 //			GLESUtils.clear();
-//		}));
+//			source.render(camera2D);
+//		});
+//
+		float margin = width * margin_pct;
+		float cellSize = (width - (margin * (numb + 1))) / numb;
+
+		texture.setBitmap(source);
+		buffer.beginFBO(() -> texture.render(camera2D, program -> {
+			GLESUtils.clear();
+			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_cellSize"), cellSize);
+			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_margin"), margin);
+			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), width, height);
+			GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_numb"), numb);
+		}));
 	}
 
 

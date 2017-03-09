@@ -14,12 +14,12 @@ import net.henryco.opalette.api.utils.GLESUtils;
 
 public class BarHorizontal implements OPallBar {
 
-	public static final float cameraTranslationStep = 4.75f;
+	public static final float cameraTranslationStep = 4.f;
 
 	public final GLESUtils.Color color = GLESUtils.Color.WHITE;
-	public float height_pct = 0.2f;
+	public float height_pct = 0.201f;
 	public float yPos_pct = 0.8f;
-	public float cellHeight_pct = 0.65f;
+	public float cellHeight_pct = 0.8f;
 	private FrameBuffer buffer;
 
 	private float width = 0, height = 0;
@@ -39,9 +39,13 @@ public class BarHorizontal implements OPallBar {
 	private void drawBar(OPallRenderable barLine, Camera2D camera2D,
 						 int barHeight, int buffer_quantum, float cameraTranslationStep) {
 
-		int loss = Math.round((buffer_quantum - cameraTranslationStep) * barHeight);
-		int it = Math.max(Math.round((barHeight + loss) / buffer_quantum), buffer_quantum);
-		for (int i = 0; i < it; i++) barLine.render(camera2D.translateY(-cameraTranslationStep).update());
+		int iter = (barHeight / buffer_quantum);
+		float d = buffer_quantum - cameraTranslationStep;
+		float lost = iter * d;
+		int extr =  Math.round((lost + d) / cameraTranslationStep);
+
+
+		for (int i = 0; i < iter + extr; i++) barLine.render(camera2D.translateY(-cameraTranslationStep).update());
 	}
 
 
@@ -57,11 +61,11 @@ public class BarHorizontal implements OPallBar {
 		float[] camYPos = camera.getPosition();
 		buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
 		float cellHeight = getHeight() * cellHeight_pct;
-		float cellPtc = (getHeight() - cellHeight) / (float) buffer.getScreenHeight();
+		float cellPtc = (getHeight() - cellHeight);
 		float margin = cellPtc * 0.5f;
 
-		camera.translateY_absolute(-margin).update();
-		drawBar(renderable, camera, (int) cellHeight, buffer_quantum, cameraTranslationStep);
+		camera.translateY((int)-margin + 0.5f * buffer_quantum).update();
+		drawBar(renderable, camera, (int) (cellHeight), buffer_quantum, cameraTranslationStep);
 		camera.setPosition(camYPos).update();
 
 	}
