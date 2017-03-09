@@ -102,10 +102,7 @@ public class CellPaletter implements OPallRenderable {
 		texture = new Texture(VERT_FILE, FRAG_FILE[type.type]);
 	}
 
-
-	/**
-	 * TODO
-	 */
+	
 	public void generate(OPallTexture source, Camera2D camera2D) {
 
 
