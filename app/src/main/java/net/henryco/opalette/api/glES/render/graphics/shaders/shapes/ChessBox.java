@@ -1,6 +1,5 @@
 package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
 
-import android.content.Context;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
@@ -37,6 +36,7 @@ public class ChessBox extends OPallShape {
 			"    else\n" +
 			"        gl_FragColor = u_color[1];\n" +
 			"}";
+
 	private static final String VERT_FILE =
 			"#version 100\n" +
 			"\n" +
@@ -63,12 +63,11 @@ public class ChessBox extends OPallShape {
 
 
 
-	public ChessBox(Context context) {
-		//super(context, FILE+".vert", FILE+".frag", 2);
+	public ChessBox() {
 		super(VERT_FILE, FRAG_FILE, 2);
 		cellSize = 25;
 		needUpDate = false;
-		imageBuffer = OPallFBOCreator.FrameBuffer(context);
+		imageBuffer = OPallFBOCreator.FrameBuffer();
 		colors = new GLESUtils.Color[]{GLESUtils.Color.GREY, GLESUtils.Color.SILVER};
 		colorsUpDate();
 	}

@@ -26,6 +26,9 @@ public class BarHorizontal implements OPallBar {
 	public BarHorizontal(Context context) {
 		buffer = OPallFBOCreator.FrameBuffer(context);
 	}
+	public BarHorizontal() {
+		buffer = OPallFBOCreator.FrameBuffer();
+	}
 
 
 	public void createBar(int scrWidth, int scrHeight, int height, GLESUtils.Color color) {

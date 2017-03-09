@@ -70,15 +70,15 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 
 		camera2D = new Camera2D(width, height, true);
-		imageTexture = new Texture(context);
-		barGradientBuffer = OPallFBOCreator.FrameBuffer(context);
-		barSrcBuffer = OPallFBOCreator.FrameBuffer(context);
-		imageBuffer = OPallFBOCreator.FrameBuffer(context);
+		imageTexture = new Texture();
+		barGradientBuffer = OPallFBOCreator.FrameBuffer();
+		barSrcBuffer = OPallFBOCreator.FrameBuffer();
+		imageBuffer = OPallFBOCreator.FrameBuffer();
 		multiTexture = new MultiTexture(context, VERT_FILE, FRAG_FILE, 2);
-		backBar = new BarHorizontal(context);
-		chessBox = new ChessBox(context);
+		backBar = new BarHorizontal();
+		chessBox = new ChessBox();
 		touchLines = new TouchLines(width, height);
-		cellPaletter = new CellPaletter(context);
+		cellPaletter = new CellPaletter();
 	}
 
 
