@@ -14,9 +14,8 @@ import net.henryco.opalette.api.utils.GLESUtils;
 
 public class BarHorizontal implements OPallBar {
 
-	public static final float cameraTranslationStep = 4.f;
-
 	public final GLESUtils.Color color = GLESUtils.Color.WHITE;
+	public float cameraTranslationStep = 4.f;
 	public float height_pct = 0.201f;
 	public float yPos_pct = 0.8f;
 	public float cellHeight_pct = 0.8f;
@@ -44,8 +43,8 @@ public class BarHorizontal implements OPallBar {
 		float lost = iter * d;
 		int extr =  Math.round((lost + d) / cameraTranslationStep);
 
-
-		for (int i = 0; i < iter + extr; i++) barLine.render(camera2D.translateY(-cameraTranslationStep).update());
+		for (int i = 0; i < iter + extr; i++)
+			barLine.render(camera2D.translateY(-cameraTranslationStep).update());
 	}
 
 
@@ -68,6 +67,12 @@ public class BarHorizontal implements OPallBar {
 		drawBar(renderable, camera, (int) (cellHeight), buffer_quantum, cameraTranslationStep);
 		camera.setPosition(camYPos).update();
 
+	}
+
+
+	public BarHorizontal setCameraTranslationStep(float cameraTranslationStep) {
+		this.cameraTranslationStep = cameraTranslationStep;
+		return this;
 	}
 
 	@Override

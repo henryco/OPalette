@@ -18,6 +18,18 @@ import net.henryco.opalette.api.utils.GLESUtils;
 public class CellPaletter implements OPallRenderable {
 
 
+	private static final String VERT_FILE = OPallTexture.DEF_SHADER+".vert";
+	private static final String[] FRAG_FILE = {
+			OPallTexture.FRAG_DIR+"/CellPaletteHorizontal.frag",
+			OPallTexture.FRAG_DIR+"/CellPaletteVertical.frag"
+	};
+
+	private static final String u_cellSize = "u_cellSize";
+	private static final String u_margin = "u_margin";
+	private static final String u_dimension = "u_dimension";
+	private static final String u_numb = "u_numb";
+
+
 	public enum CellType {
 
 		Horizontal(0),
@@ -29,19 +41,15 @@ public class CellPaletter implements OPallRenderable {
 		}
 	}
 
-	public static final String VERT_FILE = OPallTexture.DEF_SHADER+".vert";
-	public static final String[] FRAG_FILE = {
-			OPallTexture.FRAG_DIR+"/CellPaletteHorizontal.frag",
-			OPallTexture.FRAG_DIR+"/CellPaletteVertical.frag"
-	};
 
-	public float margin_pct = 0.1f;
-	public float width = 0;
-	public float height = 0;
-	public int numb = 0;
 
-	public FrameBuffer buffer;
-	public Texture texture;
+	private float margin_pct = 0.1f;
+	private float width = 0;
+	private float height = 0;
+	private int numb = 0;
+
+	private FrameBuffer buffer;
+	private Texture texture;
 
 
 	public CellPaletter(Context context) {
@@ -59,21 +67,16 @@ public class CellPaletter implements OPallRenderable {
 	 */
 	public void generate(OPallTexture source, Camera2D camera2D) {
 
-//		buffer.beginFBO(() -> {
-//			GLESUtils.clear();
-//			source.render(camera2D);
-//		});
-//
 		float margin = width * margin_pct;
 		float cellSize = (width - (margin * (numb + 1))) / numb;
 
 		texture.setBitmap(source);
 		buffer.beginFBO(() -> texture.render(camera2D, program -> {
 			GLESUtils.clear();
-			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_cellSize"), cellSize);
-			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_margin"), margin);
-			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, "u_dimension"), width, height);
-			GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_numb"), numb);
+			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellSize), cellSize);
+			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_margin), margin);
+			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), width, height);
+			GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_numb), numb);
 		}));
 	}
 
