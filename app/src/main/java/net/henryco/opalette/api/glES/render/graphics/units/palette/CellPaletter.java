@@ -46,7 +46,7 @@ public class CellPaletter implements OPallRenderable {
 	private float margin_pct = 0.1f;
 	private float width = 0;
 	private float height = 0;
-	private int numb = 0;
+	private int numb = 4;
 
 	private FrameBuffer buffer;
 	private Texture texture;
@@ -67,8 +67,9 @@ public class CellPaletter implements OPallRenderable {
 	 */
 	public void generate(OPallTexture source, Camera2D camera2D) {
 
-		float margin = width * margin_pct;
-		float cellSize = (width - (margin * (numb + 1))) / numb;
+
+		float cellSize = width / numb;
+		float margin = cellSize * margin_pct;
 
 		texture.setBitmap(source);
 		buffer.beginFBO(() -> texture.render(camera2D, program -> {
@@ -76,7 +77,7 @@ public class CellPaletter implements OPallRenderable {
 			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellSize), cellSize);
 			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_margin), margin);
 			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), width, height);
-			GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_numb), numb);
+			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_numb), numb);
 		}));
 	}
 

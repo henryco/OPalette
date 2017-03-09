@@ -66,6 +66,34 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		setFlip(false, false);
 	}
 
+	public Texture() {
+		this(null, DEFAULT_VERT_FILE, DEFAULT_FRAG_FILE, Filter.LINEAR);
+	}
+	public Texture(Bitmap image) {
+		this(image, DEFAULT_VERT_FILE, DEFAULT_FRAG_FILE);
+	}
+	public Texture(String shaderVert, String shaderFrag) {
+		this(null, shaderVert, shaderFrag, Filter.LINEAR);
+	}
+	public Texture(Bitmap image, String shaderVert, String shaderFrag) {
+		this(image, shaderVert, shaderFrag, Filter.LINEAR);
+	}
+	public Texture(Bitmap image, String shaderVert, String shaderFrag, Filter filter) {
+		super(shaderVert, shaderFrag, 2);
+		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
+		textureFlip = new boolean[2];
+		region = new float[5];
+		region[4] = 0;
+		bounds2D = new Bounds2D()
+				.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
+				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
+				.setHolder(this);
+		setBitmap(image, filter);
+		setFlip(false, false);
+	}
+
+
+
 
 	public Texture setBitmap(OPallTexture texture) {
 		return setBitmap(texture.getBitmap());

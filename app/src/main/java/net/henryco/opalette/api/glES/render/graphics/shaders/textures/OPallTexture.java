@@ -15,7 +15,6 @@ public interface OPallTexture extends OPallShader {
 
 
 	String DEFAULT_VERT_FILE =
-
 			"attribute vec4 a_Position;\n" +
 			"attribute vec2 a_TexCoordinate;\n" +
 			"\n" +
@@ -44,7 +43,6 @@ public interface OPallTexture extends OPallShader {
 
 
 	String DEFAULT_FRAG_FILE =
-
 			"precision mediump float;\n" +
 			"\n" +
 			"varying vec4 v_Position;\n" +
