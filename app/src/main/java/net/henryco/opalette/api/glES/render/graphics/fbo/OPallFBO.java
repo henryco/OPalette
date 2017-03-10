@@ -86,16 +86,19 @@ public interface OPallFBO extends OPallRenderable {
 		}
 
 
-		public static String finishAndCheckStat(boolean out) {
+		public static String finishAndCheckStat(boolean out, long id) {
 			int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
 			GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-			String msg = "FrameBuffer: OK";
+			String fboName = "FrameBuffer"+(id != -1 ? "["+id+"]" : "")+": ";
+			String msg = fboName+"OK";
 			if (status != GLES20.GL_FRAMEBUFFER_COMPLETE)
-				msg = "Error: "+status+"\n"+GLES20.glGetError();
+				msg = fboName+status+"\n"+GLES20.glGetError();
 			if (out) System.out.println(msg);
 			return msg;
 		}
-
+		public static String finishAndCheckStat(boolean out) {
+			return finishAndCheckStat(out, -1);
+		}
 
 		public static void wipe(int[] frameBuffer, int[] textureBuffer, int[] depthRenderBuffer) {
 			if(frameBuffer != null) {

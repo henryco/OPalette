@@ -64,6 +64,8 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 
+		FrameBuffer.debug = true;
+
 		camera2D = new Camera2D(width, height, true);
 		imageTexture = new EdTexture();
 		barGradientBuffer = OPallFBOCreator.FrameBuffer();

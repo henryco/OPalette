@@ -24,11 +24,16 @@ public class FrameBuffer implements OPallFBO {
 	private Texture texture = null;
 	private boolean flip = true;
 
-	public FrameBuffer(){}
+	private final long buffer_id;
+
+	public FrameBuffer(){
+		buffer_id = hashCode();
+	}
 	public FrameBuffer(int width, int height, boolean depth) {
 		this(width, height, width, height, depth);
 	}
 	public FrameBuffer(int width, int height, int screenW, int screenH, boolean depth) {
+		this();
 		createFBO(width, height, screenW, screenH, depth);
 	}
 
@@ -44,7 +49,7 @@ public class FrameBuffer implements OPallFBO {
 		frameBHandle = OPallFBO.methods.genGeneralBuff();
 		texBHandle = OPallFBO.methods.genTextureBuff(w, h);
 		if (d) depthBHandle = OPallFBO.methods.genDepthBuff(w, h);
-		OPallFBO.methods.finishAndCheckStat(debug);
+		OPallFBO.methods.finishAndCheckStat(debug, buffer_id);
 		setScreenDim(screenW, screenH);
 		width = w;
 		height = h;
