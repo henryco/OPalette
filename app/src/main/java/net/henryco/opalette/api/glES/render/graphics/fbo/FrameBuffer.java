@@ -37,6 +37,15 @@ public class FrameBuffer implements OPallFBO {
 	}
 
 
+	private void updTexture() {
+		if (texture != null) {
+			texture.setScreenDim(scrW, scrH);
+			texture.setTextureDataHandle(getTextureBufferHandle());
+			texture.setSize(width, height);
+			setFlip(flip);
+		}
+	}
+
 	public FrameBuffer createFBO(int w, int h, boolean depth) {
 		return createFBO(w, h, w, h, depth);
 	}
@@ -67,22 +76,15 @@ public class FrameBuffer implements OPallFBO {
 
 	@Override
 	public FrameBuffer beginFBO(Runnable runnable) {
-		beginFBO();
-		runnable.run();
-		endFBO();
+		OPallFBO.methods.beginFBO(frameBHandle[0], width, height, getTextureBufferHandle(), runnable);
+		updTexture();
 		return this;
 	}
 
 	@Override
 	public FrameBuffer endFBO() {
-
-		OPallFBO.methods.endFBO(width, height);
-		if (texture != null) {
-			texture.setScreenDim(scrW, scrH);
-			texture.setTextureDataHandle(getTextureBufferHandle());
-			texture.setSize(width, height);
-			setFlip(flip);
-		}
+		OPallFBO.methods.endFBO(width, height, getTextureBufferHandle());
+		updTexture();
 		return this;
 	}
 
@@ -121,7 +123,7 @@ public class FrameBuffer implements OPallFBO {
 
 	@Override
 	public Bitmap getBitmap() {
-		return Bitmap.createBitmap(OPallFBO.methods.getPixelData(frameBHandle[0], width, height),
+		return Bitmap.createBitmap(OPallFBO.methods.getPixelData(getFrameBufferHandle(), width, height, getTextureBufferHandle()),
 				width, height, Bitmap.Config.ARGB_8888);
 	}
 

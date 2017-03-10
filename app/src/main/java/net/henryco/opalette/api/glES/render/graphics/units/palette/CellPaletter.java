@@ -105,7 +105,6 @@ public class CellPaletter implements OPallRenderable {
 	
 	public void generate(Texture source, Camera2D camera2D) {
 
-
 		float cellSize = width / numb;
 		float margin = cellSize * margin_pct;
 

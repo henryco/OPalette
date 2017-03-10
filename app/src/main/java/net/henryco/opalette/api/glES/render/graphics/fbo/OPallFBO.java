@@ -31,10 +31,10 @@ public interface OPallFBO extends OPallRenderable {
 	final class methods {
 
 
-		public static void beginFBO(int frameBuffer, int w, int h, Runnable runnable) {
+		public static void beginFBO(int frameBuffer, int w, int h,  int texHandle, Runnable runnable) {
 			beginFBO(frameBuffer);
 			runnable.run();
-			endFBO(w, h);
+			endFBO(w, h, texHandle);
 		}
 
 
@@ -43,20 +43,23 @@ public interface OPallFBO extends OPallRenderable {
 		}
 
 
-		public static void endFBO(int width, int height) {
+		public static void endFBO(int width, int height, int texHandle) {
+
+			GLES20.glActiveTexture(GLES20.GL_TEXTURE_2D);
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texHandle);
 
 			GLES20.glCopyTexSubImage2D(GLES20.GL_TEXTURE_2D, 0, 0, 0, 0, 0, width, height);
 			GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
 		}
 
-		public static int[] getPixelData(int frameBuffer, int w, int h) {
+		public static int[] getPixelData(int frameBuffer, int w, int h, int texHandle) {
 
 			beginFBO(frameBuffer);
 			int[] pixels = new int[w * h];
 			IntBuffer intBuffer = IntBuffer.wrap(pixels);
 			intBuffer.position(0);
 			GLES20.glReadPixels(0, 0, w, h, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, intBuffer);
-			endFBO(w, h);
+			endFBO(w, h, texHandle);
 			for (int i = 0; i < pixels.length; i++)
 				pixels[i] = (pixels[i] & (0xFF00FF00)) | ((pixels[i] >> 16) & 0x000000FF) | ((pixels[i] << 16) & 0x00FF0000);
 			return pixels;
