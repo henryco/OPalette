@@ -11,8 +11,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallMultiTexture;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.BarHorizontal;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.OPallBar;
 import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
@@ -30,19 +29,14 @@ import javax.microedition.khronos.opengles.GL10;
 public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity> {
 
 
-	public static final int buffer_quantum = 5;
-	public static final String VERT_FILE = OPallMultiTexture.DEF_SHADER+".vert";
-	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPaletteHorizontal.frag";
-	public static final String u_dimension = "u_dimension";
-	public static final String u_line = "u_line";
-
+	private static final int buffer_quantum = 5;
 	private final long id;
 	private boolean uCan = false;
 
 	private Camera2D camera2D;
 
 	private MultiTexture multiTexture;
-	private Texture imageTexture;
+	private EdTexture imageTexture;
 
 	private FrameBuffer barGradientBuffer;
 	private FrameBuffer barSrcBuffer;
@@ -71,7 +65,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 
 		camera2D = new Camera2D(width, height, true);
-		imageTexture = new Texture(context, OPallTexture.DEF_SHADER+".vert", OPallTexture.FRAG_DIR+"/EditableDefault.frag");
+		imageTexture = new EdTexture();
 		barGradientBuffer = OPallFBOCreator.FrameBuffer();
 		barSrcBuffer = OPallFBOCreator.FrameBuffer();
 		imageBuffer = OPallFBOCreator.FrameBuffer();
@@ -106,21 +100,14 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		//RESET CAMERA
 		camera2D.setPosY_absolute(0).update();
 
-
+		GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
 		chessBox.render(camera2D);
 
 		if (uCan) {
 
 
 			//PREPARE TEXTURE
-			imageBuffer.beginFBO(() -> imageTexture.render(camera2D, program -> {
-				GLESUtils.clear();
-				GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_alpha"), 1);
-				GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_addBrightness"), 0);
-				GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_addColor"), 0, 0, 0);
-				GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_minColor"), 0, 0, 0f);
-				GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_maxColor"), 1, 1, 1);
-			}));
+			imageBuffer.beginFBO(() -> imageTexture.render(camera2D, program -> GLESUtils.clear()));
 			imageBuffer.render(camera2D);
 
 			multiTexture.setTexture(0, imageBuffer.getTexture());
@@ -177,7 +164,6 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			float barWidth = barSrcBuffer.getWidth();
 			float scale = barWidth / bmpWidth;
 			imageTexture.bounds(b -> b.setScale(scale));
-
 			uCan = true;
 
 			touchLines.setVisible(true).setDefaultSize(barWidth, bmpHeight * scale).reset();
@@ -188,9 +174,10 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 
-
-
-
+	public static final String VERT_FILE = OPallMultiTexture.DEF_SHADER+".vert";
+	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPaletteHorizontal.frag";
+	public static final String u_dimension = "u_dimension";
+	public static final String u_line = "u_line";
 	public static final String FRAG_PROGRAM =
 			"#version 100\n" +
 			"precision mediump float;\n" +

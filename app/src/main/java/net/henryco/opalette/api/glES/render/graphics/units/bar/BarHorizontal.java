@@ -44,7 +44,7 @@ public class BarHorizontal implements OPallBar {
 		int iter = (barHeight / buffer_quantum);
 		float d = buffer_quantum - cameraTranslationStep;
 		float lost = iter * d;
-		int extr =  Math.round((lost + d) / cameraTranslationStep);
+		int extr = (int) Math.floor((lost + d) / cameraTranslationStep);
 
 		for (int i = 0; i < iter + extr; i++)
 			barLine.render(camera2D.translateY(-cameraTranslationStep).update());
