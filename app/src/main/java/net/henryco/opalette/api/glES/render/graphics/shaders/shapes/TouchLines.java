@@ -153,8 +153,7 @@ public class TouchLines extends OPallShape {
 		float[] c2 = OPallGeometry.lineABC_cmnPerp(x2, y2, x1, y1);
 
 		linesCoefficients = new float[] {
-				c1[0], c1[1], c1[2], c2[0], c2[1], c2[2]
-		};
+				c1[0], c1[1], c1[2], c2[0], c2[1], c2[2]};
 		return this;
 	}
 

@@ -24,7 +24,9 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 
 
-	protected final FloatBuffer texelBuffer;
+	protected final FloatBuffer texelBuffer =
+			GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
+
 	protected final boolean[][] textureFlip;
 	protected final int[] textureGL_ID;
 	protected final int[] textureData_ID;
@@ -47,11 +49,9 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 	public MultiTexture(Context context, String VERT, String FRAG) {
 		this(context, VERT, FRAG, 1);
 	}
-
 	public MultiTexture(Context context, String VERT, String FRAG, int texNumb) {
 		super(context, VERT, FRAG, 2);
 		this.texNumb = (texNumb <= 5 && texNumb > 0) ? texNumb : 1;
-		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
 		textureGL_ID = new int[this.texNumb];
 		textureData_ID = new int[this.texNumb];
 		this.textureFlip = new boolean[this.texNumb][2];
@@ -62,10 +62,28 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 		this.focus = this.texNumb - 1;
 		setFlip(false, false);
 	}
-
-
-
-
+	public MultiTexture(String VERT, String FRAG, int texNumb) {
+		super(VERT, FRAG, 2);
+		this.texNumb = (texNumb <= 5 && texNumb > 0) ? texNumb : 1;
+		textureGL_ID = new int[this.texNumb];
+		textureData_ID = new int[this.texNumb];
+		this.textureFlip = new boolean[this.texNumb][2];
+		bounds2D = new Bounds2D[this.texNumb];
+		for (int i = 0; i < bounds2D.length; i++)
+			bounds2D[i] = new Bounds2D().setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
+					.setOrder(OPallBounds.order.FLAT_SQUARE_2D()).setHolder(this);
+		this.focus = this.texNumb - 1;
+		setFlip(false, false);
+	}
+	public MultiTexture(String VERT, String FRAG) {
+		this(VERT, FRAG, 2);
+	}
+	public MultiTexture(int texNumb) {
+		this(DEFAULT_VERT_FILE, DEFAULT_FRAG_FILE, texNumb);
+	}
+	public MultiTexture() {
+		this(2);
+	}
 
 
 
