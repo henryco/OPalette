@@ -6,7 +6,6 @@ import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
@@ -15,7 +14,7 @@ import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
  * Created by HenryCo on 10/03/17.
  */
 
-public class EdTexture extends Texture {
+public class EdTexture extends OPallTextureExtended  {
 
 	private final GLESUtils.Color add = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
 	private final GLESUtils.Color min = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
@@ -44,7 +43,7 @@ public class EdTexture extends Texture {
 		this(image, Filter.LINEAR);
 	}
 	public EdTexture(Bitmap image, Filter filter) {
-		super(image, OPallTexture.DEFAULT_VERT_FILE, FRAG_FILE, filter);
+		super(image, filter, OPallTexture.DEFAULT_VERT_FILE, FRAG_FILE);
 	}
 
 
@@ -70,16 +69,12 @@ public class EdTexture extends Texture {
 	}
 
 	@Override
-	public void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
-		super.render(camera2D, program -> {
-			setter.consume(program);
-			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_alpha"), alpha);
-			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_addBrightness"), addBrightness);
-			GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_addColor"), add.r, add.g, add.b);
-			GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_minColor"), min.r, min.g, min.b);
-			GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_maxColor"), max.r, max.g, max.b);
-
-		});
+	protected void render(int program, Camera2D camera) {
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_alpha"), alpha);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_addBrightness"), addBrightness);
+		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_addColor"), add.r, add.g, add.b);
+		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_minColor"), min.r, min.g, min.b);
+		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_maxColor"), max.r, max.g, max.b);
 	}
 
 

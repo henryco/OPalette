@@ -75,6 +75,9 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	public Texture(String shaderVert, String shaderFrag) {
 		this(null, shaderVert, shaderFrag, Filter.LINEAR);
 	}
+	public Texture(String shaderVert, String shaderFrag, Filter filter) {
+		this(null, shaderVert, shaderFrag, filter);
+	}
 	public Texture(Bitmap image, String shaderVert, String shaderFrag) {
 		this(image, shaderVert, shaderFrag, Filter.LINEAR);
 	}
