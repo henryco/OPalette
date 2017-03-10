@@ -20,7 +20,6 @@ public class FrameBuffer implements OPallFBO {
 
 	private int width = 0, height = 0;
 	private int scrW = 0, scrH = 0;
-	private Bitmap textureBitmap = null;
 	private Texture texture = null;
 	private boolean flip = true;
 
@@ -38,17 +37,16 @@ public class FrameBuffer implements OPallFBO {
 	}
 
 
-	public FrameBuffer createFBO(int w, int h, boolean d) {
-		return createFBO(w, h, w, h, d);
+	public FrameBuffer createFBO(int w, int h, boolean depth) {
+		return createFBO(w, h, w, h, depth);
 	}
 
 	@Override
-	public FrameBuffer createFBO(int w, int h, int screenW, int screenH, boolean d) {
-		if (textureBitmap != null) textureBitmap.recycle();
+	public FrameBuffer createFBO(int w, int h, int screenW, int screenH, boolean depth) {
 		OPallFBO.methods.wipe(frameBHandle, texBHandle, depthBHandle);
 		frameBHandle = OPallFBO.methods.genGeneralBuff();
 		texBHandle = OPallFBO.methods.genTextureBuff(w, h);
-		if (d) depthBHandle = OPallFBO.methods.genDepthBuff(w, h);
+		if (depth) depthBHandle = OPallFBO.methods.genDepthBuff(w, h);
 		OPallFBO.methods.finishAndCheckStat(debug, buffer_id);
 		setScreenDim(screenW, screenH);
 		width = w;
@@ -77,12 +75,11 @@ public class FrameBuffer implements OPallFBO {
 
 	@Override
 	public FrameBuffer endFBO() {
-		if (textureBitmap!= null) textureBitmap.recycle();
-		textureBitmap = Bitmap.createBitmap(OPallFBO.methods.endFBO(width, height),
-				width, height, Bitmap.Config.ARGB_8888);
+
+		OPallFBO.methods.endFBO(width, height);
 		if (texture != null) {
 			texture.setScreenDim(scrW, scrH);
-			texture.setBitmap(textureBitmap, OPallTexture.Filter.NEAREST);
+			texture.setTextureDataHandle(getTextureBufferHandle());
 			texture.setSize(width, height);
 			setFlip(flip);
 		}
@@ -124,7 +121,8 @@ public class FrameBuffer implements OPallFBO {
 
 	@Override
 	public Bitmap getBitmap() {
-		return textureBitmap;
+		return Bitmap.createBitmap(OPallFBO.methods.getPixelData(frameBHandle[0], width, height),
+				width, height, Bitmap.Config.ARGB_8888);
 	}
 
 	@Override

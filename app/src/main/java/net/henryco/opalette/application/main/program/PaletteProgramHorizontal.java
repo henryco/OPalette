@@ -112,11 +112,10 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			imageBuffer.beginFBO(() -> imageTexture.render(camera2D, program -> GLESUtils.clear()));
 			imageBuffer.render(camera2D);
 
-			multiTexture.setTexture(0, imageBuffer.getTexture());
-			multiTexture.setTexture(1, barSrcBuffer.getTexture());
+
+			multiTexture.set(0, imageBuffer.getTexture());
+			multiTexture.set(1, barSrcBuffer.getTexture());
 			multiTexture.setFocusOn(1);
-
-
 
 			//CREATE GRADIENT BAR
 			barGradientBuffer.beginFBO(() -> multiTexture.render(camera2D, program -> {
@@ -124,16 +123,16 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 				GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), width, height - backBar.getHeight());
 				GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, touchLines.getCoefficients(), 0);
 			}));
-
-
-			touchLines.render(camera2D);
-
-			cellPaletter.generate(barGradientBuffer.getTexture(), camera2D);
-
+//
+//
+//			touchLines.render(camera2D);
+//
+//			cellPaletter.generate(barGradientBuffer.getTexture(), camera2D);
+//
 			//RENDER GRADIENT BAR
-			backBar.render(camera2D, cellPaletter, buffer_quantum);
+//			backBar.render(camera2D, cellPaletter, buffer_quantum);
 
-
+			observator.update();
 		}
 
 

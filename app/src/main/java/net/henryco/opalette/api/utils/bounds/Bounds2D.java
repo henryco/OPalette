@@ -19,6 +19,11 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 	public Bounds2D() {
 	}
 	public Bounds2D(Bounds2D other) {
+		set(other);
+	}
+
+
+	public Bounds2D set(Bounds2D other) {
 		x = other.x;
 		y = other.y;
 		width = other.width;
@@ -29,8 +34,8 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 		vertices = other.getVertices();
 		order = other.getOrder();
 		generateOrderBuffer();
+		return this;
 	}
-
 
 	public float[] calculate(float dimX, float dimY) {
 		float[] verts = Utils.arrayFlatCopy(vertices);

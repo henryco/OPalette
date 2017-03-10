@@ -103,13 +103,13 @@ public class CellPaletter implements OPallRenderable {
 	}
 
 	
-	public void generate(OPallTexture source, Camera2D camera2D) {
+	public void generate(Texture source, Camera2D camera2D) {
 
 
 		float cellSize = width / numb;
 		float margin = cellSize * margin_pct;
 
-		texture.setBitmap(source);
+		texture.set(source);
 		buffer.beginFBO(() -> texture.render(camera2D, program -> {
 			GLESUtils.clear();
 			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellSize), cellSize);

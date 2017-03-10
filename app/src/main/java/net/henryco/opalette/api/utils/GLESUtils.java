@@ -161,7 +161,7 @@ public class GLESUtils {
 	public static void glUseProgram(int program, Runnable runnable) {
 		GLES20.glUseProgram(program);
 		runnable.run();
-		GLES20.glUseProgram(-1);
+		GLES20.glUseProgram(0);
 	}
 
 	/**

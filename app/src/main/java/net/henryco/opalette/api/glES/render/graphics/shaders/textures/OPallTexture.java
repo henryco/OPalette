@@ -98,15 +98,14 @@ public interface OPallTexture extends OPallShader {
 
 
 
-
 	OPallTexture setBitmap(Bitmap image, Filter filterMin, Filter filterMag);
 	OPallTexture setBitmap(Bitmap image, Filter filter);
 	OPallTexture setBitmap(Bitmap image);
 	OPallTexture setFlip(boolean x, boolean y);
 	OPallTexture setSize(int w, int h);
 	OPallTexture setRegion(int x, int y, int width, int height);
-	Bitmap getBitmap();
-
+	OPallTexture setTextureDataHandle(int textureDataHandle);
+	int getTextureDataHandle();
 
 	final class methods {
 
@@ -141,6 +140,7 @@ public interface OPallTexture extends OPallShader {
 				GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, filter_mag);
 				GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, bitmap, 0);
 				GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, n);
+
 				return textureHandle[0];
 			}
 			throw new RuntimeException("Error loading texture, probably lost GL_context or bad pass arguments");

@@ -22,13 +22,18 @@ import java.nio.FloatBuffer;
 public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPallTexture {
 
 
-	protected final float[] region;
-	protected final boolean[] textureFlip;
-	protected FloatBuffer texelBuffer;
+	protected final float[] region = new float[5];
+	protected final boolean[] textureFlip = new boolean[2];
 	protected int textureData_ID;
 	protected int textureGL_ID;
-	protected Bitmap bitmap;
-	public final Bounds2D bounds2D;
+
+
+	public final Bounds2D bounds2D = new Bounds2D()
+			.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
+			.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
+			.setHolder(this);
+	protected FloatBuffer texelBuffer = GLESUtils.createFloatBuffer(
+			new float[]{0,1, 0,0, 1,0, 1,1});
 
 
 	public Texture(Context context, String shaderVert, String shaderFrag) {
@@ -54,18 +59,10 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	}
 	public Texture(Bitmap image, Context context, Filter filter, String shaderVert, String shaderFrag) {
 		super(context, shaderVert, shaderFrag, 2);
-		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
-		textureFlip = new boolean[2];
-		region = new float[5];
 		region[4] = 0;
-		bounds2D = new Bounds2D()
-				.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
-				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
-				.setHolder(this);
 		setBitmap(image, filter);
 		setFlip(false, false);
 	}
-
 	public Texture() {
 		this(null, DEFAULT_VERT_FILE, DEFAULT_FRAG_FILE, Filter.LINEAR);
 	}
@@ -83,38 +80,44 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	}
 	public Texture(Bitmap image, String shaderVert, String shaderFrag, Filter filter) {
 		super(shaderVert, shaderFrag, 2);
-		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
-		textureFlip = new boolean[2];
-		region = new float[5];
 		region[4] = 0;
-		bounds2D = new Bounds2D()
-				.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
-				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
-				.setHolder(this);
 		setBitmap(image, filter);
 		setFlip(false, false);
 	}
 
 
 
-
-	public Texture setBitmap(OPallTexture texture) {
-		return setBitmap(texture.getBitmap());
+	@Override
+	public Texture setTextureDataHandle(int textureDataHandle) {
+		this.textureData_ID = textureDataHandle;
+		GLESUtils.glUseProgram(program, () -> this.textureGL_ID = getTextureUniformHandle(0));
+		return this;
 	}
+
+
+	public Texture set(Texture texture) {
+		bounds2D.set(texture.bounds2D).setHolder(this);
+		setTextureDataHandle(texture.getTextureDataHandle());
+		System.arraycopy(texture.region, 0, region, 0, region.length);
+		textureFlip[0] = texture.textureFlip[0];
+		textureFlip[1] = texture.textureFlip[1];
+		return this;
+	}
+
+
+
+
 
 	@Override
 	public Texture setBitmap(Bitmap image, Filter filterMin, Filter filterMag) {
 		if (image == null || filterMin == null || filterMag == null) return this;
-		bitmap = image;
 		GLESUtils.glUseProgram(program, () -> {
 			this.textureData_ID = OPallTexture.methods.loadTexture(image, filterMin, filterMag);
 			this.textureGL_ID = getTextureUniformHandle(0);
 			bounds2D.setUniSize(image.getWidth(), image.getHeight());
 		});
-
 		return this;
 	}
-
 	@Override
 	public Texture setBitmap(Bitmap image, Filter filter) {
 		return setBitmap(image, filter, filter);
@@ -124,10 +127,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		return setBitmap(image, Filter.LINEAR);
 	}
 
-	@Override
-	public Bitmap getBitmap() {
-		return bitmap;
-	}
 
 	@Override
 	public Texture setFlip(boolean x, boolean y) {
@@ -154,7 +153,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	@Override
 	public Texture updateBounds() {
 		bounds2D.generateVertexBuffer(getScreenWidth(), getScreenHeight());
-
 		if (region[4] != 0) {
 			float sw = getScreenWidth();
 			float sh = getScreenHeight();
@@ -168,7 +166,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 			return this;
 		}
 		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
-
 		return this;
 	}
 
@@ -194,7 +191,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	public Texture setRegion(int w, int h) {
 		return setRegion(0,0,w,h);
 	}
-
 	public Texture resetRegion() {
 		region[4] = 0;
 		return this;
@@ -204,10 +200,13 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	public int getWidth() {
 		return (int) bounds2D.getWidth();
 	}
-
 	@Override
 	public int getHeight() {
 		return (int) bounds2D.getHeight();
+	}
+	@Override
+	public int getTextureDataHandle() {
+		return textureData_ID;
 	}
 
 
