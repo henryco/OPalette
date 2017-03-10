@@ -40,4 +40,5 @@ void main() {
 
     vec3 color = p_col / max(trueHeight, 1.0);
     gl_FragColor = vec4(color, 1.0);
+
 }

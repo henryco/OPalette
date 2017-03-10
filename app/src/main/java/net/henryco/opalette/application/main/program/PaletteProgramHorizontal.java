@@ -11,6 +11,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallMultiTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.BarHorizontal;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.OPallBar;
@@ -70,7 +71,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 
 		camera2D = new Camera2D(width, height, true);
-		imageTexture = new Texture();
+		imageTexture = new Texture(context, OPallTexture.DEF_SHADER+".vert", OPallTexture.FRAG_DIR+"/EditableDefault.frag");
 		barGradientBuffer = OPallFBOCreator.FrameBuffer();
 		barSrcBuffer = OPallFBOCreator.FrameBuffer();
 		imageBuffer = OPallFBOCreator.FrameBuffer();
@@ -112,7 +113,14 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 			//PREPARE TEXTURE
-			imageBuffer.beginFBO(() -> imageTexture.render(camera2D, program -> GLESUtils.clear()));
+			imageBuffer.beginFBO(() -> imageTexture.render(camera2D, program -> {
+				GLESUtils.clear();
+				GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_alpha"), 1);
+				GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_addBrightness"), 0);
+				GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_addColor"), 0, 0, 0);
+				GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_minColor"), 0, 0, 0f);
+				GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_maxColor"), 1, 1, 1);
+			}));
 			imageBuffer.render(camera2D);
 
 			multiTexture.setTexture(0, imageBuffer.getTexture());
@@ -170,9 +178,6 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			float scale = barWidth / bmpWidth;
 			imageTexture.bounds(b -> b.setScale(scale));
 
-			multiTexture.setTexture(0, imageTexture);
-			multiTexture.setTexture(1, barSrcBuffer.getTexture());
-			multiTexture.setFocusOn(1);
 			uCan = true;
 
 			touchLines.setVisible(true).setDefaultSize(barWidth, bmpHeight * scale).reset();
