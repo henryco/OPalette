@@ -166,6 +166,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 			uCan = true;
 
 			touchLines.setVisible(true).setDefaultSize(barWidth, bmpHeight * scale).reset();
+			touchLines.setPoints(new float[]{0, 0}, new float[]{0, 50});
 		});
 	}
 

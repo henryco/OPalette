@@ -71,7 +71,7 @@ public class GLESUtils {
 		public Color(Color other) {
 			set(other);
 		}
-
+		public Color() {this(WHITE);}
 		public void set(Color color) {
 			this.r = color.r;
 			this.g = color.g;

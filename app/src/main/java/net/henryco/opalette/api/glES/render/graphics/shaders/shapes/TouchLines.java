@@ -4,6 +4,7 @@ package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
+import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.geom.OPallGeometry;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
@@ -31,12 +32,23 @@ public class TouchLines extends OPallShape {
 			"\n" +
 			"uniform vec2 u_dimension;\n" +
 			"uniform vec3 u_line[2]; // Ax + By + C = 0\n" +
+			"uniform vec3 u_color;\n" +
 			"uniform float u_dx;\n" +
 			"uniform float u_transparency;\n" +
 			"uniform float u_lines_a;\n" +
+			"uniform int u_type;\n" +
 			"\n" +
 			"float line(float n, float x) {\n" +
 			"  return (u_lines_a * (x - (u_dx * n)));\n" +
+			"}\n" +
+			"\n" +
+			"vec3 colorize(vec2 position) {\n" +
+			"    if (u_type == 1) return vec3(normalize(vec3(position.x, 1, position.y)));\n" +
+			"    if (u_type == 2) {\n" +
+			"        vec2 xy = position / u_dimension;\n" +
+			"        return normalize(vec3(xy, 1. - length(xy) / sqrt(2.)));\n" +
+			"    }\n" +
+			"    return u_color;\n" +
 			"}\n" +
 			"\n" +
 			"void main() {\n" +
@@ -46,7 +58,9 @@ public class TouchLines extends OPallShape {
 			"  float py2 = (-1.) * ((u_line[1].x * pos.x) + u_line[1].z) / u_line[1].y;\n" +
 			"\n" +
 			"  if (!((pos.y > py1 && pos.y < py2) || (pos.y > py2 && pos.y < py1))) {\n" +
-			"    vec3 color = vec3(normalize(vec3(pos.x, 1, pos.y)));\n" +
+			"\n" +
+			"    vec3 color = colorize(pos);\n" +
+			"\n" +
 			"    float n1 = ceil(pos.x / u_dx);\n" +
 			"    float dy = line(1.,0.);\n" +
 			"    float n2 = ceil(pos.y / dy);\n" +
@@ -69,28 +83,41 @@ public class TouchLines extends OPallShape {
 	private static final String u_transparency = "u_transparency";
 	private static final String u_lines_a = "u_lines_a";
 	private static final String u_line = "u_line";
+	private static final String u_type = "u_type";
+	private static final String u_color = "u_color";
+
+
+	public enum TouchType {
+		NORMALS(1), GRADIENT(2), COLOR(0);
+		public int type;
+		TouchType(int type) {
+			this.type = type;
+		}
+	}
 
 
 	private float defaultWidth = 0;
 	private float defaultHeight = 0;
 
-
+	private final GLESUtils.Color color;
 
 	private float[] linesCoefficients;
 
 	private float lines_dx = 10;
 	private float lines_transparency = 0.65f;
 	private float lines_a = -1;
+	private int type = 1;
 	private boolean visible = false;
+
 
 	public TouchLines() {
 		this(0,0);
 	}
 	public TouchLines(int w, int h) {
 		super(VERT_PROGRAM, FRAG_PROGRAM, 2);
+		color = new GLESUtils.Color();
 		setScreenDim(w, h);
 		reset();
-
 	}
 
 	@Override
@@ -100,10 +127,12 @@ public class TouchLines extends OPallShape {
 
 	@Override
 	protected void render(int program, Camera2D camera) {
+		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_type), type);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_dx), lines_dx);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_lines_a), lines_a);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_transparency), lines_transparency);
 		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), getWidth(), getHeight());
+		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, u_color), color.r, color.g, color.b);
 		GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, linesCoefficients, 0);
 	}
 
@@ -172,6 +201,16 @@ public class TouchLines extends OPallShape {
 
 	public TouchLines setVisible(boolean visible) {
 		this.visible = visible;
+		return this;
+	}
+
+	public TouchLines setColor(GLESUtils.Color color) {
+		this.color.set(color);
+		return this;
+	}
+
+	public TouchLines setType(TouchType type) {
+		this.type = type.type;
 		return this;
 	}
 }
