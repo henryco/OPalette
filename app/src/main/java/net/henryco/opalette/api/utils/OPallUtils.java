@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +18,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by root on 13/02/17.
  */
 
-public class Utils {
+public class OPallUtils {
+
+	public interface ImageLoadable {
+		void onActivityResult(int requestCode, int resultCode, Intent data);
+	}
+
 
 	public static final class activity {
 		public static final int REQUEST_PICK_IMAGE = 2137;
@@ -118,10 +125,10 @@ public class Utils {
 	}
 
 
-	public static void loadImageActivity(FragmentActivity activity) {
+	public static <T extends FragmentActivity & ImageLoadable> void loadImageActivity(T activity) {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		activity.startActivityForResult(intent, Utils.activity.REQUEST_PICK_IMAGE);
+		activity.startActivityForResult(intent, OPallUtils.activity.REQUEST_PICK_IMAGE);
 	}
 
 	public static long millisTimer(Runnable runnable) {
@@ -136,7 +143,17 @@ public class Utils {
 		return System.nanoTime() - t0;
 	}
 
+
 	public static float secTimer(Runnable runnable) {
 		return millisTimer(runnable) * 0.001f;
 	}
+
+
+	@SuppressWarnings("unchecked")
+	public static <T extends View> T getViewFromHeader(NavigationView navigationView, int headerIndex, int viewID)  {
+		View headerView = navigationView.getHeaderView(headerIndex);
+		return (T) headerView.findViewById(viewID);
+	}
+
 }
+

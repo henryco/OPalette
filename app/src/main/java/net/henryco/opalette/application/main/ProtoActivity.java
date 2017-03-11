@@ -19,19 +19,16 @@ import android.view.View;
 import android.widget.ImageView;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.glSurface.renderers.solo.SoloRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
-import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
-import net.henryco.opalette.api.utils.Utils;
+import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.main.program.PaletteProgramHorizontal;
 
 public class ProtoActivity extends AppCompatActivity
-		implements NavigationView.OnNavigationItemSelectedListener {
+		implements NavigationView.OnNavigationItemSelectedListener, OPallUtils.ImageLoadable {
 
 
 
@@ -177,6 +174,10 @@ public class ProtoActivity extends AppCompatActivity
 
 		renderID = stateRequester.addRequestListener(renderer);
 
+
+		ImageView iv = OPallUtils.getViewFromHeader((NavigationView)findViewById(R.id.nav_view), 0, R.id.menuLogoImgView);
+		iv.setVisibility(View.VISIBLE);
+
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		oPallSurfaceView.setOnClickListener(this::imageClickAction);
@@ -191,11 +192,11 @@ public class ProtoActivity extends AppCompatActivity
 
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == FragmentActivity.RESULT_OK)
-			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE)
-				stateRequester.sendRequest(new Request("LoadImage", Utils.loadIntentBitmap(this, data)));
+			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE)
+				stateRequester.sendRequest(new Request("LoadImage", OPallUtils.loadIntentBitmap(this, data)));
 	}
 
 
@@ -208,7 +209,7 @@ public class ProtoActivity extends AppCompatActivity
 
 	private void imageClickAction(View view) {
 		//TODO another actions: (share, pick, save)
-		Utils.loadImageActivity(this);
+		OPallUtils.loadImageActivity(this);
 		setImageFilter();
 
 	}
