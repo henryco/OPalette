@@ -16,11 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.glES.camera.Camera2D;
+import net.henryco.opalette.api.glES.glSurface.renderers.solo.SoloRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
 import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -169,7 +173,6 @@ public class ProtoActivity extends AppCompatActivity
 			getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
 		}
 
-
 		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, new PaletteProgramHorizontal());
 
 		renderID = stateRequester.addRequestListener(renderer);
@@ -178,7 +181,6 @@ public class ProtoActivity extends AppCompatActivity
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		oPallSurfaceView.setOnClickListener(this::imageClickAction);
 		oPallSurfaceView.setRenderer(renderer);
-
 
 	}
 

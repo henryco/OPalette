@@ -15,7 +15,7 @@ import net.henryco.opalette.application.main.ProtoActivity;
  */
 public class StartUpActivity extends AppCompatActivity {
 
-	public static final long SPLASH_LOADING_DELAY = 3500;
+	public static final long SPLASH_LOADING_DELAY = 2500;
 
 	private View mContentView;
 	private View mControlsView;
