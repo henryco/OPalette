@@ -26,13 +26,15 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_preferences"
-        app:elevation="3dp"
-        app:backgroundTint="@color/SEA"
-        app:rippleColor="@color/SEA"/>
+        android:scaleType="center"
+        app:backgroundTint="@android:color/transparent"
+        app:elevation="20dp"
+        app:fabSize="mini"
+        app:rippleColor="@color/black_overlay"
+        app:srcCompat="@drawable/crl2"/>
 
 </android.support.design.widget.CoordinatorLayout>
