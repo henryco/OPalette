@@ -13,11 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".application.main.ProtoActivity"
+            android:name=".application.activities.ProtoActivity"
             android:label="@string/title_activity_proto"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".application.test.TestActivity">
         </activity>
         <activity
             android:name=".StartUpActivity"

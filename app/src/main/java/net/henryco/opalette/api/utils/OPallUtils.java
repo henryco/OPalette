@@ -20,8 +20,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OPallUtils {
 
-	public interface ImageLoadable {
+	public interface ImageLoadable <T extends FragmentActivity> {
 		void onActivityResult(int requestCode, int resultCode, Intent data);
+		T getActivity();
 	}
 
 
@@ -125,10 +126,10 @@ public class OPallUtils {
 	}
 
 
-	public static <T extends FragmentActivity & ImageLoadable> void loadImageActivity(T activity) {
-		Intent intent = new Intent(Intent.ACTION_PICK,
-				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		activity.startActivityForResult(intent, OPallUtils.activity.REQUEST_PICK_IMAGE);
+	public static void loadImageActivity(ImageLoadable<? extends FragmentActivity> activity) {
+		activity.getActivity().startActivityForResult(new Intent(Intent.ACTION_PICK,
+						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
+				OPallUtils.activity.REQUEST_PICK_IMAGE);
 	}
 
 	public static long millisTimer(Runnable runnable) {

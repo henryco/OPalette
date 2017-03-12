@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 
-import net.henryco.opalette.application.main.ProtoActivity;
+import net.henryco.opalette.application.activities.ProtoActivity;
 
 
 /**
@@ -15,7 +16,7 @@ import net.henryco.opalette.application.main.ProtoActivity;
  */
 public class StartUpActivity extends AppCompatActivity {
 
-	public static final long SPLASH_LOADING_DELAY = 2500;
+	public static final long SPLASH_LOADING_DELAY = 3000;
 
 	private View mContentView;
 	private View mControlsView;
@@ -37,13 +38,16 @@ public class StartUpActivity extends AppCompatActivity {
 
 
 
-	private void init() {
+	private void initSplash() {
+		ImageView logo = (ImageView) findViewById(R.id.logoImageVIew);
 		new Thread(() -> {
-			long t0 = System.currentTimeMillis() + SPLASH_LOADING_DELAY;
-			while (System.currentTimeMillis() < t0)
+			long t0 = System.currentTimeMillis();
+			while (System.currentTimeMillis() < t0 + SPLASH_LOADING_DELAY)
 				synchronized (this) {
 					try {
-						wait(t0 - System.currentTimeMillis());
+						float nt = ((float)(System.currentTimeMillis() - t0) / SPLASH_LOADING_DELAY);
+						logo.setAlpha((float) Math.min(1., Math.sin(Math.PI * nt) * 1.25));
+						Thread.sleep(1);
 					} catch (Exception ignored) {}
 				}
 			startActivity(new Intent(this, ProtoActivity.class));
@@ -63,7 +67,7 @@ public class StartUpActivity extends AppCompatActivity {
 		mControlsView = findViewById(R.id.fullscreen_content_controls);
 		mContentView = findViewById(R.id.fullscreen_content);
 		hide();
-		init();
+		initSplash();
 	}
 
 

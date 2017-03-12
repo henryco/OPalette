@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.main.program;
+package net.henryco.opalette.application.programs;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
@@ -18,7 +18,7 @@ import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallObservator;
 import net.henryco.opalette.api.utils.requester.Request;
-import net.henryco.opalette.application.main.ProtoActivity;
+import net.henryco.opalette.application.activities.ProtoActivity;
 
 import javax.microedition.khronos.opengles.GL10;
 

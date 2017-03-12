@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.main;
+package net.henryco.opalette.application.activities;
 
 import android.content.Intent;
 import android.os.Build;
@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
@@ -25,10 +24,10 @@ import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
-import net.henryco.opalette.application.main.program.PaletteProgramHorizontal;
+import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
 
 public class ProtoActivity extends AppCompatActivity
-		implements NavigationView.OnNavigationItemSelectedListener, OPallUtils.ImageLoadable {
+		implements NavigationView.OnNavigationItemSelectedListener, OPallUtils.ImageLoadable<ProtoActivity> {
 
 
 
@@ -175,8 +174,6 @@ public class ProtoActivity extends AppCompatActivity
 		renderID = stateRequester.addRequestListener(renderer);
 
 
-		ImageView iv = OPallUtils.getViewFromHeader((NavigationView)findViewById(R.id.nav_view), 0, R.id.menuLogoImgView);
-		iv.setVisibility(View.VISIBLE);
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
@@ -200,7 +197,10 @@ public class ProtoActivity extends AppCompatActivity
 	}
 
 
-
+	@Override
+	public ProtoActivity getActivity() {
+		return this;
+	}
 
 
 
