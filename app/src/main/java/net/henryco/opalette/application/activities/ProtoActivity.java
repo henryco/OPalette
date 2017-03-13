@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.StartUpActivity;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
@@ -34,6 +35,7 @@ public class ProtoActivity extends AppCompatActivity
 
 
 	private final OPallRequester stateRequester = new OPallRequester();
+
 
 
 
@@ -177,6 +179,11 @@ public class ProtoActivity extends AppCompatActivity
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		oPallSurfaceView.setOnClickListener(this::imageClickAction);
 		oPallSurfaceView.setRenderer(renderer);
+
+		oPallSurfaceView.addToGLContextQueue(gl ->
+				stateRequester.sendRequest(new Request("LoadImage",
+						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
+		);
 
 	}
 

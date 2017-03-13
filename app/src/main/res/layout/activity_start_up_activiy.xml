@@ -49,26 +49,28 @@
                 <ImageButton
                     android:id="@+id/imageButtonGall"
                     style="@style/Widget.AppCompat.ImageButton"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="112dp"
-                    android:backgroundTint="@android:color/darker_gray"
+                    android:layout_marginTop="161dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:elevation="0dp"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_menu_gallery"/>
+                    app:srcCompat="@drawable/ic_add_circle_white_48dp"/>
 
-                <ImageButton
-                    android:id="@+id/imageButtonCam"
-                    style="@style/Widget.AppCompat.ImageButton"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/imageButtonGall"
                     android:layout_alignStart="@+id/imageButtonGall"
                     android:layout_below="@+id/imageButtonGall"
-                    android:layout_marginTop="48dp"
-                    android:backgroundTint="@android:color/darker_gray"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_menu_camera"/>
+                    android:text="Select an image."
+                    android:textAlignment="center"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="17sp"/>
+
             </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
@@ -77,6 +79,7 @@
         android:id="@+id/logoImageVIew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         app:srcCompat="@drawable/circle_logo_text2"/>
 
 </FrameLayout>
