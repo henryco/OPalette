@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -60,7 +59,6 @@ public class ProtoActivity extends AppCompatActivity
 
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
-
 
 
 		// -------- CUSTOM PART -------- //
@@ -164,6 +162,9 @@ public class ProtoActivity extends AppCompatActivity
 	private void initialization() {
 
 
+
+
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
 		}
@@ -190,7 +191,7 @@ public class ProtoActivity extends AppCompatActivity
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == FragmentActivity.RESULT_OK)
+		if (resultCode == AppCompatActivity.RESULT_OK)
 			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE)
 				stateRequester.sendRequest(new Request("LoadImage", OPallUtils.loadIntentBitmap(this, data)));
 	}
