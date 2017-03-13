@@ -29,7 +29,7 @@ import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
 
 public class ProtoActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener,
-		OPallUtils.ImageLoadable<ProtoActivity>, FirstPickFragment.OnFragmentInteractionListener {
+		OPallUtils.ImageLoadable, FirstPickFragment.OnFragmentInteractionListener {
 
 
 
@@ -189,7 +189,7 @@ public class ProtoActivity extends AppCompatActivity
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == AppCompatActivity.RESULT_OK) {
+		if (resultCode == RESULT_OK) {
 			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE) {
 				stateRequester.sendRequest(new Request("LoadImage", OPallUtils.loadIntentBitmap(this, data)));
 			}

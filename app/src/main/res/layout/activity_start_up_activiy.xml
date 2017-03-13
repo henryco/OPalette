@@ -34,12 +34,42 @@
             android:id="@+id/fullscreen_content_controls"
             style="?metaButtonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/DARK"
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
+            <RelativeLayout
+                android:id="@+id/firstPickLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/imageButtonGall"
+                    style="@style/Widget.AppCompat.ImageButton"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="112dp"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_menu_gallery"/>
+
+                <ImageButton
+                    android:id="@+id/imageButtonCam"
+                    style="@style/Widget.AppCompat.ImageButton"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignStart="@+id/imageButtonGall"
+                    android:layout_below="@+id/imageButtonGall"
+                    android:layout_marginTop="48dp"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_menu_camera"/>
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 

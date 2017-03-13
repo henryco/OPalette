@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.io.IOException;
@@ -20,9 +20,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OPallUtils {
 
-	public interface ImageLoadable <T extends FragmentActivity> {
+	public interface ImageLoadable {
 		void onActivityResult(int requestCode, int resultCode, Intent data);
-		T getActivity();
+		AppCompatActivity getActivity();
 	}
 
 
@@ -126,7 +126,7 @@ public class OPallUtils {
 	}
 
 
-	public static void loadImageActivity(ImageLoadable<? extends FragmentActivity> activity) {
+	public static void loadImageActivity(ImageLoadable activity) {
 		activity.getActivity().startActivityForResult(new Intent(Intent.ACTION_PICK,
 						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
 				OPallUtils.activity.REQUEST_PICK_IMAGE);

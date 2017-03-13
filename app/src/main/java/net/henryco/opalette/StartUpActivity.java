@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.application.activities.ProtoActivity;
 
 
@@ -14,7 +15,7 @@ import net.henryco.opalette.application.activities.ProtoActivity;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class StartUpActivity extends AppCompatActivity {
+public class StartUpActivity extends AppCompatActivity implements OPallUtils.ImageLoadable {
 
 	public static final long SPLASH_LOADING_DELAY = 3000;
 
@@ -50,8 +51,11 @@ public class StartUpActivity extends AppCompatActivity {
 						Thread.sleep(1);
 					} catch (Exception ignored) {}
 				}
-			startActivity(new Intent(this, ProtoActivity.class));
-			finish();
+//			findViewById(R.id.logoImageVIew).setVisibility(View.GONE);
+//			findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
+
+//			startActivity(new Intent(this, ProtoActivity.class));
+//			finish();
 		}).start();
 	}
 
@@ -71,12 +75,19 @@ public class StartUpActivity extends AppCompatActivity {
 	}
 
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE) {
+				startActivity(new Intent(this, ProtoActivity.class)
+						.putExtra("ImageData", OPallUtils.loadIntentBitmap(this, data)));
+				finish();
+			}
+		}
+	}
 
-
-
-
-
-
-
-
+	@Override
+	public AppCompatActivity getActivity() {
+		return this;
+	}
 }
