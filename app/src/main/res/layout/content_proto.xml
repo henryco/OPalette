@@ -41,6 +41,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.31">
+
+            <fragment
+                android:id="@+id/fragment"
+                android:name="net.henryco.opalette.application.fragments.FirstPickFragment"
+                class="net.henryco.opalette.application.fragments.FirstPickFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_first_pick"/>
         </FrameLayout>
 
     </LinearLayout>

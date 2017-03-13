@@ -1,6 +1,7 @@
 package net.henryco.opalette.application.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,10 +24,12 @@ import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
+import net.henryco.opalette.application.fragments.FirstPickFragment;
 import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
 
 public class ProtoActivity extends AppCompatActivity
-		implements NavigationView.OnNavigationItemSelectedListener, OPallUtils.ImageLoadable<ProtoActivity> {
+		implements NavigationView.OnNavigationItemSelectedListener,
+		OPallUtils.ImageLoadable<ProtoActivity>, FirstPickFragment.OnFragmentInteractionListener {
 
 
 
@@ -223,5 +226,8 @@ public class ProtoActivity extends AppCompatActivity
 	}
 
 
+	@Override
+	public void onFragmentInteraction(Uri uri) {
 
+	}
 }
