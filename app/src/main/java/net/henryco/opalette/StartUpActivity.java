@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -102,12 +103,12 @@ public class StartUpActivity extends AppCompatActivity implements OPallUtils.Ima
 
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
-			actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.DARK)));
+			actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.DARK)));
 			actionBar.setElevation(60);
 		}
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-			getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
-
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
+		}
 
 		mControlsView = findViewById(R.id.fullscreen_content_controls);
 		mContentView = findViewById(R.id.fullscreen_content);
