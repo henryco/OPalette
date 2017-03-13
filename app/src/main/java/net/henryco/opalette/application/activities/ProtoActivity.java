@@ -162,18 +162,13 @@ public class ProtoActivity extends AppCompatActivity
 	private void initialization() {
 
 
-
-
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			getWindow().setStatusBarColor(getResources().getColor(R.color.DARK));
 		}
 
+
 		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, new PaletteProgramHorizontal());
-
 		renderID = stateRequester.addRequestListener(renderer);
-
-
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
@@ -191,9 +186,11 @@ public class ProtoActivity extends AppCompatActivity
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == AppCompatActivity.RESULT_OK)
-			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE)
+		if (resultCode == AppCompatActivity.RESULT_OK) {
+			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE) {
 				stateRequester.sendRequest(new Request("LoadImage", OPallUtils.loadIntentBitmap(this, data)));
+			}
+		}
 	}
 
 
@@ -213,6 +210,7 @@ public class ProtoActivity extends AppCompatActivity
 		setImageFilter();
 
 	}
+
 
 
 

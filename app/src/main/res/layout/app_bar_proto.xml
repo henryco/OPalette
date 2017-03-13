@@ -31,7 +31,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:scaleType="center"
-        android:visibility="visible"
+        android:visibility="gone"
         app:backgroundTint="@android:color/transparent"
         app:elevation="20dp"
         app:fabSize="mini"

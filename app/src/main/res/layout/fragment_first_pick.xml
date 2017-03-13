@@ -1,0 +1,41 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="net.henryco.opalette.application.fragments.FirstPickFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:id="@+id/firstPickLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/imageButtonGall"
+            style="@style/Widget.AppCompat.ImageButton"
+            app:srcCompat="@drawable/ic_menu_gallery"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="112dp"
+            android:backgroundTint="@android:color/darker_gray"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:id="@+id/imageButtonCam"
+            style="@style/Widget.AppCompat.ImageButton"
+            app:srcCompat="@drawable/ic_menu_camera"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignStart="@+id/imageButtonGall"
+            android:layout_below="@+id/imageButtonGall"
+            android:layout_marginTop="48dp"
+            android:backgroundTint="@android:color/darker_gray"
+            android:scaleType="fitCenter"/>
+    </RelativeLayout>
+
+</FrameLayout>

@@ -19,9 +19,11 @@
 
 
     <LinearLayout
+        android:id="@+id/activeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,6 +42,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.31">
         </FrameLayout>
+
     </LinearLayout>
 
 </LinearLayout>
