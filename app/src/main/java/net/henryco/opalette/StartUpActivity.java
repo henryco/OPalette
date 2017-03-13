@@ -1,6 +1,7 @@
 package net.henryco.opalette;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,18 @@ public class StartUpActivity extends AppCompatActivity implements OPallUtils.Ima
 	private View mControlsView;
 
 
+	public static final class BitmapPack {
+		private static Bitmap pushUpBitmap = null;
+		public static Bitmap get() {
+			return pushUpBitmap;
+		}
+		public static void close(){
+			pushUpBitmap.recycle();
+			pushUpBitmap = null;
+		}
+	}
+
+
 	private void hide() {
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) actionBar.hide();
@@ -41,6 +54,7 @@ public class StartUpActivity extends AppCompatActivity implements OPallUtils.Ima
 
 	private void initSplash() {
 		ImageView logo = (ImageView) findViewById(R.id.logoImageVIew);
+		findViewById(R.id.imageButtonGall).setOnClickListener(v -> OPallUtils.loadImageActivity(this));
 		new Thread(() -> {
 			long t0 = System.currentTimeMillis();
 			while (System.currentTimeMillis() < t0 + SPLASH_LOADING_DELAY)
@@ -51,11 +65,10 @@ public class StartUpActivity extends AppCompatActivity implements OPallUtils.Ima
 						Thread.sleep(1);
 					} catch (Exception ignored) {}
 				}
-//			findViewById(R.id.logoImageVIew).setVisibility(View.GONE);
-//			findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
-
-//			startActivity(new Intent(this, ProtoActivity.class));
-//			finish();
+			runOnUiThread(() -> {
+				logo.setVisibility(View.GONE);
+				findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
+			});
 		}).start();
 	}
 
@@ -79,8 +92,9 @@ public class StartUpActivity extends AppCompatActivity implements OPallUtils.Ima
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE) {
-				startActivity(new Intent(this, ProtoActivity.class)
-						.putExtra("ImageData", OPallUtils.loadIntentBitmap(this, data)));
+				Intent intent = new Intent(this, ProtoActivity.class);
+				BitmapPack.pushUpBitmap = OPallUtils.loadIntentBitmap(this, data);
+				startActivity(intent);
 				finish();
 			}
 		}
@@ -90,4 +104,6 @@ public class StartUpActivity extends AppCompatActivity implements OPallUtils.Ima
 	public AppCompatActivity getActivity() {
 		return this;
 	}
+
+
 }
