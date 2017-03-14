@@ -56,7 +56,8 @@
                     <FrameLayout
                         android:id="@android:id/tabcontent"
                         android:layout_width="match_parent"
-                        android:layout_height="113dp">
+                        android:layout_height="0dp"
+                        android:layout_weight="0.8">
 
                         <LinearLayout
                             android:id="@+id/tab1"
@@ -86,7 +87,9 @@
                     <TabWidget
                         android:id="@android:id/tabs"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="0dp"
+                        android:layout_gravity="bottom|center"
+                        android:layout_weight="0.2"/>
 
                 </LinearLayout>
             </TabHost>
