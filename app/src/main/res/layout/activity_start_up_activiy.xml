@@ -57,6 +57,7 @@
                     android:backgroundTint="@android:color/transparent"
                     android:elevation="0dp"
                     android:scaleType="fitCenter"
+                    android:visibility="invisible"
                     app:srcCompat="@drawable/ic_add_circle_white_48dp"/>
 
                 <TextView
