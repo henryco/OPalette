@@ -72,7 +72,7 @@ public class StartUpActivity extends AppCompatActivity
 	private void animation(float direction, float corner, float animTime_ms, Runnable afterAction) {
 
 		ImageButton pickButton = (ImageButton) findViewById(R.id.imageButtonGall);
-		pickButton.setVisibility(View.VISIBLE);
+
 
 		float r = pickButton.getWidth() * 0.5f * PICKBUTTON_RADIUS;
 		float hlW = (findViewById(R.id.firstPickLayout).getWidth() * 0.5f) + r;
@@ -93,6 +93,7 @@ public class StartUpActivity extends AppCompatActivity
 					float rot = (float)t1 * deg_per_ms * direction;
 
 					try {
+						pickButton.setVisibility(View.VISIBLE);
 						pickButton.setRotation(rot);
 						pickButton.setTranslationX(trx);
 						Thread.sleep(PICKBUTTON_SLEEP_TIME);
@@ -169,13 +170,14 @@ public class StartUpActivity extends AppCompatActivity
 				findViewById(R.id.textView).setVisibility(View.GONE);
 
 				new Handler().postDelayed(() ->
-						animation(1, 0, ANIMATION_TIME, () ->
-								new Handler().postDelayed(() ->
-										runOnUiThread(() -> {
-											startActivity(intent);
-											finish();
-										}), NEW_ACTIVITY_DELAY)
-						), AFTER_SPLASH_DELAY
+						animation(1, 0, ANIMATION_TIME, () -> {
+							findViewById(R.id.imageButtonGall).setVisibility(View.GONE);
+							new Handler().postDelayed(() ->
+									runOnUiThread(() -> {
+										startActivity(intent);
+										finish();
+									}), NEW_ACTIVITY_DELAY);
+						}), AFTER_SPLASH_DELAY
 				);
 			}
 		}
