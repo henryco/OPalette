@@ -217,7 +217,7 @@ public class ProtoActivity extends AppCompatActivity
 
 	private void imageClickAction(View view) {
 		//TODO another actions: (share, pick, save)
-		OPallUtils.loadImageActivity(this);
+		OPallUtils.loadGalleryImageActivity(this);
 		setImageFilter();
 
 	}

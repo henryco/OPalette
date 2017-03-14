@@ -126,7 +126,7 @@ public class OPallUtils {
 	}
 
 
-	public static void loadImageActivity(ImageLoadable activity) {
+	public static void loadGalleryImageActivity(ImageLoadable activity) {
 		activity.getActivity().startActivityForResult(new Intent(Intent.ACTION_PICK,
 						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
 				OPallUtils.activity.REQUEST_PICK_IMAGE);

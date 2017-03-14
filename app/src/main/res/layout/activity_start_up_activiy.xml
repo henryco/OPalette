@@ -44,7 +44,7 @@
                 android:id="@+id/firstPickLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageButton
                     android:id="@+id/imageButtonGall"
@@ -79,7 +79,7 @@
         android:id="@+id/logoImageVIew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:srcCompat="@drawable/circle_logo_text2"/>
 
 </FrameLayout>
