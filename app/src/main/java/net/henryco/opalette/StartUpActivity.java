@@ -31,7 +31,7 @@ public class StartUpActivity extends AppCompatActivity
 	public static final long AFTER_SPLASH_DELAY = 300;
 	public static final long ANIMATION_TIME = 300;
 	public static final long PICKBUTTON_SLEEP_TIME = 2;
-	public static final float PICKBUTTON_RADIUS = 0.6842f;
+	public static final float PICKBUTTON_RADIUS = 0.7f;
 
 	public static final class BitmapPack {
 		private static Bitmap pushUpBitmap = null;
@@ -163,7 +163,8 @@ public class StartUpActivity extends AppCompatActivity
 				BitmapPack.pushUpBitmap = OPallUtils.loadIntentBitmap(this, data);
 
 				new Handler().postDelayed(()
-						-> animation(1, 0, ANIMATION_TIME, () -> runOnUiThread(() -> {
+						-> animation(1, 0, ANIMATION_TIME, () -> runOnUiThread(() ->
+				{
 					startActivity(intent);
 					finish();
 				})), AFTER_SPLASH_DELAY);
