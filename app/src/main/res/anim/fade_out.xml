@@ -4,8 +4,8 @@
    
    <alpha
       android:fromAlpha="1"
-      android:toAlpha="0"
-      android:duration="400" >
+      android:toAlpha="0.35"
+      android:duration="125" >
    </alpha>
 
 

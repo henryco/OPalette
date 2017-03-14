@@ -73,7 +73,6 @@ public class StartUpActivity extends AppCompatActivity
 
 		ImageButton pickButton = (ImageButton) findViewById(R.id.imageButtonGall);
 
-
 		float r = pickButton.getWidth() * 0.5f * PICKBUTTON_RADIUS;
 		float hlW = (findViewById(R.id.firstPickLayout).getWidth() * 0.5f) + r;
 		float s_pi = (float) (hlW / (Math.PI * r * 2f));
@@ -134,8 +133,12 @@ public class StartUpActivity extends AppCompatActivity
 
 
 	private synchronized void imagePickAction(View view) {
-		AppCompatDialogFragment pickImageDialog = new PickImageDialog();
-		pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
+		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(this, R.anim.blink));
+		findViewById(R.id.textView).startAnimation(AnimationUtils.loadAnimation(this, R.anim.blink));
+		new Handler().postDelayed(() -> {
+			AppCompatDialogFragment pickImageDialog = new PickImageDialog();
+			pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
+		}, 175);
 	}
 
 
