@@ -70,7 +70,8 @@
                     android:text="Select an image."
                     android:textAlignment="center"
                     android:textColor="@android:color/background_light"
-                    android:textSize="17sp"/>
+                    android:textSize="17sp"
+                    android:visibility="invisible"/>
 
             </RelativeLayout>
         </LinearLayout>
