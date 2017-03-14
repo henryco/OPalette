@@ -68,14 +68,15 @@ public class StartUpActivity extends AppCompatActivity
 		findViewById(R.id.fullscreen_content).setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 		findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
-		reloadControls();
+		reloadControls(true);
 	}
 
 
 
-	private void reloadControls() {
+	private void reloadControls(boolean left_right) {
+		float lr = left_right ? 1 : -1;
 		new Handler().postDelayed(() ->
-				animation(1, -1, ANIMATION_TIME, () ->
+				animation(1 * lr, -1 * lr, ANIMATION_TIME, () ->
 						runOnUiThread(() -> {
 							View text = findViewById(R.id.textView);
 							text.setVisibility(View.VISIBLE);
@@ -227,7 +228,7 @@ public class StartUpActivity extends AppCompatActivity
 		super.onResume();
 		if (isClosed) {
 			findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
-			reloadControls();
+			reloadControls(false);
 			isClosed = false;
 		}
 	}
