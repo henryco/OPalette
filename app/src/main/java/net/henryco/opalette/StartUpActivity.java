@@ -27,10 +27,9 @@ public class StartUpActivity extends AppCompatActivity
 
 
 	public static final long SPLASH_LOADING_DELAY = 3000;
-	public static final long PICKBUTTON_ROTATION_TIME = 500;
-	public static final int PICKBUTTON_ROTATION_NUMB = 1;
+	public static final long PICKBUTTON_ROTATION_TIME = 400;
 	public static final long PICKBUTTON_SLEEP_TIME = 2;
-	public static final float PICKBUTTON_RADIUS = 2/3;
+	public static final float PICKBUTTON_RADIUS = 0.6842f;
 
 	public static final class BitmapPack {
 		private static Bitmap pushUpBitmap = null;
@@ -47,10 +46,6 @@ public class StartUpActivity extends AppCompatActivity
 
 
 
-
-
-
-
 	private void showAllItems() {
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) actionBar.show();
@@ -58,6 +53,52 @@ public class StartUpActivity extends AppCompatActivity
 				View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 		);
 	}
+
+
+
+
+
+	private void imageButtonAnimation(Runnable runnable) {
+
+		ImageButton pickButton = (ImageButton) findViewById(R.id.imageButtonGall);
+
+		float r = pickButton.getWidth() * 0.5f * PICKBUTTON_RADIUS;
+		float hlW = (findViewById(R.id.firstPickLayout).getWidth() * 0.5f) + r;
+		float s_pi = (float) (hlW / (Math.PI * r * 2f));
+		float ht = PICKBUTTON_ROTATION_TIME * 0.5f;
+
+		long t_spin_ms = (long)(ht / s_pi);
+		float deg_per_ms = 360f / (float)t_spin_ms;
+		float x_per_ms = hlW / ht;
+
+		new Thread(() -> {
+			long t0 = System.currentTimeMillis();
+			long time;
+			while((time = System.currentTimeMillis()) < t0 + (long)ht * 2) {
+				synchronized (this) {
+
+					long t1 = System.currentTimeMillis() - t0;
+					float rot = (float)t1 * deg_per_ms;
+					float trx = (float)t1 * x_per_ms;
+
+					if (time >= t0 + (long)ht) {
+						trx -= 2f * hlW;
+					}
+
+					pickButton.setRotation(rot);
+					pickButton.setTranslationX(trx);
+
+					try {
+						Thread.sleep(PICKBUTTON_SLEEP_TIME);
+					} catch (Exception ignore) {}
+				}
+			}
+			pickButton.setRotation(0);
+			runnable.run();
+		}).start();
+	}
+
+
 
 
 	private void initSplash() {
@@ -76,6 +117,9 @@ public class StartUpActivity extends AppCompatActivity
 				logo.setVisibility(View.GONE);
 				showAllItems();
 				findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
+				findViewById(R.id.fullscreen_content_controls).setOnClickListener(this::imagePickAction);
+				findViewById(R.id.imageButtonGall).setOnClickListener(this::imagePickAction);
+				findViewById(R.id.textView).setOnClickListener(this::imagePickAction);
 			});
 		}).start();
 	}
@@ -84,32 +128,11 @@ public class StartUpActivity extends AppCompatActivity
 
 	private synchronized void imagePickAction(View view) {
 
-		ImageButton pickButton = (ImageButton) findViewById(R.id.imageButtonGall);
-
-		float hlW = findViewById(R.id.firstPickLayout).getWidth() * 0.5f;
-		float s_pi = (float) (hlW / Math.PI);
-		float r = pickButton.getWidth() * 0.5f * PICKBUTTON_RADIUS;
-
-
-
-		long t_spin_ms = PICKBUTTON_ROTATION_TIME / PICKBUTTON_ROTATION_NUMB;
-		float deg_per_ms = 360f / (float)t_spin_ms;
-		new Thread(() -> {
-			long t0 = System.currentTimeMillis();
-			while(System.currentTimeMillis() < t0 + PICKBUTTON_ROTATION_TIME) {
-				synchronized (this) {
-					try {
-						pickButton.setRotation(((float)(System.currentTimeMillis() - t0)) * deg_per_ms);
-						Thread.sleep(PICKBUTTON_SLEEP_TIME);
-					} catch (Exception ignore) {}
-				}
-			}
-			pickButton.setRotation(0);
+		imageButtonAnimation(() -> {
 			AppCompatDialogFragment pickImageDialog = new PickImageDialog();
 			pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
-		}).start();
+		});
 	}
-
 
 
 
@@ -127,11 +150,6 @@ public class StartUpActivity extends AppCompatActivity
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
 		}
-
-		findViewById(R.id.fullscreen_content_controls).setOnClickListener(this::imagePickAction);
-		findViewById(R.id.imageButtonGall).setOnClickListener(this::imagePickAction);
-		findViewById(R.id.textView).setOnClickListener(this::imagePickAction);
-
 		initSplash();
 	}
 
@@ -156,7 +174,7 @@ public class StartUpActivity extends AppCompatActivity
 
 	@Override
 	public void dialogSelectedGallery(PickImageDialog dialog) {
-		OPallUtils.loadGalleryImageActivity(this);
+		imageButtonAnimation(() -> OPallUtils.loadGalleryImageActivity(this));
 	}
 
 
