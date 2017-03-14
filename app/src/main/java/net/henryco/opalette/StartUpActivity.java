@@ -30,7 +30,7 @@ public class StartUpActivity extends AppCompatActivity
 
 	public static final long PICKBUTTON_SLEEP_TIME = 2;
 	public static final long SPLASH_LOADING_TIME = 3000;
-	public static final long ANIMATION_TIME = 250;
+	public static final long ANIMATION_TIME = 300;
 
 	public static final long AFTER_SPLASH_DELAY = 225;
 	public static final long NEW_ACTIVITY_DELAY = 60;
@@ -49,22 +49,43 @@ public class StartUpActivity extends AppCompatActivity
 		}
 	}
 
+	private boolean isClosed = false;
+
+
+	private void close() {
+		findViewById(R.id.fullscreen_content_controls).setOnClickListener(v -> {});
+		findViewById(R.id.imageButtonGall).setOnClickListener(v -> {});
+		findViewById(R.id.textView).setOnClickListener(v -> {});
+		isClosed = true;
+	}
 
 
 
+	private void loadAfterSplash() {
 
-	private void showAfterSplash() {
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) actionBar.show();
 		findViewById(R.id.fullscreen_content).setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 		findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
+		reloadControls();
+	}
 
-		new Handler().postDelayed(() -> animation(1, -1, ANIMATION_TIME, () -> {
-			View text = findViewById(R.id.textView);
-			text.setVisibility(View.VISIBLE);
-			text.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
-		}), AFTER_SPLASH_DELAY);
+
+
+	private void reloadControls() {
+		new Handler().postDelayed(() ->
+				animation(1, -1, ANIMATION_TIME, () ->
+						runOnUiThread(() -> {
+							View text = findViewById(R.id.textView);
+							text.setVisibility(View.VISIBLE);
+							text.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
+							text.setOnClickListener(this::imagePickAction);
+							findViewById(R.id.fullscreen_content_controls).setOnClickListener(this::imagePickAction);
+							findViewById(R.id.imageButtonGall).setOnClickListener(this::imagePickAction);
+						})
+				), AFTER_SPLASH_DELAY
+		);
 	}
 
 
@@ -122,10 +143,7 @@ public class StartUpActivity extends AppCompatActivity
 				}
 			} runOnUiThread(() -> {
 				logo.setVisibility(View.GONE);
-				findViewById(R.id.fullscreen_content_controls).setOnClickListener(this::imagePickAction);
-				findViewById(R.id.imageButtonGall).setOnClickListener(this::imagePickAction);
-				findViewById(R.id.textView).setOnClickListener(this::imagePickAction);
-				showAfterSplash();
+				loadAfterSplash();
 			});
 		}).start();
 	}
@@ -178,7 +196,7 @@ public class StartUpActivity extends AppCompatActivity
 							new Handler().postDelayed(() ->
 									runOnUiThread(() -> {
 										startActivity(intent);
-										finish();
+										close();
 									}), NEW_ACTIVITY_DELAY);
 						}), AFTER_SPLASH_DELAY
 				);
@@ -202,6 +220,18 @@ public class StartUpActivity extends AppCompatActivity
 	public AppCompatActivity getActivity() {
 		return this;
 	}
+
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (isClosed) {
+			findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
+			reloadControls();
+			isClosed = false;
+		}
+	}
+
 
 
 }

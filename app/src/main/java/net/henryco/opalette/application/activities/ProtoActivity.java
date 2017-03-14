@@ -186,7 +186,7 @@ public class ProtoActivity extends AppCompatActivity
 						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
 		);
 
-		
+
 
 	}
 
