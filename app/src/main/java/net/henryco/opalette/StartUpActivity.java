@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import net.henryco.opalette.api.utils.OPallUtils;
-import net.henryco.opalette.application.activities.ProtoActivity;
+import net.henryco.opalette.application.activities.MainActivity;
 import net.henryco.opalette.application.fragments.dialogs.PickImageDialog;
 
 
@@ -187,7 +187,7 @@ public class StartUpActivity extends AppCompatActivity
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE) {
-				Intent intent = new Intent(this, ProtoActivity.class);
+				Intent intent = new Intent(this, MainActivity.class);
 				BitmapPack.pushUpBitmap = OPallUtils.loadIntentBitmap(this, data);
 
 				findViewById(R.id.textView).setVisibility(View.GONE);

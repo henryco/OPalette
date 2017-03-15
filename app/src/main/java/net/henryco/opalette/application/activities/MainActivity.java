@@ -13,13 +13,13 @@ import net.henryco.opalette.StartUpActivity;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
-import net.henryco.opalette.api.utils.dialogs.OPallSimpleDialog;
+import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.fragments.ImageOptionFragment;
 import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
 
-public class ProtoActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
 
 
 
@@ -58,7 +58,7 @@ public class ProtoActivity extends AppCompatActivity implements ImageOptionFragm
 			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
 		}
 
-		OPallUniRenderer<ProtoActivity> renderer = new UniRenderer<>(this, new PaletteProgramHorizontal());
+		OPallUniRenderer<MainActivity> renderer = new UniRenderer<>(this, new PaletteProgramHorizontal());
 		renderID = stateRequester.addRequestListener(renderer);
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
@@ -107,7 +107,7 @@ public class ProtoActivity extends AppCompatActivity implements ImageOptionFragm
 
 
 	private void startBackDialog() {
-		new OPallSimpleDialog()
+		new OPallAlertDialog()
 				.title("U SURE?")
 				.message("SURE?")
 				.negative("cancel")

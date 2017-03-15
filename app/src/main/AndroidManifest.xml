@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".application.activities.ProtoActivity"
+            android:name=".application.activities.MainActivity"
             android:label="@string/title_activity_proto"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

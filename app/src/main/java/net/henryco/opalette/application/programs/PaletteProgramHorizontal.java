@@ -18,7 +18,7 @@ import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallObservator;
 import net.henryco.opalette.api.utils.requester.Request;
-import net.henryco.opalette.application.activities.ProtoActivity;
+import net.henryco.opalette.application.activities.MainActivity;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -26,7 +26,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity> {
+public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity> {
 
 
 	private static final int buffer_quantum = 5;
@@ -60,7 +60,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 	@Override
-	public final void create(GL10 gl, int width, int height, ProtoActivity context) {
+	public final void create(GL10 gl, int width, int height, MainActivity context) {
 		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 
@@ -81,7 +81,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 	@Override
-	public final void onSurfaceChange(GL10 gl, ProtoActivity context, int width, int height) {
+	public final void onSurfaceChange(GL10 gl, MainActivity context, int width, int height) {
 		camera2D.set(width, height).update();
 		barGradientBuffer.createFBO(width, height, false);
 		barSrcBuffer.createFBO(width, buffer_quantum, width, height, false).beginFBO(GLESUtils::clear);
@@ -97,7 +97,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<ProtoActivity
 
 
 	@Override
-	public final void onDraw(GL10 gl, ProtoActivity context, int width, int height) {
+	public final void onDraw(GL10 gl, MainActivity context, int width, int height) {
 
 		//RESET CAMERA
 		camera2D.setPosY_absolute(0).update();
