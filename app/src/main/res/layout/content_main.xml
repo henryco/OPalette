@@ -43,9 +43,29 @@
             android:layout_weight="0.31"
             android:visibility="visible">
 
-            <AdapterViewFlipper
+            <HorizontalScrollView
+                android:id="@+id/scrollOptionsView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center"
+                android:fillViewport="false"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <fragment
+                android:id="@+id/optionsFragment"
+                android:name="net.henryco.opalette.application.fragments.ImageOptionFragment"
+                class="net.henryco.opalette.application.fragments.ImageOptionFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

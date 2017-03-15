@@ -1,6 +1,6 @@
 package net.henryco.opalette.application.activities;
 
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -13,14 +13,13 @@ import net.henryco.opalette.StartUpActivity;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
-import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.dialogs.OPallSimpleDialog;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
+import net.henryco.opalette.application.fragments.ImageOptionFragment;
 import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
 
-public class ProtoActivity extends AppCompatActivity
-		implements OPallUtils.ImageLoadable {
+public class ProtoActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
 
 
 
@@ -45,7 +44,6 @@ public class ProtoActivity extends AppCompatActivity
 
 		initialization();
 	}
-
 
 
 
@@ -77,22 +75,12 @@ public class ProtoActivity extends AppCompatActivity
 
 
 
-
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
-			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE) {
-				stateRequester.sendRequest(new Request("LoadImage", OPallUtils.loadIntentBitmap(this, data)));
-			}
-		}
+	public void onFragmentInteraction(Uri uri) {
+
 	}
 
 
-	@Override
-	public ProtoActivity getActivity() {
-		return this;
-	}
 
 
 
@@ -102,6 +90,8 @@ public class ProtoActivity extends AppCompatActivity
 			startBackDialog();
 		return super.onOptionsItemSelected(item);
 	}
+
+
 
 
 	@Override
@@ -115,6 +105,7 @@ public class ProtoActivity extends AppCompatActivity
 		finish();
 	}
 
+
 	private void startBackDialog() {
 		new OPallSimpleDialog()
 				.title("U SURE?")
@@ -123,6 +114,7 @@ public class ProtoActivity extends AppCompatActivity
 				.positive("accept", this::closeActivity)
 		.show(getSupportFragmentManager(), "backDialog");
 	}
+
 
 
 }
