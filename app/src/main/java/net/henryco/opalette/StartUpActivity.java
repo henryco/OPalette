@@ -34,6 +34,7 @@ public class StartUpActivity extends AppCompatActivity
 
 	public static final long AFTER_SPLASH_DELAY = 225;
 	public static final long NEW_ACTIVITY_DELAY = 60;
+	public static final long RESUME_ACTIVITY_DELAY = 500;
 
 	public static final float PICKBUTTON_RADIUS = 0.71f;
 
@@ -227,8 +228,12 @@ public class StartUpActivity extends AppCompatActivity
 	protected void onResume() {
 		super.onResume();
 		if (isClosed) {
-			findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
-			reloadControls(false);
+
+			new Handler().postDelayed(() -> {
+				findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
+				reloadControls(false);
+			}, RESUME_ACTIVITY_DELAY);
+
 			isClosed = false;
 		}
 	}

@@ -110,15 +110,17 @@ public class ProtoActivity extends AppCompatActivity
 	}
 
 
+	private void closeActivity() {
+		super.onBackPressed();
+		finish();
+	}
+
 	private void startBackDialog() {
 		new OPallSimpleDialog()
 				.title("U SURE?")
 				.message("SURE?")
 				.negative("cancel")
-				.positive("accept", () -> {
-					onBackPressed();
-					finish();
-				})
+				.positive("accept", this::closeActivity)
 		.show(getSupportFragmentManager(), "backDialog");
 	}
 
