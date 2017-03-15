@@ -64,7 +64,8 @@
                 android:name="net.henryco.opalette.application.fragments.ImageOptionFragment"
                 class="net.henryco.opalette.application.fragments.ImageOptionFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
 
         </FrameLayout>
     </LinearLayout>
