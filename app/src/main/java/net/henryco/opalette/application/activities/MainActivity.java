@@ -1,5 +1,6 @@
 package net.henryco.opalette.application.activities;
 
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.extended.fragments.ImageOptionFragment;
-import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
+import net.henryco.opalette.application.programs.paletteHorizontal.PaletteProgramHorizontal;
 
 public class MainActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
 
@@ -36,9 +37,10 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -54,6 +56,18 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 
 
 
+	public void switchToFragmentOptions() {
+
+		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
+		findViewById(R.id.optionsFragment).setVisibility(View.VISIBLE);
+		optionsSwitched = true;
+	}
+
+	public void switchToScrollOptionsView() {
+		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
+		findViewById(R.id.optionsFragment).setVisibility(View.GONE);
+		optionsSwitched = false;
+	}
 
 
 
@@ -76,17 +90,10 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
 		);
 
-		initButtons();
+
 	}
 
 
-
-	private void initButtons() {
-		findViewById(R.id.translateButton).setOnClickListener(v -> {
-			switchToFragmentOptions();
-
-		});
-	}
 
 
 	@Override
@@ -132,18 +139,6 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 
 
 
-	private void switchToFragmentOptions() {
-
-		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
-		findViewById(R.id.optionsFragment).setVisibility(View.VISIBLE);
-		optionsSwitched = true;
-	}
-
-	private void switchToScrollOptionsView() {
-		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
-		findViewById(R.id.optionsFragment).setVisibility(View.GONE);
-		optionsSwitched = false;
-	}
 
 
 

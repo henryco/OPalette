@@ -56,47 +56,16 @@
                 android:visibility="visible">
 
                 <LinearLayout
+                    android:id="@+id/scrollContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
 
+                    android:layout_height="match_parent"
                     android:animationCache="false"
                     android:fadeScrollbars="false"
                     android:fadingEdge="none"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/activity_vertical_margin"
                     android:paddingTop="@dimen/activity_vertical_margin">
-
-                    <LinearLayout
-                        android:id="@+id/translateLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-
-
-                        android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:paddingTop="@dimen/activity_vertical_margin">
-
-                        <ImageButton
-                            android:id="@+id/translateButton"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:layout_gravity="center_vertical|center_horizontal|center"
-                            android:background="@android:color/transparent"
-                            android:scaleType="fitCenter"
-                            app:srcCompat="@drawable/ic_open_with_white_24dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom|center"
-                            android:paddingTop="@dimen/activity_vertical_margin"
-                            android:text="translate"
-                            android:textAlignment="center"
-                            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-                            android:textSize="12sp"/>
-                    </LinearLayout>
 
                 </LinearLayout>
             </net.henryco.opalette.api.utils.views.OPallHorizontalScrollView>

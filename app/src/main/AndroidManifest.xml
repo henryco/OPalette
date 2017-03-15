@@ -18,10 +18,12 @@
         <activity
             android:name=".application.activities.MainActivity"
             android:label="@string/title_activity_proto"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".StartUpActivity"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_start_up_activiy"
             android:theme="@style/FullscreenTheme">
