@@ -48,13 +48,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom|center"
+                android:fadingEdgeLength="0dp"
+                android:fadeScrollbars="false"
                 android:fadingEdge="none"
                 android:scrollbarStyle="insideOverlay"
                 android:scrollbars="none"
                 android:visibility="visible">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
 
                     android:animationCache="false"
@@ -66,10 +68,9 @@
 
                     <LinearLayout
                         android:id="@+id/translateLayout"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:orientation="vertical"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
 
@@ -82,7 +83,6 @@
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             android:layout_gravity="center_vertical|center_horizontal|center"
-                            android:layout_weight="1"
                             android:background="@android:color/transparent"
                             android:scaleType="fitCenter"
                             app:srcCompat="@drawable/ic_open_with_white_24dp"/>
@@ -91,7 +91,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom|center"
-                            android:layout_weight="1"
                             android:paddingTop="@dimen/activity_vertical_margin"
                             android:text="translate"
                             android:textAlignment="center"
