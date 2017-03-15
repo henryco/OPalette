@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.fragments;
+package net.henryco.opalette.application.extended.fragments;
 
 import android.content.Context;
 import android.net.Uri;

@@ -17,7 +17,7 @@ import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
-import net.henryco.opalette.application.fragments.ImageOptionFragment;
+import net.henryco.opalette.application.extended.fragments.ImageOptionFragment;
 import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
 
 public class MainActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 		.show(getSupportFragmentManager(), "backDialog");
 	}
 
-	
+
 
 	private void switchToFragmentOptions() {
 

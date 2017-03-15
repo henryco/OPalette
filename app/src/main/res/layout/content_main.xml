@@ -43,11 +43,12 @@
             android:layout_weight="0.31"
             android:visibility="visible">
 
-            <HorizontalScrollView
+            <net.henryco.opalette.api.utils.views.OPallHorizontalScrollView
                 android:id="@+id/scrollOptionsView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom|center"
+                android:fadingEdge="none"
                 android:scrollbarStyle="insideOverlay"
                 android:scrollbars="none"
                 android:visibility="visible">
@@ -56,6 +57,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
 
+                    android:animationCache="false"
+                    android:fadeScrollbars="false"
+                    android:fadingEdge="none"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/activity_vertical_margin"
                     android:paddingTop="@dimen/activity_vertical_margin">
@@ -96,12 +100,12 @@
                     </LinearLayout>
 
                 </LinearLayout>
-            </HorizontalScrollView>
+            </net.henryco.opalette.api.utils.views.OPallHorizontalScrollView>
 
             <fragment
                 android:id="@+id/optionsFragment"
-                android:name="net.henryco.opalette.application.fragments.ImageOptionFragment"
-                class="net.henryco.opalette.application.fragments.ImageOptionFragment"
+                android:name="net.henryco.opalette.application.extended.fragments.ImageOptionFragment"
+                class="net.henryco.opalette.application.extended.fragments.ImageOptionFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"/>

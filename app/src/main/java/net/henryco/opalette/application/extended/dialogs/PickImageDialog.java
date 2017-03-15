@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.fragments.dialogs;
+package net.henryco.opalette.application.extended.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
