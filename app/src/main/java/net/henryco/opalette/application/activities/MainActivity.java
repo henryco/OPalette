@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.StartUpActivity;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 
 
 	long renderID = 0;
+	boolean optionsSwitched = false;
 
 	private void initialization() {
 
@@ -70,9 +72,29 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
 		);
 
-
+		initButtons();
 	}
 
+
+	private void switchToFragmentOptions() {
+
+		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
+		findViewById(R.id.optionsFragment).setVisibility(View.VISIBLE);
+		optionsSwitched = true;
+	}
+
+	private void switchToScrollOptionsView() {
+		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
+		findViewById(R.id.optionsFragment).setVisibility(View.GONE);
+		optionsSwitched = false;
+	}
+
+	private void initButtons() {
+		findViewById(R.id.translateButton).setOnClickListener(v -> {
+			switchToFragmentOptions();
+
+		});
+	}
 
 
 	@Override
@@ -96,7 +118,8 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 
 	@Override
 	public void onBackPressed() {
-		startBackDialog();
+		if (!optionsSwitched) startBackDialog();
+		else switchToScrollOptionsView();
 	}
 
 
