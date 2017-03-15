@@ -18,7 +18,7 @@ import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallObservator;
 import net.henryco.opalette.api.utils.requester.Request;
-import net.henryco.opalette.api.utils.views.OPallSmartLayerInjector;
+import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.activities.MainActivity;
 import net.henryco.opalette.application.programs.paletteHorizontal.controlls.PPHTranslation;
 
@@ -64,7 +64,10 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 	@Override
 	public final void create(GL10 gl, int width, int height, MainActivity context) {
 
-		OPallSmartLayerInjector.inject(context, new PPHTranslation());
+		OPallViewInjector.inject(context, new PPHTranslation());
+		OPallViewInjector.inject(context, new PPHTranslation());
+		OPallViewInjector.inject(context, new PPHTranslation());
+		OPallViewInjector.inject(context, new PPHTranslation());
 
 		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));

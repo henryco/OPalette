@@ -1,6 +1,7 @@
 package net.henryco.opalette.api.utils.views;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,13 @@ import android.view.ViewGroup;
  * Created by HenryCo on 15/03/17.
  */
 
-public abstract class OPallSmartLayerInjector <T extends AppCompatActivity> {
+public abstract class OPallViewInjector<T extends AppCompatActivity> {
+
+
 
 
 	@SuppressWarnings("unchecked")
-	public static void inject(AppCompatActivity context, OPallSmartLayerInjector injector) {
+	public static void inject(AppCompatActivity context, OPallViewInjector injector, long delay) {
 		context.runOnUiThread(() -> {
 			View view = ((LayoutInflater) context.getApplicationContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(injector.ids[1], null);
@@ -27,18 +30,29 @@ public abstract class OPallSmartLayerInjector <T extends AppCompatActivity> {
 						injector.getClass().getName()
 				);
 			}
+			view.setVisibility(View.GONE);
 			insertGroup.addView(view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+
+			new Handler().postDelayed(() -> context.runOnUiThread(() -> {
+				view.setVisibility(View.VISIBLE);
+				injector.onPostInject(context, view);
+			}), delay);
+
+
 		});
+	}
+	public static void inject(AppCompatActivity context, OPallViewInjector injector) {
+		inject(context, injector, 0);
 	}
 
 
 	protected abstract void onInject(T context, View view);
 	private final int[] ids;
 
-	public OPallSmartLayerInjector(int container, int layer) {
+	public OPallViewInjector(int container, int layer) {
 		ids = new int[]{container, layer};
 	}
 
-
+	public void onPostInject(T context, View view) {}
 
 }
