@@ -27,6 +27,11 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 	private final OPallRequester stateRequester = new OPallRequester();
 
 
+	boolean optionsSwitched = false;
+	long renderID = 0;
+
+
+
 
 
 	@Override
@@ -51,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 
 
 
-	long renderID = 0;
-	boolean optionsSwitched = false;
+
 
 	private void initialization() {
 
@@ -76,18 +80,6 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 	}
 
 
-	private void switchToFragmentOptions() {
-
-		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
-		findViewById(R.id.optionsFragment).setVisibility(View.VISIBLE);
-		optionsSwitched = true;
-	}
-
-	private void switchToScrollOptionsView() {
-		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
-		findViewById(R.id.optionsFragment).setVisibility(View.GONE);
-		optionsSwitched = false;
-	}
 
 	private void initButtons() {
 		findViewById(R.id.translateButton).setOnClickListener(v -> {
@@ -137,6 +129,22 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 				.positive("accept", this::closeActivity)
 		.show(getSupportFragmentManager(), "backDialog");
 	}
+
+	
+
+	private void switchToFragmentOptions() {
+
+		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
+		findViewById(R.id.optionsFragment).setVisibility(View.VISIBLE);
+		optionsSwitched = true;
+	}
+
+	private void switchToScrollOptionsView() {
+		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
+		findViewById(R.id.optionsFragment).setVisibility(View.GONE);
+		optionsSwitched = false;
+	}
+
 
 
 
