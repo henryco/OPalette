@@ -16,10 +16,10 @@ import net.henryco.opalette.application.activities.MainActivity;
 import net.henryco.opalette.application.programs.controlls.PPHTranslation;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
-import net.henryco.opalette.application.programs.sub.GradientBarProgram;
-import net.henryco.opalette.application.programs.sub.ImageProgram;
-import net.henryco.opalette.application.programs.sub.PaletteBarProgram;
-import net.henryco.opalette.application.programs.sub.TouchLinesProgram;
+import net.henryco.opalette.application.programs.sub.programs.GradientBarProgram;
+import net.henryco.opalette.application.programs.sub.programs.ImageProgram;
+import net.henryco.opalette.application.programs.sub.programs.PaletteBarProgram;
+import net.henryco.opalette.application.programs.sub.programs.TouchLinesProgram;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +53,9 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 		this.id = id;
 
 		subPrograms = new ArrayList<>();
-
 		requestSender = new RequestSender();
+
+
 
 		ImageProgram imageProgram = new ImageProgram();
 		requestSender.addRequestListener(imageProgram);
@@ -99,9 +100,9 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox();
 
-		for (AppSubProgram<MainActivity> asp : subPrograms)
+		for (AppSubProgram<MainActivity> asp : subPrograms) {
 			asp.create(gl, width, height, context);
-
+		}
 
 	}
 
@@ -113,8 +114,9 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 		camera2D.set(width, height).update();
 		chessBox.setScreenDim(width, height);
 
-		for (AppSubProgram<MainActivity> asp : subPrograms)
+		for (AppSubProgram<MainActivity> asp : subPrograms) {
 			asp.onSurfaceChange(gl, context, width, height);
+		}
 
 	}
 
@@ -123,15 +125,14 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 	@Override
 	public final void onDraw(GL10 gl, MainActivity context, int width, int height) {
 
-		//RESET CAMERA
 		camera2D.setPosY_absolute(0).update();
-
-		GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
+		GLESUtils.clear();
 		chessBox.render(camera2D);
 
 		if (uCan) {
-			for (AppSubProgram<MainActivity> asp : subPrograms)
+			for (AppSubProgram<MainActivity> asp : subPrograms) {
 				asp.render(gl, context, camera2D, width, height);
+			}
 		}
 
 
@@ -155,12 +156,11 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 
 	@Override
 	public void acceptRequest(Request request) {
+
 		request.openRequest("loadImage", () -> {
-
-			Bitmap image = request.getData();
-			requestSender.sendRequest(new Request(set_first_image, image));
-
 			uCan = true;
+			requestSender.sendRequest(new Request(set_first_image, (Bitmap)request.getData()));
+			observator.update();
 		});
 	}
 

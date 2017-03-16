@@ -52,11 +52,13 @@ public class StartUpActivity extends AppCompatActivity
 
 	private boolean isClosed = false;
 
-
-	private void close() {
+	private void disableButtons() {
 		findViewById(R.id.fullscreen_content_controls).setOnClickListener(v -> {});
 		findViewById(R.id.imageButtonGall).setOnClickListener(v -> {});
 		findViewById(R.id.textView).setOnClickListener(v -> {});
+	}
+
+	private void close() {
 		isClosed = true;
 	}
 
@@ -187,6 +189,9 @@ public class StartUpActivity extends AppCompatActivity
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE) {
+
+				disableButtons();
+
 				Intent intent = new Intent(this, MainActivity.class);
 				BitmapPack.pushUpBitmap = OPallUtils.loadIntentBitmap(this, data);
 
