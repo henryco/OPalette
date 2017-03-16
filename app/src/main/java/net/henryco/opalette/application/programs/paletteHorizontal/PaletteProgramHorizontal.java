@@ -16,7 +16,7 @@ import net.henryco.opalette.api.glES.render.graphics.units.bar.BarHorizontal;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.OPallBar;
 import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.observer.OPallObservator;
+import net.henryco.opalette.api.utils.observer.OPallObserver;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.activities.MainActivity;
@@ -48,7 +48,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 	private TouchLines touchLines;
 	private CellPaletter cellPaletter;
 
-	private OPallObservator observator;
+	private OPallObserver observator;
 	private OPallBar backBar;
 
 	public PaletteProgramHorizontal(){
@@ -61,13 +61,12 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 
 
 
+
 	@Override
 	public final void create(GL10 gl, int width, int height, MainActivity context) {
 
 		OPallViewInjector.inject(context, new PPHTranslation());
-		OPallViewInjector.inject(context, new PPHTranslation());
-		OPallViewInjector.inject(context, new PPHTranslation());
-		OPallViewInjector.inject(context, new PPHTranslation());
+
 
 		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
@@ -120,6 +119,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 			imageBuffer.beginFBO(() -> imageTexture.render(camera2D, program -> GLESUtils.clear()));
 			imageBuffer.render(camera2D);
 
+
 			multiTexture.set(0, imageBuffer.getTexture());
 			multiTexture.set(1, barSrcBuffer.getTexture());
 			multiTexture.setFocusOn(1);
@@ -146,7 +146,7 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 
 
 	@Override
-	public void setObservator(OPallObservator observator) {
+	public void setObservator(OPallObserver observator) {
 		this.observator = observator;
 	}
 

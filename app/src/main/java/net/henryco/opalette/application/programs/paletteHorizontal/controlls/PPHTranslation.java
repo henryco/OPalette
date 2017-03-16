@@ -19,6 +19,8 @@ public class PPHTranslation extends OPallViewInjector<MainActivity> {
 
 	public PPHTranslation() {
 		super(R.id.scrollContainer, R.layout.image_option);
+
+
 	}
 
 

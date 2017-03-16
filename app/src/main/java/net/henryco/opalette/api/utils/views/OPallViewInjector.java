@@ -38,7 +38,6 @@ public abstract class OPallViewInjector<T extends AppCompatActivity> {
 				injector.onPostInject(context, view);
 			}), delay);
 
-
 		});
 	}
 	public static void inject(AppCompatActivity context, OPallViewInjector injector) {
