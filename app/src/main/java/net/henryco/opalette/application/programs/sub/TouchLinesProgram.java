@@ -2,7 +2,7 @@ package net.henryco.opalette.application.programs.sub;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.utils.requester.OPallRequestListener;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -12,12 +12,19 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class TouchLinesProgram implements AppSubProgram<MainActivity, Texture>, AppSubProtocol {
+public class TouchLinesProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 	private final static long id = methods.genID(TouchLinesProgram.class);
 
 	private TouchLines touchLines;
 
+	private OPallRequestListener feedBackListener;
+
+
+	@Override
+	public void setFeedBackListener(OPallRequestListener feedBackListener) {
+		this.feedBackListener = feedBackListener;
+	}
 
 	@Override
 	public void acceptRequest(Request request) {

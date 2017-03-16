@@ -5,6 +5,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.BarHorizontal;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.OPallBar;
 import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
+import net.henryco.opalette.api.utils.requester.OPallRequestListener;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -14,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class PaletteBarProgram implements AppSubProgram<MainActivity, Texture>, AppSubProtocol {
+public class PaletteBarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 	private static final long id = methods.genID(PaletteBarProgram.class);
 
@@ -25,6 +26,14 @@ public class PaletteBarProgram implements AppSubProgram<MainActivity, Texture>, 
 	private Texture externalRenderSource;
 
 	private int buffer_quantum = 5;
+
+	private OPallRequestListener feedBackListener;
+
+
+	@Override
+	public void setFeedBackListener(OPallRequestListener feedBackListener) {
+		this.feedBackListener = feedBackListener;
+	}
 
 	@Override
 	public void acceptRequest(Request request) {

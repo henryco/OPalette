@@ -9,6 +9,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTextu
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.requester.OPallRequestListener;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -18,7 +19,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class GradientBarProgram implements AppSubProgram<MainActivity, Texture>, AppSubProtocol {
+public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 	private final static long id = methods.genID(GradientBarProgram.class);
 
@@ -33,6 +34,12 @@ public class GradientBarProgram implements AppSubProgram<MainActivity, Texture>,
 	private float externalBarHeight = 0;
 	private int buffer_quantum = 5;
 
+	private OPallRequestListener feedBackListener;
+
+	@Override
+	public void setFeedBackListener(OPallRequestListener feedBackListener) {
+		this.feedBackListener = feedBackListener;
+	}
 
 	@Override
 	public void acceptRequest(Request request) {

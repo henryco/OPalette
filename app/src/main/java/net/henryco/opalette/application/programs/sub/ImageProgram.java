@@ -3,9 +3,9 @@ package net.henryco.opalette.application.programs.sub;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.requester.OPallRequestListener;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -15,14 +15,19 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class ImageProgram implements AppSubProgram<MainActivity, Texture>, AppSubProtocol {
+public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 	private final static long id = methods.genID(ImageProgram.class);
 
 	private FrameBuffer imageBuffer;
 	private EdTexture imageTexture;
 
+	private OPallRequestListener feedBackListener;
 
+	@Override
+	public void setFeedBackListener(OPallRequestListener feedBackListener) {
+		this.feedBackListener = feedBackListener;
+	}
 
 	@Override
 	public void acceptRequest(Request request) {
