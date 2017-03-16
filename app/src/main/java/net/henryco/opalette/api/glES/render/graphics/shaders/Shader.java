@@ -95,10 +95,10 @@ public abstract class Shader implements OPallShader {
 	}
 
 
-	protected float getScreenWidth() {
+	public float getScreenWidth() {
 		return screenWidth;
 	}
-	protected float getScreenHeight() {
+	public float getScreenHeight() {
 		return screenHeight;
 	}
 

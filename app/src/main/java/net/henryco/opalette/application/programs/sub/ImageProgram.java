@@ -5,7 +5,7 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.requester.OPallRequestListener;
+import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -22,16 +22,25 @@ public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol
 	private FrameBuffer imageBuffer;
 	private EdTexture imageTexture;
 
-	private OPallRequestListener feedBackListener;
+	private OPallRequester feedBackListener;
 
 	@Override
-	public void setFeedBackListener(OPallRequestListener feedBackListener) {
+	public void setFeedBackListener(OPallRequester feedBackListener) {
 		this.feedBackListener = feedBackListener;
 	}
 
 	@Override
 	public void acceptRequest(Request request) {
-		// TODO
+		request.openRequest(set_first_image, () -> {
+			imageTexture.setBitmap(request.getData());
+			float scrWidth = imageTexture.getScreenWidth();
+			float w = imageTexture.getWidth();
+			float h = imageTexture.getHeight();
+			float scale = scrWidth / w;
+			imageTexture.bounds(b -> b.setScale(scale));
+
+			feedBackListener.sendRequest(new Request(set_touch_lines_def_size, scrWidth, h * scale));
+		});
 	}
 
 	@Override
@@ -47,6 +56,7 @@ public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol
 
 		imageBuffer = OPallFBOCreator.FrameBuffer();
 		imageTexture = new EdTexture();
+		imageTexture.setScreenDim(width, height);
 	}
 
 
@@ -65,6 +75,7 @@ public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol
 
 		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
 		imageBuffer.render(camera);
+		feedBackListener.sendRequest(new Request(send_first_image_buffer, imageBuffer.getTexture()));
 	}
 
 

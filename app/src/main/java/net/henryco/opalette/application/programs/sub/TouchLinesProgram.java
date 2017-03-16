@@ -2,7 +2,7 @@ package net.henryco.opalette.application.programs.sub;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
-import net.henryco.opalette.api.utils.requester.OPallRequestListener;
+import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -18,17 +18,21 @@ public class TouchLinesProgram implements AppSubProgram<MainActivity>, AppSubPro
 
 	private TouchLines touchLines;
 
-	private OPallRequestListener feedBackListener;
+	private OPallRequester feedBackListener;
 
 
 	@Override
-	public void setFeedBackListener(OPallRequestListener feedBackListener) {
+	public void setFeedBackListener(OPallRequester feedBackListener) {
 		this.feedBackListener = feedBackListener;
 	}
 
 	@Override
 	public void acceptRequest(Request request) {
-
+		request.openRequest(set_touch_lines_def_size, () -> {
+			float w = request.getData(0);
+			float h = request.getData(1);
+			touchLines.setDefaultSize(w, h).setVisible(true).reset();
+		});
 	}
 
 	@Override
@@ -39,12 +43,13 @@ public class TouchLinesProgram implements AppSubProgram<MainActivity>, AppSubPro
 	@Override
 	public void create(GL10 gl, int width, int height, MainActivity context) {
 		touchLines = new TouchLines(width, height);
-
+		sendCoeffInfo();
 	}
 
 	@Override
 	public void onSurfaceChange(GL10 gl, MainActivity context, int width, int height) {
 		touchLines.setScreenDim(width, height);
+		sendCoeffInfo();
 	}
 
 	@Override
@@ -52,4 +57,8 @@ public class TouchLinesProgram implements AppSubProgram<MainActivity>, AppSubPro
 		touchLines.render(camera);
 	}
 
+
+	private void sendCoeffInfo() {
+		feedBackListener.sendRequest(new Request(send_line_coeffs, touchLines.getCoefficients()));
+	}
 }

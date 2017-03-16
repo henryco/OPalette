@@ -6,5 +6,5 @@ package net.henryco.opalette.api.utils.requester;
 
 public interface OPallRequestFeedBack {
 
-	void setFeedBackListener(OPallRequestListener feedBackListener);
+	void setFeedBackListener(OPallRequester feedBackListener);
 }

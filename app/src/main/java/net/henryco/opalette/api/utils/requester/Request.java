@@ -125,4 +125,10 @@ public class Request {
 	public <T> T getData() {
 		return (T) data;
 	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T getData(int index) {
+		Object[] dataArr = (Object[]) data;
+		return (T) (dataArr != null ? dataArr[index] : null);
+	}
 }

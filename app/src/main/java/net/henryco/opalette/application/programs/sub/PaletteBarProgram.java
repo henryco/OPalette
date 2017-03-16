@@ -5,7 +5,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.BarHorizontal;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.OPallBar;
 import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
-import net.henryco.opalette.api.utils.requester.OPallRequestListener;
+import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -27,18 +27,18 @@ public class PaletteBarProgram implements AppSubProgram<MainActivity>, AppSubPro
 
 	private int buffer_quantum = 5;
 
-	private OPallRequestListener feedBackListener;
+	private OPallRequester feedBackListener;
 
 
 	@Override
-	public void setFeedBackListener(OPallRequestListener feedBackListener) {
+	public void setFeedBackListener(OPallRequester feedBackListener) {
 		this.feedBackListener = feedBackListener;
 	}
 
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest(set_buffer_quantum, () -> this.buffer_quantum = request.getData());
-		request.openRequest(set_palette_bar_source, () -> this.externalRenderSource = request.getData());
+		request.openRequest(send_bar_gradient_buffer, () -> this.externalRenderSource = request.getData());
 	}
 
 	@Override
@@ -51,6 +51,7 @@ public class PaletteBarProgram implements AppSubProgram<MainActivity>, AppSubPro
 
 		cellPaletter = new CellPaletter();
 		backBar = new BarHorizontal();
+		senBarHeightInfo();
 	}
 
 	@Override
@@ -58,6 +59,7 @@ public class PaletteBarProgram implements AppSubProgram<MainActivity>, AppSubPro
 
 		backBar.createBar(width, height);
 		cellPaletter.setScreenDim(width, height);
+		senBarHeightInfo();
 	}
 
 	@Override
@@ -68,4 +70,8 @@ public class PaletteBarProgram implements AppSubProgram<MainActivity>, AppSubPro
 	}
 
 
+
+	private void senBarHeightInfo() {
+		feedBackListener.sendRequest(new Request(send_back_bar_height, backBar.getHeight()));
+	}
 }

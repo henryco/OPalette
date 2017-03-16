@@ -9,7 +9,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTextu
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.requester.OPallRequestListener;
+import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -34,19 +34,19 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	private float externalBarHeight = 0;
 	private int buffer_quantum = 5;
 
-	private OPallRequestListener feedBackListener;
+	private OPallRequester feedBackListener;
 
 	@Override
-	public void setFeedBackListener(OPallRequestListener feedBackListener) {
+	public void setFeedBackListener(OPallRequester feedBackListener) {
 		this.feedBackListener = feedBackListener;
 	}
 
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest(set_buffer_quantum, () -> buffer_quantum = request.getData());
-		request.openRequest(set_back_bar_height, () -> externalBarHeight = request.getData());
-		request.openRequest(set_line_coeffs, () -> externalLineCoeffs = request.getData());
-		request.openRequest(set_grad_bar_source, () -> externalSource = request.getData());
+		request.openRequest(send_back_bar_height, () -> externalBarHeight = request.getData());
+		request.openRequest(send_line_coeffs, () -> externalLineCoeffs = request.getData());
+		request.openRequest(send_first_image_buffer, () -> externalSource = request.getData());
 	}
 
 	@Override
@@ -84,6 +84,7 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 			GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, externalLineCoeffs, 0);
 		}));
 
+		feedBackListener.sendRequest(new Request(send_bar_gradient_buffer, barGradientBuffer.getTexture()));
 	}
 
 

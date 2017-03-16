@@ -16,8 +16,8 @@ import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRende
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
-import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
+import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.extended.fragments.ImageOptionFragment;
 import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
 
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 
 
 
-	private final OPallRequester stateRequester = new OPallRequester();
+	private final RequestSender stateRequester = new RequestSender();
 
 
 	boolean optionsSwitched = false;
