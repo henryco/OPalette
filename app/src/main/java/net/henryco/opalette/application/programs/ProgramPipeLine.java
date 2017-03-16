@@ -14,10 +14,10 @@ import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.activities.MainActivity;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
-import net.henryco.opalette.application.programs.sub.programs.GradientBarProgram;
-import net.henryco.opalette.application.programs.sub.programs.ImageProgram;
-import net.henryco.opalette.application.programs.sub.programs.PaletteBarProgram;
-import net.henryco.opalette.application.programs.sub.programs.TouchLinesProgram;
+import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
+import net.henryco.opalette.application.programs.sub.programs.image.ImageProgram;
+import net.henryco.opalette.application.programs.sub.programs.palette.PaletteBarProgram;
+import net.henryco.opalette.application.programs.sub.programs.touch.TouchLinesProgram;
 
 import java.util.ArrayList;
 import java.util.List;

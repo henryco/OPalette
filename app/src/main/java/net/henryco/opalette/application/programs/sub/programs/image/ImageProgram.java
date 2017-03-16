@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.sub.programs;
+package net.henryco.opalette.application.programs.sub.programs.image;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
@@ -9,7 +9,6 @@ import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.activities.MainActivity;
-import net.henryco.opalette.application.programs.controlls.PPHTranslation;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 
@@ -58,7 +57,8 @@ public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol
 	@Override
 	public void create(GL10 gl, int width, int height, MainActivity context) {
 
-		OPallViewInjector.inject(context, new PPHTranslation());
+		OPallViewInjector.inject(context, new ColorControl());
+		OPallViewInjector.inject(context, new TranslationControl());
 
 		imageBuffer = OPallFBOCreator.FrameBuffer();
 		imageTexture = new EdTexture();
@@ -83,6 +83,9 @@ public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol
 		imageBuffer.render(camera);
 		feedBackListener.sendRequest(new Request(send_first_image_buffer, imageBuffer.getTexture()));
 	}
+
+
+
 
 
 }

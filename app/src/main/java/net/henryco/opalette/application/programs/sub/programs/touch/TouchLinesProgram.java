@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.sub.programs;
+package net.henryco.opalette.application.programs.sub.programs.touch;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;

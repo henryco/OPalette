@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.sub.programs;
+package net.henryco.opalette.application.programs.sub.programs.gradient;
 
 import android.opengl.GLES20;
 

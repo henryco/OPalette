@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.controlls;
+package net.henryco.opalette.application.programs.sub.programs.image;
 
 import android.view.View;
 import android.widget.ImageButton;
@@ -9,26 +9,22 @@ import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.activities.MainActivity;
 
 /**
- * Created by HenryCo on 15/03/17.
+ * Created by HenryCo on 16/03/17.
  */
 
-public class PPHTranslation extends OPallViewInjector<MainActivity> {
+public class ColorControl extends OPallViewInjector<MainActivity> {
 
 
-
-
-	public PPHTranslation() {
+	public ColorControl() {
 		super(R.id.scrollContainer, R.layout.image_option);
 
-
 	}
-
 
 	@Override
 	protected void onInject(MainActivity context, View view) {
 
 		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
-		textView.setText("translate");
+		textView.setText("color");
 
 		ImageButton imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
 		imageButton.setImageResource(R.drawable.ic_translate_white_24dp);
@@ -36,13 +32,14 @@ public class PPHTranslation extends OPallViewInjector<MainActivity> {
 
 	}
 
-
 	@Override
 	public void onPostInject(MainActivity context, View view) {
 
 		view.setOnClickListener(v -> {
 			synchronized (context) {
 				context.switchToFragmentOptions();
+
+
 			}
 		});
 
