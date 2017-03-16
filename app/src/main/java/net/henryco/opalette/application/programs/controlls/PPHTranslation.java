@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.paletteHorizontal.controlls;
+package net.henryco.opalette.application.programs.controlls;
 
 import android.view.View;
 import android.widget.ImageButton;

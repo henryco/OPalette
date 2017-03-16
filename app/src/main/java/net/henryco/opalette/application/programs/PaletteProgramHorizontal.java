@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.paletteHorizontal;
+package net.henryco.opalette.application.programs;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
@@ -20,7 +20,7 @@ import net.henryco.opalette.api.utils.observer.OPallObserver;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.activities.MainActivity;
-import net.henryco.opalette.application.programs.paletteHorizontal.controlls.PPHTranslation;
+import net.henryco.opalette.application.programs.controlls.PPHTranslation;
 
 import javax.microedition.khronos.opengles.GL10;
 

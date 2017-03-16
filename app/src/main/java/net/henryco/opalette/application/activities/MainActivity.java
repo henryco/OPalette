@@ -19,7 +19,7 @@ import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.extended.fragments.ImageOptionFragment;
-import net.henryco.opalette.application.programs.paletteHorizontal.PaletteProgramHorizontal;
+import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
 
 public class MainActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
 
