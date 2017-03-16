@@ -19,7 +19,7 @@ import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.extended.fragments.ImageOptionFragment;
-import net.henryco.opalette.application.programs.PaletteProgramHorizontal;
+import net.henryco.opalette.application.programs.ProgramPipeLine;
 
 public class MainActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
 		}
 
-		OPallUniRenderer<MainActivity> renderer = new UniRenderer<>(this, new PaletteProgramHorizontal());
+		OPallUniRenderer<MainActivity> renderer = new UniRenderer<>(this, new ProgramPipeLine());
 		renderID = stateRequester.addRequestListener(renderer);
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);

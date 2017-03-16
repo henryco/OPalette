@@ -30,7 +30,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>, AppSubProtocol {
+public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubProtocol {
 
 
 	private final long id;
@@ -46,10 +46,10 @@ public class PaletteProgramHorizontal implements OPallUnderProgram<MainActivity>
 	private List<AppSubProgram<MainActivity>> subPrograms;
 
 
-	public PaletteProgramHorizontal(){
+	public ProgramPipeLine(){
 		this(OPallUnderProgram.methods.genID());
 	}
-	public PaletteProgramHorizontal(long id){
+	public ProgramPipeLine(long id){
 		this.id = id;
 
 		subPrograms = new ArrayList<>();
