@@ -54,9 +54,7 @@ public class UniRenderer<T extends Context> extends OPallUniRenderer<T> implemen
 	 * Optional method can be override
 	 * @param request - delegated request
 	 */
-	protected void acceptDelegatedRequest(Request request) {
-		// DO NOTHING
-	}
+	protected void acceptDelegatedRequest(Request request) {}
 
 	/**
 	 * Final method, if u want handle requests, override {acceptDelegatedRequest}

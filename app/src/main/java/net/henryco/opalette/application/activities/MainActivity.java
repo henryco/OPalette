@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 		oPallSurfaceView.setRenderer(renderer);
 
 		oPallSurfaceView.addToGLContextQueue(gl ->
-				stateRequester.sendRequest(new Request("LoadImage",
+				stateRequester.sendNonSyncRequest(new Request("LoadImage",
 						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
 		);
 

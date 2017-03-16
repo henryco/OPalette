@@ -98,7 +98,7 @@ public class FrameBuffer implements OPallFBO {
 	@Override
 	public FrameBuffer setTargetTexture(OPallTexture targetTexture) {
 		if (!(targetTexture instanceof Texture))
-			throw new RuntimeException("<targetTexture> must be the <Texture> instance!");
+			throw new RuntimeException("[targetTexture] must be the <Texture> instance!");
 		this.texture = (Texture) targetTexture;
 		setFlip(flip);
 		return this;

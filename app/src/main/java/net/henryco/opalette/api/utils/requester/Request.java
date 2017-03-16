@@ -89,6 +89,7 @@ public class Request {
 	}
 
 
+
 	public void openRequest(Runnable r) {
 		r.run();
 		closeRequest();
@@ -116,7 +117,7 @@ public class Request {
 	}
 
 	public boolean checkRequest(int requestID, String request, boolean and_or) {
-		if (and_or == AND) return requestID == this.requestID && request.equalsIgnoreCase(this.request);
+		if (and_or != OR) return requestID == this.requestID && request.equalsIgnoreCase(this.request);
 		return requestID == this.requestID || request.equalsIgnoreCase(this.request);
 	}
 

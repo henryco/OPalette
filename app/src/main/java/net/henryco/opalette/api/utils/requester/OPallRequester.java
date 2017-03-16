@@ -40,6 +40,11 @@ public class OPallRequester {
 	}
 
 
+	public OPallRequester sendNonSyncRequest(Request request) {
+		new Thread(() -> sendRequest(request)).start();
+		return this;
+	}
+
 	public OPallRequester sendRequest(Request request) {
 
 		long[] dest = request.destination.getDestinations();
