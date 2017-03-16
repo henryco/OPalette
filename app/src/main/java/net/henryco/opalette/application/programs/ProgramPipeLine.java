@@ -11,9 +11,7 @@ import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallObserver;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
-import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.activities.MainActivity;
-import net.henryco.opalette.application.programs.controlls.PPHTranslation;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.GradientBarProgram;
@@ -30,7 +28,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubProtocol {
+public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubProtocol, MainActivity.AppMainProtocol {
 
 
 	private final long id;
@@ -40,45 +38,36 @@ public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubP
 	private ChessBox chessBox;
 
 	private OPallObserver observator;
-
 	private RequestSender requestSender;
-
 	private List<AppSubProgram<MainActivity>> subPrograms;
+
+	@SuppressWarnings("unchecked")
+	public static AppSubProgram<MainActivity>[] getDefaultPipeLineArray() {
+		return new AppSubProgram[] {
+				new ImageProgram(),
+				new GradientBarProgram(),
+				new TouchLinesProgram(),
+				new PaletteBarProgram()
+		};
+	}
 
 
 	public ProgramPipeLine(){
 		this(OPallUnderProgram.methods.genID());
 	}
 	public ProgramPipeLine(long id){
+
 		this.id = id;
 
 		subPrograms = new ArrayList<>();
 		requestSender = new RequestSender();
 
-
-
-		ImageProgram imageProgram = new ImageProgram();
-		requestSender.addRequestListener(imageProgram);
-		imageProgram.setFeedBackListener(requestSender);
-		subPrograms.add(imageProgram);
-
-		GradientBarProgram gradientBarProgram = new GradientBarProgram();
-		requestSender.addRequestListener(gradientBarProgram);
-		gradientBarProgram.setFeedBackListener(requestSender);
-		subPrograms.add(gradientBarProgram);
-
-		TouchLinesProgram touchLinesProgram = new TouchLinesProgram();
-		requestSender.addRequestListener(touchLinesProgram);
-		touchLinesProgram.setFeedBackListener(requestSender);
-		subPrograms.add(touchLinesProgram);
-
-		PaletteBarProgram paletteBarProgram = new PaletteBarProgram();
-		requestSender.addRequestListener(paletteBarProgram);
-		paletteBarProgram.setFeedBackListener(requestSender);
-		subPrograms.add(paletteBarProgram);
-
-
-
+		AppSubProgram<MainActivity>[] pipeLine = getDefaultPipeLineArray();
+		for (AppSubProgram<MainActivity> abs : pipeLine){
+			requestSender.addRequestListener(abs);
+			abs.setFeedBackListener(requestSender);
+			subPrograms.add(abs);
+		}
 
 	}
 
@@ -88,9 +77,6 @@ public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubP
 
 	@Override
 	public final void create(GL10 gl, int width, int height, MainActivity context) {
-
-		OPallViewInjector.inject(context, new PPHTranslation());
-
 
 		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
@@ -157,7 +143,7 @@ public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubP
 	@Override
 	public void acceptRequest(Request request) {
 
-		request.openRequest("loadImage", () -> {
+		request.openRequest(send_bitmap_to_program, () -> {
 			uCan = true;
 			requestSender.sendRequest(new Request(set_first_image, (Bitmap)request.getData()));
 			observator.update();

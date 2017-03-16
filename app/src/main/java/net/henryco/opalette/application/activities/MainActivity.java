@@ -24,6 +24,10 @@ import net.henryco.opalette.application.programs.ProgramPipeLine;
 public class MainActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
 
 
+	public interface AppMainProtocol {
+		int send_bitmap_to_program = 233938111;
+	}
+
 
 	private final RequestSender stateRequester = new RequestSender();
 
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 		oPallSurfaceView.setRenderer(renderer);
 
 		oPallSurfaceView.addToGLContextQueue(gl ->
-				stateRequester.sendNonSyncRequest(new Request("LoadImage",
+				stateRequester.sendNonSyncRequest(new Request(AppMainProtocol.send_bitmap_to_program,
 						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
 		);
 
