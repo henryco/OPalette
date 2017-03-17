@@ -1,12 +1,11 @@
 package net.henryco.opalette.application.programs.sub.programs.image;
 
-import android.os.Handler;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.activities.MainActivity;
 
@@ -39,14 +38,14 @@ public class ColorControl extends OPallViewInjector<MainActivity> {
 	@Override
 	public void onPostInject(MainActivity context, View view) {
 
-		view.setOnClickListener(v -> {
-			imageButton.startAnimation(AnimationUtils.loadAnimation(context, R.anim.press_75pct_225ms));
-			new Handler().postDelayed(() -> {
-				synchronized (context) {
-					context.runOnUiThread(context::switchToFragmentOptions);
-				}
-			}, 180);
-		});
+		view.setOnClickListener(v ->
+				OPallUtils.pressButton75_225(context, imageButton, () -> {
+					synchronized (context) {
+						context.runOnUiThread(context::switchToFragmentOptions);
+					}
+				})
+		);
+
 	}
 
 
