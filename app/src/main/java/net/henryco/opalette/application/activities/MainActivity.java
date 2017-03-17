@@ -1,5 +1,7 @@
 package net.henryco.opalette.application.activities;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 	private final RequestSender stateRequester = new RequestSender();
 
 
+	private Fragment actualFragment = null;
 	boolean optionsSwitched = false;
 	long renderID = 0;
 
@@ -58,17 +61,32 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-	public void switchToFragmentOptions() {
+	public void switchToFragmentOptions(Fragment fragment) {
+
+		if (fragment != null) {
+			FragmentTransaction fragmentTransaction = getFragmentManager()
+					.beginTransaction().add(R.id.fragmentContainer, fragment);
+			fragmentTransaction.commit();
+		}
 
 		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
 		findViewById(R.id.fragmentContainer).setVisibility(View.VISIBLE);
+
 		optionsSwitched = true;
+		actualFragment = fragment;
 	}
 
 	public void switchToScrollOptionsView() {
+
+		if (actualFragment != null) {
+			getFragmentManager().beginTransaction().remove(actualFragment).commit();
+		}
+
 		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
 		findViewById(R.id.fragmentContainer).setVisibility(View.GONE);
+
 		optionsSwitched = false;
+		actualFragment = null;
 	}
 
 

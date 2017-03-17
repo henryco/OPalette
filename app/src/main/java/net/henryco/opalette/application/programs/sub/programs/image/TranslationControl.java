@@ -42,7 +42,7 @@ public class TranslationControl extends OPallViewInjector<MainActivity> {
 
 		view.setOnClickListener(v -> {
 			synchronized (context) {
-				context.switchToFragmentOptions();
+				context.switchToFragmentOptions(null);
 
 
 			}

@@ -20,8 +20,8 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class ImageProgram implements
-		AppSubProgram<MainActivity>, AppSubProtocol, OPallListener<EdTexture> {
+public class ImageProgram
+		implements AppSubProgram<MainActivity>, AppSubProtocol, OPallListener<EdTexture> {
 
 	private final static long id = methods.genID(ImageProgram.class);
 

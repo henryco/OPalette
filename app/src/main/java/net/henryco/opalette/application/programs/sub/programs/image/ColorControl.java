@@ -1,8 +1,8 @@
 package net.henryco.opalette.application.programs.sub.programs.image;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +53,7 @@ public class ColorControl extends OPallViewInjector<MainActivity> implements OPa
 		view.setOnClickListener(v ->
 				OPallUtils.pressButton75_225(context, imageButton, () -> {
 					synchronized (context) {
-						context.runOnUiThread(context::switchToFragmentOptions);
+						context.runOnUiThread(() -> context.switchToFragmentOptions(new ControlFragment()));
 					}
 				})
 		);
