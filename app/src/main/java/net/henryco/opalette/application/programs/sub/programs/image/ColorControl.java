@@ -43,7 +43,7 @@ public class ColorControl extends OPallViewInjector<MainActivity> {
 
 		view.setOnClickListener(v -> {
 
-			imageButton.startAnimation(AnimationUtils.loadAnimation(context, R.anim.press));
+			imageButton.startAnimation(AnimationUtils.loadAnimation(context, R.anim.press_80pct));
 // 			synchronized (context) {
 //				context.switchToFragmentOptions();
 //
