@@ -112,11 +112,10 @@ public class ColorControl extends OPallViewInjector<MainActivity> implements OPa
 			}
 		}
 
+
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-								 Bundle savedInstanceState) {
-			// Inflate the layout for this fragment
-			return inflater.inflate(R.layout.image_color_control, container, false);
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+			return inflater.inflate(R.layout.control_image_color, container, false);
 		}
 
 
