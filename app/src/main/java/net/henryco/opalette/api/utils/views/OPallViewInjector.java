@@ -52,6 +52,6 @@ public abstract class OPallViewInjector<T extends AppCompatActivity> {
 		ids = new int[]{container, layer};
 	}
 
-	public void onPostInject(T context, View view) {}
+	protected void onPostInject(T context, View view) {}
 
 }

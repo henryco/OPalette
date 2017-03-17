@@ -1,7 +1,6 @@
 package net.henryco.opalette.application.activities;
 
 import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -18,10 +17,9 @@ import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
-import net.henryco.opalette.application.extended.fragments.ImageOptionFragment;
 import net.henryco.opalette.application.programs.ProgramPipeLine;
 
-public class MainActivity extends AppCompatActivity implements ImageOptionFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
 
 	public interface AppMainProtocol {
@@ -98,12 +96,6 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 	}
 
 
-
-
-	@Override
-	public void onFragmentInteraction(Uri uri) {
-
-	}
 
 
 

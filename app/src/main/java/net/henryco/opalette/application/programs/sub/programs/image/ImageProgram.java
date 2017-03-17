@@ -5,6 +5,8 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
+import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
@@ -18,7 +20,8 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
+public class ImageProgram implements
+		AppSubProgram<MainActivity>, AppSubProtocol, OPallListener<EdTexture> {
 
 	private final static long id = methods.genID(ImageProgram.class);
 
@@ -57,7 +60,7 @@ public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol
 	@Override
 	public void create(GL10 gl, int width, int height, MainActivity context) {
 
-		OPallViewInjector.inject(context, new ColorControl());
+		OPallViewInjector.inject(context, new ColorControl(this));
 		OPallViewInjector.inject(context, new TranslationControl());
 
 		imageBuffer = OPallFBOCreator.FrameBuffer();
@@ -85,7 +88,8 @@ public class ImageProgram implements AppSubProgram<MainActivity>, AppSubProtocol
 	}
 
 
-
-
-
+	@Override
+	public void onOPallAction(OPallConsumer<EdTexture> consumer) {
+		consumer.consume(imageTexture);
+	}
 }
