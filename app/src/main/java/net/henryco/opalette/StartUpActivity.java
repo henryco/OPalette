@@ -155,7 +155,7 @@ public class StartUpActivity extends AppCompatActivity
 
 
 	private synchronized void imagePickAction(View view) {
-		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(this, R.anim.press_80pct));
+		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(this, R.anim.press_75pct_225ms));
 		new Handler().postDelayed(() -> {
 			AppCompatDialogFragment pickImageDialog = new PickImageDialog();
 			pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
