@@ -44,6 +44,7 @@
                 android:id="@+id/firstPickLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:foregroundGravity="center"
                 android:visibility="gone">
 
                 <ImageButton
@@ -56,6 +57,7 @@
                     android:layout_marginTop="161dp"
                     android:backgroundTint="@android:color/transparent"
                     android:elevation="0dp"
+                    android:foregroundGravity="center"
                     android:scaleType="fitCenter"
                     android:visibility="invisible"
                     app:srcCompat="@drawable/ic_add_circle_white_48dp"/>

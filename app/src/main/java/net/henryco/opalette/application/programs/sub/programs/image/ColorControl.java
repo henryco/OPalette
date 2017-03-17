@@ -1,6 +1,7 @@
 package net.henryco.opalette.application.programs.sub.programs.image;
 
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -15,6 +16,9 @@ import net.henryco.opalette.application.activities.MainActivity;
 public class ColorControl extends OPallViewInjector<MainActivity> {
 
 
+	private ImageButton imageButton;
+	private TextView textView;
+
 	public ColorControl() {
 		super(R.id.scrollContainer, R.layout.image_option);
 
@@ -23,10 +27,10 @@ public class ColorControl extends OPallViewInjector<MainActivity> {
 	@Override
 	protected void onInject(MainActivity context, View view) {
 
-		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
+		textView = (TextView) view.findViewById(R.id.iopTextView);
 		textView.setText("color");
 
-		ImageButton imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
+		imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
 		imageButton.setImageResource(R.drawable.ic_translate_white_24dp);
 		imageButton.setClickable(false);
 
@@ -35,12 +39,15 @@ public class ColorControl extends OPallViewInjector<MainActivity> {
 	@Override
 	public void onPostInject(MainActivity context, View view) {
 
+
+
 		view.setOnClickListener(v -> {
-			synchronized (context) {
-				context.switchToFragmentOptions();
 
-
-			}
+			imageButton.startAnimation(AnimationUtils.loadAnimation(context, R.anim.press));
+// 			synchronized (context) {
+//				context.switchToFragmentOptions();
+//
+//			}
 		});
 
 	}

@@ -48,9 +48,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom|center"
-                android:fadingEdgeLength="0dp"
                 android:fadeScrollbars="false"
                 android:fadingEdge="none"
+                android:fadingEdgeLength="0dp"
                 android:scrollbarStyle="insideOverlay"
                 android:scrollbars="none"
                 android:visibility="visible">
@@ -70,14 +70,15 @@
                 </LinearLayout>
             </net.henryco.opalette.api.utils.views.OPallHorizontalScrollView>
 
-            <fragment
-                android:id="@+id/optionsFragment"
-                android:name="net.henryco.opalette.application.extended.fragments.ImageOptionFragment"
-                class="net.henryco.opalette.application.extended.fragments.ImageOptionFragment"
+            <FrameLayout
+                android:id="@+id/fragmentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"/>
+                android:visibility="gone">
+
+            </FrameLayout>
 
         </FrameLayout>
+
     </LinearLayout>
 </LinearLayout>

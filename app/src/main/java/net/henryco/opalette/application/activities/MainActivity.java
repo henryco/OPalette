@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity implements ImageOptionFragme
 	public void switchToFragmentOptions() {
 
 		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
-		findViewById(R.id.optionsFragment).setVisibility(View.VISIBLE);
+		findViewById(R.id.fragmentContainer).setVisibility(View.VISIBLE);
 		optionsSwitched = true;
 	}
 
 	public void switchToScrollOptionsView() {
 		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
-		findViewById(R.id.optionsFragment).setVisibility(View.GONE);
+		findViewById(R.id.fragmentContainer).setVisibility(View.GONE);
 		optionsSwitched = false;
 	}
 
