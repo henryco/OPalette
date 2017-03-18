@@ -14,12 +14,10 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.listener.OPallListener;
-import net.henryco.opalette.api.utils.listener.OPallListenerHolder;
-import net.henryco.opalette.api.utils.observer.OPallUpdObserved;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
-import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.activities.MainActivity;
+import net.henryco.opalette.application.programs.sub.programs.AppSubControl;
 
 import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.deNormalize;
 import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.normalize;
@@ -27,23 +25,19 @@ import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.
 /**
  * Created by HenryCo on 16/03/17.
  */
-public class ColorControl extends OPallViewInjector<MainActivity>
-		implements OPallListenerHolder<EdTexture>, OPallUpdObserved {
+public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
 	private static OPallListener<EdTexture> texListener;
-	private static OPallUpdObserver updObserver;
-
 	private ImageButton imageButton;
 
 
 
+	
+
 	public ColorControl(OPallListener<EdTexture> listener, OPallUpdObserver updObserver) {
-		this();
+		super(R.id.scrollContainer, R.layout.image_option, listener, updObserver);
 		setOPallListener(listener);
 		setObservator(updObserver);
-	}
-	public ColorControl() {
-		super(R.id.scrollContainer, R.layout.image_option);
 	}
 
 	@Override
@@ -72,10 +66,8 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 		ColorControl.texListener = listener;
 	}
 
-	@Override
-	public void setObservator(OPallUpdObserver observator) {
-		updObserver = observator;
-	}
+
+
 
 
 
@@ -100,7 +92,7 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 			seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener().onProgress
 					((sBar, progress, fromUser) -> {
 				texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress)));
-				updObserver.update();
+				getUpdObserver().update();
 			}));
 		}
 

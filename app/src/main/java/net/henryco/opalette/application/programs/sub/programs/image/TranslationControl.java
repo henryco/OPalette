@@ -5,20 +5,21 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.api.utils.listener.OPallListener;
+import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.application.activities.MainActivity;
+import net.henryco.opalette.application.programs.sub.programs.AppSubControl;
 
 /**
  * Created by HenryCo on 15/03/17.
  */
 
-public class TranslationControl extends OPallViewInjector<MainActivity> {
+public class TranslationControl extends AppSubControl<MainActivity, Void> {
 
 
 
-
-	public TranslationControl() {
-		super(R.id.scrollContainer, R.layout.image_option);
+	public TranslationControl(OPallListener<Void> listener, OPallUpdObserver updObserver) {
+		super(R.id.scrollContainer, R.layout.image_option, listener, updObserver);
 
 
 	}
@@ -37,5 +38,8 @@ public class TranslationControl extends OPallViewInjector<MainActivity> {
 	}
 
 
+	@Override
+	public void setOPallListener(OPallListener<Void> listener) {
 
+	}
 }
