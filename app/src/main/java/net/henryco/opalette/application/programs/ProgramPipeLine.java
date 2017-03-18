@@ -123,8 +123,6 @@ public class ProgramPipeLine implements
 				asp.render(gl, context, camera2D, width, height);
 			}
 		}
-
-		System.out.println("DRAW");
 	}
 
 
