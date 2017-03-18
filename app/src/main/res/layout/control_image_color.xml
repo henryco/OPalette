@@ -13,9 +13,9 @@
         android:weightSum="1">
 
         <RelativeLayout
+            android:id="@+id/barLayout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            >
+            android:layout_height="60dp">
 
             <TextView
                 android:id="@+id/barName"
