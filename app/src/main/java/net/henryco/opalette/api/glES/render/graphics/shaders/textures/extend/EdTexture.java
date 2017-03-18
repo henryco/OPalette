@@ -68,6 +68,16 @@ public class EdTexture extends OPallTextureExtended  {
 		return this;
 	}
 
+
+	public float getBrightness() {
+		return addBrightness;
+	}
+
+	public float getAlpha() {
+		return alpha;
+	}
+
+
 	@Override
 	protected void render(int program, Camera2D camera) {
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_alpha"), alpha);

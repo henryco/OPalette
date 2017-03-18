@@ -104,21 +104,12 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 			super.onViewCreated(view, savedInstanceState);
 
 			SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-			texListener.onOPallAction(edTexture -> edTexture.brightness(b -> {
-				this.b = (b * 50) + 50;
-				return b;
-			}));
+			texListener.onOPallAction(edTexture ->
+					seekBar.setProgress(deNormalize(edTexture.getBrightness())));
 
-			System.out.println("CR Br: "+b);
-			seekBar.setProgress((int) b);
 			seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener()
 					.onProgress((sBar, progress, fromUser) -> {
-						System.out.println("Br: "+progress);
-						texListener.onOPallAction(etx -> etx.brightness(b -> {
-							float bb = (progress - 50f) / 50f;
-							System.out.println("BBR: "+bb);
-							return bb;
-						}));
+						texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress)));
 						updObserver.update();
 					})
 			);
@@ -127,7 +118,11 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 
 	}
 
-
-
+	private static int deNormalize(float v) {
+		return (int) ((v * 50) + 50);
+	}
+	private static float normalize(float v) {
+		return (v - 50f) / 50f;
+	}
 
 }
