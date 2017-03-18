@@ -17,7 +17,7 @@ import android.widget.ImageView;
 
 import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.application.activities.MainActivity;
-import net.henryco.opalette.application.extended.dialogs.PickImageDialog;
+import net.henryco.opalette.application.dialogs.PickImageDialog;
 
 
 /**
