@@ -6,7 +6,7 @@ import android.widget.SeekBar;
  * Created by HenryCo on 18/03/17.
  */
 
-public class OPallSeekBar implements SeekBar.OnSeekBarChangeListener {
+public class OPallSeekBarListener implements SeekBar.OnSeekBarChangeListener {
 
 	public interface progress {
 		void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser);
@@ -21,15 +21,15 @@ public class OPallSeekBar implements SeekBar.OnSeekBarChangeListener {
 	private start str = null;
 	private stop stp = null;
 
-	public OPallSeekBar onProgress(progress p) {
+	public OPallSeekBarListener onProgress(progress p) {
 		this.p = p;
 		return this;
 	}
-	public OPallSeekBar onStart(start str) {
+	public OPallSeekBarListener onStart(start str) {
 		this.str = str;
 		return this;
 	}
-	public OPallSeekBar onStop(stop stp) {
+	public OPallSeekBarListener onStop(stop stp) {
 		this.stp = stp;
 		return this;
 	}

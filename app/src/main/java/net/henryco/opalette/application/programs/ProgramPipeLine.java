@@ -91,7 +91,6 @@ public class ProgramPipeLine implements
 
 		for (AppSubProgram<MainActivity> asp : subPrograms) {
 			asp.create(gl, width, height, context);
-			asp.setObservator(observator);
 		}
 
 	}
@@ -132,6 +131,9 @@ public class ProgramPipeLine implements
 	@Override
 	public void setObservator(OPallUpdObserver observator) {
 		this.observator = observator;
+		for (AppSubProgram<MainActivity> asp : subPrograms) {
+			asp.setObservator(observator);
+		}
 	}
 
 

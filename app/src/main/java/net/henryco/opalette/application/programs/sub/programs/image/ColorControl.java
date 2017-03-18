@@ -18,6 +18,7 @@ import net.henryco.opalette.api.utils.listener.OPallListenerHolder;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserved;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.activities.MainActivity;
 
 /**
@@ -27,10 +28,11 @@ import net.henryco.opalette.application.activities.MainActivity;
 public class ColorControl extends OPallViewInjector<MainActivity>
 		implements OPallListenerHolder<EdTexture>, OPallUpdObserved {
 
-
 	private ImageButton imageButton;
-	private OPallListener<EdTexture> listener;
-	private OPallUpdObserver updObserver;
+
+	private static OPallListener<EdTexture> texListener;
+	private static OPallUpdObserver updObserver;
+
 
 	public ColorControl(OPallListener<EdTexture> listener, OPallUpdObserver updObserver) {
 		this();
@@ -60,8 +62,6 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 				OPallUtils.pressButton75_225(context, imageButton, () -> {
 					synchronized (context) {
 						ControlFragment fragment = new ControlFragment();
-						fragment.setOPallListener(listener);
-						fragment.setObservator(updObserver);
 						context.runOnUiThread(() -> context.switchToFragmentOptions(fragment));
 					}
 				})
@@ -71,23 +71,21 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 
 	@Override
 	public void setOPallListener(OPallListener<EdTexture> listener) {
-		this.listener = listener;
+		ColorControl.texListener = listener;
 	}
 
 	@Override
 	public void setObservator(OPallUpdObserver observator) {
-		this.updObserver = observator;
+		updObserver = observator;
 	}
 
-	public static class ControlFragment extends Fragment
-			implements OPallListenerHolder<EdTexture>, OPallUpdObserved {
+
+
+
+	public static final class ControlFragment extends Fragment {
 
 		//	TODO: MAYBE NEED OVERRIDE [onAttach(), onCreate()]
-		private OPallListener<EdTexture> texListener;
-		private OPallUpdObserver updObserver;
-
 		private float b = 0;
-
 
 
 		public ControlFragment() {
@@ -102,46 +100,34 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 
 
 		@Override
-		public void onDetach() {
-			super.onDetach();
-			texListener = null;
-			updObserver = null;
-		}
+		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+			super.onViewCreated(view, savedInstanceState);
 
-		@Override
-		public void setOPallListener(OPallListener<EdTexture> listener) {
-			texListener = listener;
+			SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 			texListener.onOPallAction(edTexture -> edTexture.brightness(b -> {
 				this.b = (b * 50) + 50;
 				return b;
 			}));
-		}
 
-		@Override
-		public void setObservator(OPallUpdObserver observator) {
-			this.updObserver = observator;
-		}
-
-		@Override
-		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-			super.onViewCreated(view, savedInstanceState);
-			SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 			System.out.println("CR Br: "+b);
-			seekBar.setMax(100);
 			seekBar.setProgress((int) b);
-//			seekBar.setOnSeekBarChangeListener();
-
-			seekBar.setOnClickListener(v -> {
-				float pos = seekBar.getProgress();
-				System.out.println("Br: "+pos);
-				texListener.onOPallAction(etx -> etx.brightness(b -> {
-					float bb = (pos - 50f) / 50f;
-					System.out.println("BBR: "+bb);
-					return bb;
-				}));
-				updObserver.update();
-			});
+			seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener()
+					.onProgress((sBar, progress, fromUser) -> {
+						System.out.println("Br: "+progress);
+						texListener.onOPallAction(etx -> etx.brightness(b -> {
+							float bb = (progress - 50f) / 50f;
+							System.out.println("BBR: "+bb);
+							return bb;
+						}));
+						updObserver.update();
+					})
+			);
 		}
+
+
 	}
+
+
+
 
 }

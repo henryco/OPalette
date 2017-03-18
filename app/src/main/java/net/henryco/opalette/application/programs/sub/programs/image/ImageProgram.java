@@ -62,6 +62,9 @@ public class ImageProgram
 	@Override
 	public void create(GL10 gl, int width, int height, MainActivity context) {
 
+		if (updObserver == null) throw new RuntimeException("OPallUpdObserver == NULL!");
+		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
+
 		OPallViewInjector.inject(context, new ColorControl(this, updObserver));
 		OPallViewInjector.inject(context, new TranslationControl());
 
