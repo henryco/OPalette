@@ -8,11 +8,13 @@ import android.widget.SeekBar;
 
 public class OPallSeekBarListener implements SeekBar.OnSeekBarChangeListener {
 
-	public static int deNormalize(float v) {
-		return (int) ((v * 50) + 50);
+	public static int deNormalize(float v, float from) {
+		float d = from / 2f;
+		return (int) ((v * d) + d);
 	}
-	public static float normalize(float v) {
-		return (v - 50f) / 50f;
+	public static float normalize(float v, float from) {
+		float d = from / 2f;
+		return (v - d) / d;
 	}
 
 

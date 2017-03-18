@@ -79,22 +79,16 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 			super.onViewCreated(view, savedInstanceState);
 
 			InjectableSeekBar brightnessBar = new InjectableSeekBar(view);
-			brightnessBar.setStartValue(0).setBarName("Brightness");
-			brightnessBar.setOnBarCreate(bar ->
-					texListener.onOPallAction(edTexture ->
-							bar.setProgress(deNormalize(edTexture.getBrightness()))
-					)
-			);
-
-			brightnessBar.setBarListener(new OPallSeekBarListener().onProgress(
-					(sBar, progress, fromUser) -> {
-						texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress)));
-						getUpdObserver().update();
+			brightnessBar.setBarName("Brightness");
+			brightnessBar.setOnBarCreate(bar -> texListener.onOPallAction(edTexture ->
+					bar.setProgress(deNormalize(edTexture.getBrightness(), 100))));
+			brightnessBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
+				texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress, 100)));
+				getUpdObserver().update();
 			}));
 
 			OPallViewInjector.inject(getActivity(), brightnessBar);
-//			OPallViewInjector.inject(getActivity(), new InjectableSeekBar(view));
-//			OPallViewInjector.inject(getActivity(), new InjectableSeekBar(view));
+			OPallViewInjector.inject(getActivity(), new InjectableSeekBar(view));
 		}
 
 	}

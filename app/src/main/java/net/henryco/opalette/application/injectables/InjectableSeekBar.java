@@ -59,13 +59,15 @@ public class InjectableSeekBar extends OPallViewInjector {
 		onBarCreator.onSeekBarCreate(seekBar);
 
 		int valueCorrection = startValue - seekBar.getProgress();
+		float bMax = seekBar.getMax();
+		float mlt = bMax / (bMax - Math.abs((float) valueCorrection));
 
 		seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener()
 				.onStart(barListener)
 				.onStop(barListener)
 				.onProgress((sBar, progress, fromUser) -> {
 					barListener.onProgressChanged(sBar, progress, fromUser);
-					String barValue = Integer.toString(2 * (progress + valueCorrection));
+					String barValue = Integer.toString((int)(mlt * (progress + valueCorrection)));
 					valBar.setText(barValue);
 				})
 		);
