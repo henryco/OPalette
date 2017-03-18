@@ -66,7 +66,7 @@ public class ImageProgram
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
 		OPallViewInjector.inject(context, new ColorControl(this, updObserver));
-		OPallViewInjector.inject(context, new TranslationControl());
+		OPallViewInjector.inject(context, new TranslationControl(null, updObserver));
 
 		imageBuffer = OPallFBOCreator.FrameBuffer();
 		imageTexture = new EdTexture();
