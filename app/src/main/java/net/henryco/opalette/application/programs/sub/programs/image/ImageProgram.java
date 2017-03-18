@@ -7,6 +7,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdT
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.listener.OPallListener;
+import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
@@ -29,6 +30,7 @@ public class ImageProgram
 	private EdTexture imageTexture;
 
 	private OPallRequester feedBackListener;
+	private OPallUpdObserver updObserver;
 
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {
@@ -60,7 +62,7 @@ public class ImageProgram
 	@Override
 	public void create(GL10 gl, int width, int height, MainActivity context) {
 
-		OPallViewInjector.inject(context, new ColorControl(this));
+		OPallViewInjector.inject(context, new ColorControl(this, updObserver));
 		OPallViewInjector.inject(context, new TranslationControl());
 
 		imageBuffer = OPallFBOCreator.FrameBuffer();
@@ -90,6 +92,12 @@ public class ImageProgram
 
 	@Override
 	public void onOPallAction(OPallConsumer<EdTexture> consumer) {
-		consumer.consume(imageTexture);
+		if (consumer != null) consumer.consume(imageTexture);
+	}
+
+
+	@Override
+	public void setObservator(OPallUpdObserver observator) {
+		this.updObserver = observator;
 	}
 }

@@ -3,7 +3,7 @@ package net.henryco.opalette.api.glES.glSurface.renderers.universal;
 import android.content.Context;
 
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
-import net.henryco.opalette.api.utils.observer.OPallObserver;
+import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.Request;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -13,7 +13,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class UniRenderer<T extends Context> extends OPallUniRenderer<T> implements OPallObserver {
+public class UniRenderer<T extends Context> extends OPallUniRenderer<T> implements OPallUpdObserver {
 
 
 	private OPallUnderProgram<T> underProgram;

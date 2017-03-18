@@ -2,6 +2,7 @@ package net.henryco.opalette.application.programs.sub.programs.touch;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
+import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
@@ -59,6 +60,10 @@ public class TouchLinesProgram implements AppSubProgram<MainActivity>, AppSubPro
 		touchLines.render(camera);
 	}
 
+	@Override
+	public void setObservator(OPallUpdObserver observator) {
+
+	}
 
 	private void sendCoeffInfo() {
 		feedBackListener.sendRequest(new Request(send_line_coeffs, touchLines.getCoefficients()));

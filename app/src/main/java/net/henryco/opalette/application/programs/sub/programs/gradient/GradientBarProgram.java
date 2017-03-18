@@ -9,6 +9,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTextu
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.activities.MainActivity;
@@ -90,7 +91,10 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	}
 
 
+	@Override
+	public void setObservator(OPallUpdObserver observator) {
 
+	}
 
 	public static final String u_dimension = "u_dimension";
 	public static final String u_line = "u_line";

@@ -8,7 +8,7 @@ import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderPro
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.observer.OPallObserver;
+import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.activities.MainActivity;
@@ -28,7 +28,9 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubProtocol, MainActivity.AppMainProtocol {
+public class ProgramPipeLine implements
+		OPallUnderProgram<MainActivity>, AppSubProtocol,
+		MainActivity.AppMainProtocol {
 
 
 	private final long id;
@@ -37,13 +39,14 @@ public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubP
 	private Camera2D camera2D;
 	private ChessBox chessBox;
 
-	private OPallObserver observator;
+	private OPallUpdObserver observator;
 	private RequestSender requestSender;
 	private List<AppSubProgram<MainActivity>> subPrograms;
 
 	@SuppressWarnings("unchecked")
 	public static AppSubProgram<MainActivity>[] getDefaultPipeLineArray() {
-		return new AppSubProgram[] {
+		return new AppSubProgram[]{
+
 				new ImageProgram(),
 				new GradientBarProgram(),
 				new TouchLinesProgram(),
@@ -88,6 +91,7 @@ public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubP
 
 		for (AppSubProgram<MainActivity> asp : subPrograms) {
 			asp.create(gl, width, height, context);
+			asp.setObservator(observator);
 		}
 
 	}
@@ -121,12 +125,12 @@ public class ProgramPipeLine implements OPallUnderProgram<MainActivity>, AppSubP
 			}
 		}
 
-
+		System.out.println("DRAW");
 	}
 
 
 	@Override
-	public void setObservator(OPallObserver observator) {
+	public void setObservator(OPallUpdObserver observator) {
 		this.observator = observator;
 	}
 

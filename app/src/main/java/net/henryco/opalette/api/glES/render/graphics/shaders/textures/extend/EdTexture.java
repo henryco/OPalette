@@ -16,9 +16,9 @@ import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 
 public class EdTexture extends OPallTextureExtended  {
 
-	private final GLESUtils.Color add = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
-	private final GLESUtils.Color min = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
-	private final GLESUtils.Color max = new GLESUtils.Color(GLESUtils.Color.WHITE);
+	public final GLESUtils.Color add = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
+	public final GLESUtils.Color min = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
+	public final GLESUtils.Color max = new GLESUtils.Color(GLESUtils.Color.WHITE);
 
 	private float addBrightness = 0;
 	private float alpha = 1;
