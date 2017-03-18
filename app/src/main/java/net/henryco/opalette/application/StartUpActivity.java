@@ -1,4 +1,4 @@
-package net.henryco.opalette;
+package net.henryco.opalette.application;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,8 +15,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.OPallUtils;
-import net.henryco.opalette.application.activities.MainActivity;
 import net.henryco.opalette.application.dialogs.PickImageDialog;
 
 

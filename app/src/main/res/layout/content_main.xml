@@ -15,7 +15,7 @@
     android:visibility="visible"
     android:weightSum="1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="net.henryco.opalette.application.activities.MainActivity"
+    tools:context="net.henryco.opalette.application.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <LinearLayout
@@ -71,11 +71,21 @@
             </net.henryco.opalette.api.utils.views.OPallHorizontalScrollView>
 
             <FrameLayout
-                android:id="@+id/fragmentContainer"
+                android:id="@+id/fragmentSuperContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:visibility="gone">
 
+                <LinearLayout
+                    android:id="@+id/fragmentContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
+
+                </LinearLayout>
             </FrameLayout>
 
         </FrameLayout>

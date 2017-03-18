@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.activities;
+package net.henryco.opalette.application;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.StartUpActivity;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		initialization();
+		switchToScrollOptionsView();
 	}
 
 
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
-		findViewById(R.id.fragmentContainer).setVisibility(View.VISIBLE);
+		findViewById(R.id.fragmentSuperContainer).setVisibility(View.VISIBLE);
 
 		optionsSwitched = true;
 		actualFragment = fragment;
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
-		findViewById(R.id.fragmentContainer).setVisibility(View.GONE);
+		findViewById(R.id.fragmentSuperContainer).setVisibility(View.GONE);
 
 		optionsSwitched = false;
 		actualFragment = null;
@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
 				stateRequester.sendNonSyncRequest(new Request(AppMainProtocol.send_bitmap_to_program,
 						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
 		);
-
 
 	}
 

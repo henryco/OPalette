@@ -7,7 +7,7 @@ import android.widget.TextView;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
-import net.henryco.opalette.application.activities.MainActivity;
+import net.henryco.opalette.application.MainActivity;
 import net.henryco.opalette.application.programs.sub.programs.AppSubControl;
 
 /**

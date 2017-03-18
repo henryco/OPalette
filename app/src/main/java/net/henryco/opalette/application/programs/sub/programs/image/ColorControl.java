@@ -13,7 +13,7 @@ import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
-import net.henryco.opalette.application.activities.MainActivity;
+import net.henryco.opalette.application.MainActivity;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppSubControl;
 
@@ -93,7 +93,8 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 			}));
 
 			OPallViewInjector.inject(getActivity(), brightnessBar);
-
+//			OPallViewInjector.inject(getActivity(), new InjectableSeekBar(view));
+//			OPallViewInjector.inject(getActivity(), new InjectableSeekBar(view));
 		}
 
 	}

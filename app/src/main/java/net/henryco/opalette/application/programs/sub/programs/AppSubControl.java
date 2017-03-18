@@ -3,6 +3,7 @@ package net.henryco.opalette.application.programs.sub.programs;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			LinearLayout linearLayout = new LinearLayout(getActivity().getApplicationContext());
 			linearLayout.setOrientation(LinearLayout.VERTICAL);
-
+			linearLayout.setGravity(Gravity.CENTER);
 			return linearLayout;
 		}
 
