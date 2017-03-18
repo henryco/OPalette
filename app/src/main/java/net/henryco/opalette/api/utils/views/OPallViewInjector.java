@@ -1,8 +1,8 @@
 package net.henryco.opalette.api.utils.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +11,26 @@ import android.view.ViewGroup;
  * Created by HenryCo on 15/03/17.
  */
 
-public abstract class OPallViewInjector<T extends AppCompatActivity> {
+public abstract class OPallViewInjector<T extends Context> {
 
 
 
 
 	@SuppressWarnings("unchecked")
-	public static void inject(AppCompatActivity context, OPallViewInjector injector, long delay) {
+	public static void inject(Activity context, OPallViewInjector injector, long delay) {
+
+
 		context.runOnUiThread(() -> {
 			View view = ((LayoutInflater) context.getApplicationContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(injector.ids[1], null);
-			ViewGroup insertGroup = (ViewGroup) context.findViewById(injector.ids[0]);
+
+			final ViewGroup insertGroup;
+			if (injector.containerGroup == null && injector.ids[0] != (-1))
+				insertGroup = (ViewGroup) context.findViewById(injector.ids[0]);
+			else if (injector.containerGroup != null && injector.ids[0] == (-1))
+				insertGroup = injector.containerGroup;
+			else throw new RuntimeException("VIEW GROUP == NULL");
+
 			try {
 				injector.onInject(context, view);
 			} catch (ClassCastException e) {
@@ -30,6 +39,7 @@ public abstract class OPallViewInjector<T extends AppCompatActivity> {
 						injector.getClass().getName()
 				);
 			}
+
 			view.setVisibility(View.GONE);
 			new Handler().postDelayed(() -> context.runOnUiThread(() -> {
 				insertGroup.addView(view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
@@ -38,17 +48,24 @@ public abstract class OPallViewInjector<T extends AppCompatActivity> {
 
 		});
 	}
-	public static void inject(AppCompatActivity context, OPallViewInjector injector) {
+	public static void inject(Activity context, OPallViewInjector injector) {
 		inject(context, injector, 0);
 	}
 
 
 	protected abstract void onInject(T context, View view);
 	private final int[] ids;
+	private final ViewGroup containerGroup;
 
 	public OPallViewInjector(int container, int layer) {
 		ids = new int[]{container, layer};
+		containerGroup = null;
 	}
-
-
+	public OPallViewInjector(ViewGroup container, int layer) {
+		ids = new int[]{-1, layer};
+		containerGroup = container;
+	}
+	public OPallViewInjector(View container, int layer) {
+		this((ViewGroup)container, layer);
+	}
 }

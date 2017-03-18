@@ -35,13 +35,22 @@ public class OPallSeekBarListener implements SeekBar.OnSeekBarChangeListener {
 		this.p = p;
 		return this;
 	}
+	public OPallSeekBarListener onProgress(OPallSeekBarListener bar) {
+		return onProgress(bar.p);
+	}
 	public OPallSeekBarListener onStart(start str) {
 		this.str = str;
 		return this;
 	}
+	public OPallSeekBarListener onStart(OPallSeekBarListener bar) {
+		return onStart(bar.str);
+	}
 	public OPallSeekBarListener onStop(stop stp) {
 		this.stp = stp;
 		return this;
+	}
+	public OPallSeekBarListener onStop(OPallSeekBarListener bar) {
+		return onStop(bar.stp);
 	}
 
 	@Override

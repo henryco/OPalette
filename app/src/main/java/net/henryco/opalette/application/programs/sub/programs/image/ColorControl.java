@@ -1,13 +1,9 @@
 package net.henryco.opalette.application.programs.sub.programs.image;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
@@ -15,8 +11,11 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdT
 import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
+import net.henryco.opalette.api.utils.views.OPallFragmentLinear;
+import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.activities.MainActivity;
+import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppSubControl;
 
 import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.deNormalize;
@@ -35,7 +34,7 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 	
 
 	public ColorControl(OPallListener<EdTexture> listener, OPallUpdObserver updObserver) {
-		super(R.id.scrollContainer, R.layout.image_option, listener, updObserver);
+		super(R.id.scrollContainer, R.layout.image_option_button, listener, updObserver);
 		setOPallListener(listener);
 		setObservator(updObserver);
 	}
@@ -73,27 +72,29 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
 
 
-//	TODO: MAYBE NEED CONSTRUCTOR and OVERRIDES [onAttach(), onCreate()]
-	public static final class ControlFragment extends Fragment {
+	public static final class ControlFragment extends OPallFragmentLinear {
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			return inflater.inflate(R.layout.control_image_color, container, false);
-		}
 
 		@Override
 		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 			super.onViewCreated(view, savedInstanceState);
 
-			SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-			texListener.onOPallAction(edTexture ->
-					seekBar.setProgress(deNormalize(edTexture.getBrightness())));
+			InjectableSeekBar brightnessBar = new InjectableSeekBar(view);
+			brightnessBar.setStartValue(0).setBarName("Brightness");
+			brightnessBar.setOnBarCreate(bar ->
+					texListener.onOPallAction(edTexture ->
+							bar.setProgress(deNormalize(edTexture.getBrightness()))
+					)
+			);
 
-			seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener().onProgress
-					((sBar, progress, fromUser) -> {
-				texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress)));
-				getUpdObserver().update();
+			brightnessBar.setBarListener(new OPallSeekBarListener().onProgress(
+					(sBar, progress, fromUser) -> {
+						texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress)));
+						getUpdObserver().update();
 			}));
+
+			OPallViewInjector.inject(getActivity(), brightnessBar);
+
 		}
 
 	}

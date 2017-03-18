@@ -19,7 +19,7 @@ public class TranslationControl extends AppSubControl<MainActivity, Void> {
 
 
 	public TranslationControl(OPallListener<Void> listener, OPallUpdObserver updObserver) {
-		super(R.id.scrollContainer, R.layout.image_option, listener, updObserver);
+		super(R.id.scrollContainer, R.layout.image_option_button, listener, updObserver);
 
 
 	}
