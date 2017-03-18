@@ -24,25 +24,26 @@ public class InjectableSeekBar extends OPallViewInjector {
 
 	private OPallSeekBarListener barListener;
 	private String barName;
-	private int startValue;
+	private int valueCorrection;
 
 
-	public InjectableSeekBar(View container) {
+	public InjectableSeekBar(View container, String ... name) {
 		super(container, R.layout.bar_control_layout);
-		init();
+		init(name);
 	}
-	public InjectableSeekBar(ViewGroup container) {
+	public InjectableSeekBar(ViewGroup container, String ... name) {
 		super(container, R.layout.bar_control_layout);
-		init();
+		init(name);
 	}
-	public InjectableSeekBar(int container) {
+	public InjectableSeekBar(int container, String ... name) {
 		super(container, R.layout.bar_control_layout);
-		init();
+		init(name);
 	}
 
-	private void init() {
-		setStartValue(0)
-				.setBarName("")
+	private void init(String ... nm) {
+		String name = "";
+		for (String n : nm) name += n + " ";
+		setDefaultPoint(0, 0).setBarName(name)
 				.setOnBarCreate(seekBar -> {})
 				.setBarListener(new OPallSeekBarListener());
 	}
@@ -51,29 +52,27 @@ public class InjectableSeekBar extends OPallViewInjector {
 	@Override
 	protected void onInject(Context context, View view) {
 
-		TextView valBar = (TextView) view.findViewById(R.id.barValue);
-		TextView textBar = (TextView) view.findViewById(R.id.barName);
-		textBar.setText(barName);
-
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 		onBarCreator.onSeekBarCreate(seekBar);
 
-		int valueCorrection = startValue - seekBar.getProgress();
-		float bMax = seekBar.getMax();
-		float mlt = bMax / (bMax - Math.abs((float) valueCorrection));
+		TextView textBar = (TextView) view.findViewById(R.id.barName);
+		textBar.setText(barName);
+
+		TextView valBar = (TextView) view.findViewById(R.id.barValue);
+		valBar.setText(calcBarValue(seekBar.getMax(), valueCorrection, seekBar.getProgress()));
 
 		seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener()
 				.onStart(barListener)
 				.onStop(barListener)
 				.onProgress((sBar, progress, fromUser) -> {
 					barListener.onProgressChanged(sBar, progress, fromUser);
-					String barValue = Integer.toString((int)(mlt * (progress + valueCorrection)));
-					valBar.setText(barValue);
+					valBar.setText(calcBarValue(seekBar.getMax(), valueCorrection, progress));
 				})
 		);
 
-
 	}
+
+
 
 
 	public InjectableSeekBar setBarListener(OPallSeekBarListener listener) {
@@ -81,8 +80,8 @@ public class InjectableSeekBar extends OPallViewInjector {
 		return this;
 	}
 
-	public InjectableSeekBar setStartValue(int startValue) {
-		this.startValue = startValue;
+	public InjectableSeekBar setDefaultPoint(int startValue, int startBarPoint) {
+		this.valueCorrection = startValue - startBarPoint;
 		return this;
 	}
 
@@ -94,5 +93,9 @@ public class InjectableSeekBar extends OPallViewInjector {
 	public InjectableSeekBar setBarName(String barName) {
 		this.barName = barName;
 		return this;
+	}
+
+	private static String calcBarValue(float barMax, int corr, int value) {
+		return Integer.toString((int)((barMax / (barMax - Math.abs((float) corr))) * (value + corr)));
 	}
 }
