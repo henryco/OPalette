@@ -81,10 +81,8 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 
 
 
+//	TODO: MAYBE NEED CONSTRUCTOR and OVERRIDES [onAttach(), onCreate()]
 	public static final class ControlFragment extends Fragment {
-
-//		TODO: MAYBE NEED CONSTRUCTOR and OVERRIDES [onAttach(), onCreate()]
-
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,7 +103,6 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 				updObserver.update();
 			}));
 		}
-
 
 	}
 
