@@ -16,6 +16,11 @@ import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 
 public class InjectableSeekBar extends OPallViewInjector {
 
+
+	public static final int TYPE_NORMAL = R.layout.bar_control_layout;
+	public static final int TYPE_SMALL = R.layout.bar_small_control_layout;
+
+
 	private OnBarCreate onBarCreator;
 	public interface OnBarCreate {
 		void onSeekBarCreate(SeekBar seekBar);
@@ -27,18 +32,29 @@ public class InjectableSeekBar extends OPallViewInjector {
 	private int valueCorrection;
 
 
-	public InjectableSeekBar(View container, String ... name) {
-		super(container, R.layout.bar_control_layout);
+
+	public InjectableSeekBar(View container, int type, String ... name) {
+		super(container, type);
 		init(name);
+	}
+	public InjectableSeekBar(ViewGroup container, int type, String ... name) {
+		super(container, type);
+		init(name);
+	}
+	public InjectableSeekBar(int container, int type, String ... name) {
+		super(container, type);
+		init(name);
+	}
+	public InjectableSeekBar(View container, String ... name) {
+		this(container, TYPE_NORMAL, name);
 	}
 	public InjectableSeekBar(ViewGroup container, String ... name) {
-		super(container, R.layout.bar_control_layout);
-		init(name);
+		this(container, TYPE_NORMAL, name);
 	}
 	public InjectableSeekBar(int container, String ... name) {
-		super(container, R.layout.bar_control_layout);
-		init(name);
+		this(container, TYPE_NORMAL, name);
 	}
+
 
 	private void init(String ... nm) {
 		String name = "";

@@ -78,7 +78,7 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 			super.onViewCreated(view, savedInstanceState);
 
-			InjectableSeekBar brightnessBar = new InjectableSeekBar(view, "Brightness");
+			InjectableSeekBar brightnessBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_NORMAL ,"Brightness");
 			brightnessBar.setDefaultPoint(0, 50);
 			brightnessBar.setOnBarCreate(bar -> texListener.onOPallAction(edTexture -> {
 				int brightness = deNormalize(edTexture.getBrightness(), 100);
