@@ -1,6 +1,12 @@
 package net.henryco.opalette.application.programs.sub.programs;
 
+import android.app.Fragment;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.listener.OPallListenerHolder;
@@ -30,6 +36,22 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 
 	public static OPallUpdObserver getUpdObserver() {
 		return updObserver;
+	}
+
+
+
+
+
+	public static class AppControlFragment extends Fragment {
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+			LinearLayout linearLayout = new LinearLayout(getActivity().getApplicationContext());
+			linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+			return linearLayout;
+		}
+
 	}
 
 }

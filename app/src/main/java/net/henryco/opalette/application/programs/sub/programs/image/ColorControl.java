@@ -11,7 +11,6 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdT
 import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
-import net.henryco.opalette.api.utils.views.OPallFragmentLinear;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.activities.MainActivity;
@@ -72,7 +71,7 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
 
 
-	public static final class ControlFragment extends OPallFragmentLinear {
+	public static final class ControlFragment extends AppControlFragment {
 
 
 		@Override
