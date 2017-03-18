@@ -8,6 +8,16 @@ import android.widget.SeekBar;
 
 public class OPallSeekBarListener implements SeekBar.OnSeekBarChangeListener {
 
+	public static int deNormalize(float v) {
+		return (int) ((v * 50) + 50);
+	}
+	public static float normalize(float v) {
+		return (v - 50f) / 50f;
+	}
+
+
+
+
 	public interface progress {
 		void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser);
 	}

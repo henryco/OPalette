@@ -21,17 +21,20 @@ import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.activities.MainActivity;
 
+import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.deNormalize;
+import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.normalize;
+
 /**
  * Created by HenryCo on 16/03/17.
  */
-
 public class ColorControl extends OPallViewInjector<MainActivity>
 		implements OPallListenerHolder<EdTexture>, OPallUpdObserved {
 
-	private ImageButton imageButton;
-
 	private static OPallListener<EdTexture> texListener;
 	private static OPallUpdObserver updObserver;
+
+	private ImageButton imageButton;
+
 
 
 	public ColorControl(OPallListener<EdTexture> listener, OPallUpdObserver updObserver) {
@@ -77,22 +80,16 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 
 
 
+
 	public static final class ControlFragment extends Fragment {
 
-		//	TODO: MAYBE NEED OVERRIDE [onAttach(), onCreate()]
-		private float b = 0;
-
-
-		public ControlFragment() {
-			// Required empty public constructor
-		}
+//		TODO: MAYBE NEED CONSTRUCTOR and OVERRIDES [onAttach(), onCreate()]
 
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			return inflater.inflate(R.layout.control_image_color, container, false);
 		}
-
 
 		@Override
 		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -102,22 +99,14 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 			texListener.onOPallAction(edTexture ->
 					seekBar.setProgress(deNormalize(edTexture.getBrightness())));
 
-			seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener()
-					.onProgress((sBar, progress, fromUser) -> {
-						texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress)));
-						updObserver.update();
-					})
-			);
+			seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener().onProgress
+					((sBar, progress, fromUser) -> {
+				texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress)));
+				updObserver.update();
+			}));
 		}
 
 
-	}
-
-	private static int deNormalize(float v) {
-		return (int) ((v * 50) + 50);
-	}
-	private static float normalize(float v) {
-		return (v - 50f) / 50f;
 	}
 
 }
