@@ -26,7 +26,7 @@ import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.
 public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
 	private static OPallListener<EdTexture> texListener;
-
+	private static final int BRIGHTNESS = R.string.control_brightness;
 	
 
 	public ColorControl(OPallListener<EdTexture> listener, OPallUpdObserver updObserver) {
@@ -39,7 +39,7 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 	protected void onInject(MainActivity context, View view) {
 
 		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
-		textView.setText("Brightness");
+		textView.setText(BRIGHTNESS);
 
 		ImageButton imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
 		imageButton.setImageResource(R.drawable.ic_brightness_6_white_24dp);
@@ -73,11 +73,13 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 		@Override
 		public void onFragmentCreated(View view, @Nullable Bundle savedInstanceState) {
 
-			InjectableSeekBar brightnessBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_NORMAL ,"Brightness");
+			String brightness = getResources().getString(R.string.control_brightness);
+
+			InjectableSeekBar brightnessBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_NORMAL, brightness);
 			brightnessBar.setDefaultPoint(0, 50);
 			brightnessBar.setOnBarCreate(bar -> texListener.onOPallAction(edTexture -> {
-				int brightness = deNormalize(edTexture.getBrightness(), 100);
-				bar.setProgress(brightness);
+				int br = deNormalize(edTexture.getBrightness(), 100);
+				bar.setProgress(br);
 			}));
 
 			brightnessBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {

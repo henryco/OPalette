@@ -12,7 +12,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
-    <string name="title_activity_start_up_activiy">StartUpActiviy</string>
+    <string name="title_activity_start_up_activity">StartUpActivity</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -21,4 +21,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+    <string name="control_brightness">Brightness</string>
+    <string name="control_move">Move</string>
+    <string name="control_translate">Translate</string>
+
+
+
 </resources>
