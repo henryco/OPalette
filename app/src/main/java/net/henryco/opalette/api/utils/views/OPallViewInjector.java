@@ -14,11 +14,8 @@ import android.view.ViewGroup;
 public abstract class OPallViewInjector<T extends Context> {
 
 
-
-
 	@SuppressWarnings("unchecked")
 	public static void inject(Activity context, OPallViewInjector injector, long delay) {
-
 
 		context.runOnUiThread(() -> {
 			View view = ((LayoutInflater) context.getApplicationContext()
@@ -48,12 +45,11 @@ public abstract class OPallViewInjector<T extends Context> {
 
 		});
 	}
+
 	public static void inject(Activity context, OPallViewInjector injector) {
 		inject(context, injector, 0);
 	}
 
-
-	protected abstract void onInject(T context, View view);
 	private final int[] ids;
 	private final ViewGroup containerGroup;
 
@@ -68,4 +64,7 @@ public abstract class OPallViewInjector<T extends Context> {
 	public OPallViewInjector(View container, int layer) {
 		this((ViewGroup)container, layer);
 	}
+
+	protected abstract void onInject(T context, View view);
+
 }

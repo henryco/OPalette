@@ -88,7 +88,6 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 			}));
 
 			OPallViewInjector.inject(getActivity(), brightnessBar);
-			OPallViewInjector.inject(getActivity(), new InjectableSeekBar(view));
 		}
 
 	}

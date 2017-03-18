@@ -37,10 +37,15 @@
                 android:layout_height="match_parent"/>
         </LinearLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.025"/>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.31"
+            android:layout_weight="0.285"
             android:visibility="visible">
 
             <net.henryco.opalette.api.utils.views.OPallHorizontalScrollView
@@ -53,7 +58,7 @@
                 android:fadingEdgeLength="0dp"
                 android:scrollbarStyle="insideOverlay"
                 android:scrollbars="none"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/scrollContainer"
@@ -75,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:id="@+id/fragmentContainer"
