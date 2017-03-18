@@ -26,9 +26,6 @@ import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.
 public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
 	private static OPallListener<EdTexture> texListener;
-	private ImageButton imageButton;
-
-
 
 	
 
@@ -42,10 +39,10 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 	protected void onInject(MainActivity context, View view) {
 
 		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
-		textView.setText("color");
+		textView.setText("Brightness");
 
-		imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
-		imageButton.setImageResource(R.drawable.ic_translate_white_24dp);
+		ImageButton imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
+		imageButton.setImageResource(R.drawable.ic_brightness_6_white_24dp);
 		imageButton.setClickable(false);
 
 		view.setOnClickListener(v ->
@@ -73,10 +70,8 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
 	public static final class ControlFragment extends AppControlFragment {
 
-
 		@Override
-		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-			super.onViewCreated(view, savedInstanceState);
+		public void onFragmentCreated(View view, @Nullable Bundle savedInstanceState) {
 
 			InjectableSeekBar brightnessBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_NORMAL ,"Brightness");
 			brightnessBar.setDefaultPoint(0, 50);

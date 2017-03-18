@@ -242,5 +242,4 @@ public class StartUpActivity extends AppCompatActivity
 		}
 	}
 
-
 }

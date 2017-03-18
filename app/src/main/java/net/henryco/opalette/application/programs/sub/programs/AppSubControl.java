@@ -2,6 +2,7 @@ package net.henryco.opalette.application.programs.sub.programs;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,7 +44,7 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 
 
 
-	public static class AppControlFragment extends Fragment {
+	public static abstract class AppControlFragment extends Fragment {
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +54,12 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 			return linearLayout;
 		}
 
+		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+			super.onViewCreated(view, savedInstanceState);
+			onFragmentCreated(view, savedInstanceState);
+		}
+
+		public abstract void onFragmentCreated(View view, @Nullable Bundle savedInstanceState);
 	}
 
 }
