@@ -37,19 +37,5 @@ public class TranslationControl extends OPallViewInjector<MainActivity> {
 	}
 
 
-	@Override
-	public void onPostInject(MainActivity context, View view) {
-
-		view.setOnClickListener(v -> {
-			synchronized (context) {
-				context.switchToFragmentOptions(null);
-
-
-			}
-		});
-
-	}
-
-
 
 }

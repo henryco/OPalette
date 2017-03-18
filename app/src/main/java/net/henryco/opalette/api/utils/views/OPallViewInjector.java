@@ -31,11 +31,9 @@ public abstract class OPallViewInjector<T extends AppCompatActivity> {
 				);
 			}
 			view.setVisibility(View.GONE);
-			insertGroup.addView(view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-
 			new Handler().postDelayed(() -> context.runOnUiThread(() -> {
+				insertGroup.addView(view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 				view.setVisibility(View.VISIBLE);
-				injector.onPostInject(context, view);
 			}), delay);
 
 		});
@@ -52,6 +50,5 @@ public abstract class OPallViewInjector<T extends AppCompatActivity> {
 		ids = new int[]{container, layer};
 	}
 
-	protected void onPostInject(T context, View view) {}
 
 }

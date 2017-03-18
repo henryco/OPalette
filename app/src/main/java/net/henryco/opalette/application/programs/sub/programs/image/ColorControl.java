@@ -53,11 +53,6 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 		imageButton.setImageResource(R.drawable.ic_translate_white_24dp);
 		imageButton.setClickable(false);
 
-	}
-
-	@Override
-	protected void onPostInject(MainActivity context, View view) {
-
 		view.setOnClickListener(v ->
 				OPallUtils.pressButton75_225(context, imageButton, () -> {
 					synchronized (context) {
@@ -66,8 +61,8 @@ public class ColorControl extends OPallViewInjector<MainActivity>
 					}
 				})
 		);
-
 	}
+
 
 	@Override
 	public void setOPallListener(OPallListener<EdTexture> listener) {
