@@ -1,6 +1,8 @@
 package net.henryco.opalette.application.injectables;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -16,11 +18,11 @@ import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 
 public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
-	public static final int COLOR_DEFAULT_DARK = R.color.common_google_signin_btn_text_light_default;
-	public static final int COLOR_BLACK_OVERLAY = R.color.black_overlay;
-	public static final int COLOR_DEFAULT_LIGHT = R.color.common_google_signin_btn_text_dark_default;
-	public static final int COLOR_LIGHT_OVERLAY = R.color.common_google_signin_btn_text_dark_disabled;
-	public static final int COLOR_LIGHT = R.attr.colorButtonNormal;
+	public static final int TEXT_COLOR_DEFAULT_DARK = R.color.common_google_signin_btn_text_light_default;
+	public static final int TEXT_COLOR_BLACK_OVERLAY = R.color.black_overlay;
+	public static final int TEXT_COLOR_DEFAULT_LIGHT = R.color.common_google_signin_btn_text_dark_default;
+	public static final int TEXT_COLOR_LIGHT_OVERLAY = R.color.common_google_signin_btn_text_dark_disabled;
+	public static final int TEXT_COLOR_LIGHT = R.attr.colorButtonNormal;
 
 
 	public static final int TYPE_NORMAL = R.layout.bar_control_layout;
@@ -33,9 +35,9 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	}
 
 
-	private static int default_text_color;
+	private static int default_text_color = TEXT_COLOR_DEFAULT_DARK;
 	public static void setDefaultTextColor(int color) {
-		default_text_color = color == -1 ? COLOR_DEFAULT_DARK : color;
+		default_text_color = color == -1 ? TEXT_COLOR_DEFAULT_DARK : color;
 	}
 
 
@@ -45,6 +47,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	private int max;
 	private int text_color;
 	private int value_color;
+
 
 
 
@@ -74,7 +77,6 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	public void reset(String ... nm) {
 		String name = "";
 		for (String n : nm) name += n + " ";
-		setDefaultTextColor(-1);
 		setDefaultPoint(0, 0)
 				.setMax(-1).setBarName(name)
 				.onBarCreate(seekBar -> {})
@@ -88,6 +90,8 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 		seekBar.setMax(max);
+		seekBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+		seekBar.getThumb().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
 		onBarCreator.onSeekBarCreate(seekBar);
 
 		TextView textBar = (TextView) view.findViewById(R.id.barName);
