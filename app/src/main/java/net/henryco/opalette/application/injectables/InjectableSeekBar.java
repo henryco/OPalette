@@ -16,6 +16,12 @@ import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 
 public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
+	public static final int COLOR_DEFAULT_DARK = R.color.common_google_signin_btn_text_light_default;
+	public static final int COLOR_BLACK_OVERLAY = R.color.black_overlay;
+	public static final int COLOR_DEFAULT_LIGHT = R.color.common_google_signin_btn_text_dark_default;
+	public static final int COLOR_LIGHT_OVERLAY = R.color.common_google_signin_btn_text_dark_disabled;
+	public static final int COLOR_LIGHT = R.attr.colorButtonNormal;
+
 
 	public static final int TYPE_NORMAL = R.layout.bar_control_layout;
 	public static final int TYPE_SMALL = R.layout.bar_small_control_layout;
@@ -27,23 +33,32 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	}
 
 
+	private static int default_text_color;
+	public static void setDefaultTextColor(int color) {
+		default_text_color = color == -1 ? COLOR_DEFAULT_DARK : color;
+	}
+
+
 	private OPallSeekBarListener barListener;
 	private String barName;
 	private int valueCorrection;
 	private int max;
+	private int text_color;
+	private int value_color;
+
 
 
 	public InjectableSeekBar(View container, int type, String ... name) {
 		super(container, type);
-		init(name);
+		reset(name);
 	}
 	public InjectableSeekBar(ViewGroup container, int type, String ... name) {
 		super(container, type);
-		init(name);
+		reset(name);
 	}
 	public InjectableSeekBar(int container, int type, String ... name) {
 		super(container, type);
-		init(name);
+		reset(name);
 	}
 	public InjectableSeekBar(View container, String ... name) {
 		this(container, TYPE_NORMAL, name);
@@ -56,12 +71,14 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	}
 
 
-	private void init(String ... nm) {
+	public void reset(String ... nm) {
 		String name = "";
 		for (String n : nm) name += n + " ";
+		setDefaultTextColor(-1);
 		setDefaultPoint(0, 0)
 				.setMax(-1).setBarName(name)
-				.setOnBarCreate(seekBar -> {})
+				.onBarCreate(seekBar -> {})
+				.setTextColor(default_text_color)
 				.setBarListener(new OPallSeekBarListener());
 	}
 
@@ -74,10 +91,13 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		onBarCreator.onSeekBarCreate(seekBar);
 
 		TextView textBar = (TextView) view.findViewById(R.id.barName);
+		if (text_color != -1) textBar.setTextColor(text_color);
 		textBar.setText(barName);
 
 		TextView valBar = (TextView) view.findViewById(R.id.barValue);
+		if (value_color != -1) valBar.setTextColor(value_color);
 		valBar.setText(calcBarValue(seekBar.getMax(), valueCorrection, seekBar.getProgress()));
+
 
 		seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener()
 				.onStart(barListener)
@@ -90,7 +110,19 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 	}
 
+	public InjectableSeekBar setTextColor(int color) {
+		return setNameColor(color).setValueColor(color);
+	}
 
+	public InjectableSeekBar setNameColor(int color) {
+		this.text_color = color;
+		return this;
+	}
+
+	public InjectableSeekBar setValueColor(int color) {
+		this.value_color = color;
+		return this;
+	}
 
 	public InjectableSeekBar setMax(int max) {
 		this.max = max == -1 ? 100 : max;
@@ -107,7 +139,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		return this;
 	}
 
-	public InjectableSeekBar setOnBarCreate(OnBarCreate onBarCreator) {
+	public InjectableSeekBar onBarCreate(OnBarCreate onBarCreator) {
 		this.onBarCreator = onBarCreator;
 		return this;
 	}

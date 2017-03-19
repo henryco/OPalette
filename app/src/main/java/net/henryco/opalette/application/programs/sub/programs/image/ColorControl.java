@@ -42,7 +42,7 @@ public class ColorControl extends AppSubControl<AppMainProto, EdTexture> {
 
 		InjectableSeekBar brightnessBar = new InjectableSeekBar(view, brightness);
 		brightnessBar.setDefaultPoint(0, 50);
-		brightnessBar.setOnBarCreate(bar -> getOPallListener().onOPallAction(edTexture ->
+		brightnessBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture ->
 				bar.setProgress(deNormalize(edTexture.getBrightness(), 100)))
 		);
 

@@ -49,9 +49,9 @@ public class TuneControl extends AppSubControl<AppMainProto, EdTexture> {
 		greenBar.setDefaultPoint(0, 50);
 		blueBar.setDefaultPoint(0, 50);
 
-		redBar.setOnBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.r, 100))));
-		greenBar.setOnBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.g, 100))));
-		blueBar.setOnBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.b, 100))));
+		redBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.r, 100))));
+		greenBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.g, 100))));
+		blueBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.b, 100))));
 
 		redBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
 			getOPallListener().onOPallAction(etx -> etx.add.r = normalize(progress, 100));

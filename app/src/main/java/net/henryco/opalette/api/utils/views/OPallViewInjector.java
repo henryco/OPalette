@@ -16,7 +16,7 @@ public abstract class OPallViewInjector<T> {
 
 	@SuppressWarnings("unchecked")
 	private static void inject(Activity context, OPallViewInjector injector, long delay) {
-
+		
 		context.runOnUiThread(() -> {
 			View view = ((LayoutInflater) context.getApplicationContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(injector.ids[1], null);
