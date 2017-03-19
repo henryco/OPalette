@@ -42,7 +42,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 	private static int default_bar_color = Color.DKGRAY;
 	public static void  setDefaultBarColor(int color) {
-		default_bar_color = color == -1 ? Color.RED : color;
+		default_bar_color = color == -1 ? Color.DKGRAY : color;
 	}
 
 	private OPallSeekBarListener barListener;
