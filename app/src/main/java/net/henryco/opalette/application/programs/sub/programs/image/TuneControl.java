@@ -1,5 +1,7 @@
 package net.henryco.opalette.application.programs.sub.programs.image;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import net.henryco.opalette.R;
@@ -8,7 +10,7 @@ import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
-import net.henryco.opalette.application.programs.sub.programs.AppSubControl;
+import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.deNormalize;
@@ -18,27 +20,18 @@ import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.
  * Created by HenryCo on 19/03/17.
  */
 
-public class TuneControl extends AppSubControl<AppMainProto, EdTexture> {
+public class TuneControl extends AppAutoSubControl<AppMainProto, EdTexture> {
 
-	private static final int TUNE = R.string.control_tune;
 	private static final int IMG = R.drawable.ic_tune_white_24dp;
+	private static final int TUNE = R.string.control_tune;
 
 	public TuneControl(OPallListener<EdTexture> listener) {
-		super(listener);
+		super(listener, IMG, TUNE);
 	}
 
 
 	@Override
-	protected void onInject(AppMainProto context, View view) {
-
-		loadImageOptionButton(view, TUNE, IMG, context.getActivityContext(), v ->
-				context.switchToFragmentOptions(loadControlFragment(onFragmentCreate))
-		);
-	}
-
-
-
-	private AppControlFragmentLoader<AppMainProto> onFragmentCreate = (view, context, savedInstanceState) -> {
+	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		int type = InjectableSeekBar.TYPE_SMALL;
 		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red");
@@ -67,7 +60,8 @@ public class TuneControl extends AppSubControl<AppMainProto, EdTexture> {
 		}));
 
 		OPallViewInjector.inject(context.getActivityContext(), blueBar, greenBar, redBar);
-	};
+	}
+
 
 
 }

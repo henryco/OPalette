@@ -40,7 +40,7 @@
             android:layout_toEndOf="@+id/seekBar"
             android:text="0"
             android:textAlignment="textStart"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="bold"/>
     </RelativeLayout>
 </LinearLayout>

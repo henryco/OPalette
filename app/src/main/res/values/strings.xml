@@ -28,6 +28,6 @@
     <string name="control_move">Move</string>
     <string name="control_translate">Translate</string>
     <string name="control_tune">Tune colors</string>
-
-
+    <string name="control_minimum">Minimum</string>
+    <string name="control_maximum">Maximum</string>
 </resources>

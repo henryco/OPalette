@@ -62,7 +62,9 @@ public class ImageProgram
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
-		OPallViewInjector.inject(context.getActivityContext(), new ColorControl(this));
+		OPallViewInjector.inject(context.getActivityContext(), new MinColorControl(this));
+		OPallViewInjector.inject(context.getActivityContext(), new MaxColorControl(this));
+		OPallViewInjector.inject(context.getActivityContext(), new BrightnessControl(this));
 		OPallViewInjector.inject(context.getActivityContext(), new TuneControl(this));
 		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(null));
 

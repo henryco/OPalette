@@ -23,8 +23,7 @@ import net.henryco.opalette.application.proto.AppMainProto;
  * Created by HenryCo on 18/03/17.
  */
 
-public abstract class AppSubControl<T extends AppMainProto, U> extends OPallViewInjector<T>
-		implements OPallListenerHolder<U> {
+public abstract class AppSubControl<T extends AppMainProto, U> extends OPallViewInjector<T> implements OPallListenerHolder<U> {
 
 	private OPallListener<U> listener;
 
@@ -38,7 +37,7 @@ public abstract class AppSubControl<T extends AppMainProto, U> extends OPallView
 		this.listener = listener;
 	}
 
-	public OPallListener<U> getOPallListener() {
+	protected OPallListener<U> getOPallListener() {
 		return listener;
 	}
 
@@ -47,11 +46,11 @@ public abstract class AppSubControl<T extends AppMainProto, U> extends OPallView
 
 
 
-	public static <T> ControlFragment<T> loadControlFragment(AppControlFragmentLoader<T> loader) {
+	protected static <T> ControlFragment<T> loadControlFragment(AppControlFragmentLoader<T> loader) {
 		return new ControlFragment<T>().onFragmentCreated(loader);
 	}
 
-	public static void loadImageOptionButton(View view, int textRes, int imgRes, Activity context, View.OnClickListener clickListener) {
+	protected static void loadImageOptionButton(View view, int textRes, int imgRes, Activity context, View.OnClickListener clickListener) {
 
 		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
 		textView.setText(textRes);
@@ -75,8 +74,8 @@ public abstract class AppSubControl<T extends AppMainProto, U> extends OPallView
 
 
 
-	public interface AppControlFragmentLoader<U> {
-		void onFragmentCreated(View view, U context, @Nullable Bundle savedInstanceState);
+	public interface AppControlFragmentLoader<V> {
+		void onFragmentCreated(View view, V context, @Nullable Bundle savedInstanceState);
 	}
 
 
