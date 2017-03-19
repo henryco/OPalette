@@ -3,12 +3,9 @@ package net.henryco.opalette.application.programs.sub.programs.image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
-import net.henryco.opalette.api.utils.OPallUtils;
 import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
@@ -27,32 +24,21 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
 	private static OPallListener<EdTexture> texListener;
 	private static final int BRIGHTNESS = R.string.control_brightness;
-	
+	private static final int BUTTON_IMAGE = R.drawable.ic_brightness_6_white_24dp;
 
 	public ColorControl(OPallListener<EdTexture> listener, OPallUpdObserver updObserver) {
 		super(R.id.scrollContainer, R.layout.image_option_button, listener, updObserver);
 		setOPallListener(listener);
-		setObservator(updObserver);
 	}
 
 	@Override
 	protected void onInject(MainActivity context, View view) {
 
-		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
-		textView.setText(BRIGHTNESS);
-
-		ImageButton imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
-		imageButton.setImageResource(R.drawable.ic_brightness_6_white_24dp);
-		imageButton.setClickable(false);
-
-		view.setOnClickListener(v ->
-				OPallUtils.pressButton75_225(context, imageButton, () -> {
-					synchronized (context) {
-						ControlFragment fragment = new ControlFragment();
-						context.runOnUiThread(() -> context.switchToFragmentOptions(fragment));
-					}
-				})
-		);
+		loadImageOptionButton(view, BRIGHTNESS, BUTTON_IMAGE, context, v -> {
+			synchronized (context) {
+				context.runOnUiThread(() -> context.switchToFragmentOptions(new ControlFragment()));
+			}
+		});
 	}
 
 
@@ -60,11 +46,6 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 	public void setOPallListener(OPallListener<EdTexture> listener) {
 		ColorControl.texListener = listener;
 	}
-
-
-
-
-
 
 
 

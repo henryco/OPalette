@@ -8,8 +8,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import net.henryco.opalette.R;
+import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.listener.OPallListenerHolder;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserved;
@@ -40,6 +44,22 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 		return updObserver;
 	}
 
+
+
+	public static void loadImageOptionButton(View view, int textRes, int imgRes, AppCompatActivity context, View.OnClickListener clickListener) {
+
+		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
+		textView.setText(textRes);
+
+		ImageButton imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
+		imageButton.setImageResource(imgRes);
+		imageButton.setClickable(false);
+
+		view.setOnClickListener(v ->
+				OPallAnimated.pressButton75_225(context, imageButton, () -> clickListener.onClick(v))
+		);
+
+	}
 
 
 
