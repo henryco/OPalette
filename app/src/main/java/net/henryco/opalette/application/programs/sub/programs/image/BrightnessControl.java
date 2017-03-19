@@ -13,8 +13,6 @@ import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
-import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.deNormalize;
-import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.normalize;
 
 /**
  * Created by HenryCo on 16/03/17.
@@ -38,11 +36,11 @@ public class BrightnessControl extends AppAutoSubControl<AppMainProto, EdTexture
 		InjectableSeekBar brightnessBar = new InjectableSeekBar(view, brightness);
 		brightnessBar.setDefaultPoint(0, 50);
 		brightnessBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture ->
-				bar.setProgress(deNormalize(edTexture.getBrightness(), 100)))
+				bar.setProgress(brightnessBar.de_norm(edTexture.getBrightness())))
 		);
 
 		brightnessBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			getOPallListener().onOPallAction(etx -> etx.brightness(b -> normalize(progress, 100)));
+			getOPallListener().onOPallAction(etx -> etx.brightness(b -> brightnessBar.norm(progress)));
 			context.getRenderSurface().update();
 		}));
 

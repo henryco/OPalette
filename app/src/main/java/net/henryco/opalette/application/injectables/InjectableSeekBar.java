@@ -119,6 +119,14 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 	}
 
+	public int de_norm(float v) {
+		return (int) (v * (max + valueCorrection) - valueCorrection);
+	}
+
+	public float norm(float v) {
+		return (v + valueCorrection) / (max + valueCorrection);
+	}
+
 
 	public InjectableSeekBar setBarColor(int color) {
 		return setProgressColor(color).setThumbColor(color);

@@ -7,8 +7,12 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.listener.OPallListener;
+import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
+import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
+
 
 /**
  * Created by HenryCo on 19/03/17.
@@ -16,7 +20,7 @@ import net.henryco.opalette.application.proto.AppMainProto;
 
 public class MaxColorControl extends AppAutoSubControl<AppMainProto, EdTexture> {
 
-	private static final int img_button_res = R.drawable.ic_tonality_white_down_24dp;
+	private static final int img_button_res = R.drawable.ic_tonality_white_up_24dp;
 	private static final int txt_button_res = R.string.control_maximum;
 
 	public MaxColorControl(OPallListener<EdTexture> listener) {
@@ -25,6 +29,36 @@ public class MaxColorControl extends AppAutoSubControl<AppMainProto, EdTexture> 
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
-//		TODO
+
+		int type = InjectableSeekBar.TYPE_SMALL;
+		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red");
+		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, "Green");
+		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, "Blue");
+
+		redBar.setMax(255);
+		greenBar.setMax(255);
+		blueBar.setMax(255);
+
+		redBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(redBar.de_norm(edTexture.max.r))));
+		greenBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(greenBar.de_norm(edTexture.max.g))));
+		blueBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(blueBar.de_norm(edTexture.max.b))));
+
+		redBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
+			getOPallListener().onOPallAction(etx -> etx.max.r = redBar.norm(progress));
+			context.getRenderSurface().update();
+		}));
+		greenBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
+			getOPallListener().onOPallAction(etx -> etx.max.g = greenBar.norm(progress));
+			context.getRenderSurface().update();
+		}));
+		blueBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
+			getOPallListener().onOPallAction(etx -> etx.max.b = blueBar.norm(progress));
+			context.getRenderSurface().update();
+		}));
+
+		OPallViewInjector.inject(context.getActivityContext(), blueBar, greenBar, redBar);
 	}
+
+
+
 }

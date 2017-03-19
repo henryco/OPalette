@@ -13,8 +13,6 @@ import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
-import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.deNormalize;
-import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.normalize;
 
 /**
  * Created by HenryCo on 19/03/17.
@@ -42,20 +40,20 @@ public class TuneControl extends AppAutoSubControl<AppMainProto, EdTexture> {
 		greenBar.setDefaultPoint(0, 50);
 		blueBar.setDefaultPoint(0, 50);
 
-		redBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.r, 100))));
-		greenBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.g, 100))));
-		blueBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(deNormalize(edTexture.add.b, 100))));
+		redBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(redBar.de_norm(edTexture.add.r))));
+		greenBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(greenBar.de_norm(edTexture.add.g))));
+		blueBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(blueBar.de_norm(edTexture.add.b))));
 
 		redBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			getOPallListener().onOPallAction(etx -> etx.add.r = normalize(progress, 100));
+			getOPallListener().onOPallAction(etx -> etx.add.r = redBar.norm(progress));
 			context.getRenderSurface().update();
 		}));
 		greenBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			getOPallListener().onOPallAction(etx -> etx.add.g = normalize(progress, 100));
+			getOPallListener().onOPallAction(etx -> etx.add.g = greenBar.norm(progress));
 			context.getRenderSurface().update();
 		}));
 		blueBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			getOPallListener().onOPallAction(etx -> etx.add.b = normalize(progress, 100));
+			getOPallListener().onOPallAction(etx -> etx.add.b = blueBar.norm(progress));
 			context.getRenderSurface().update();
 		}));
 
