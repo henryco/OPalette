@@ -35,19 +35,19 @@ public class GLESUtils {
 		public static final Color YELLOW = new Color(1.f,1.f,.0f,1.f);
 
 
-		public static final GLESUtils.Color[] COLORS = {
-				GLESUtils.Color.BLACK,
-				GLESUtils.Color.BLUE,
-				GLESUtils.Color.GREEN,
-				GLESUtils.Color.GREY,
-				GLESUtils.Color.LIME,
-				GLESUtils.Color.PINK,
-				GLESUtils.Color.RED,
-				GLESUtils.Color.SILVER,
-				GLESUtils.Color.TEAL,
-				GLESUtils.Color.TRANSPARENT,
-				GLESUtils.Color.WHITE,
-				GLESUtils.Color.YELLOW
+		public static final Color[] COLORS = {
+				Color.BLACK,
+				Color.BLUE,
+				Color.GREEN,
+				Color.GREY,
+				Color.LIME,
+				Color.PINK,
+				Color.RED,
+				Color.SILVER,
+				Color.TEAL,
+				Color.TRANSPARENT,
+				Color.WHITE,
+				Color.YELLOW
 		};
 
 
@@ -77,6 +77,10 @@ public class GLESUtils {
 			this.g = color.g;
 			this.b = color.b;
 			this.a = color.a;
+		}
+
+		public int hex() {
+			return android.graphics.Color.argb((int) a * 255, (int) r * 255, (int) g * 255, (int) b * 255);
 		}
 
 		@Override

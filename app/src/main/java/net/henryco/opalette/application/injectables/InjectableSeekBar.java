@@ -40,6 +40,10 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		default_text_color = color == -1 ? TEXT_COLOR_DEFAULT_DARK : color;
 	}
 
+	private static int default_bar_color = Color.DKGRAY;
+	public static void  setDefaultBarColor(int color) {
+		default_bar_color = color == -1 ? Color.RED : color;
+	}
 
 	private OPallSeekBarListener barListener;
 	private String barName;
@@ -47,8 +51,8 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	private int max;
 	private int text_color;
 	private int value_color;
-
-
+	private int progress_color;
+	private int thumb_color;
 
 
 	public InjectableSeekBar(View container, int type, String ... name) {
@@ -81,6 +85,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 				.setMax(-1).setBarName(name)
 				.onBarCreate(seekBar -> {})
 				.setTextColor(default_text_color)
+				.setBarColor(default_bar_color)
 				.setBarListener(new OPallSeekBarListener());
 	}
 
@@ -90,8 +95,8 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 		seekBar.setMax(max);
-		seekBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-		seekBar.getThumb().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+		seekBar.getProgressDrawable().setColorFilter(progress_color, PorterDuff.Mode.SRC_IN);
+		seekBar.getThumb().setColorFilter(thumb_color, PorterDuff.Mode.SRC_IN);
 		onBarCreator.onSeekBarCreate(seekBar);
 
 		TextView textBar = (TextView) view.findViewById(R.id.barName);
@@ -112,6 +117,21 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 				})
 		);
 
+	}
+
+
+	public InjectableSeekBar setBarColor(int color) {
+		return setProgressColor(color).setThumbColor(color);
+	}
+
+	public InjectableSeekBar setProgressColor(int color) {
+		this.progress_color = color;
+		return this;
+	}
+
+	public InjectableSeekBar setThumbColor(int color) {
+		this.thumb_color = color;
+		return this;
 	}
 
 	public InjectableSeekBar setTextColor(int color) {
