@@ -31,22 +31,21 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 	protected void onInject(MainActivity context, View view) {
 
 		loadImageOptionButton(view, BRIGHTNESS, BUTTON_IMAGE, context, v ->
-				context.switchToFragmentOptions(loadControlFragment(loader))
+				context.switchToFragmentOptions(loadControlFragment(onFragmentCreate))
 		);
 	}
 
 
 
 
-	private AppControlFragmentLoader<MainActivity> loader = (view, context, savedInstanceState) -> {
+	private AppControlFragmentLoader<MainActivity> onFragmentCreate = (view, context, savedInstanceState) -> {
 		String brightness = context.getResources().getString(R.string.control_brightness);
 
-		InjectableSeekBar brightnessBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_NORMAL, brightness);
+		InjectableSeekBar brightnessBar = new InjectableSeekBar(view, brightness);
 		brightnessBar.setDefaultPoint(0, 50);
-		brightnessBar.setOnBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> {
-			int br = deNormalize(edTexture.getBrightness(), 100);
-			bar.setProgress(br);
-		}));
+		brightnessBar.setOnBarCreate(bar -> getOPallListener().onOPallAction(edTexture ->
+				bar.setProgress(deNormalize(edTexture.getBrightness(), 100)))
+		);
 
 		brightnessBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
 			getOPallListener().onOPallAction(etx -> etx.brightness(b -> normalize(progress, 100)));

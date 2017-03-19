@@ -15,7 +15,7 @@ public abstract class OPallViewInjector<T extends Context> {
 
 
 	@SuppressWarnings("unchecked")
-	public static void inject(Activity context, OPallViewInjector injector, long delay) {
+	private static void inject(Activity context, OPallViewInjector injector, long delay) {
 
 		context.runOnUiThread(() -> {
 			View view = ((LayoutInflater) context.getApplicationContext()
@@ -46,8 +46,11 @@ public abstract class OPallViewInjector<T extends Context> {
 		});
 	}
 
-	public static void inject(Activity context, OPallViewInjector injector) {
-		inject(context, injector, 0);
+	public static void inject(Activity context, OPallViewInjector ... injector) {
+		inject(context, 0, injector);
+	}
+	public static void inject(Activity context, long delay, OPallViewInjector ... injector) {
+		for (OPallViewInjector i : injector) inject(context, i, delay);
 	}
 
 	private final int[] ids;

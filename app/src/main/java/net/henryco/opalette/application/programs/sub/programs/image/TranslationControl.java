@@ -26,12 +26,12 @@ public class TranslationControl extends AppSubControl<MainActivity, Void> {
 	@Override
 	protected void onInject(MainActivity context, View view) {
 		loadImageOptionButton(view, MOVE, BUTTON_IMAGE, context, v ->
-				context.switchToFragmentOptions(loadControlFragment(loader))
+				context.switchToFragmentOptions(loadControlFragment(onFragmentCreate))
 		);
 	}
 
 
-	private AppControlFragmentLoader<MainActivity> loader = (view, context, savedInstanceState) -> {
+	private AppControlFragmentLoader<MainActivity> onFragmentCreate = (view, context, savedInstanceState) -> {
 	//TODO
 	};
 

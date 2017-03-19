@@ -30,7 +30,7 @@ public class InjectableSeekBar extends OPallViewInjector {
 	private OPallSeekBarListener barListener;
 	private String barName;
 	private int valueCorrection;
-
+	private int max;
 
 
 	public InjectableSeekBar(View container, int type, String ... name) {
@@ -59,7 +59,8 @@ public class InjectableSeekBar extends OPallViewInjector {
 	private void init(String ... nm) {
 		String name = "";
 		for (String n : nm) name += n + " ";
-		setDefaultPoint(0, 0).setBarName(name)
+		setDefaultPoint(0, 0)
+				.setMax(-1).setBarName(name)
 				.setOnBarCreate(seekBar -> {})
 				.setBarListener(new OPallSeekBarListener());
 	}
@@ -69,6 +70,7 @@ public class InjectableSeekBar extends OPallViewInjector {
 	protected void onInject(Context context, View view) {
 
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+		seekBar.setMax(max);
 		onBarCreator.onSeekBarCreate(seekBar);
 
 		TextView textBar = (TextView) view.findViewById(R.id.barName);
@@ -90,6 +92,10 @@ public class InjectableSeekBar extends OPallViewInjector {
 
 
 
+	public InjectableSeekBar setMax(int max) {
+		this.max = max == -1 ? 100 : max;
+		return this;
+	}
 
 	public InjectableSeekBar setBarListener(OPallSeekBarListener listener) {
 		this.barListener = listener;

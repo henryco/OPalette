@@ -123,7 +123,7 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 
 		private AppControlFragmentLoader<T> loader;
 
-		public ControlFragment<T>  onFragmentCreated( AppControlFragmentLoader<T> loader) {
+		public ControlFragment<T> onFragmentCreated(AppControlFragmentLoader<T> loader) {
 			this.loader = loader;
 			return this;
 		}
