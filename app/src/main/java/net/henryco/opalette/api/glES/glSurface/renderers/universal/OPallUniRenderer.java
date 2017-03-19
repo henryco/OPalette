@@ -15,32 +15,32 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 27/02/17.
  */
 
-public abstract class OPallUniRenderer <T extends Context> implements GLSurfaceView.Renderer, OPallRequestListener {
+public abstract class OPallUniRenderer implements GLSurfaceView.Renderer, OPallRequestListener {
 
 
-	private T context;
+	private Context context;
 	private long id;
 	private OPallSurfaceView surfaceView = null;
 
-	public OPallUniRenderer(T context) {
+	public OPallUniRenderer(Context context) {
 		this(context, (int) System.nanoTime());
 	}
-	public OPallUniRenderer(T context, int id) {
+	public OPallUniRenderer(Context context, int id) {
 		setContext(context);
 		setID(id);
 	}
-	public OPallUniRenderer(T context, OPallSurfaceView view) {
+	public OPallUniRenderer(Context context, OPallSurfaceView view) {
 		this(context);
 		setSuperSurface(view);
 	}
-	public OPallUniRenderer(T context, int id, OPallSurfaceView view) {
+	public OPallUniRenderer(Context context, int id, OPallSurfaceView view) {
 		this(context, id);
 		setSuperSurface(view);
 	}
 
-	protected abstract void onSurfaceCreated(GL10 gl, EGLConfig config, int width, int height, T context);
-	protected abstract void onSurfaceChanged(GL10 gl, int width, int height, T context);
-	protected abstract void onDrawFrame(GL10 gl, T context);
+	protected abstract void onSurfaceCreated(GL10 gl, EGLConfig config, int width, int height, Context context);
+	protected abstract void onSurfaceChanged(GL10 gl, int width, int height, Context context);
+	protected abstract void onDrawFrame(GL10 gl, Context context);
 
 
 
@@ -76,18 +76,18 @@ public abstract class OPallUniRenderer <T extends Context> implements GLSurfaceV
 
 
 
-	protected void acceptRequest(Request request, T context) {}
+	protected void acceptRequest(Request request, Context context) {}
 
 	public OPallUniRenderer setID(long id) {
 		this.id = id;
 		return this;
 	}
 
-	public OPallUniRenderer setContext(T context) {
+	public OPallUniRenderer setContext(Context context) {
 		this.context = context;
 		return this;
 	}
-	public T getContext() {
+	public Context getContext() {
 		return this.context;
 	}
 
@@ -108,7 +108,7 @@ public abstract class OPallUniRenderer <T extends Context> implements GLSurfaceV
 		return this;
 	}
 
-	public OPallUniRenderer addToGLContextQueue(OPallBiConsumer<GL10, T> action) {
+	public OPallUniRenderer addToGLContextQueue(OPallBiConsumer<GL10, Context> action) {
 		surfaceView.addToGLContextQueue(gl -> action.consume(gl, context));
 		return this;
 	}

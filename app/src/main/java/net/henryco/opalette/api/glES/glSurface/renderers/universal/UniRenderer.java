@@ -13,38 +13,38 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class UniRenderer<T extends Context> extends OPallUniRenderer<T> implements OPallUpdObserver {
+public class UniRenderer extends OPallUniRenderer implements OPallUpdObserver {
 
 
-	private OPallUnderProgram<T> underProgram;
+	private OPallUnderProgram underProgram;
 	private int[] dimension = {0, 0};
 
-	public UniRenderer(T context) {
+	public UniRenderer(Context context) {
 		super(context);
 	}
-	public UniRenderer(T context, int id) {
+	public UniRenderer(Context context, int id) {
 		super(context, id);
 	}
-	public UniRenderer(T context, OPallSurfaceView view) {
+	public UniRenderer(Context context, OPallSurfaceView view) {
 		super(context, view);
 	}
-	public UniRenderer(T context, int id, OPallSurfaceView view) {
+	public UniRenderer(Context context, int id, OPallSurfaceView view) {
 		super(context, id, view);
 	}
 
-	public UniRenderer(T context, OPallUnderProgram<T> program) {
+	public UniRenderer(Context context, OPallUnderProgram program) {
 		this(context);
 		setProgram(program);
 	}
-	public UniRenderer(T context, int id, OPallUnderProgram<T> program) {
+	public UniRenderer(Context context, int id, OPallUnderProgram program) {
 		this(context, id);
 		setProgram(program);
 	}
-	public UniRenderer(T context, OPallSurfaceView view, OPallUnderProgram<T> program) {
+	public UniRenderer(Context context, OPallSurfaceView view, OPallUnderProgram program) {
 		this(context, view);
 		setProgram(program);
 	}
-	public UniRenderer(T context, int id, OPallSurfaceView view, OPallUnderProgram<T> program) {
+	public UniRenderer(Context context, int id, OPallSurfaceView view, OPallUnderProgram program) {
 		this(context, id, view);
 		setProgram(program);
 	}
@@ -71,24 +71,24 @@ public class UniRenderer<T extends Context> extends OPallUniRenderer<T> implemen
 
 
 	@Override
-	protected void onSurfaceCreated(GL10 gl, EGLConfig config, int width, int height, T context) {
+	protected void onSurfaceCreated(GL10 gl, EGLConfig config, int width, int height, Context context) {
 		if (underProgram != null) underProgram.create(gl, width, height, context);
 		dimension = new int[]{width, height};
 	}
 
 	@Override
-	protected void onSurfaceChanged(GL10 gl, int width, int height, T context) {
+	protected void onSurfaceChanged(GL10 gl, int width, int height, Context context) {
 		if (underProgram != null) underProgram.onSurfaceChange(gl, context, width, height);
 		dimension = new int[]{width, height};
 	}
 
 	@Override
-	protected void onDrawFrame(GL10 gl, T context) {
+	protected void onDrawFrame(GL10 gl, Context context) {
 		if (underProgram != null) underProgram.onDraw(gl, context, dimension[0], dimension[1]);
 	}
 
 
-	public UniRenderer<T> setRenderProgram(OPallUnderProgram<T> program) {
+	public UniRenderer setRenderProgram(OPallUnderProgram program) {
 		setProgram(program);
 		forceUpDate(()
 				-> addToGLContextQueue((gl10, context)
@@ -97,7 +97,7 @@ public class UniRenderer<T extends Context> extends OPallUniRenderer<T> implemen
 		return this;
 	}
 
-	private UniRenderer<T> setProgram(OPallUnderProgram<T> program) {
+	private UniRenderer setProgram(OPallUnderProgram program) {
 		this.underProgram = program;
 		program.setObservator(this);
 		return this;

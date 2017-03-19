@@ -5,12 +5,11 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.listener.OPallListener;
-import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
-import net.henryco.opalette.application.MainActivity;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppSubControl;
+import net.henryco.opalette.application.proto.AppMainProto;
 
 import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.deNormalize;
 import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.normalize;
@@ -19,27 +18,27 @@ import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.
  * Created by HenryCo on 19/03/17.
  */
 
-public class TuneControl extends AppSubControl<MainActivity, EdTexture> {
+public class TuneControl extends AppSubControl<AppMainProto, EdTexture> {
 
 	private static final int TUNE = R.string.control_tune;
 	private static final int IMG = R.drawable.ic_tune_white_24dp;
 
-	public TuneControl(OPallListener<EdTexture> listener, OPallUpdObserver updObserver) {
-		super(listener, updObserver);
+	public TuneControl(OPallListener<EdTexture> listener) {
+		super(listener);
 	}
 
 
 	@Override
-	protected void onInject(MainActivity context, View view) {
+	protected void onInject(AppMainProto context, View view) {
 
-		loadImageOptionButton(view, TUNE, IMG, context, v ->
+		loadImageOptionButton(view, TUNE, IMG, context.getActivityContext(), v ->
 				context.switchToFragmentOptions(loadControlFragment(onFragmentCreate))
 		);
 	}
 
 
 
-	private AppControlFragmentLoader<MainActivity> onFragmentCreate = (view, context, savedInstanceState) -> {
+	private AppControlFragmentLoader<AppMainProto> onFragmentCreate = (view, context, savedInstanceState) -> {
 
 		int type = InjectableSeekBar.TYPE_SMALL;
 		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red");
@@ -56,18 +55,18 @@ public class TuneControl extends AppSubControl<MainActivity, EdTexture> {
 
 		redBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
 			getOPallListener().onOPallAction(etx -> etx.add.r = normalize(progress, 100));
-			getUpdObserver().update();
+			context.getRenderSurface().update();
 		}));
 		greenBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
 			getOPallListener().onOPallAction(etx -> etx.add.g = normalize(progress, 100));
-			getUpdObserver().update();
+			context.getRenderSurface().update();
 		}));
 		blueBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
 			getOPallListener().onOPallAction(etx -> etx.add.b = normalize(progress, 100));
-			getUpdObserver().update();
+			context.getRenderSurface().update();
 		}));
 
-		OPallViewInjector.inject(context, blueBar, greenBar, redBar);
+		OPallViewInjector.inject(context.getActivityContext(), blueBar, greenBar, redBar);
 	};
 
 

@@ -5,7 +5,6 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.BarHorizontal;
 import net.henryco.opalette.api.glES.render.graphics.units.bar.OPallBar;
 import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
-import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.MainActivity;
@@ -72,10 +71,6 @@ public class PaletteBarProgram implements AppSubProgram<MainActivity>, AppSubPro
 		backBar.render(camera, cellPaletter, buffer_quantum);
 	}
 
-	@Override
-	public void setObservator(OPallUpdObserver observator) {
-
-	}
 
 	private void senBarHeightInfo() {
 		feedBackListener.sendRequest(new Request(send_back_bar_height, backBar.getHeight()));

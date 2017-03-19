@@ -1,9 +1,9 @@
 package net.henryco.opalette.application.programs.sub.programs;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,29 +16,21 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.listener.OPallListenerHolder;
-import net.henryco.opalette.api.utils.observer.OPallUpdObserved;
-import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.application.proto.AppMainProto;
 
 /**
  * Created by HenryCo on 18/03/17.
  */
 
-public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPallViewInjector<T>
-		implements OPallListenerHolder<U>, OPallUpdObserved {
+public abstract class AppSubControl<T extends AppMainProto, U> extends OPallViewInjector<T>
+		implements OPallListenerHolder<U> {
 
-	private OPallUpdObserver updObserver;
 	private OPallListener<U> listener;
 
-	public AppSubControl(OPallListener<U> listener, OPallUpdObserver updObserver) {
+	public AppSubControl(OPallListener<U> listener) {
 		super(R.id.scrollContainer, R.layout.image_option_button);
 		setOPallListener(listener);
-		setObservator(updObserver);
-	}
-
-	@Override
-	public void setObservator(OPallUpdObserver observator) {
-		updObserver = observator;
 	}
 
 	@Override
@@ -46,9 +38,6 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 		this.listener = listener;
 	}
 
-	public OPallUpdObserver getUpdObserver() {
-		return updObserver;
-	}
 	public OPallListener<U> getOPallListener() {
 		return listener;
 	}
@@ -58,11 +47,11 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 
 
 
-	public static <V extends AppCompatActivity> ControlFragment<V> loadControlFragment(AppControlFragmentLoader<V> loader) {
-		return new ControlFragment<V>().onFragmentCreated(loader);
+	public static <T> ControlFragment<T> loadControlFragment(AppControlFragmentLoader<T> loader) {
+		return new ControlFragment<T>().onFragmentCreated(loader);
 	}
 
-	public static void loadImageOptionButton(View view, int textRes, int imgRes, AppCompatActivity context, View.OnClickListener clickListener) {
+	public static void loadImageOptionButton(View view, int textRes, int imgRes, Activity context, View.OnClickListener clickListener) {
 
 		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
 		textView.setText(textRes);
@@ -86,12 +75,12 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 
 
 
-	public interface AppControlFragmentLoader<U extends AppCompatActivity> {
-		void onFragmentCreated(View view, U context,  @Nullable Bundle savedInstanceState);
+	public interface AppControlFragmentLoader<U> {
+		void onFragmentCreated(View view, U context, @Nullable Bundle savedInstanceState);
 	}
 
 
-	public static abstract class AppControlFragment<T extends AppCompatActivity> extends Fragment {
+	public static abstract class AppControlFragment<T> extends Fragment {
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -119,7 +108,7 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 	}
 
 
-	public static final class ControlFragment<T extends AppCompatActivity> extends AppControlFragment<T> {
+	public static final class ControlFragment<T> extends AppControlFragment<T> {
 
 		private AppControlFragmentLoader<T> loader;
 

@@ -1,6 +1,6 @@
 package net.henryco.opalette.application.injectables;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -14,7 +14,7 @@ import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
  * Created by HenryCo on 18/03/17.
  */
 
-public class InjectableSeekBar extends OPallViewInjector {
+public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 
 	public static final int TYPE_NORMAL = R.layout.bar_control_layout;
@@ -67,7 +67,7 @@ public class InjectableSeekBar extends OPallViewInjector {
 
 
 	@Override
-	protected void onInject(Context context, View view) {
+	protected void onInject(Activity context, View view) {
 
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 		seekBar.setMax(max);

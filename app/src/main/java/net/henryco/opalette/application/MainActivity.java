@@ -1,5 +1,6 @@
 package net.henryco.opalette.application;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.pm.ActivityInfo;
@@ -19,13 +20,10 @@ import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.ProgramPipeLine;
+import net.henryco.opalette.application.proto.AppMainProto;
 
-public class MainActivity extends AppCompatActivity {
-
-
-	public interface AppMainProtocol {
-		int send_bitmap_to_program = 233938111;
-	}
+public class MainActivity extends AppCompatActivity
+		implements AppMainProto, ProgramPipeLine.AppProgramProtocol {
 
 
 	private final RequestSender stateRequester = new RequestSender();
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+	@Override
 	public void switchToFragmentOptions(Fragment fragment) {
 
 		if (fragment != null) {
@@ -76,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 		actualFragment = fragment;
 	}
 
+	@Override
 	public void switchToScrollOptionsView() {
 
 		if (actualFragment != null) {
@@ -89,6 +88,16 @@ public class MainActivity extends AppCompatActivity {
 		actualFragment = null;
 	}
 
+	@Override
+	public OPallSurfaceView getRenderSurface() {
+		return (OPallSurfaceView) findViewById(R.id.opallView);
+	}
+
+	@Override
+	public Activity getActivityContext() {
+		return this;
+	}
+
 
 
 
@@ -98,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
 		}
 
-		OPallUniRenderer<MainActivity> renderer = new UniRenderer<>(this, new ProgramPipeLine());
+		OPallUniRenderer renderer = new UniRenderer(this, new ProgramPipeLine());
 		renderID = stateRequester.addRequestListener(renderer);
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
@@ -106,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 		oPallSurfaceView.setRenderer(renderer);
 
 		oPallSurfaceView.addToGLContextQueue(gl ->
-				stateRequester.sendNonSyncRequest(new Request(AppMainProtocol.send_bitmap_to_program,
+				stateRequester.sendNonSyncRequest(new Request(send_bitmap_to_program,
 						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
 		);
 

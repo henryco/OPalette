@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  * Created by HenryCo on 15/03/17.
  */
 
-public abstract class OPallViewInjector<T extends Context> {
+public abstract class OPallViewInjector<T> {
 
 
 	@SuppressWarnings("unchecked")

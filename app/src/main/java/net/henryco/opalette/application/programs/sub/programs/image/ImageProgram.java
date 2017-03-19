@@ -7,13 +7,12 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdT
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.listener.OPallListener;
-import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
-import net.henryco.opalette.application.MainActivity;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
+import net.henryco.opalette.application.proto.AppMainProto;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -22,7 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class ImageProgram
-		implements AppSubProgram<MainActivity>, AppSubProtocol, OPallListener<EdTexture> {
+		implements AppSubProgram<AppMainProto>, AppSubProtocol, OPallListener<EdTexture> {
 
 	private final static long id = methods.genID(ImageProgram.class);
 
@@ -30,7 +29,6 @@ public class ImageProgram
 	private EdTexture imageTexture;
 
 	private OPallRequester feedBackListener;
-	private OPallUpdObserver updObserver;
 
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {
@@ -60,14 +58,14 @@ public class ImageProgram
 
 
 	@Override
-	public void create(GL10 gl, int width, int height, MainActivity context) {
+	public void create(GL10 gl, int width, int height, AppMainProto context) {
 
-		if (updObserver == null) throw new RuntimeException("OPallUpdObserver == NULL!");
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
-		OPallViewInjector.inject(context, new ColorControl(this, updObserver));
-		OPallViewInjector.inject(context, new TranslationControl(null, updObserver));
-		OPallViewInjector.inject(context, new TuneControl(this, updObserver));
+		OPallViewInjector.inject(context.getActivityContext(), new ColorControl(this));
+		OPallViewInjector.inject(context.getActivityContext(), new TuneControl(this));
+		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(null));
+
 
 		imageBuffer = OPallFBOCreator.FrameBuffer();
 		imageTexture = new EdTexture();
@@ -77,7 +75,7 @@ public class ImageProgram
 
 
 	@Override
-	public void onSurfaceChange(GL10 gl, MainActivity context, int width, int height) {
+	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 
 		imageBuffer.createFBO(width, height, false);
 		imageTexture.setScreenDim(width, height);
@@ -86,7 +84,7 @@ public class ImageProgram
 
 
 	@Override
-	public void render(GL10 gl10, MainActivity context, Camera2D camera, int w, int h) {
+	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
 		imageBuffer.render(camera);
@@ -100,8 +98,4 @@ public class ImageProgram
 	}
 
 
-	@Override
-	public void setObservator(OPallUpdObserver observator) {
-		this.updObserver = observator;
-	}
 }

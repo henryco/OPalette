@@ -11,13 +11,13 @@ import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
-import net.henryco.opalette.application.MainActivity;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.image.ImageProgram;
 import net.henryco.opalette.application.programs.sub.programs.palette.PaletteBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.touch.TouchLinesProgram;
+import net.henryco.opalette.application.proto.AppMainProto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,16 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class ProgramPipeLine implements
-		OPallUnderProgram<MainActivity>, AppSubProtocol,
-		MainActivity.AppMainProtocol {
+public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubProtocol  {
+
+
+
+	public interface AppProgramProtocol {
+		int send_bitmap_to_program = 233938111;
+
+
+
+	}
 
 
 	private final long id;
@@ -41,10 +48,11 @@ public class ProgramPipeLine implements
 
 	private OPallUpdObserver observator;
 	private RequestSender requestSender;
-	private List<AppSubProgram<MainActivity>> subPrograms;
+	private List<AppSubProgram> subPrograms;
 
 	@SuppressWarnings("unchecked")
-	public static AppSubProgram<MainActivity>[] getDefaultPipeLineArray() {
+	public static AppSubProgram[] getDefaultPipeLineArray() {
+
 		return new AppSubProgram[]{
 
 				new ImageProgram(),
@@ -65,8 +73,8 @@ public class ProgramPipeLine implements
 		subPrograms = new ArrayList<>();
 		requestSender = new RequestSender();
 
-		AppSubProgram<MainActivity>[] pipeLine = getDefaultPipeLineArray();
-		for (AppSubProgram<MainActivity> abs : pipeLine){
+		AppSubProgram[] pipeLine = getDefaultPipeLineArray();
+		for (AppSubProgram abs : pipeLine){
 			requestSender.addRequestListener(abs);
 			abs.setFeedBackListener(requestSender);
 			subPrograms.add(abs);
@@ -79,7 +87,7 @@ public class ProgramPipeLine implements
 
 
 	@Override
-	public final void create(GL10 gl, int width, int height, MainActivity context) {
+	public final void create(GL10 gl, int width, int height, AppMainProto context) {
 
 		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
@@ -89,7 +97,7 @@ public class ProgramPipeLine implements
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox();
 
-		for (AppSubProgram<MainActivity> asp : subPrograms) {
+		for (AppSubProgram asp : subPrograms) {
 			asp.create(gl, width, height, context);
 		}
 
@@ -98,12 +106,12 @@ public class ProgramPipeLine implements
 
 
 	@Override
-	public final void onSurfaceChange(GL10 gl, MainActivity context, int width, int height) {
+	public final void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 
 		camera2D.set(width, height).update();
 		chessBox.setScreenDim(width, height);
 
-		for (AppSubProgram<MainActivity> asp : subPrograms) {
+		for (AppSubProgram asp : subPrograms) {
 			asp.onSurfaceChange(gl, context, width, height);
 		}
 
@@ -112,14 +120,14 @@ public class ProgramPipeLine implements
 
 
 	@Override
-	public final void onDraw(GL10 gl, MainActivity context, int width, int height) {
+	public final void onDraw(GL10 gl, AppMainProto context, int width, int height) {
 
 		camera2D.setPosY_absolute(0).update();
 		GLESUtils.clear();
 		chessBox.render(camera2D);
 
 		if (uCan) {
-			for (AppSubProgram<MainActivity> asp : subPrograms) {
+			for (AppSubProgram asp : subPrograms) {
 				asp.render(gl, context, camera2D, width, height);
 			}
 		}
@@ -129,9 +137,6 @@ public class ProgramPipeLine implements
 	@Override
 	public void setObservator(OPallUpdObserver observator) {
 		this.observator = observator;
-		for (AppSubProgram<MainActivity> asp : subPrograms) {
-			asp.setObservator(observator);
-		}
 	}
 
 
@@ -147,7 +152,7 @@ public class ProgramPipeLine implements
 	@Override
 	public void acceptRequest(Request request) {
 
-		request.openRequest(send_bitmap_to_program, () -> {
+		request.openRequest(AppProgramProtocol.send_bitmap_to_program, () -> {
 			uCan = true;
 			requestSender.sendRequest(new Request(set_first_image, (Bitmap)request.getData()));
 			observator.update();

@@ -2,12 +2,11 @@ package net.henryco.opalette.application.programs.sub.programs.touch;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
-import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
-import net.henryco.opalette.application.MainActivity;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
+import net.henryco.opalette.application.proto.AppMainProto;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -15,7 +14,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class TouchLinesProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
+public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
 	private final static long id = methods.genID(TouchLinesProgram.class);
 
@@ -44,25 +43,20 @@ public class TouchLinesProgram implements AppSubProgram<MainActivity>, AppSubPro
 	}
 
 	@Override
-	public void create(GL10 gl, int width, int height, MainActivity context) {
+	public void create(GL10 gl, int width, int height, AppMainProto context) {
 		touchLines = new TouchLines(width, height);
 		sendCoeffInfo();
 	}
 
 	@Override
-	public void onSurfaceChange(GL10 gl, MainActivity context, int width, int height) {
+	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 		touchLines.setScreenDim(width, height);
 		sendCoeffInfo();
 	}
 
 	@Override
-	public void render(GL10 gl10, MainActivity context, Camera2D camera, int w, int h) {
+	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 		touchLines.render(camera);
-	}
-
-	@Override
-	public void setObservator(OPallUpdObserver observator) {
-
 	}
 
 	private void sendCoeffInfo() {
