@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/appbar_padding_top">
+    >
 
 
     <ImageButton

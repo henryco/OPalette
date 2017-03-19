@@ -26,11 +26,11 @@
             android:id="@+id/seekBar"
             android:layout_width="275dp"
             android:layout_height="25dp"
-            android:layout_below="@+id/barName"
-            android:layout_centerHorizontal="false"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:layout_below="@+id/barName"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="11dp"/>
 
         <TextView
             android:id="@+id/barValue"
