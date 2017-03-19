@@ -43,9 +43,9 @@ public class TranslationControl extends AppSubControl<MainActivity, Void> {
 	}
 
 
-	public static final class ControlFragment extends AppControlFragment {
+	public static final class ControlFragment extends AppControlFragment<MainActivity> {
 		@Override
-		public void onFragmentCreated(View view, @Nullable Bundle savedInstanceState) {
+		public void onFragmentCreated(View view, MainActivity context, @Nullable Bundle savedInstanceState) {
 			//TODO
 		}
 	}

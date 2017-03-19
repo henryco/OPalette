@@ -49,10 +49,10 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
 
 
-	public static final class ControlFragment extends AppControlFragment {
+	public static final class ControlFragment extends AppControlFragment<MainActivity> {
 
 		@Override
-		public void onFragmentCreated(View view, @Nullable Bundle savedInstanceState) {
+		public void onFragmentCreated(View view, MainActivity context, @Nullable Bundle savedInstanceState) {
 
 			String brightness = getResources().getString(R.string.control_brightness);
 
@@ -68,7 +68,7 @@ public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 				getUpdObserver().update();
 			}));
 
-			OPallViewInjector.inject(getActivity(), brightnessBar);
+			OPallViewInjector.inject(context, brightnessBar);
 		}
 
 	}

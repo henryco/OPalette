@@ -64,7 +64,7 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 
 
 
-	public static abstract class AppControlFragment extends Fragment {
+	public static abstract class AppControlFragment<T extends AppCompatActivity> extends Fragment {
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,12 +74,20 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 			return linearLayout;
 		}
 
+		@SuppressWarnings("unchecked")
 		public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 			super.onViewCreated(view, savedInstanceState);
-			onFragmentCreated(view, savedInstanceState);
+			T context;
+			try {
+				context = (T) getActivity();
+			} catch (ClassCastException e) {
+				throw new RuntimeException(getClass().getName()+
+						" generic <T> must be compatible with super Activity instance");
+			}
+			onFragmentCreated(view, context, savedInstanceState);
 		}
 
-		public abstract void onFragmentCreated(View view, @Nullable Bundle savedInstanceState);
+		public abstract void onFragmentCreated(View view, T context,  @Nullable Bundle savedInstanceState);
 	}
 
 }
