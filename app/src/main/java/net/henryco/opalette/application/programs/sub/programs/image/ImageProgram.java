@@ -67,6 +67,7 @@ public class ImageProgram
 
 		OPallViewInjector.inject(context, new ColorControl(this, updObserver));
 		OPallViewInjector.inject(context, new TranslationControl(null, updObserver));
+		OPallViewInjector.inject(context, new TuneControl(this, updObserver));
 
 		imageBuffer = OPallFBOCreator.FrameBuffer();
 		imageTexture = new EdTexture();

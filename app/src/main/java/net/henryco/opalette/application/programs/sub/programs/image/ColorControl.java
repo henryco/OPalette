@@ -1,7 +1,5 @@
 package net.henryco.opalette.application.programs.sub.programs.image;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import net.henryco.opalette.R;
@@ -22,55 +20,42 @@ import static net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener.
  */
 public class ColorControl extends AppSubControl<MainActivity, EdTexture> {
 
-	private static OPallListener<EdTexture> texListener;
 	private static final int BRIGHTNESS = R.string.control_brightness;
 	private static final int BUTTON_IMAGE = R.drawable.ic_brightness_6_white_24dp;
 
 	public ColorControl(OPallListener<EdTexture> listener, OPallUpdObserver updObserver) {
-		super(R.id.scrollContainer, R.layout.image_option_button, listener, updObserver);
-		setOPallListener(listener);
+		super(listener, updObserver);
 	}
 
 	@Override
 	protected void onInject(MainActivity context, View view) {
 
-		loadImageOptionButton(view, BRIGHTNESS, BUTTON_IMAGE, context, v -> {
-			synchronized (context) {
-				context.runOnUiThread(() -> context.switchToFragmentOptions(new ControlFragment()));
-			}
-		});
-	}
-
-
-	@Override
-	public void setOPallListener(OPallListener<EdTexture> listener) {
-		ColorControl.texListener = listener;
+		loadImageOptionButton(view, BRIGHTNESS, BUTTON_IMAGE, context, v ->
+				context.switchToFragmentOptions(loadControlFragment(loader))
+		);
 	}
 
 
 
-	public static final class ControlFragment extends AppControlFragment<MainActivity> {
 
-		@Override
-		public void onFragmentCreated(View view, MainActivity context, @Nullable Bundle savedInstanceState) {
+	private AppControlFragmentLoader<MainActivity> loader = (view, context, savedInstanceState) -> {
+		String brightness = context.getResources().getString(R.string.control_brightness);
 
-			String brightness = getResources().getString(R.string.control_brightness);
+		InjectableSeekBar brightnessBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_NORMAL, brightness);
+		brightnessBar.setDefaultPoint(0, 50);
+		brightnessBar.setOnBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> {
+			int br = deNormalize(edTexture.getBrightness(), 100);
+			bar.setProgress(br);
+		}));
 
-			InjectableSeekBar brightnessBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_NORMAL, brightness);
-			brightnessBar.setDefaultPoint(0, 50);
-			brightnessBar.setOnBarCreate(bar -> texListener.onOPallAction(edTexture -> {
-				int br = deNormalize(edTexture.getBrightness(), 100);
-				bar.setProgress(br);
-			}));
+		brightnessBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
+			getOPallListener().onOPallAction(etx -> etx.brightness(b -> normalize(progress, 100)));
+			getUpdObserver().update();
+		}));
 
-			brightnessBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-				texListener.onOPallAction(etx -> etx.brightness(b -> normalize(progress, 100)));
-				getUpdObserver().update();
-			}));
+		OPallViewInjector.inject(context, brightnessBar);
+	};
 
-			OPallViewInjector.inject(context, brightnessBar);
-		}
 
-	}
 
 }

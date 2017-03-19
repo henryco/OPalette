@@ -27,24 +27,40 @@ import net.henryco.opalette.api.utils.views.OPallViewInjector;
 public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPallViewInjector<T>
 		implements OPallListenerHolder<U>, OPallUpdObserved {
 
-	private static OPallUpdObserver updObserver;
+	private OPallUpdObserver updObserver;
+	private OPallListener<U> listener;
 
-	public AppSubControl(int container, int layer, OPallListener<U> listener, OPallUpdObserver updObserver) {
-		super(container, layer);
+	public AppSubControl(OPallListener<U> listener, OPallUpdObserver updObserver) {
+		super(R.id.scrollContainer, R.layout.image_option_button);
 		setOPallListener(listener);
 		setObservator(updObserver);
 	}
 
 	@Override
 	public void setObservator(OPallUpdObserver observator) {
-		if (observator != null) updObserver = observator;
+		updObserver = observator;
 	}
 
-	public static OPallUpdObserver getUpdObserver() {
+	@Override
+	public void setOPallListener(OPallListener<U> listener) {
+		this.listener = listener;
+	}
+
+	public OPallUpdObserver getUpdObserver() {
 		return updObserver;
 	}
+	public OPallListener<U> getOPallListener() {
+		return listener;
+	}
 
 
+
+
+
+
+	public static <V extends AppCompatActivity> ControlFragment<V> loadControlFragment(AppControlFragmentLoader<V> loader) {
+		return new ControlFragment<V>().onFragmentCreated(loader);
+	}
 
 	public static void loadImageOptionButton(View view, int textRes, int imgRes, AppCompatActivity context, View.OnClickListener clickListener) {
 
@@ -56,12 +72,23 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 		imageButton.setClickable(false);
 
 		view.setOnClickListener(v ->
-				OPallAnimated.pressButton75_225(context, imageButton, () -> clickListener.onClick(v))
+				OPallAnimated.pressButton75_225(context, imageButton, () -> {
+					synchronized (context) {
+						context.runOnUiThread(() -> clickListener.onClick(v));
+					}
+				})
 		);
 
 	}
 
 
+
+
+
+
+	public interface AppControlFragmentLoader<U extends AppCompatActivity> {
+		void onFragmentCreated(View view, U context,  @Nullable Bundle savedInstanceState);
+	}
 
 
 	public static abstract class AppControlFragment<T extends AppCompatActivity> extends Fragment {
@@ -82,12 +109,29 @@ public abstract class AppSubControl<T extends AppCompatActivity, U> extends OPal
 				context = (T) getActivity();
 			} catch (ClassCastException e) {
 				throw new RuntimeException(getClass().getName()+
-						" generic <T> must be compatible with super Activity instance");
+						" generic <T extends AppCompatActivity> " +
+						"must be compatible with super Activity instance");
 			}
 			onFragmentCreated(view, context, savedInstanceState);
 		}
 
-		public abstract void onFragmentCreated(View view, T context,  @Nullable Bundle savedInstanceState);
+		protected abstract void onFragmentCreated(View view, T context, @Nullable Bundle savedInstanceState);
+	}
+
+
+	public static final class ControlFragment<T extends AppCompatActivity> extends AppControlFragment<T> {
+
+		private AppControlFragmentLoader<T> loader;
+
+		public ControlFragment<T>  onFragmentCreated( AppControlFragmentLoader<T> loader) {
+			this.loader = loader;
+			return this;
+		}
+
+		@Override
+		protected void onFragmentCreated(View view, T context, @Nullable Bundle savedInstanceState) {
+			if (loader != null) loader.onFragmentCreated(view, context, savedInstanceState);
+		}
 	}
 
 }

@@ -27,7 +27,7 @@
     <string name="control_brightness">Brightness</string>
     <string name="control_move">Move</string>
     <string name="control_translate">Translate</string>
-
+    <string name="control_tune">Tune colors</string>
 
 
 </resources>
