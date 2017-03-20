@@ -57,10 +57,11 @@ public class ConvolveTexture extends OPallTextureExtended {
 
 	public ConvolveTexture setFilterMatrix(float ... matrix) {
 
-		if (matrix.length == 0 || (matrix.length == 1 && matrix[0] == -1)) {
+		if (matrix.length == 0 || (matrix.length == 1 && matrix[0] == -1))
 			setEnable(false);
-		}
-
+		if (Math.sqrt(matrix.length) % 2 == 0)
+			throw new RuntimeException(getClass().getName()
+					+ ": Filter matrix dimension must be 3x3, 5x5, 7x7, 9x9 ...");
 		original_filter_matrix = matrix;
 		matrix_size = original_filter_matrix.length;
 		return setCenterEffect(center_scale);
