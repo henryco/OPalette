@@ -2,6 +2,7 @@ package net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
@@ -14,7 +15,10 @@ public class ConvolveTexture extends OPallTextureExtended {
 
 
 
-
+	private static final String u_matrixSize = "u_matrixSize";
+	private static final String u_matrix3 = "u_matrix3";
+	private static final String u_matrix5 = "u_matrix5";
+	private static final String u_texDim = "u_screenDim";
 
 
 
@@ -22,6 +26,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private float[] work_filter_matrix = {};
 	private float center_scale = 1;
 	private int matrix_size = 0;
+	private int matrix_sqrt_size = 0;
 
 	private boolean enable = false;
 
@@ -51,9 +56,12 @@ public class ConvolveTexture extends OPallTextureExtended {
 	@Override
 	protected void render(int program, Camera2D camera) {
 		if (isEnable()) {
-//			TODO
-		} else {
-//			TODO
+			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_texDim), getWidth(), getHeight());
+			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_matrixSize), matrix_sqrt_size);
+			String matrixTarget;
+			if (matrix_sqrt_size == 3) matrixTarget = u_matrix3;
+			else matrixTarget = u_matrix5;
+			GLES20.glUniform1fv(GLES20.glGetUniformLocation(program, matrixTarget), matrix_size, work_filter_matrix, 0);
 		}
 	}
 
@@ -69,6 +77,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 					+ ": Filter matrix dimension must be 3x3, 5x5, 7x7, 9x9 ...");
 		original_filter_matrix = matrix;
 		matrix_size = original_filter_matrix.length;
+		matrix_sqrt_size = (int) Math.sqrt(matrix_size);
 		return setCenterEffect(center_scale);
 	}
 
@@ -76,10 +85,9 @@ public class ConvolveTexture extends OPallTextureExtended {
 
 		center_scale = s;
 		float[] matrix = new float[matrix_size];
-		int dim = (int) Math.sqrt(matrix_size);
-		int center = (int) (0.5f * (dim - 1f));
+		int center = (int) (0.5f * (matrix_sqrt_size - 1f));
 		System.arraycopy(original_filter_matrix, 0, matrix, 0, matrix_size);
-		matrix[(center * dim) + center] *= center_scale;
+		matrix[(center * matrix_sqrt_size) + center] *= center_scale;
 		work_filter_matrix = normalize(matrix);
 		return this;
 	}
@@ -121,7 +129,6 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"\n" +
 			"// custom part\n" +
 			"uniform float u_matrixSize;  // 3, 5\n" +
-			"uniform float u_matrixDim;  // 9, 25\n" +
 			"uniform float u_matrix3[9];\n" +
 			"uniform float u_matrix5[25];\n" +
 			"\n" +

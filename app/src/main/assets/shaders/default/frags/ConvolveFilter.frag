@@ -10,12 +10,9 @@ uniform sampler2D u_Texture0;
 
 // custom part
 uniform float u_matrixSize;  // 3, 5
-uniform float u_matrixDim;  // 9, 25
 uniform float u_matrix3[9];
 uniform float u_matrix5[25];
-
 uniform vec2 u_screenDim;
-
 
 
 void main() {
