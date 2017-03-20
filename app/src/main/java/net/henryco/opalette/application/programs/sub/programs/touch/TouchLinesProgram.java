@@ -1,6 +1,7 @@
 package net.henryco.opalette.application.programs.sub.programs.touch;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
+import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -17,9 +18,9 @@ import javax.microedition.khronos.opengles.GL10;
 public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
 	private long id = methods.genID(TouchLinesProgram.class);
+	private ProxyRenderData<OPallRenderable> proxyRenderData = new ProxyRenderData<>();
 
 	private TouchLines touchLines;
-
 	private OPallRequester feedBackListener;
 
 
@@ -62,6 +63,19 @@ public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 		touchLines.render(camera);
+	}
+
+
+
+
+	@Override
+	public void setRenderData(OPallRenderable data) {
+		proxyRenderData.setRenderData(data);
+	}
+
+	@Override
+	public OPallRenderable getRenderData() {
+		return proxyRenderData.getRenderData();
 	}
 
 	private void sendCoeffInfo() {

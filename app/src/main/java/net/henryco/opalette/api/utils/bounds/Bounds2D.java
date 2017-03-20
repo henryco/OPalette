@@ -24,6 +24,7 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 
 
 	public Bounds2D set(Bounds2D other) {
+
 		x = other.x;
 		y = other.y;
 		width = other.width;
@@ -33,6 +34,7 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 		def_height = other.def_height;
 		vertices = other.getVertices();
 		order = other.getOrder();
+		holder.updateBounds();
 		generateOrderBuffer();
 		return this;
 	}

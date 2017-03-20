@@ -1,8 +1,10 @@
 package net.henryco.opalette.application.programs.sub.programs.image;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
+import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
@@ -18,8 +20,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class ImageProgram
-		implements AppSubProgram<AppMainProto>, AppSubProtocol {
+public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
 	private long id = methods.genID(ImageProgram.class);
 
@@ -29,7 +30,6 @@ public class ImageProgram
 	private OPallRequester feedBackListener;
 
 
-
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {
 		this.feedBackListener = feedBackListener;
@@ -37,16 +37,7 @@ public class ImageProgram
 
 	@Override
 	public void acceptRequest(Request request) {
-		request.openRequest(set_first_image, () -> {
-			imageTexture.setBitmap(request.getData());
-			float scrWidth = imageTexture.getScreenWidth();
-			float w = imageTexture.getWidth();
-			float h = imageTexture.getHeight();
-			float scale = scrWidth / w;
-			imageTexture.bounds(b -> b.setScale(scale));
 
-			feedBackListener.sendRequest(new Request(set_touch_lines_def_size, scrWidth, h * scale));
-		});
 	}
 
 	@Override
@@ -93,9 +84,17 @@ public class ImageProgram
 
 		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
 		imageBuffer.render(camera);
-		feedBackListener.sendRequest(new Request(send_first_image_buffer, imageBuffer.getTexture()));
 	}
 
 
 
+	@Override
+	public void setRenderData(OPallRenderable data) {
+		imageTexture.set((Texture) data);
+	}
+
+	@Override
+	public OPallRenderable getRenderData() {
+		return imageBuffer.getTexture();
+	}
 }

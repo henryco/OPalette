@@ -3,6 +3,7 @@ package net.henryco.opalette.application.programs.sub.programs.gradient;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
+import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTexture;
@@ -24,6 +25,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 	private long id = methods.genID(GradientBarProgram.class);
+	private ProxyRenderData<Texture> proxyRenderData = new ProxyRenderData<>();
 
 
 	private MultiTexture multiTexture;
@@ -31,10 +33,10 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	private FrameBuffer barSrcBuffer;
 
 
-	private Texture externalSource;
 	private float[] externalLineCoeffs = {};
 	private float externalBarHeight = 0;
 	private int buffer_quantum = 5;
+
 
 	private OPallRequester feedBackListener;
 
@@ -48,7 +50,6 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 		request.openRequest(set_buffer_quantum, () -> buffer_quantum = request.getData());
 		request.openRequest(send_back_bar_height, () -> externalBarHeight = request.getData());
 		request.openRequest(send_line_coeffs, () -> externalLineCoeffs = request.getData());
-		request.openRequest(send_first_image_buffer, () -> externalSource = request.getData());
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	@Override
 	public void render(GL10 gl10, MainActivity context, Camera2D camera, int w, int h) {
 
-		multiTexture.set(0, externalSource);
+		multiTexture.set(0, getRenderData());
 		multiTexture.set(1, barSrcBuffer.getTexture());
 		multiTexture.setFocusOn(1);
 
@@ -90,8 +91,18 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), w, h - externalBarHeight);
 			GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, externalLineCoeffs, 0);
 		}));
+		setRenderData(barGradientBuffer.getTexture());
+	}
 
-		feedBackListener.sendRequest(new Request(send_bar_gradient_buffer, barGradientBuffer.getTexture()));
+
+	@Override
+	public void setRenderData(OPallRenderable data) {
+		proxyRenderData.setRenderData((Texture) data);
+	}
+
+	@Override
+	public Texture getRenderData() {
+		return proxyRenderData.getRenderData();
 	}
 
 

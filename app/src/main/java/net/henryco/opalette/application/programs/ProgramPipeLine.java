@@ -1,12 +1,14 @@
 package net.henryco.opalette.application.programs;
 
-import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
+import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -34,9 +36,6 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 	public interface AppProgramProtocol {
 		int send_bitmap_to_program = 233938111;
-
-
-
 	}
 
 
@@ -45,6 +44,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 	private Camera2D camera2D;
 	private ChessBox chessBox;
+	private Texture startImage;
 
 	private OPallUpdObserver observator;
 	private RequestSender requestSender;
@@ -99,7 +99,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox();
 
-
+		startImage = new EdTexture();
+		startImage.setScreenDim(width, height);
 
 		for (AppSubProgram asp : subPrograms) {
 			asp.create(gl, width, height, context);
@@ -114,6 +115,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		camera2D.set(width, height).update();
 		chessBox.setScreenDim(width, height);
+		startImage.setScreenDim(width, height);
 
 		for (AppSubProgram asp : subPrograms) {
 			asp.onSurfaceChange(gl, context, width, height);
@@ -129,10 +131,14 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		camera2D.setPosY_absolute(0).update();
 		GLESUtils.clear();
 		chessBox.render(camera2D);
+		startImage.render(camera2D);
 
 		if (uCan) {
+			OPallRenderable renderData = startImage;
 			for (AppSubProgram asp : subPrograms) {
+				if (renderData != null) asp.setRenderData(renderData);
 				asp.render(gl, context, camera2D, width, height);
+				renderData = asp.getRenderData();
 			}
 		}
 	}
@@ -158,7 +164,16 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		request.openRequest(AppProgramProtocol.send_bitmap_to_program, () -> {
 			uCan = true;
-			requestSender.sendRequest(new Request(set_first_image, (Bitmap)request.getData()));
+
+			startImage.setBitmap(request.getData());
+			float scrWidth = startImage.getScreenWidth();
+			float w = startImage.getWidth();
+			float h = startImage.getHeight();
+			float scale = scrWidth / w;
+
+			startImage.bounds(b -> b.setScale(scale));
+
+			requestSender.sendRequest(new Request(set_touch_lines_def_size, scrWidth, h * scale));
 			observator.update();
 		});
 	}
