@@ -8,7 +8,6 @@ import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -99,7 +98,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox();
 
-		startImage = new EdTexture();
+		startImage = new Texture();
 		startImage.setScreenDim(width, height);
 
 		for (AppSubProgram asp : subPrograms) {
@@ -131,7 +130,6 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		camera2D.setPosY_absolute(0).update();
 		GLESUtils.clear();
 		chessBox.render(camera2D);
-		startImage.render(camera2D);
 
 		if (uCan) {
 			OPallRenderable renderData = startImage;
