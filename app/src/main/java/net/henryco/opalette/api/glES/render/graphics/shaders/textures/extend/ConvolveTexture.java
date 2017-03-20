@@ -28,11 +28,29 @@ public class ConvolveTexture extends OPallTextureExtended {
 					1, 1, 1
 			};
 		}
+		public static float[] m_blur() {
+			return new float[] {
+					0, 0, 1, 0, 0,
+					0, 1, 1, 1, 0,
+					1, 1, 1, 1, 1,
+					0, 1, 1, 1, 0,
+					0, 0, 1, 0, 0
+			};
+		}
 		public static float[] m_gaussianBlur() {
 			return new float[] {
 					1, 2, 1,
 					2, 4, 2,
 					1, 2, 1
+			};
+		}
+		public static float[] m_sharpen() {
+			return new float[] {
+					-1, -1, -1, -1, -1,
+					-1,  2,  2,  2, -1,
+					-1,  2,  8,  2, -1,
+					-1,  2,  2,  2, -1,
+					-1, -1, -1, -1, -1
 			};
 		}
 		public static float[] m_sharpen1() {
@@ -72,7 +90,20 @@ public class ConvolveTexture extends OPallTextureExtended {
 					-1, -1, -1, -1, -1
 			};
 		}
-
+		public static float[] m_emboss1() {
+			return new float[] {
+					-2, -1, 0,
+					-1, 1, 1,
+					0, 1, 2
+			};
+		}
+		public static float[] m_emboss2() {
+			return new float[] {
+					-2, 0, 0,
+					0, 1, 0,
+					0, 0, 2
+			};
+		}
 		public static float[] m_diagShatter() {
 			return new float[] {
 					1, 0, 0, 0, 1,
@@ -102,6 +133,8 @@ public class ConvolveTexture extends OPallTextureExtended {
 					1, 4, 6, 4, 1
 			};
 		}
+
+
 	}
 
 
