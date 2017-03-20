@@ -4,20 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 /**
  * Created by HenryCo on 19/03/17.
  */
 
-public abstract class AppAutoSubControl<T extends AppMainProto, U> extends AppSubControl<T, U> {
+public abstract class AppAutoSubControl<T extends AppMainProto> extends AppSubControl<T> {
 
 	private final int img_button_res;
 	private final int txt_button_res;
 
-	public AppAutoSubControl(OPallListener<U> listener, int img_button_res, int txt_button_res) {
-		super(listener);
+	public AppAutoSubControl(int img_button_res, int txt_button_res) {
 		this.img_button_res = img_button_res;
 		this.txt_button_res = txt_button_res;
 	}

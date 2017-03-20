@@ -3,6 +3,7 @@ package net.henryco.opalette.application.programs.sub.programs.image;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
@@ -29,6 +30,9 @@ public class ImageProgram
 	private EdTexture imageTexture;
 
 	private OPallRequester feedBackListener;
+
+
+	private ConvolveTexture filterTexture;
 
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {
@@ -62,16 +66,21 @@ public class ImageProgram
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
-		OPallViewInjector.inject(context.getActivityContext(), new MaxColorControl(this));
-		OPallViewInjector.inject(context.getActivityContext(), new MinColorControl(this));
-		OPallViewInjector.inject(context.getActivityContext(), new BrightnessControl(this));
-		OPallViewInjector.inject(context.getActivityContext(), new TuneControl(this));
-		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(null));
-
-
 		imageBuffer = OPallFBOCreator.FrameBuffer();
+
 		imageTexture = new EdTexture();
 		imageTexture.setScreenDim(width, height);
+
+		filterTexture = new ConvolveTexture();
+		filterTexture.setScreenDim(width, height);
+
+
+		
+		OPallViewInjector.inject(context.getActivityContext(), new MaxColorControl(imageTexture));
+		OPallViewInjector.inject(context.getActivityContext(), new MinColorControl(imageTexture));
+		OPallViewInjector.inject(context.getActivityContext(), new BrightnessControl(imageTexture));
+		OPallViewInjector.inject(context.getActivityContext(), new TuneControl(imageTexture));
+		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl());
 	}
 
 

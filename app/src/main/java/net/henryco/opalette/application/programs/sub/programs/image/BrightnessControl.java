@@ -6,7 +6,6 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
-import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -17,15 +16,17 @@ import net.henryco.opalette.application.proto.AppMainProto;
 /**
  * Created by HenryCo on 16/03/17.
  */
-public class BrightnessControl extends AppAutoSubControl<AppMainProto, EdTexture> {
+public class BrightnessControl extends AppAutoSubControl<AppMainProto> {
 
 
 	private static final int BUTTON_IMAGE = R.drawable.ic_brightness_6_white_24dp;
 	private static final int BRIGHTNESS = R.string.control_brightness;
 
+	private EdTexture edTexture;
 
-	public BrightnessControl(OPallListener<EdTexture> listener) {
-		super(listener, BUTTON_IMAGE, BRIGHTNESS);
+	public BrightnessControl(EdTexture edTexture) {
+		super(BUTTON_IMAGE, BRIGHTNESS);
+		this.edTexture = edTexture;
 	}
 
 
@@ -35,12 +36,13 @@ public class BrightnessControl extends AppAutoSubControl<AppMainProto, EdTexture
 
 		InjectableSeekBar brightnessBar = new InjectableSeekBar(view, brightness);
 		brightnessBar.setDefaultPoint(0, 50);
-		brightnessBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture ->
-				bar.setProgress(brightnessBar.de_norm(edTexture.getBrightness())))
+
+		brightnessBar.onBarCreate(bar ->
+				bar.setProgress(brightnessBar.de_norm(edTexture.getBrightness()))
 		);
 
 		brightnessBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			getOPallListener().onOPallAction(etx -> etx.brightness(b -> brightnessBar.norm(progress)));
+			edTexture.brightness(b -> brightnessBar.norm(progress));
 			context.getRenderSurface().update();
 		}));
 

@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.OPallAnimated;
-import net.henryco.opalette.api.utils.listener.OPallListener;
-import net.henryco.opalette.api.utils.listener.OPallListenerHolder;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -23,24 +21,13 @@ import net.henryco.opalette.application.proto.AppMainProto;
  * Created by HenryCo on 18/03/17.
  */
 
-public abstract class AppSubControl<T extends AppMainProto, U> extends OPallViewInjector<T> implements OPallListenerHolder<U> {
+public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInjector<T>  {
 
-	private OPallListener<U> listener;
 
-	public AppSubControl(OPallListener<U> listener) {
+
+	public AppSubControl() {
 		super(R.id.scrollContainer, R.layout.image_option_button);
-		setOPallListener(listener);
 	}
-
-	@Override
-	public void setOPallListener(OPallListener<U> listener) {
-		this.listener = listener;
-	}
-
-	protected OPallListener<U> getOPallListener() {
-		return listener;
-	}
-
 
 
 

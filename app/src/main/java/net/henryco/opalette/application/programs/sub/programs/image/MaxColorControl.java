@@ -6,7 +6,6 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
-import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -18,13 +17,16 @@ import net.henryco.opalette.application.proto.AppMainProto;
  * Created by HenryCo on 19/03/17.
  */
 
-public class MaxColorControl extends AppAutoSubControl<AppMainProto, EdTexture> {
+public class MaxColorControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_tonality_white_up_24dp;
 	private static final int txt_button_res = R.string.control_maximum;
 
-	public MaxColorControl(OPallListener<EdTexture> listener) {
-		super(listener, img_button_res, txt_button_res);
+	private EdTexture edTexture;
+
+	public MaxColorControl(EdTexture edTexture) {
+		super(img_button_res, txt_button_res);
+		this.edTexture = edTexture;
 	}
 
 	@Override
@@ -39,20 +41,20 @@ public class MaxColorControl extends AppAutoSubControl<AppMainProto, EdTexture> 
 		greenBar.setMax(255);
 		blueBar.setMax(255);
 
-		redBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(redBar.de_norm(edTexture.max.r))));
-		greenBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(greenBar.de_norm(edTexture.max.g))));
-		blueBar.onBarCreate(bar -> getOPallListener().onOPallAction(edTexture -> bar.setProgress(blueBar.de_norm(edTexture.max.b))));
+		redBar.onBarCreate(bar -> bar.setProgress(redBar.de_norm(edTexture.max.r)));
+		greenBar.onBarCreate(bar -> bar.setProgress(greenBar.de_norm(edTexture.max.g)));
+		blueBar.onBarCreate(bar -> bar.setProgress(blueBar.de_norm(edTexture.max.b)));
 
 		redBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			getOPallListener().onOPallAction(etx -> etx.max.r = redBar.norm(progress));
+			edTexture.max.r = redBar.norm(progress);
 			context.getRenderSurface().update();
 		}));
 		greenBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			getOPallListener().onOPallAction(etx -> etx.max.g = greenBar.norm(progress));
+			edTexture.max.g = greenBar.norm(progress);
 			context.getRenderSurface().update();
 		}));
 		blueBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			getOPallListener().onOPallAction(etx -> etx.max.b = blueBar.norm(progress));
+			edTexture.max.b = blueBar.norm(progress);
 			context.getRenderSurface().update();
 		}));
 
