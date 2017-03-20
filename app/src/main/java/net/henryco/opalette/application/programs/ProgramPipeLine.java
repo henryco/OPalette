@@ -134,8 +134,10 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		if (uCan) {
 			OPallRenderable renderData = startImage;
 			for (AppSubProgram asp : subPrograms) {
-				if (renderData != null) asp.setRenderData(renderData);
-				asp.render(gl, context, camera2D, width, height);
+				if (renderData != null) {
+					asp.setRenderData(renderData);
+					asp.render(gl, context, camera2D, width, height);
+				}
 				renderData = asp.getRenderData();
 			}
 		}
