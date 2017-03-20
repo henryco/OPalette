@@ -8,6 +8,7 @@ import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -84,7 +85,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	}
 
 
-
+	ConvolveTexture filter;
 
 
 	@Override
@@ -105,6 +106,10 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 			asp.create(gl, width, height, context);
 		}
 
+		filter = new ConvolveTexture();
+		filter.setScreenDim(width, height);
+		filter.setEnable(true);
+		filter.setFilterMatrix(ConvolveTexture.matrix.m_identity());
 	}
 
 
@@ -119,7 +124,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		for (AppSubProgram asp : subPrograms) {
 			asp.onSurfaceChange(gl, context, width, height);
 		}
-
+		filter.setScreenDim(width, height);
 	}
 
 
@@ -141,6 +146,9 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				renderData = asp.getRenderData();
 			}
 		}
+
+		filter.set(startImage);
+		filter.render(camera2D);
 	}
 
 
@@ -163,7 +171,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	public void acceptRequest(Request request) {
 
 		request.openRequest(AppProgramProtocol.send_bitmap_to_program, () -> {
-			uCan = true;
+//			uCan = true;
 
 			startImage.setBitmap(request.getData());
 			float scrWidth = startImage.getScreenWidth();

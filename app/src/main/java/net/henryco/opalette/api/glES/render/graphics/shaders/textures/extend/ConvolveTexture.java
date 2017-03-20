@@ -97,10 +97,9 @@ public class ConvolveTexture extends OPallTextureExtended {
 
 		float sum = 0;
 		for (float v : matrix) sum += v;
-		float n = sum / matrix.length;
-		if (n == 0) return matrix;
+		if (sum == 0) return matrix;
 		for (int i = 0; i < matrix.length; i++)
-			matrix[i] /= n;
+			matrix[i] /= sum;
 		return matrix;
 	}
 
