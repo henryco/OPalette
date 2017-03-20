@@ -19,7 +19,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class PaletteBarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
-	private static final long id = methods.genID(PaletteBarProgram.class);
+	private long id = methods.genID(PaletteBarProgram.class);
 
 
 	private CellPaletter cellPaletter;
@@ -46,6 +46,11 @@ public class PaletteBarProgram implements AppSubProgram<MainActivity>, AppSubPro
 	@Override
 	public long getID() {
 		return id;
+	}
+
+	@Override
+	public void setID(long id) {
+		this.id = id;
 	}
 
 	@Override

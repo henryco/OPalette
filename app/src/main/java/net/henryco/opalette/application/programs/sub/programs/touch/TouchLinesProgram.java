@@ -16,7 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
-	private final static long id = methods.genID(TouchLinesProgram.class);
+	private long id = methods.genID(TouchLinesProgram.class);
 
 	private TouchLines touchLines;
 
@@ -40,6 +40,11 @@ public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public long getID() {
 		return id;
+	}
+
+	@Override
+	public void setID(long id) {
+		this.id = id;
 	}
 
 	@Override

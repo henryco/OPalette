@@ -13,5 +13,5 @@ import javax.microedition.khronos.opengles.GL10;
 public interface AppSubProgram<T> extends OPallSubProgram<T>, OPallRequestFeedBack {
 
 	void render(GL10 gl10, T context, Camera2D camera, int w, int h);
-
+	void setID(long id);
 }

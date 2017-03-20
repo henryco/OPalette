@@ -35,9 +35,9 @@ public class MinColorControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		int type = InjectableSeekBar.TYPE_SMALL;
-		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red min");
-		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, "Green min");
-		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, "Blue min");
+		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red");
+		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, "Green");
+		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, "Blue");
 
 		redBar.setMax(255);
 		greenBar.setMax(255);

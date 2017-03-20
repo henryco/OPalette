@@ -20,6 +20,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private static final String u_matrix5 = "u_matrix5";
 	private static final String u_texDim = "u_screenDim";
 
+	public static final FilterMatrices matrix = new FilterMatrices();
 
 
 	private float[] original_filter_matrix = {};
@@ -131,9 +132,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"uniform float u_matrixSize;  // 3, 5\n" +
 			"uniform float u_matrix3[9];\n" +
 			"uniform float u_matrix5[25];\n" +
-			"\n" +
 			"uniform vec2 u_screenDim;\n" +
-			"\n" +
 			"\n" +
 			"\n" +
 			"void main() {\n" +
@@ -159,23 +158,23 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"}";
 
 
-	public static final class matrices {
+	public static final class FilterMatrices {
 
-		public static float[] m_identity(){
+		public final float[] m_identity(){
 			return new float[] {
 					0, 0, 0,
 					0, 1, 0,
 					0, 0, 0
 			};
 		}
-		public static float[] m_boxBlur() {
+		public final float[] m_boxBlur() {
 			return new float[] {
 					1, 1, 1,
 					1, 1, 1,
 					1, 1, 1
 			};
 		}
-		public static float[] m_blur() {
+		public final float[] m_blur() {
 			return new float[] {
 					0, 0, 1, 0, 0,
 					0, 1, 1, 1, 0,
@@ -184,14 +183,14 @@ public class ConvolveTexture extends OPallTextureExtended {
 					0, 0, 1, 0, 0
 			};
 		}
-		public static float[] m_gaussianBlur() {
+		public final float[] m_gaussianBlur() {
 			return new float[] {
 					1, 2, 1,
 					2, 4, 2,
 					1, 2, 1
 			};
 		}
-		public static float[] m_sharpen() {
+		public final float[] m_sharpen() {
 			return new float[] {
 					-1, -1, -1, -1, -1,
 					-1,  2,  2,  2, -1,
@@ -200,35 +199,35 @@ public class ConvolveTexture extends OPallTextureExtended {
 					-1, -1, -1, -1, -1
 			};
 		}
-		public static float[] m_sharpen1() {
+		public final float[] m_sharpen1() {
 			return new float[] {
 					0, -1, 0,
 					-1, 5, -1,
 					0, -1, 0
 			};
 		}
-		public static float[] m_sharpen2() {
+		public final float[] m_sharpen2() {
 			return new float[] {
 					-1, -1, -1,
 					-1, 0, -1,
 					-1, -1, -1
 			};
 		}
-		public static float[] m_sharpen3() {
+		public final float[] m_sharpen3() {
 			return new float[]{
 					-1, -1, -1,
 					-1, 8, -1,
 					-1, -1, -1
 			};
 		}
-		public static float[] m_sharpen4() {
+		public final float[] m_sharpen4() {
 			return new float[]{
 					1, -2, 1,
 					-2, 5, -2,
 					1, -2, 1
 			};
 		}
-		public static float[] m_sharpen5() {
+		public final float[] m_sharpen5() {
 			return new float[] {
 					-1, -1, -1, -1, -1,
 					-1, 3, 4, 3, -1,
@@ -237,21 +236,21 @@ public class ConvolveTexture extends OPallTextureExtended {
 					-1, -1, -1, -1, -1
 			};
 		}
-		public static float[] m_emboss1() {
+		public final float[] m_emboss1() {
 			return new float[] {
 					-2, -1, 0,
 					-1, 1, 1,
 					0, 1, 2
 			};
 		}
-		public static float[] m_emboss2() {
+		public final float[] m_emboss2() {
 			return new float[] {
 					-2, 0, 0,
 					0, 1, 0,
 					0, 0, 2
 			};
 		}
-		public static float[] m_diagShatter() {
+		public final float[] m_diagShatter() {
 			return new float[] {
 					1, 0, 0, 0, 1,
 					0, 0, 0, 0, 0,
@@ -260,7 +259,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 					1, 0, 0, 0, 1
 			};
 		}
-		public static float[] m_horizontalMotionBlur() {
+		public final float[] m_horizontalMotionBlur() {
 			return new float[] {
 					0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0,
@@ -269,7 +268,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 					0, 0, 0, 0, 0
 			};
 		}
-		public static float[] m_unsharp() {
+		public final float[] m_unsharp() {
 			return new float[] {
 					1, 4, 6, 4, 1,
 					4, 16, 24, 16, 4,

@@ -23,7 +23,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
-	private final static long id = methods.genID(GradientBarProgram.class);
+	private long id = methods.genID(GradientBarProgram.class);
 
 
 	private MultiTexture multiTexture;
@@ -54,6 +54,11 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	@Override
 	public long getID() {
 		return id;
+	}
+
+	@Override
+	public void setID(long id) {
+		this.id = id;
 	}
 
 	@Override

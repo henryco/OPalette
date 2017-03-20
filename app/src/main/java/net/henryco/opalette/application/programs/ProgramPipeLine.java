@@ -69,6 +69,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	public ProgramPipeLine(long id){
 
 		this.id = id;
+		long cur = System.currentTimeMillis() - hashCode();
 
 		subPrograms = new ArrayList<>();
 		requestSender = new RequestSender();
@@ -78,6 +79,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 			requestSender.addRequestListener(abs);
 			abs.setFeedBackListener(requestSender);
 			subPrograms.add(abs);
+			abs.setID(cur += 1);
 		}
 
 	}
@@ -96,6 +98,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox();
+
+
 
 		for (AppSubProgram asp : subPrograms) {
 			asp.create(gl, width, height, context);

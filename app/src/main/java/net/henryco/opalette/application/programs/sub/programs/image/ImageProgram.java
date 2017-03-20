@@ -3,11 +3,8 @@ package net.henryco.opalette.application.programs.sub.programs.image;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
-import net.henryco.opalette.api.utils.listener.OPallListener;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
@@ -22,9 +19,9 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class ImageProgram
-		implements AppSubProgram<AppMainProto>, AppSubProtocol, OPallListener<EdTexture> {
+		implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
-	private final static long id = methods.genID(ImageProgram.class);
+	private long id = methods.genID(ImageProgram.class);
 
 	private FrameBuffer imageBuffer;
 	private EdTexture imageTexture;
@@ -32,7 +29,6 @@ public class ImageProgram
 	private OPallRequester feedBackListener;
 
 
-	private ConvolveTexture filterTexture;
 
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {
@@ -58,8 +54,10 @@ public class ImageProgram
 		return id;
 	}
 
-
-
+	@Override
+	public void setID(long id) {
+		this.id = id;
+	}
 
 	@Override
 	public void create(GL10 gl, int width, int height, AppMainProto context) {
@@ -71,11 +69,7 @@ public class ImageProgram
 		imageTexture = new EdTexture();
 		imageTexture.setScreenDim(width, height);
 
-		filterTexture = new ConvolveTexture();
-		filterTexture.setScreenDim(width, height);
 
-
-		
 		OPallViewInjector.inject(context.getActivityContext(), new MaxColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new MinColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new BrightnessControl(imageTexture));
@@ -102,11 +96,6 @@ public class ImageProgram
 		feedBackListener.sendRequest(new Request(send_first_image_buffer, imageBuffer.getTexture()));
 	}
 
-
-	@Override
-	public void onOPallAction(OPallConsumer<EdTexture> consumer) {
-		if (consumer != null) consumer.consume(imageTexture);
-	}
 
 
 }
