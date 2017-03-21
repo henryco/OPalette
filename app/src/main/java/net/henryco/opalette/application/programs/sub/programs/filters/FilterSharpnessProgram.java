@@ -62,7 +62,7 @@ public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppS
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 		textureBuffer = OPallFBOCreator.FrameBuffer();
-		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen2());
+		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen());
 		proxyRenderData.getRenderData().setEffectScale(0);
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 	}
