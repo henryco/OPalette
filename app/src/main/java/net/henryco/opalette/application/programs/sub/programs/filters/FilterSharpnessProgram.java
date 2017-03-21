@@ -40,7 +40,7 @@ public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppS
 
 	@Override
 	public void acceptRequest(Request request) {
-
+		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 
 	}
 
@@ -60,6 +60,7 @@ public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppS
 	@Override
 	public void create(GL10 gl, int width, int height, AppMainProto context) {
 
+		//m_sharpen, m_sharpen_1, m_sharpen_5
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 		textureBuffer = OPallFBOCreator.FrameBuffer();
 		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen());
@@ -75,8 +76,10 @@ public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppS
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
-		if (proxyRenderData.stateUpdated())
+		if (proxyRenderData.stateUpdated()) {
 			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
+			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
+		}
 	}
 
 

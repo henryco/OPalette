@@ -57,7 +57,7 @@ public class RequestSender implements OPallRequester {
 		} else
 			for (long d : dest) {
 				OPallRequestListener listener = listenerMap.get(d);
-				if (!isGaijin(excp, listener.getID()))
+				if (listener != null && !isGaijin(excp, listener.getID()))
 					listener.acceptRequest(request);
 			}
 		return this;

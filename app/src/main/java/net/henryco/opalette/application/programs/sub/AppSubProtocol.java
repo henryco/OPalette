@@ -11,4 +11,7 @@ public interface AppSubProtocol {
 
 	int send_back_bar_height = 1332;
 	int send_line_coeffs = 1233;
+
+	int update_proxy_render_state = 837566;
+
 }
