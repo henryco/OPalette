@@ -33,8 +33,9 @@ public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInj
 
 
 
-	protected static <T> ControlFragment<T> loadControlFragment(AppControlFragmentLoader<T> loader) {
-		return new ControlFragment<T>().onFragmentCreated(loader);
+	protected static <T> ControlFragment<T> loadControlFragment
+			(AppControlFragmentLoader<T> loader, AppControlFragmentDestroyer<T> destroyer) {
+		return new ControlFragment<T>().onFragmentCreated(loader).onFragmentDestroyed(destroyer);
 	}
 
 	protected static void loadImageOptionButton(View view, int textRes, int imgRes, Activity context, View.OnClickListener clickListener) {
@@ -63,6 +64,9 @@ public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInj
 
 	public interface AppControlFragmentLoader<V> {
 		void onFragmentCreated(View view, V context, @Nullable Bundle savedInstanceState);
+	}
+	public interface AppControlFragmentDestroyer<V> {
+		void onFragmentDestroy(Fragment fragment, V context);
 	}
 
 
@@ -97,15 +101,29 @@ public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInj
 	public static final class ControlFragment<T> extends AppControlFragment<T> {
 
 		private AppControlFragmentLoader<T> loader;
+		private AppControlFragmentDestroyer<T> destroyer;
+		private T context;
 
 		public ControlFragment<T> onFragmentCreated(AppControlFragmentLoader<T> loader) {
 			this.loader = loader;
 			return this;
 		}
 
+		public ControlFragment<T> onFragmentDestroyed(AppControlFragmentDestroyer<T> destroyer) {
+			this.destroyer = destroyer;
+			return this;
+		}
+
 		@Override
 		protected void onFragmentCreated(View view, T context, @Nullable Bundle savedInstanceState) {
+			this.context = context;
 			if (loader != null) loader.onFragmentCreated(view, context, savedInstanceState);
+		}
+
+		@Override
+		public void onDestroy() {
+			if (destroyer != null) destroyer.onFragmentDestroy(this, context);
+			super.onDestroy();
 		}
 	}
 

@@ -36,6 +36,7 @@ public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 			float h = request.getData(1);
 			touchLines.setDefaultSize(w, h).setVisible(true).reset();
 		});
+		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 	}
 
 	@Override

@@ -50,6 +50,7 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 		request.openRequest(set_buffer_quantum, () -> buffer_quantum = request.getData());
 		request.openRequest(send_back_bar_height, () -> externalBarHeight = request.getData());
 		request.openRequest(send_line_coeffs, () -> externalLineCoeffs = request.getData());
+		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 	}
 
 	@Override

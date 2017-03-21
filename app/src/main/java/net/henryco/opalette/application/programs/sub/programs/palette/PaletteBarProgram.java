@@ -38,6 +38,7 @@ public class PaletteBarProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest(set_buffer_quantum, () -> this.buffer_quantum = request.getData());
+		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package net.henryco.opalette.application.programs.sub.programs;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -24,9 +25,13 @@ public abstract class AppAutoSubControl<T extends AppMainProto> extends AppSubCo
 	protected void onInject(T context, View view) {
 
 		loadImageOptionButton(view, txt_button_res, img_button_res, context.getActivityContext(),
-				v -> context.switchToFragmentOptions(loadControlFragment(this::onFragmentCreate)));
+				v -> context.switchToFragmentOptions(loadControlFragment(this::onFragmentCreate, this::onFragmentDestroyed)));
 	}
 
 	protected abstract void onFragmentCreate(View view, T context, @Nullable Bundle savedInstanceState);
+
+	public void onFragmentDestroyed(Fragment fragment, T context) {
+		// OPTIONAL METHOD FOR OVERRIDE
+	}
 
 }

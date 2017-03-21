@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.solo.OPallSoloRenderer;
@@ -184,6 +185,14 @@ public class OPallSurfaceView extends GLSurfaceView {
 		setMeasuredDimension(dim[0], dim[1]);
 	}
 
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+
+
+
+		return super.onTouchEvent(event);
+	}
 
 
 	/**

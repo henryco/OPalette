@@ -60,7 +60,7 @@ public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppS
 	@Override
 	public void create(GL10 gl, int width, int height, AppMainProto context) {
 
-		//m_sharpen, m_sharpen_1, m_sharpen_5
+		//m_sharpen, m_sharpen_1, m_sharpen_5 is oks
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 		textureBuffer = OPallFBOCreator.FrameBuffer();
 		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen());
