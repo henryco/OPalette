@@ -29,19 +29,16 @@ public class FilterSharpnessControl extends AppAutoSubControl<AppMainProto> {
 		filterHolder = data;
 	}
 
-	private static final int filter_max_effect = 100; // norming value -> effectScale = scale / scaleMax
-	private static final int percent_correction = 100 / filter_max_effect; // set bar to start on 0
+
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		InjectableSeekBar seekBar = new InjectableSeekBar(view);
 		seekBar.setBarName(context.getActivityContext().getResources().getString(txt_button_res));
-		seekBar.onBarCreate(bar -> bar.setProgress(seekBar.de_norm(filterHolder.getRenderData()
-						.setEffectMax(filter_max_effect)
-						.getEffectScale()) - percent_correction));
+		seekBar.onBarCreate(bar -> bar.setProgress(seekBar.de_norm(filterHolder.getRenderData().getEffectScale())));
 		seekBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			filterHolder.setStateUpdated().getRenderData().setCenterEffect(seekBar.norm(progress + percent_correction));
+			filterHolder.setStateUpdated().getRenderData().setEffectScale(seekBar.norm(progress));
 			context.getRenderSurface().update();
 		}));
 		OPallViewInjector.inject(context.getActivityContext(), seekBar);

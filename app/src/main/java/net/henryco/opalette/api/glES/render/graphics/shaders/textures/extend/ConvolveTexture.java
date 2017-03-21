@@ -28,7 +28,6 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private float[] original_filter_matrix;
 	private float[] work_filter_matrix;
 	private float center_scale = 1;
-	private float effect_max = 1;
 	private int matrix_size = 0;
 	private int matrix_sqrt_size = 0;
 
@@ -87,28 +86,32 @@ public class ConvolveTexture extends OPallTextureExtended {
 		original_filter_matrix = matrix;
 		matrix_size = original_filter_matrix.length;
 		matrix_sqrt_size = (int) Math.sqrt(matrix_size);
-		return setCenterEffect(center_scale);
+		return setEffectScale(center_scale);
 	}
 
-	public ConvolveTexture setCenterEffect(float s) {
+	public ConvolveTexture setEffectScale(float s) {
 
-		center_scale = s * effect_max;
+		center_scale = s;
 		float[] matrix = new float[matrix_size];
 		int center = (int) (0.5f * (matrix_sqrt_size - 1f));
-		System.arraycopy(original_filter_matrix, 0, matrix, 0, matrix_size);
-		matrix[(center * matrix_sqrt_size) + center] *= center_scale;
+		int cp = (center * matrix_sqrt_size) + center;
+		for (int i = 0; i < matrix_size; i++) {
+			matrix[i] = original_filter_matrix[i];
+			if (i != cp) matrix[i] *= s;
+			else {
+				float x = matrix[i];
+				float rx = 1f / x;
+				matrix[i] = rx + ((x - rx) * s);
+			}
+		}
 		work_filter_matrix = normalize(matrix);
 		return this;
 	}
 
 	public float getEffectScale() {
-		return center_scale / effect_max;
+		return center_scale;
 	}
 
-	public ConvolveTexture setEffectMax(float max) {
-		this.effect_max = max;
-		return this;
-	}
 
 	private static float[] normalize(float[] matrix) {
 
