@@ -7,6 +7,8 @@ import android.opengl.GLES20;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
 
+import java.nio.FloatBuffer;
+
 /**
  * Created by HenryCo on 20/03/17.
  */
@@ -29,7 +31,6 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private int matrix_size = 0;
 	private int matrix_sqrt_size = 0;
 
-	private boolean enable = false;
 
 	public ConvolveTexture(Context context) {
 		this(context, Filter.LINEAR);
@@ -56,14 +57,12 @@ public class ConvolveTexture extends OPallTextureExtended {
 
 	@Override
 	protected void render(int program, Camera2D camera) {
-		if (isEnable()) {
-			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_texDim), getWidth(), getHeight());
-			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_matrixSize), matrix_sqrt_size);
-			String matrixTarget;
-			if (matrix_sqrt_size == 3) matrixTarget = u_matrix3;
-			else matrixTarget = u_matrix5;
-			GLES20.glUniform1fv(GLES20.glGetUniformLocation(program, matrixTarget), matrix_size, work_filter_matrix, 0);
-		}
+		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_texDim), getWidth(), getHeight());
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_matrixSize), matrix_sqrt_size);
+		String matrixTarget;
+		if (matrix_sqrt_size == 3) matrixTarget = u_matrix3;
+		else matrixTarget = u_matrix5;
+		GLES20.glUniform1fv(GLES20.glGetUniformLocation(program, matrixTarget), matrix_size, FloatBuffer.wrap(work_filter_matrix));
 	}
 
 
@@ -72,7 +71,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	public ConvolveTexture setFilterMatrix(float ... matrix) {
 
 		if (matrix.length == 0 || (matrix.length == 1 && matrix[0] == -1))
-			setEnable(false);
+			matrix = ConvolveTexture.matrix.m_identity();
 		if (Math.sqrt(matrix.length) % 2 == 0)
 			throw new RuntimeException(getClass().getName()
 					+ ": Filter matrix dimension must be 3x3, 5x5, 7x7, 9x9 ...");
@@ -104,15 +103,6 @@ public class ConvolveTexture extends OPallTextureExtended {
 	}
 
 
-	public boolean isEnable() {
-		return enable;
-	}
-
-	public void setEnable(boolean enable) {
-		this.enable = enable;
-	}
-
-
 
 
 	private static final String FRAG_DIR = OPallTexture.FRAG_DIR+"/ConvolveFilter.frag";
@@ -136,14 +126,14 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"\n" +
 			"void main() {\n" +
 			"\n" +
-			"    vec2 pos = gl_FragCoord.xy;\n" +
+			"    vec2 pos = v_TexCoordinate;\n" +
 			"    vec2 cor = vec2((u_matrixSize - 1.) / 2.);\n" +
 			"    vec3 rgb = vec3(0.);\n" +
 			"\n" +
 			"    for (float i = 0.; i < u_matrixSize; i++) {\n" +
 			"        for (float k = 0.; k < u_matrixSize; k++) {\n" +
 			"            vec2 ipos = vec2(i - cor.x, k - cor.y);\n" +
-			"            vec3 irgb = texture2D(u_Texture0, pos + ipos).rgb;\n" +
+			"            vec3 irgb = texture2D(u_Texture0, pos + (ipos / u_screenDim)).rgb;\n" +
 			"\n" +
 			"            int n = int(i * u_matrixSize + k);\n" +
 			"            if (u_matrixSize == 3.) irgb *= u_matrix3[n];\n" +
@@ -152,7 +142,6 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"            rgb += irgb;\n" +
 			"        }\n" +
 			"    }\n" +
-			"\n" +
 			"    gl_FragColor = vec4(rgb, 1.);\n" +
 			"}";
 

@@ -17,14 +17,14 @@ uniform vec2 u_screenDim;
 
 void main() {
 
-    vec2 pos = gl_FragCoord.xy;
+    vec2 pos = v_TexCoordinate;
     vec2 cor = vec2((u_matrixSize - 1.) / 2.);
     vec3 rgb = vec3(0.);
 
     for (float i = 0.; i < u_matrixSize; i++) {
         for (float k = 0.; k < u_matrixSize; k++) {
             vec2 ipos = vec2(i - cor.x, k - cor.y);
-            vec3 irgb = texture2D(u_Texture0, pos + ipos).rgb;
+            vec3 irgb = texture2D(u_Texture0, pos + (ipos / u_screenDim)).rgb;
 
             int n = int(i * u_matrixSize + k);
             if (u_matrixSize == 3.) irgb *= u_matrix3[n];
@@ -33,6 +33,5 @@ void main() {
             rgb += irgb;
         }
     }
-
     gl_FragColor = vec4(rgb, 1.);
 }

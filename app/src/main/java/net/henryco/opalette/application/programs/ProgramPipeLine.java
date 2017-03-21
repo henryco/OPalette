@@ -109,7 +109,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		filter = new ConvolveTexture();
 		filter.setScreenDim(width, height);
 		filter.setEnable(true);
-		filter.setFilterMatrix(ConvolveTexture.matrix.m_identity());
+		filter.setFilterMatrix(ConvolveTexture.matrix.m_boxBlur());
 	}
 
 
