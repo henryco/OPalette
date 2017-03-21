@@ -25,9 +25,10 @@ public class ConvolveTexture extends OPallTextureExtended {
 	public static final FilterMatrices matrix = new FilterMatrices();
 
 
-	private float[] original_filter_matrix = {};
-	private float[] work_filter_matrix = {};
+	private float[] original_filter_matrix;
+	private float[] work_filter_matrix;
 	private float center_scale = 1;
+	private float effect_max = 1;
 	private int matrix_size = 0;
 	private int matrix_sqrt_size = 0;
 
@@ -37,23 +38,31 @@ public class ConvolveTexture extends OPallTextureExtended {
 	}
 	public ConvolveTexture(Context context, Filter filter) {
 		super(context, filter, OPallTexture.DEF_SHADER+".vert", FRAG_DIR);
+		init();
 	}
 	public ConvolveTexture(Bitmap image, Context context) {
 		this(image, context, Filter.LINEAR);
 	}
 	public ConvolveTexture(Bitmap image, Context context, Filter filter) {
 		super(image, context, filter, OPallTexture.DEF_SHADER+".vert", FRAG_DIR);
+		init();
 	}
 	public ConvolveTexture() {
 		super(OPallTexture.DEFAULT_VERT_FILE, FRAG_FILE);
+		init();
 	}
 	public ConvolveTexture(Bitmap image) {
 		this(image, Filter.LINEAR);
 	}
 	public ConvolveTexture(Bitmap image, Filter filter) {
 		super(image, filter, OPallTexture.DEFAULT_VERT_FILE, FRAG_FILE);
+		init();
 	}
 
+
+	private void init() {
+		setFilterMatrix(matrix.m_identity());
+	}
 
 	@Override
 	protected void render(int program, Camera2D camera) {
@@ -83,12 +92,21 @@ public class ConvolveTexture extends OPallTextureExtended {
 
 	public ConvolveTexture setCenterEffect(float s) {
 
-		center_scale = s;
+		center_scale = s * effect_max;
 		float[] matrix = new float[matrix_size];
 		int center = (int) (0.5f * (matrix_sqrt_size - 1f));
 		System.arraycopy(original_filter_matrix, 0, matrix, 0, matrix_size);
 		matrix[(center * matrix_sqrt_size) + center] *= center_scale;
 		work_filter_matrix = normalize(matrix);
+		return this;
+	}
+
+	public float getEffectScale() {
+		return center_scale / effect_max;
+	}
+
+	public ConvolveTexture setEffectMax(float max) {
+		this.effect_max = max;
 		return this;
 	}
 

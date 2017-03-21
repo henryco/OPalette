@@ -22,13 +22,24 @@ public interface AppSubProgram<T> extends OPallSubProgram<T>, OPallRequestFeedBa
 
 	final class ProxyRenderData <U extends OPallRenderable> {
 
-		private U data;
+		private U data = null;
+		private boolean state = false;
 
 		public void setRenderData(U data) {
 			this.data = data;
 		}
 		public U getRenderData() {
+			if (data == null) return null;
 			return data;
+		}
+		public boolean stateUpdated() {
+			boolean r = state;
+			state = false;
+			return r;
+		}
+		public ProxyRenderData<U> setStateUpdated() {
+			this.state = true;
+			return this;
 		}
 	}
 }

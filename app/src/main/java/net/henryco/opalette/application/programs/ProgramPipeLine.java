@@ -8,12 +8,14 @@ import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.observer.OPallUpdObserver;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
+import net.henryco.opalette.application.programs.sub.programs.filters.FilterSharpnessProgram;
 import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.image.ImageProgram;
 import net.henryco.opalette.application.programs.sub.programs.palette.PaletteBarProgram;
@@ -54,6 +56,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		return new AppSubProgram[]{
 
+				new FilterSharpnessProgram(),
 				new ImageProgram(),
 				new GradientBarProgram(),
 				new TouchLinesProgram(),
@@ -95,11 +98,14 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox();
 
-		startImage = new Texture();
+		startImage = new ConvolveTexture();
 		startImage.setScreenDim(width, height);
 
+		OPallRenderable renderData = startImage;
 		for (AppSubProgram asp : subPrograms) {
+			if (renderData != null) asp.setRenderData(renderData);
 			asp.create(gl, width, height, context);
+			renderData = asp.getRenderData();
 		}
 	}
 
@@ -112,8 +118,11 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		chessBox.setScreenDim(width, height);
 		startImage.setScreenDim(width, height);
 
+		OPallRenderable renderData = startImage;
 		for (AppSubProgram asp : subPrograms) {
+			if (renderData != null) asp.setRenderData(renderData);
 			asp.onSurfaceChange(gl, context, width, height);
+			renderData = asp.getRenderData();
 		}
 	}
 
