@@ -62,7 +62,7 @@ public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppS
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 		textureBuffer = OPallFBOCreator.FrameBuffer();
-		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_emboss1());
+		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen2());
 		proxyRenderData.getRenderData().setEffectScale(0);
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 	}
@@ -75,9 +75,8 @@ public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppS
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
-		if (proxyRenderData.stateUpdated()) {
+		if (proxyRenderData.stateUpdated())
 			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
-		}
 	}
 
 

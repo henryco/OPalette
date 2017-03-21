@@ -100,8 +100,10 @@ public class ConvolveTexture extends OPallTextureExtended {
 			if (i != cp) matrix[i] *= s;
 			else {
 				float x = matrix[i];
-				float rx = 1f / x;
-				matrix[i] = rx + ((x - rx) * s);
+				if (x != 0) {
+					float rx = 1f / x;
+					matrix[i] = rx + ((x - rx) * s);
+				} else matrix[i] = 1 - s;
 			}
 		}
 		work_filter_matrix = normalize(matrix);
