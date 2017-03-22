@@ -7,10 +7,11 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
+import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -25,11 +26,11 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 	private static final int BUTTON_IMAGE = R.drawable.ic_transform_white_24dp;
 
 	private OPallSurfaceView.OnTouchEventListener touchEventListener;
-	private Texture image;
+	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;
 
-	public TranslationControl(Texture image) {
+	public TranslationControl(AppSubProgram.ProxyRenderData<ConvolveTexture> renderData) {
 		super(BUTTON_IMAGE, MOVE);
-		this.image = image;
+		imgHolder = renderData;
 	}
 
 
@@ -42,19 +43,30 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		horBar.setDefaultPoint(0, 50);
 		verBar.setDefaultPoint(0, 50);
 
-		image.bounds2D.setX(100);
+		ConvolveTexture image = imgHolder.getRenderData();
 
 		horBar.onBarCreate(bar -> bar.setProgress(horBar.de_norm(image.bounds2D.getX() / image.getWidth())));
-		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm(image.bounds2D.getY() / image.getHeight())));
+		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm((-1) * image.bounds2D.getY() / image.getHeight())));
+
+		Runnable updateFunc = () -> {
+			imgHolder.setStateUpdated();
+			context.getRenderSurface().update();
+		};
+
+		OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> {
+			image.setEnable(true);
+			updateFunc.run();
+		});
 
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			image.bounds(b -> b.setX(horBar.norm(progress) * image.getWidth()));
-			context.getRenderSurface().update();
-		}));
+			image.setEnable(false).bounds(b -> b.setX(horBar.norm(progress) * image.getWidth()));
+			updateFunc.run();
+		}).onStop(stop));
+
 		verBar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {
-			image.bounds(b -> b.setY(verBar.norm(progress) * image.getHeight()));
-			context.getRenderSurface().update();
-		}));
+			image.setEnable(false).bounds(b -> b.setY((-1) * verBar.norm(progress) * image.getHeight()));
+			updateFunc.run();
+		}).onStop(stop));
 
 		OPallSurfaceView surface = context.getRenderSurface();
 		touchEventListener = event -> {

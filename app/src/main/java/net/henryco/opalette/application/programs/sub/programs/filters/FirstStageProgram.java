@@ -40,7 +40,8 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
-
+		request.openRequest(set_filters_enable, () -> proxyRenderData.getRenderData().setEnable(true));
+		request.openRequest(set_filters_disable, () -> proxyRenderData.getRenderData().setEnable(false));
 	}
 
 
@@ -65,7 +66,7 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen());
 		proxyRenderData.getRenderData().setEffectScale(0);
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
-		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(textureBuffer.getTexture()));
+		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
 	}
 
 	@Override
