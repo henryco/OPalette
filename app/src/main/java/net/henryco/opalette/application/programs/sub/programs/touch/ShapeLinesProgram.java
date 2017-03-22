@@ -15,9 +15,9 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
+public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
-	private long id = methods.genID(TouchLinesProgram.class);
+	private long id = methods.genID(ShapeLinesProgram.class);
 	private ProxyRenderData<OPallRenderable> proxyRenderData = new ProxyRenderData<>();
 
 	private TouchLines touchLines;

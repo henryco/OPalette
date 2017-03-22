@@ -19,7 +19,7 @@ import net.henryco.opalette.application.programs.sub.programs.filters.FirstStage
 import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.image.ImageProgram;
 import net.henryco.opalette.application.programs.sub.programs.palette.PaletteBarProgram;
-import net.henryco.opalette.application.programs.sub.programs.touch.TouchLinesProgram;
+import net.henryco.opalette.application.programs.sub.programs.touch.ShapeLinesProgram;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import java.util.ArrayList;
@@ -58,8 +58,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 				new FirstStageProgram(),
 				new ImageProgram(),
+				new ShapeLinesProgram(),
 				new GradientBarProgram(),
-				new TouchLinesProgram(),
 				new PaletteBarProgram()
 		};
 	}
