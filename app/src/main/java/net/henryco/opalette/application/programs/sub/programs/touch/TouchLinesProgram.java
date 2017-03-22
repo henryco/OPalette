@@ -9,8 +9,6 @@ import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.proto.AppMainProto;
 
-import java.util.Arrays;
-
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -38,7 +36,6 @@ public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 			float w = request.getData(0);
 			float h = request.getData(1);
 			touchLines.setDefaultSize(w, h).setVisible(true).reset();
-			System.out.println("SET: "+ Arrays.toString(touchLines.getCoefficients()));
 			sendCoeffInfo();
 		});
 	}
