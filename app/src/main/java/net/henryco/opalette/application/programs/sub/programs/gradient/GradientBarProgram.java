@@ -16,6 +16,8 @@ import net.henryco.opalette.application.MainActivity;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 
+import java.util.Arrays;
+
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -49,7 +51,10 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	public void acceptRequest(Request request) {
 		request.openRequest(set_buffer_quantum, () -> buffer_quantum = request.getData());
 		request.openRequest(send_back_bar_height, () -> externalBarHeight = request.getData());
-		request.openRequest(send_line_coeffs, () -> externalLineCoeffs = request.getData());
+		request.openRequest(send_line_coeffs, () -> {
+			externalLineCoeffs = request.getData();
+			System.out.println("GET: "+ Arrays.toString(externalLineCoeffs));
+		});
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 	}
 
@@ -89,8 +94,8 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 		//CREATE GRADIENT BAR
 		barGradientBuffer.beginFBO(() -> multiTexture.render(camera, program -> {
 			GLESUtils.clear();
-			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), w, h - externalBarHeight);
-			GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, externalLineCoeffs, 0);
+			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), w, h - externalBarHeight); //FIXME
+			GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, externalLineCoeffs, 0); //FIXME
 		}));
 		setRenderData(barGradientBuffer.getTexture());
 	}

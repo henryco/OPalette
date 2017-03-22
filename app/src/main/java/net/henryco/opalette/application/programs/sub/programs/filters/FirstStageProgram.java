@@ -79,10 +79,11 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 
 		if (proxyRenderData.stateUpdated()) {
 			boolean e = proxyRenderData.getRenderData().isEnable();
-			feedBackListener.sendNonSyncRequest(new Request(e ? set_filters_enable : set_filters_disable));
+			feedBackListener.sendNonSyncRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
 			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
 		}
+
 	}
 
 

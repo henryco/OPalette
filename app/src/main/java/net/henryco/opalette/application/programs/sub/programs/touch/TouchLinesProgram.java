@@ -9,6 +9,8 @@ import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.proto.AppMainProto;
 
+import java.util.Arrays;
+
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -31,12 +33,14 @@ public class TouchLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 
 	@Override
 	public void acceptRequest(Request request) {
+		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 		request.openRequest(set_touch_lines_def_size, () -> {
 			float w = request.getData(0);
 			float h = request.getData(1);
 			touchLines.setDefaultSize(w, h).setVisible(true).reset();
+			System.out.println("SET: "+ Arrays.toString(touchLines.getCoefficients()));
+			sendCoeffInfo();
 		});
-		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 	}
 
 	@Override
