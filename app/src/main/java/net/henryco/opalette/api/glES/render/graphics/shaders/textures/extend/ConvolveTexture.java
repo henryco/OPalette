@@ -22,6 +22,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private static final String u_matrix5 = "u_matrix5";
 	private static final String u_texDim = "u_screenDim";
 	private static final String u_enable = "u_enable";
+	private static final String u_angle = "u_angle";
 
 	public static final FilterMatrices matrix = new FilterMatrices();
 
@@ -128,15 +129,17 @@ public class ConvolveTexture extends OPallTextureExtended {
 		return matrix;
 	}
 
-	public ConvolveTexture setEnable(boolean b) {
+
+	public ConvolveTexture setFilterEnable(boolean b) {
 		this.enable = b;
 		return this;
 	}
-	public boolean isEnable() {
+	public boolean isFilterEnable() {
 		return enable;
 	}
 
 	private static final String FRAG_DIR = OPallTexture.FRAG_DIR+"/ConvolveFilter.frag";
+
 	private static final String FRAG_FILE =
 			"precision mediump float;\n" +
 			"\n" +

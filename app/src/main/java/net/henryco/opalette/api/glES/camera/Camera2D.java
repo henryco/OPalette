@@ -1,7 +1,7 @@
 package net.henryco.opalette.api.glES.camera;
 
 
-/**
+/*
  * Created by root on 13/02/17.
  */
 
@@ -13,7 +13,7 @@ import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 public class Camera2D {
 
 
-	private final OPallCameraMatrix matrix;
+	public final OPallCameraMatrix matrix;
 
 	private boolean flipX = true, flipY = true;
 	private float pxFacX = 1, pxFacY = 1;

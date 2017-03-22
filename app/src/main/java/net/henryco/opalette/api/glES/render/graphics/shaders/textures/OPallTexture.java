@@ -105,7 +105,9 @@ public interface OPallTexture extends OPallShader {
 	OPallTexture setSize(int w, int h);
 	OPallTexture setRegion(int x, int y, int width, int height);
 	OPallTexture setTextureDataHandle(int textureDataHandle);
+	OPallTexture setRotation(float angle);
 	int getTextureDataHandle();
+	float getRotation();
 
 	final class methods {
 

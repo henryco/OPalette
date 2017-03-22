@@ -374,4 +374,14 @@ public class OPallGeometry {
 		if (val < 0) return 1;
 		return 0;
 	}
+
+	public static float[] multiplyMat_Vec(float[] mat, float[] vec) {
+
+		float[] t = new float[vec.length];
+		int k = -1;
+		for (int i = 0; i < vec.length; i++)
+			for (float aVec : vec)
+				t[i] += mat[k += 1] * aVec;
+		return t;
+	}
 }

@@ -27,6 +27,9 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	protected int textureData_ID;
 	protected int textureGL_ID;
 
+	private float rot_angle = 0;
+	private float[] rot_matrix;
+
 
 	public final Bounds2D bounds2D = new Bounds2D()
 			.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
@@ -137,6 +140,33 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 	@Override
+	public OPallTexture setRotation(float angle) {
+		this.rot_angle = angle;
+
+		float cos_f = (float) Math.cos(rot_angle);
+		float sin_f = (float) Math.sin(rot_angle);
+		rot_matrix = new float[]{cos_f, sin_f, -sin_f, cos_f};
+
+//		float[] ver = Bounds2D.vertices.FLAT_SQUARE_2D();
+//		float[] v2 = new float[ver.length];
+//
+//		for (int i = 0; i < ver.length - 1; i += 2) {
+//			float[] v = {ver[i], ver[i+1]};
+//			float[] r = OPallGeometry.multiplyMat_Vec(rotMatrix, v);
+//			v2[i] = r[0];
+//			v2[i+1] = r[1];
+//		}
+//		bounds2D.setVerticesOnly(v2).generateVertexBuffer(getScreenWidth(), getScreenHeight());
+
+		return this;
+	}
+
+	@Override
+	public float getRotation() {
+		return rot_angle;
+	}
+
+	@Override
 	public Texture setSize(int w, int h) {
 		bounds2D.setSize(w, h);
 		return this;
@@ -152,20 +182,20 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 	@Override
 	public Texture updateBounds() {
-		bounds2D.generateVertexBuffer(getScreenWidth(), getScreenHeight());
+
+		float[] texels = {0,1, 0,0, 1,0, 1,1};
 		if (region[4] != 0) {
 			float sw = getScreenWidth();
 			float sh = getScreenHeight();
-
 			float x = region[0] / sw;
 			float y = region[1] / sh;
 			float w = region[2] / sw;
 			float h = region[3] / sh;
-
-			texelBuffer = GLESUtils.createFloatBuffer(new float[]{x,h, x,y, w,y, w,h});
-			return this;
+			texels = new float[]{x,h, x,y, w,y, w,h};
 		}
-		texelBuffer = GLESUtils.createFloatBuffer(new float[]{0,1, 0,0, 1,0, 1,1});
+
+		bounds2D.generateVertexBuffer(getScreenWidth(), getScreenHeight());
+		texelBuffer = GLESUtils.createFloatBuffer(texels);
 		return this;
 	}
 

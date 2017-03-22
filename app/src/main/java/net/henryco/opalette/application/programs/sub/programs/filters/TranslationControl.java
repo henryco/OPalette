@@ -54,17 +54,17 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		};
 
 		OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> {
-			image.setEnable(true);
+			image.setFilterEnable(true);
 			updateFunc.run();
 		});
 
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			image.setEnable(false).bounds(b -> b.setX(horBar.norm(progress) * image.getWidth()));
+			image.setFilterEnable(false).bounds(b -> b.setX(horBar.norm(progress) * image.getWidth()));
 			updateFunc.run();
 		}).onStop(stop));
 
 		verBar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {
-			image.setEnable(false).bounds(b -> b.setY((-1) * verBar.norm(progress) * image.getHeight()));
+			image.setFilterEnable(false).bounds(b -> b.setY((-1) * verBar.norm(progress) * image.getHeight()));
 			updateFunc.run();
 		}).onStop(stop));
 

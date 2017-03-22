@@ -105,6 +105,17 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 	}
 
 
+	@Override
+	public OPallTexture setRotation(float angle) {
+		//TODO
+		return this;
+	}
+
+	@Override
+	public float getRotation() {
+		//TODO
+		return 0;
+	}
 
 	@Override
 	public void setScreenDim(float w, float h) {

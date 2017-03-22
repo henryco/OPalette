@@ -160,6 +160,10 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 		generateVertexBuffer(0, 0);
 		return this;
 	}
+	public Bounds2D setVerticesOnly(float[] vertices) {
+		this.vertices = vertices;
+		return this;
+	}
 	public Bounds2D setOrder(short[] order) {
 		this.order = order;
 		generateOrderBuffer();

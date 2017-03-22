@@ -43,8 +43,8 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
-		request.openRequest(set_filters_enable, () -> proxyRenderData.getRenderData().setEnable(true));
-		request.openRequest(set_filters_disable, () -> proxyRenderData.getRenderData().setEnable(false));
+		request.openRequest(set_filters_enable, () -> proxyRenderData.getRenderData().setFilterEnable(true));
+		request.openRequest(set_filters_disable, () -> proxyRenderData.getRenderData().setFilterEnable(false));
 	}
 
 
@@ -83,12 +83,13 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		if (proxyRenderData.stateUpdated()) {
-			boolean e = proxyRenderData.getRenderData().isEnable();
+			boolean e = proxyRenderData.getRenderData().isFilterEnable();
 			feedBackListener.sendNonSyncRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
 			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
+			proxyRenderData.setStateUpdated();
 		}
-
+		textureBuffer.render(camera);
 	}
 
 
