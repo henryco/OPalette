@@ -63,7 +63,7 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 		//m_sharpen, m_sharpen_1, m_sharpen_5 is oks
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 		textureBuffer = OPallFBOCreator.FrameBuffer();
-		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen());
+		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen1());
 		proxyRenderData.getRenderData().setEffectScale(0);
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
@@ -78,6 +78,8 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		if (proxyRenderData.stateUpdated()) {
+			boolean e = proxyRenderData.getRenderData().isEnable();
+			feedBackListener.sendNonSyncRequest(new Request(e ? set_filters_enable : set_filters_disable));
 			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
 			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
 		}
