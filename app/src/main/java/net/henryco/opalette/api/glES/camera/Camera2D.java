@@ -92,9 +92,9 @@ public class Camera2D {
 
 	public Camera2D backTranslate(Runnable r) {
 		float[] position = getPosition();
+		float[] rotation = getRotation();
 		r.run();
-		setPosition(position);
-		return this;
+		return setPosition(position).setRotation(rotation);
 	}
 
 
@@ -143,8 +143,13 @@ public class Camera2D {
 	public Camera2D setPosition(float[] vec) {
 		return setPosXY_absolute(vec[0], vec[1]);
 	}
-
-
+	public float[] getRotation() {
+		return new float[]{matrix.rotation.x, matrix.rotation.y, matrix.rotation.z};
+	}
+	public Camera2D setRotation(float[] rot) {
+		setRotation(rot[0], rot[1], rot[2]);
+		return this;
+	}
 
 	public Camera2D setPosX_absolute(float x) {
 		matrix.eye.x = x;

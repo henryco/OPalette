@@ -247,22 +247,28 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 //		TODO ROTATION HANDLE
 
-		int positionHandle = getPositionHandle();
-		int mTextureUniformHandle = textureGL_ID;
-		int mTextureCoordinateHandle = getTextureCoordinateHandle();
+		camera.backTranslate(() -> {
 
-		OPallTexture.methods.applyFlip(glProgram, textureFlip);
+			int positionHandle = getPositionHandle();
+			int mTextureUniformHandle = textureGL_ID;
+			int mTextureCoordinateHandle = getTextureCoordinateHandle();
 
-		GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
+			OPallTexture.methods.applyFlip(glProgram, textureFlip);
 
-			setter.consume(glProgram);
+			GLESUtils.glUseVertexAttribArray(positionHandle, mTextureCoordinateHandle, (Runnable) () -> {
 
-			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
-			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, COORDS_PER_TEXEL, GLES20.GL_FLOAT, false, texelStride, texelBuffer);
-			OPallTexture.methods.bindTexture(textureData_ID, mTextureUniformHandle);
-			GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
+				setter.consume(glProgram);
+
+				GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
+				GLES20.glVertexAttribPointer(mTextureCoordinateHandle, COORDS_PER_TEXEL, GLES20.GL_FLOAT, false, texelStride, texelBuffer);
+				OPallTexture.methods.bindTexture(textureData_ID, mTextureUniformHandle);
+				GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
+
+			});
 
 		});
+
+
 
 	}
 
