@@ -13,6 +13,8 @@ uniform sampler2D u_Texture4;
 
 uniform vec2 u_dimension;
 uniform int u_texNumb;
+uniform float u_barStart;
+uniform float u_barEnd;
 uniform vec3 u_line[2]; // Ax + By + C = 0
 
 void main() {
@@ -26,7 +28,7 @@ void main() {
         vec2 point = vec2(pointNormed.x * u_dimension.x, u_dimension.y * (1. - pointNormed.y));
         vec4 pointColor = texture2D(u_Texture0, pointNormed).rgba;
 
-        if (pointColor.a != 0.0) {
+        if (pointColor.a != 0.0 && (y >= u_barEnd || y <= u_barStart)) {
 
             float py1 = (-1.) * ((u_line[0].x * point.x) + u_line[0].z) / u_line[0].y;
             float py2 = (-1.) * ((u_line[1].x * point.x) + u_line[1].z) / u_line[1].y;

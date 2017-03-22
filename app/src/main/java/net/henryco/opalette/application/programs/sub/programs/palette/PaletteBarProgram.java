@@ -86,6 +86,7 @@ public class PaletteBarProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	}
 
 	private void sendBarHeightInfo() {
-		feedBackListener.sendRequest(new Request(send_back_bar_height, backBar.getHeight()));
+		feedBackListener.sendRequest(new Request(send_back_bar_start, backBar.getPosY()).destination(d -> d.except(id)));
+		feedBackListener.sendRequest(new Request(send_back_bar_end, backBar.getPosY() + backBar.getHeight()).destination(d -> d.except(id)));
 	}
 }

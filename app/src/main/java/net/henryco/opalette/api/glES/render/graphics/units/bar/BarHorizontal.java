@@ -22,6 +22,7 @@ public class BarHorizontal implements OPallBar {
 	private FrameBuffer buffer;
 
 	private float width = 0, height = 0;
+	private float posX = 0, posY = 0;
 
 	public BarHorizontal(Context context) {
 		buffer = OPallFBOCreator.FrameBuffer(context);
@@ -36,6 +37,8 @@ public class BarHorizontal implements OPallBar {
 		buffer.beginFBO(() -> GLESUtils.clear(color));
 		this.width = scrWidth;
 		this.height = height;
+		this.posX = 0;
+		this.posY = scrHeight * yPos_pct;
 	}
 
 	private void drawBar(OPallRenderable barLine, Camera2D camera2D,
@@ -110,6 +113,16 @@ public class BarHorizontal implements OPallBar {
 	@Override
 	public float getHeight() {
 		return height;
+	}
+
+	@Override
+	public float getPosX() {
+		return posX;
+	}
+
+	@Override
+	public float getPosY() {
+		return posY;
 	}
 
 	@Override

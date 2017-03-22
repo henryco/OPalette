@@ -20,4 +20,7 @@ public interface OPallBar {
 	OPallBar setRelativeSize(float size_pct);
 	OPallBar setRelativePosition(float pos_pct);
 	OPallBar setRelativeContentSize(float size_pct);
+
+	float getPosX();
+	float getPosY();
 }

@@ -53,4 +53,14 @@ public class BarVertical implements OPallBar {
 	public float getHeight() {
 		return 0;
 	}
+
+	@Override
+	public float getPosX() {
+		return 0;
+	}
+
+	@Override
+	public float getPosY() {
+		return 0;
+	}
 }
