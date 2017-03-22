@@ -252,7 +252,20 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 		return (int) bounds2D[focus].getHeight();
 	}
 
+	@Override
+	protected float getAngle() {
+		return rot_angle;
+	}
 
+	@Override
+	protected float getX() {
+		return bounds2D[focus].getX();
+	}
+
+	@Override
+	protected float getY() {
+		return bounds2D[focus].getY();
+	}
 
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
@@ -260,7 +273,6 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 		int positionHandle = getPositionHandle();
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();
-		// TODO ROTATION HANDLE
 
 		OPallMultiTexture.methods.applyTexNumb(program, texNumb);
 		OPallMultiTexture.methods.applyFlip(program, textureFlip);

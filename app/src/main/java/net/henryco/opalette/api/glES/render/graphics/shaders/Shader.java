@@ -20,8 +20,6 @@ public abstract class Shader implements OPallShader {
     public final int vertexStride;
 
 	private float screenWidth = 0, screenHeight = 0;
-	protected boolean cameraForceUpdate;
-
 
 
     public Shader(Context context, String VERT, String FRAG) {
@@ -42,13 +40,21 @@ public abstract class Shader implements OPallShader {
 		GLES20.glUseProgram(program);
 		COORDS_PER_VERTEX = coordsPerVertex;
 		vertexStride = COORDS_PER_VERTEX * 4; //coz float = 4 byte
-		setCameraForceUpdate(false);
 		outErrorLog();
 	}
 
 
     protected abstract void render(final int glProgram, Camera2D camera, OPallConsumer<Integer> setter);
 
+	protected float getAngle() {
+		return 0 ;
+	}
+	protected float getX() {
+		return 0;
+	}
+	protected float getY() {
+		return 0;
+	}
 
 	@Override
 	public void setScreenDim(float w, float h) {
@@ -60,12 +66,12 @@ public abstract class Shader implements OPallShader {
 	@Override
 	public void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
 
+		GLESUtils.glUseProgram(program, () -> camera2D.backTranslate(() -> {
 
-		GLESUtils.glUseProgram(program, () -> {
-			if (cameraForceUpdate) camera2D.update();
-			OPallShader.methods.applyCameraMatrix(program, camera2D.getMVPMatrix());
+			camera2D.rotate(getAngle()).update();
+			methods.applyCameraMatrix(program, camera2D.getMVPMatrix());
 			render(program, camera2D, setter);
-		});
+		}));
 	}
 
 	@Override
@@ -102,8 +108,4 @@ public abstract class Shader implements OPallShader {
 		return screenHeight;
 	}
 
-	public Shader setCameraForceUpdate(boolean b) {
-		cameraForceUpdate = b;
-		return this;
-	}
 }
