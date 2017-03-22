@@ -4,6 +4,7 @@ import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
@@ -11,7 +12,6 @@ import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
-import net.henryco.opalette.application.programs.sub.programs.image.TranslationControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -63,9 +63,10 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void create(GL10 gl, int width, int height, AppMainProto context) {
 
-		//m_sharpen, m_sharpen_1, m_sharpen_5 is oks
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 		textureBuffer = OPallFBOCreator.FrameBuffer();
+		proxyRenderData.setRenderData(new ConvolveTexture());
+		proxyRenderData.getRenderData().setScreenDim(width, height);
 		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen1());
 		proxyRenderData.getRenderData().setEffectScale(0);
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
@@ -75,6 +76,7 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 		textureBuffer.createFBO(width, height, false);
+		proxyRenderData.getRenderData().setScreenDim(width, height);
 	}
 
 	@Override
@@ -93,7 +95,10 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 
 	@Override
 	public void setRenderData(OPallRenderable data) {
-		proxyRenderData.setRenderData((ConvolveTexture) data);
+		if (data != null && data instanceof Texture) {
+			proxyRenderData.getRenderData().set((Texture) data);
+			proxyRenderData.setStateUpdated();
+		}
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.sub.programs.image;
+package net.henryco.opalette.application.programs.sub.programs.filters;
 
 import android.app.Fragment;
 import android.os.Bundle;

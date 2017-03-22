@@ -115,8 +115,7 @@ public class MainActivity extends AppCompatActivity
 		oPallSurfaceView.setRenderer(renderer);
 
 		oPallSurfaceView.addToGLContextQueue(gl ->
-				stateRequester.sendNonSyncRequest(new Request(send_bitmap_to_program,
-						StartUpActivity.BitmapPack::close, StartUpActivity.BitmapPack.get()))
+				stateRequester.sendNonSyncRequest(new Request(send_bitmap_to_program, StartUpActivity.BitmapPack.get()))
 		);
 
 	}
