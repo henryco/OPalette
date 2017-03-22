@@ -11,6 +11,7 @@ import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
+import net.henryco.opalette.application.programs.sub.programs.image.TranslationControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -19,16 +20,14 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 21/03/17.
  */
 
-public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
+public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
 
-	private long id = methods.genID(FilterSharpnessProgram.class);
+	private long id = methods.genID(FirstStageProgram.class);
 	private ProxyRenderData<ConvolveTexture> proxyRenderData = new ProxyRenderData<>();
 	private FrameBuffer textureBuffer;
 
 	private OPallRequester feedBackListener;
-
-
 
 
 
@@ -66,6 +65,7 @@ public class FilterSharpnessProgram implements AppSubProgram<AppMainProto>, AppS
 		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen());
 		proxyRenderData.getRenderData().setEffectScale(0);
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
+		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(textureBuffer.getTexture()));
 	}
 
 	@Override

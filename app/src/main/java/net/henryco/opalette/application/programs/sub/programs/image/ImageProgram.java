@@ -60,12 +60,10 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		imageTexture = new EdTexture();
 		imageTexture.setScreenDim(width, height);
 
-
 		OPallViewInjector.inject(context.getActivityContext(), new MaxColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new MinColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new BrightnessControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new TuneControl(imageTexture));
-		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl());
 	}
 
 
@@ -81,7 +79,6 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
-
 		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
 		imageBuffer.render(camera);
 	}

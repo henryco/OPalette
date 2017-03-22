@@ -13,25 +13,27 @@ uniform float u_matrixSize;  // 3, 5
 uniform float u_matrix3[9];
 uniform float u_matrix5[25];
 uniform vec2 u_screenDim;
-
+uniform int u_enable; // 0 == false, 1... == true
 
 void main() {
 
-    vec2 pos = v_TexCoordinate;
-    vec2 cor = vec2((u_matrixSize - 1.) / 2.);
-    vec3 rgb = vec3(0.);
+    if (u_enable == 0) gl_FragColor = texture2D(u_Texture0, v_TexCoordinate).rgba;
+    else {
+        vec2 cor = vec2((u_matrixSize - 1.) / 2.);
+        vec3 rgb = vec3(0.);
 
-    for (float i = 0.; i < u_matrixSize; i++) {
-        for (float k = 0.; k < u_matrixSize; k++) {
-            vec2 ipos = vec2(i - cor.x, k - cor.y);
-            vec3 irgb = texture2D(u_Texture0, pos + (ipos / u_screenDim)).rgb;
+        for (float i = 0.; i < u_matrixSize; i++) {
+            for (float k = 0.; k < u_matrixSize; k++) {
+                vec2 ipos = vec2(i - cor.x, k - cor.y);
+                vec3 irgb = texture2D(u_Texture0, v_TexCoordinate + (ipos / u_screenDim)).rgb;
 
-            int n = int(i * u_matrixSize + k);
-            if (u_matrixSize == 3.) irgb *= u_matrix3[n];
-            else irgb *= u_matrix5[n];
+                int n = int(i * u_matrixSize + k);
+                if (u_matrixSize == 3.) irgb *= u_matrix3[n];
+                else irgb *= u_matrix5[n];
 
-            rgb += irgb;
+                rgb += irgb;
+            }
         }
+        gl_FragColor = vec4(rgb, 1.);
     }
-    gl_FragColor = vec4(rgb, 1.);
 }

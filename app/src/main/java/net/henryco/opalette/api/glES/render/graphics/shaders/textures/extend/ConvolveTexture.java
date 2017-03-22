@@ -21,6 +21,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private static final String u_matrix3 = "u_matrix3";
 	private static final String u_matrix5 = "u_matrix5";
 	private static final String u_texDim = "u_screenDim";
+	private static final String u_enable = "u_enable";
 
 	public static final FilterMatrices matrix = new FilterMatrices();
 
@@ -31,6 +32,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private int matrix_size = 0;
 	private int matrix_sqrt_size = 0;
 
+	private boolean enable = true;
 
 	public ConvolveTexture(Context context) {
 		this(context, Filter.LINEAR);
@@ -67,6 +69,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	protected void render(int program, Camera2D camera) {
 		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_texDim), getWidth(), getHeight());
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_matrixSize), matrix_sqrt_size);
+		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_enable), enable ? 1 : 0);
 		String matrixTarget;
 		if (matrix_sqrt_size == 3) matrixTarget = u_matrix3;
 		else matrixTarget = u_matrix5;
@@ -125,8 +128,13 @@ public class ConvolveTexture extends OPallTextureExtended {
 		return matrix;
 	}
 
-
-
+	public ConvolveTexture setEnable(boolean b) {
+		this.enable = b;
+		return this;
+	}
+	public boolean isEnable() {
+		return enable;
+	}
 
 	private static final String FRAG_DIR = OPallTexture.FRAG_DIR+"/ConvolveFilter.frag";
 	private static final String FRAG_FILE =
@@ -145,27 +153,29 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"uniform float u_matrix3[9];\n" +
 			"uniform float u_matrix5[25];\n" +
 			"uniform vec2 u_screenDim;\n" +
-			"\n" +
+			"uniform int u_enable; // 0 == false, 1... == true\n" +
 			"\n" +
 			"void main() {\n" +
 			"\n" +
-			"    vec2 pos = v_TexCoordinate;\n" +
-			"    vec2 cor = vec2((u_matrixSize - 1.) / 2.);\n" +
-			"    vec3 rgb = vec3(0.);\n" +
+			"    if (u_enable == 0) gl_FragColor = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
+			"    else {\n" +
+			"        vec2 cor = vec2((u_matrixSize - 1.) / 2.);\n" +
+			"        vec3 rgb = vec3(0.);\n" +
 			"\n" +
-			"    for (float i = 0.; i < u_matrixSize; i++) {\n" +
-			"        for (float k = 0.; k < u_matrixSize; k++) {\n" +
-			"            vec2 ipos = vec2(i - cor.x, k - cor.y);\n" +
-			"            vec3 irgb = texture2D(u_Texture0, pos + (ipos / u_screenDim)).rgb;\n" +
+			"        for (float i = 0.; i < u_matrixSize; i++) {\n" +
+			"            for (float k = 0.; k < u_matrixSize; k++) {\n" +
+			"                vec2 ipos = vec2(i - cor.x, k - cor.y);\n" +
+			"                vec3 irgb = texture2D(u_Texture0, v_TexCoordinate + (ipos / u_screenDim)).rgb;\n" +
 			"\n" +
-			"            int n = int(i * u_matrixSize + k);\n" +
-			"            if (u_matrixSize == 3.) irgb *= u_matrix3[n];\n" +
-			"            else irgb *= u_matrix5[n];\n" +
+			"                int n = int(i * u_matrixSize + k);\n" +
+			"                if (u_matrixSize == 3.) irgb *= u_matrix3[n];\n" +
+			"                else irgb *= u_matrix5[n];\n" +
 			"\n" +
-			"            rgb += irgb;\n" +
+			"                rgb += irgb;\n" +
+			"            }\n" +
 			"        }\n" +
+			"        gl_FragColor = vec4(rgb, 1.);\n" +
 			"    }\n" +
-			"    gl_FragColor = vec4(rgb, 1.);\n" +
 			"}";
 
 

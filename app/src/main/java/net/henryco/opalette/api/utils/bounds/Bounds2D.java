@@ -81,6 +81,12 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 	public Bounds2D setBounds(float x, float y, float w, float h){
 		return setBounds(x, y, w, h, scale);
 	}
+	public Bounds2D setX(float x) {
+		return setPosition(x, y);
+	}
+	public Bounds2D setY(float y) {
+		return setPosition(x, y);
+	}
 	public Bounds2D setPosition(float x, float y) {
 		return setBounds(x, y, width, height, scale);
 	}
@@ -120,6 +126,12 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 		return this;
 	}
 
+	public float getX() {
+		return x;
+	}
+	public float getY() {
+		return y;
+	}
 	public float getWidth(){
 		return width;
 	}

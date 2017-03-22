@@ -54,6 +54,11 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 
 
+	private List<OnTouchEventListener> touchEventListeners = new ArrayList<>();
+	public interface OnTouchEventListener {
+		void onTouchEvent(MotionEvent event);
+	}
+
 
 	private SurfaceDimension dimProcessor = DimensionProcessors.DEFAULT;
 	public interface SurfaceDimension {
@@ -188,11 +193,18 @@ public class OPallSurfaceView extends GLSurfaceView {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-
-
-
+		for (OnTouchEventListener l : touchEventListeners) l.onTouchEvent(event);
 		return super.onTouchEvent(event);
 	}
+
+	public void addOnTouchEventListener(OnTouchEventListener listener) {
+		if (listener != null) touchEventListeners.add(listener);
+	}
+
+	public void removeTouchEventListener(OnTouchEventListener listener) {
+		if (listener != null) touchEventListeners.remove(listener);
+	}
+
 
 
 	/**
