@@ -28,7 +28,12 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private EdTexture imageTexture;
 
 	private OPallRequester feedBackListener;
+	private AppSubProgramHolder holder;
 
+	@Override
+	public void setProgramHolder(AppSubProgramHolder holder) {
+		this.holder = holder;
+	}
 
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {

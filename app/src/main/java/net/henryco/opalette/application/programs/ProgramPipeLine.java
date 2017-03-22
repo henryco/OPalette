@@ -31,7 +31,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 01/03/17.
  */
 
-public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubProtocol  {
+public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubProtocol, AppSubProgram.AppSubProgramHolder {
 
 
 
@@ -71,20 +71,60 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	public ProgramPipeLine(long id){
 
 		this.id = id;
-		long cur = System.currentTimeMillis() - hashCode();
 
 		subPrograms = new ArrayList<>();
 		requestSender = new RequestSender();
 
 		AppSubProgram[] pipeLine = getDefaultPipeLineArray();
 		for (AppSubProgram abs : pipeLine){
-			requestSender.addRequestListener(abs);
-			abs.setFeedBackListener(requestSender);
-			subPrograms.add(abs);
-			abs.setID(cur += 1);
+			addSubProgram(abs);
 		}
 
 	}
+
+
+	@Override
+	public void addSubProgram(AppSubProgram p) {
+		requestSender.addRequestListener(p);
+		p.setFeedBackListener(requestSender);
+		p.setProgramHolder(this);
+		p.setID(subPrograms.size());
+		subPrograms.add(p);
+	}
+
+	@Override
+	public void setSubProgram(AppSubProgram p, int i) {
+		requestSender.addRequestListener(p);
+		p.setFeedBackListener(requestSender);
+		p.setProgramHolder(this);
+		subPrograms.set(i, p);
+		for (int k = 0; k < subPrograms.size(); k++)
+			subPrograms.get(k).setID(k);
+	}
+
+	@Override
+	public boolean removeSubProgram(AppSubProgram p) {
+		boolean o = subPrograms.remove(p);
+		if (o)
+			for (int k = 0; k < subPrograms.size(); k++)
+				subPrograms.get(k).setID(k);
+		return o;
+	}
+
+	@Override
+	public boolean removeSubProgram(int i) {
+		try {
+			subPrograms.remove(i);
+		} catch (Exception e) {
+			return false;
+		}
+		for (int k = 0; k < subPrograms.size(); k++)
+			subPrograms.get(k).setID(k);
+		return true;
+	}
+
+
+
 
 
 	@Override

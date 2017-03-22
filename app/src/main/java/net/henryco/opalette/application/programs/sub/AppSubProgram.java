@@ -17,8 +17,16 @@ public interface AppSubProgram<T> extends OPallSubProgram<T>, OPallRequestFeedBa
 	void setID(long id);
 
 	void setRenderData(OPallRenderable data);
+	void setProgramHolder(AppSubProgramHolder holder);
 	OPallRenderable getRenderData();
 
+
+	interface AppSubProgramHolder {
+		void addSubProgram(AppSubProgram p);
+		void setSubProgram(AppSubProgram p, int i);
+		boolean removeSubProgram(AppSubProgram p);
+		boolean removeSubProgram(int i);
+	}
 
 	final class ProxyRenderData <U extends OPallRenderable> {
 

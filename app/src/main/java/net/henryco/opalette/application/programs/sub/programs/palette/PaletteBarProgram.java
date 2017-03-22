@@ -28,7 +28,12 @@ public class PaletteBarProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	private OPallBar backBar;
 	private int buffer_quantum = 5;
 	private OPallRequester feedBackListener;
+	private AppSubProgramHolder holder;
 
+	@Override
+	public void setProgramHolder(AppSubProgramHolder holder) {
+		this.holder = holder;
+	}
 
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {

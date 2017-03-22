@@ -40,6 +40,12 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 
 
 	private OPallRequester feedBackListener;
+	private AppSubProgramHolder holder;
+
+	@Override
+	public void setProgramHolder(AppSubProgramHolder holder) {
+		this.holder = holder;
+	}
 
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {

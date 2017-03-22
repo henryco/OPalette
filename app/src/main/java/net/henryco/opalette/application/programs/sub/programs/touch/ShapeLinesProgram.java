@@ -22,7 +22,12 @@ public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 
 	private TouchLines touchLines;
 	private OPallRequester feedBackListener;
+	private AppSubProgramHolder holder;
 
+	@Override
+	public void setProgramHolder(AppSubProgramHolder holder) {
+		this.holder = holder;
+	}
 
 	@Override
 	public void setFeedBackListener(OPallRequester feedBackListener) {
