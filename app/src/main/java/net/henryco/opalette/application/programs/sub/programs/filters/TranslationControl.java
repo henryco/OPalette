@@ -68,9 +68,16 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 			updateFunc.run();
 		}).onStop(stop));
 
+
+
 		OPallSurfaceView surface = context.getRenderSurface();
 		touchEventListener = event -> {
-			
+
+			float x = event.getX();
+			float y = event.getY();
+
+
+
 		};
 		surface.addOnTouchEventListener(touchEventListener);
 

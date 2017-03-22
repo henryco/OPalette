@@ -245,6 +245,8 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
 
+
+
 		int positionHandle = getPositionHandle();
 		int mTextureUniformHandle = textureGL_ID;
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();

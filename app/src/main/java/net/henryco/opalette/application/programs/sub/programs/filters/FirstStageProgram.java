@@ -82,6 +82,8 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
+		proxyRenderData.getRenderData().render(camera);
+
 		if (proxyRenderData.stateUpdated()) {
 			boolean e = proxyRenderData.getRenderData().isFilterEnable();
 			feedBackListener.sendNonSyncRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));

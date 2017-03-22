@@ -204,7 +204,9 @@ public class Camera2D {
 		matrix.rotation.z += deg_z;
 		return this;
 	}
-
+	public Camera2D rotate(float angle_deg) {
+		return rotateZ(angle_deg);
+	}
 
 
 
@@ -220,6 +222,9 @@ public class Camera2D {
 	}
 	public Camera2D setRotation(float deg_x, float deg_y, float deg_z) {
 		return rotate(deg_x - matrix.rotation.x, deg_y - matrix.rotation.y, deg_z - matrix.rotation.z);
+	}
+	public Camera2D setRotation(float angle_deg) {
+		return setRotationZ(angle_deg);
 	}
 
 }
