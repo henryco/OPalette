@@ -28,7 +28,6 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	protected int textureGL_ID;
 
 	private float rot_angle = 0;
-	private float[] rot_matrix;
 
 
 	public final Bounds2D bounds2D = new Bounds2D()
@@ -104,6 +103,7 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 		System.arraycopy(texture.region, 0, region, 0, region.length);
 		textureFlip[0] = texture.textureFlip[0];
 		textureFlip[1] = texture.textureFlip[1];
+		this.rot_angle = texture.rot_angle;
 		return this;
 	}
 
@@ -140,13 +140,13 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 
 
 	@Override
-	public OPallTexture setRotation(float angle) {
+	public Texture setRotation(float angle) {
 		this.rot_angle = angle;
-
-		float cos_f = (float) Math.cos(rot_angle);
-		float sin_f = (float) Math.sin(rot_angle);
-		rot_matrix = new float[]{cos_f, sin_f, -sin_f, cos_f};
-
+//		TODO FIX
+//		float cos_f = (float) Math.cos(rot_angle);
+//		float sin_f = (float) Math.sin(rot_angle);
+//		rot_matrix = new float[]{cos_f, sin_f, -sin_f, cos_f};
+//
 //		float[] ver = Bounds2D.vertices.FLAT_SQUARE_2D();
 //		float[] v2 = new float[ver.length];
 //
@@ -245,7 +245,7 @@ public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPal
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
 
-
+//		TODO ROTATION HANDLE
 
 		int positionHandle = getPositionHandle();
 		int mTextureUniformHandle = textureGL_ID;

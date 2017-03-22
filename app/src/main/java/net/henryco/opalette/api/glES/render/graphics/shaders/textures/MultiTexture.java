@@ -33,7 +33,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 	public final Bounds2D[] bounds2D;
 	private final int texNumb;
 	private int focus;
-
+	private float rot_angle = 0;
 
 
 
@@ -97,9 +97,10 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 	public MultiTexture set(int n, Texture texture) {
 
 		setTextureDataHandle(n, texture.getTextureDataHandle());
-		this.bounds2D[n] = new Bounds2D(texture.bounds2D).setHolder(this);
-		this.textureFlip[n][0] = texture.textureFlip[0];
-		this.textureFlip[n][1] = texture.textureFlip[1];
+		bounds2D[n] = new Bounds2D(texture.bounds2D).setHolder(this);
+		textureFlip[n][0] = texture.textureFlip[0];
+		textureFlip[n][1] = texture.textureFlip[1];
+		this.rot_angle = texture.getRotation();
 		updateBounds(n);
 		return this;
 	}
@@ -107,14 +108,14 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 	@Override
 	public OPallTexture setRotation(float angle) {
+		this.rot_angle = angle;
 		//TODO
 		return this;
 	}
 
 	@Override
 	public float getRotation() {
-		//TODO
-		return 0;
+		return rot_angle;
 	}
 
 	@Override
@@ -259,7 +260,7 @@ public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Boun
 
 		int positionHandle = getPositionHandle();
 		int mTextureCoordinateHandle = getTextureCoordinateHandle();
-
+		// TODO ROTATION HANDLE
 
 		OPallMultiTexture.methods.applyTexNumb(program, texNumb);
 		OPallMultiTexture.methods.applyFlip(program, textureFlip);

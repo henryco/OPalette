@@ -17,10 +17,6 @@ import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.filters.FirstStageProgram;
-import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
-import net.henryco.opalette.application.programs.sub.programs.image.ImageProgram;
-import net.henryco.opalette.application.programs.sub.programs.palette.PaletteBarProgram;
-import net.henryco.opalette.application.programs.sub.programs.touch.ShapeLinesProgram;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import java.util.ArrayList;
@@ -59,10 +55,10 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		return new AppSubProgram[]{
 
 				new FirstStageProgram(),
-				new ImageProgram(),
-				new ShapeLinesProgram(),
-				new GradientBarProgram(),
-				new PaletteBarProgram()
+//				new ImageProgram(),
+//				new ShapeLinesProgram(),
+//				new GradientBarProgram(),
+//				new PaletteBarProgram()
 		};
 	}
 
@@ -211,6 +207,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				Texture startImage = new Texture();
 				startImage.setScreenDim(width, height);
 				startImage.setBitmap(bitmap);
+				startImage.setRotation(35); // FIXME
 				bitmap.recycle();
 				bitmap = null;
 				float scrWidth = startImage.getScreenWidth();
