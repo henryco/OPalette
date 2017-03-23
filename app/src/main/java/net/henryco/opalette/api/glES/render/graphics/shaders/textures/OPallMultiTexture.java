@@ -9,8 +9,7 @@ import android.opengl.GLES20;
 
 public interface OPallMultiTexture extends OPallTexture {
 
-	String DEFAULT_VERT_FILE =
-
+	String DEFAULT_VERT_FILE = "#version 100\n" +
 			"attribute vec4  a_Position;\n" +
 			"attribute vec2  a_TexCoordinate;\n" +
 			"\n" +
@@ -24,8 +23,8 @@ public interface OPallMultiTexture extends OPallTexture {
 			"\n" +
 			"vec2 flip(vec2 f, vec2 tex) {\n" +
 			"\n" +
-			"    float x = min(1., f.x + 1.) - f.x * tex.x;\n" +
-			"    float y = min(1., f.y + 1.) - f.y * tex.y;\n" +
+			"    float x = min(1.0, f.x + 1.0) - f.x * tex.x;\n" +
+			"    float y = min(1.0, f.y + 1.0) - f.y * tex.y;\n" +
 			"    return vec2(x, y);\n" +
 			"}\n" +
 			"\n" +
@@ -39,8 +38,9 @@ public interface OPallMultiTexture extends OPallTexture {
 			"}";
 
 
-	String DEFAULT_FRAG_FILE =
-
+	String DEFAULT_FRAG_FILE = "#version 100\n" +
+			"precision mediump float;\n" +
+			"\n" +
 			"varying vec4 v_Position;\n" +
 			"varying vec4 v_WorldPos;\n" +
 			"varying vec2 v_TexCoordinate[5];\n" +
@@ -54,6 +54,7 @@ public interface OPallMultiTexture extends OPallTexture {
 			"\n" +
 			"\n" +
 			"void main() {\n" +
+			"\n" +
 			"    gl_FragColor = texture2D(u_Texture0, v_TexCoordinate[0]).rgba;\n" +
 			"}";
 

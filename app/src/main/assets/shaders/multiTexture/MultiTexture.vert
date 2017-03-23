@@ -1,4 +1,4 @@
-
+#version 100
 attribute vec4  a_Position;
 attribute vec2  a_TexCoordinate;
 

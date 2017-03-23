@@ -76,7 +76,7 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 
 		barGradientBuffer = OPallFBOCreator.FrameBuffer();
 		barSrcBuffer = OPallFBOCreator.FrameBuffer();
-		multiTexture = new MultiTexture(context, VERT_FILE, FRAG_FILE, 2);
+		multiTexture = new MultiTexture(OPallMultiTexture.DEFAULT_VERT_FILE, FRAG_PROGRAM, 2);
 	}
 
 	@Override
@@ -120,7 +120,6 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	public static final String u_barStart = "u_barStart";
 	public static final String u_dimension = "u_dimension";
 	public static final String u_line = "u_line";
-	public static final String VERT_FILE = OPallMultiTexture.DEF_SHADER+".vert";
 	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPaletteHorizontal.frag";
 	public static final String FRAG_PROGRAM =
 			"#version 100\n" +
@@ -167,7 +166,6 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 			"\n" +
 			"    vec3 color = p_col / max(trueHeight, 1.0);\n" +
 			"    gl_FragColor = vec4(color, 1.0);\n" +
-			"\n" +
 			"}";
 
 }
