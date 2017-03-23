@@ -3,6 +3,7 @@ package net.henryco.opalette.application.programs.sub.programs.filters;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
 import android.view.View;
 
 import net.henryco.opalette.R;
@@ -35,12 +36,15 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 	private Runnable updateFunc = () -> {};
-	private OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> {
+	private Runnable stopFunc = () -> {
 		imgHolder.getRenderData().setFilterEnable(true);
 		updateFunc.run();
-	});
+	};
+	private OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> stopFunc.run());
 
-
+	private static int clamp(int val) {
+		return Math.max(Math.min(val, 100), -100);
+	}
 
 
 
@@ -48,18 +52,18 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
+		OPallSurfaceView surface = context.getRenderSurface();
 		ConvolveTexture image = imgHolder.getRenderData();
-
-		this.updateFunc = () -> {
-			imgHolder.setStateUpdated();
-			context.getRenderSurface().update();
-		};
-
 		InjectableSeekBar horBar = new InjectableSeekBar(view, "Horizontal").setDefaultPoint(0, 50);
 		InjectableSeekBar verBar = new InjectableSeekBar(view, "Vertical").setDefaultPoint(0, 50);
 
-		horBar.onBarCreate(bar -> bar.setProgress(horBar.de_norm(image.bounds2D.getX() / image.getScreenWidth())));
-		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm(image.bounds2D.getY() / image.getScreenHeight())));
+		horBar.onBarCreate(bar -> bar.setProgress(clamp(horBar.de_norm(image.bounds2D.getX() / image.getScreenWidth()))));
+		verBar.onBarCreate(bar -> bar.setProgress(clamp(verBar.de_norm(image.bounds2D.getY() / image.getScreenHeight()))));
+
+		updateFunc = () -> {
+			imgHolder.setStateUpdated();
+			context.getRenderSurface().update();
+		};
 
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			image.setFilterEnable(false).bounds2D.setX(horBar.norm(progress) * image.getScreenWidth());
@@ -72,15 +76,32 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		}).onStop(stop));
 
 
-		OPallSurfaceView surface = context.getRenderSurface();
-		touchEventListener = event -> {
+		final float[] last = {0,0};
+		surface.addOnTouchEventListener(touchEventListener = event -> {
 
 			float x = event.getX();
 			float y = event.getY();
 
+			switch (event.getAction()) {
+				case MotionEvent.ACTION_MOVE:
+					float dx = x - last[0];
+					float dy = y - last[1];
 
-		};
-		surface.addOnTouchEventListener(touchEventListener);
+					float ix = image.bounds2D.getX();
+					float iy = image.bounds2D.getY();
+
+					float px = ix + dx;
+					float py = iy + dy;
+
+					horBar.setProgress(clamp(horBar.de_norm((px / image.getWidth()))));
+					verBar.setProgress(clamp(verBar.de_norm((py / image.getHeight()))));
+
+					image.bounds2D.setPosition(px, py);
+					updateFunc.run();
+			}
+			last[0] = x;
+			last[1] = y;
+		});
 
 
 		OPallViewInjector.inject(context.getActivityContext(), verBar, horBar);

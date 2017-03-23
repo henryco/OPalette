@@ -194,7 +194,7 @@ public class OPallSurfaceView extends GLSurfaceView {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		for (OnTouchEventListener l : touchEventListeners) l.onTouchEvent(event);
-		return super.onTouchEvent(event);
+		return true;
 	}
 
 	public void addOnTouchEventListener(OnTouchEventListener listener) {

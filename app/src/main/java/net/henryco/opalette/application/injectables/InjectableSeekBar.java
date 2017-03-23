@@ -53,7 +53,9 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	private int value_color;
 	private int progress_color;
 	private int thumb_color;
+	private int lazyProgress;
 
+	private SeekBar seekBar;
 
 	public InjectableSeekBar(View container, int type, String ... name) {
 		super(container, type);
@@ -87,14 +89,16 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 				.setTextColor(default_text_color)
 				.setBarColor(default_bar_color)
 				.setBarListener(new OPallSeekBarListener());
+		lazyProgress = 0;
 	}
 
 
 	@Override
 	protected void onInject(Activity context, View view) {
 
-		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+		seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 		seekBar.setMax(max);
+		seekBar.setProgress(lazyProgress);
 		seekBar.getProgressDrawable().setColorFilter(progress_color, PorterDuff.Mode.SRC_IN);
 		seekBar.getThumb().setColorFilter(thumb_color, PorterDuff.Mode.SRC_IN);
 		onBarCreator.onSeekBarCreate(seekBar);
@@ -127,6 +131,12 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		return (v + valueCorrection) / (max + valueCorrection);
 	}
 
+
+	public InjectableSeekBar setProgress(int progress) {
+		lazyProgress = progress;
+		if (seekBar != null) seekBar.setProgress(progress);
+		return this;
+	}
 
 	public InjectableSeekBar setBarColor(int color) {
 		return setProgressColor(color).setThumbColor(color);
