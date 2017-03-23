@@ -153,7 +153,7 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 			"        vec2 point = vec2(pointNormed.x * u_dimension.x, u_dimension.y * (1. - pointNormed.y));\n" +
 			"        vec4 pointColor = texture2D(u_Texture0, pointNormed).rgba;\n" +
 			"\n" +
-			"        if (pointColor.a != 0.0 && (y >= u_barEnd || y <= u_barStart)) {\n" +
+			"        if (pointColor.a != 0.0 && y > 0. && (y >= u_barEnd || y <= u_barStart)) {\n" +
 			"\n" +
 			"            float py1 = (-1.) * ((u_line[0].x * point.x) + u_line[0].z) / u_line[0].y;\n" +
 			"            float py2 = (-1.) * ((u_line[1].x * point.x) + u_line[1].z) / u_line[1].y;\n" +

@@ -58,16 +58,16 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		InjectableSeekBar horBar = new InjectableSeekBar(view, "Horizontal").setDefaultPoint(0, 50);
 		InjectableSeekBar verBar = new InjectableSeekBar(view, "Vertical").setDefaultPoint(0, 50);
 
-		horBar.onBarCreate(bar -> bar.setProgress(horBar.de_norm(image.bounds2D.getX() / image.getWidth())));
-		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm(image.bounds2D.getY() / image.getHeight())));
+		horBar.onBarCreate(bar -> bar.setProgress(horBar.de_norm(image.bounds2D.getX() / image.getScreenWidth())));
+		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm(image.bounds2D.getY() / image.getScreenHeight())));
 
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			image.setFilterEnable(false).bounds2D.setX(horBar.norm(progress) * image.getWidth());
+			image.setFilterEnable(false).bounds2D.setX(horBar.norm(progress) * image.getScreenWidth());
 			updateFunc.run();
 		}).onStop(stop));
 
 		verBar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {
-			image.setFilterEnable(false).bounds2D.setY(verBar.norm(progress) * image.getHeight());
+			image.setFilterEnable(false).bounds2D.setY(verBar.norm(progress) * image.getScreenHeight());
 			updateFunc.run();
 		}).onStop(stop));
 

@@ -19,8 +19,8 @@ import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.filters.FirstStageProgram;
 import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.image.ImageProgram;
+import net.henryco.opalette.application.programs.sub.programs.line.ShapeLinesProgram;
 import net.henryco.opalette.application.programs.sub.programs.palette.PaletteBarProgram;
-import net.henryco.opalette.application.programs.sub.programs.touch.ShapeLinesProgram;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import java.util.ArrayList;
