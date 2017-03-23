@@ -7,6 +7,7 @@
       <w>coeffs</w>
       <w>coord</w>
       <w>coords</w>
+      <w>cosf</w>
       <w>excp</w>
       <w>extr</w>
       <w>flipx</w>
@@ -30,6 +31,7 @@
       <w>renderable</w>
       <w>shaders</w>
       <w>signin</w>
+      <w>sinf</w>
       <w>texels</w>
       <w>vert</w>
       <w>verts</w>

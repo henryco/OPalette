@@ -28,46 +28,48 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 	private OPallSurfaceView.OnTouchEventListener touchEventListener;
 	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;
 
-	public TranslationControl(AppSubProgram.ProxyRenderData<ConvolveTexture> renderData) {
+	public TranslationControl(final AppSubProgram.ProxyRenderData<ConvolveTexture> renderData) {
 		super(BUTTON_IMAGE, MOVE);
-		imgHolder = renderData;
+		this.imgHolder = renderData;
 	}
+
+
+	private Runnable updateFunc = () -> {};
+	private OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> {
+		imgHolder.getRenderData().setFilterEnable(true);
+		updateFunc.run();
+	});
+
+
+
+
 
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		InjectableSeekBar horBar = new InjectableSeekBar(view, "Horizontal");
-		InjectableSeekBar verBar = new InjectableSeekBar(view, "Vertical");
-
-		horBar.setDefaultPoint(0, 50);
-		verBar.setDefaultPoint(0, 50);
-
 		ConvolveTexture image = imgHolder.getRenderData();
 
-		horBar.onBarCreate(bar -> bar.setProgress(horBar.de_norm(image.bounds2D.getX() / image.getWidth())));
-		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm((-1) * image.bounds2D.getY() / image.getHeight())));
-
-		Runnable updateFunc = () -> {
+		this.updateFunc = () -> {
 			imgHolder.setStateUpdated();
 			context.getRenderSurface().update();
 		};
 
-		OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> {
-			image.setFilterEnable(true);
-			updateFunc.run();
-		});
+		InjectableSeekBar horBar = new InjectableSeekBar(view, "Horizontal").setDefaultPoint(0, 50);
+		InjectableSeekBar verBar = new InjectableSeekBar(view, "Vertical").setDefaultPoint(0, 50);
+
+		horBar.onBarCreate(bar -> bar.setProgress(horBar.de_norm(0)));
+		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm(0)));
 
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			image.setFilterEnable(false).bounds(b -> b.setX(horBar.norm(progress) * image.getWidth()));
+			image.setFilterEnable(false).bounds2D.setX(horBar.norm(progress) * image.getWidth());
 			updateFunc.run();
 		}).onStop(stop));
 
 		verBar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {
-			image.setFilterEnable(false).bounds(b -> b.setY((-1) * verBar.norm(progress) * image.getHeight()));
+			image.setFilterEnable(false).bounds2D.setY(verBar.norm(progress) * image.getHeight());
 			updateFunc.run();
 		}).onStop(stop));
-
 
 
 		OPallSurfaceView surface = context.getRenderSurface();
@@ -77,13 +79,15 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 			float y = event.getY();
 
 
-
 		};
 		surface.addOnTouchEventListener(touchEventListener);
 
 
 		OPallViewInjector.inject(context.getActivityContext(), verBar, horBar);
 	}
+
+
+
 
 
 	@Override

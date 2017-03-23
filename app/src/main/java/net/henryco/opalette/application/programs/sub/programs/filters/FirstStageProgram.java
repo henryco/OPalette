@@ -7,6 +7,7 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.geom.OPallGeometry;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
@@ -21,6 +22,7 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
+
 
 
 	private long id = methods.genID(FirstStageProgram.class);
@@ -73,23 +75,49 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
 	}
 
+
+
+
 	@Override
 	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 		textureBuffer.createFBO(width, height, false);
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 	}
 
+
+	private static void correctFunc(ConvolveTexture image, Camera2D camera) {
+
+		float trueX = image.bounds2D.getX();
+		float trueY = image.bounds2D.getY();
+
+		float a = (float) Math.toRadians(image.getRotation());
+
+		float sinf = (float) Math.sin(a);
+		float cosf = (float) Math.cos(a);
+
+		float[] v = {trueX, trueY};
+		float[] m = {cosf, sinf, -sinf, cosf};
+
+		float[] xy = OPallGeometry.multiplyMat_Vec(m, v);
+
+		camera.translateXY(-xy[0], -xy[1]);
+	}
+
+
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
-//		proxyRenderData.getRenderData().render(camera);
-//
 		if (proxyRenderData.stateUpdated()) {
-			boolean e = proxyRenderData.getRenderData().isFilterEnable();
-			feedBackListener.sendNonSyncRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
-			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
-			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
-			proxyRenderData.setStateUpdated();
+			camera.backTranslate(() -> {
+
+				correctFunc(proxyRenderData.getRenderData(), camera);
+
+				boolean e = proxyRenderData.getRenderData().isFilterEnable();
+				feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
+				feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
+
+				textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
+			});
 		}
 		textureBuffer.render(camera);
 	}

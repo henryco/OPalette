@@ -335,6 +335,10 @@ public class OPallGeometry {
 		return squaredLength(p[0], p[1], p[2], p[3]);
 	}
 
+	/**
+	 * @param p array of floats, where {px1, py1, px2, py2} points of some line (vec)
+	 * @return length of some line \ vec
+	 */
 	public static float length(float... p) {
 		return (float) Math.sqrt(squaredLength(p));
 	}

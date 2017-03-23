@@ -211,6 +211,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				Texture startImage = new Texture();
 				startImage.setScreenDim(width, height);
 				startImage.setBitmap(bitmap);
+				startImage.setRotation(30);
 				bitmap.recycle();
 				bitmap = null;
 				float scrWidth = startImage.getScreenWidth();

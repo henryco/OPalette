@@ -46,7 +46,7 @@ public class OPallCameraMatrix {
 		float ratio = (float) width / height;
 		Matrix.frustumM(mProjectionMatrix, 0, -ratio * flipFacX / zoom, ratio * flipFacX / zoom, -1 * flipFacY / zoom, flipFacY / zoom, 3, 1);
 		Matrix.setLookAtM(mViewMatrix, 0, eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
-		Matrix.setRotateEulerM(mRotMatrix, 0, rotation.x, rotation.y, rotation.z);
+		Matrix.setRotateEulerM(mRotMatrix, 0, -rotation.x, -rotation.y, -rotation.z);
 		Matrix.multiplyMM(mVProxyMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 		Matrix.multiplyMM(mMVPMatrix, 0, mVProxyMatrix, 0, mRotMatrix, 0);
 	}
