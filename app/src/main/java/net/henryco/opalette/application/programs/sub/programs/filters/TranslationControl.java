@@ -58,8 +58,8 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		InjectableSeekBar horBar = new InjectableSeekBar(view, "Horizontal").setDefaultPoint(0, 50);
 		InjectableSeekBar verBar = new InjectableSeekBar(view, "Vertical").setDefaultPoint(0, 50);
 
-		horBar.onBarCreate(bar -> bar.setProgress(horBar.de_norm(0)));
-		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm(0)));
+		horBar.onBarCreate(bar -> bar.setProgress(horBar.de_norm(image.bounds2D.getX() / image.getWidth())));
+		verBar.onBarCreate(bar -> bar.setProgress(verBar.de_norm(image.bounds2D.getY() / image.getHeight())));
 
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			image.setFilterEnable(false).bounds2D.setX(horBar.norm(progress) * image.getWidth());
