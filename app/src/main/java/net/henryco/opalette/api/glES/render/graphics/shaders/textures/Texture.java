@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
+import net.henryco.opalette.api.glES.render.graphics.shaders.Shader2D;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.bounds.Bounds2D;
 import net.henryco.opalette.api.utils.bounds.OPallBounds;
@@ -19,7 +19,7 @@ import java.nio.FloatBuffer;
  * Created by root on 14/02/17.
  */
 
-public class Texture extends Shader implements OPallBoundsHolder<Bounds2D>, OPallTexture {
+public class Texture extends Shader2D implements OPallBoundsHolder<Bounds2D>, OPallTexture {
 
 
 	protected final float[] region = new float[5];

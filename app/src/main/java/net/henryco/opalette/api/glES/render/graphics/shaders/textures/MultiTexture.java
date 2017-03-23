@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
+import net.henryco.opalette.api.glES.render.graphics.shaders.Shader2D;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.bounds.Bounds2D;
 import net.henryco.opalette.api.utils.bounds.OPallBounds;
@@ -19,7 +19,7 @@ import java.nio.FloatBuffer;
  * Created by HenryCo on 23/02/17.
  */
 
-public class MultiTexture extends Shader implements OPallMultiBoundsHolder <Bounds2D>, OPallMultiTexture {
+public class MultiTexture extends Shader2D implements OPallMultiBoundsHolder <Bounds2D>, OPallMultiTexture {
 
 
 

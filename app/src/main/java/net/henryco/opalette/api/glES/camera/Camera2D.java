@@ -134,7 +134,9 @@ public class Camera2D {
 	public Camera2D translateXY(float x_px, float y_px) {
 		return translateX(x_px).translateY(y_px);
 	}
-
+	public Camera2D translateXY(float[] xy_px) {
+		return translateX(xy_px[0]).translateY(xy_px[1]);
+	}
 
 
 	public float[] getPosition() {

@@ -10,9 +10,10 @@ import android.opengl.GLES20;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.OPallUtils;
+import net.henryco.opalette.api.utils.geom.OPallGeometry;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
-public abstract class Shader implements OPallShader {
+public abstract class Shader2D implements OPallShader {
 
 
 	public final int program;
@@ -22,16 +23,16 @@ public abstract class Shader implements OPallShader {
 	private float screenWidth = 0, screenHeight = 0;
 
 
-    public Shader(Context context, String VERT, String FRAG) {
-        this(context, VERT, FRAG, 3);
+    public Shader2D(Context context, String VERT, String FRAG) {
+        this(context, VERT, FRAG, 2);
     }
-    public Shader(Context context, String VERT, String FRAG, int coordsPerVertex) {
+    public Shader2D(Context context, String VERT, String FRAG, int coordsPerVertex) {
 		this(OPallUtils.getSourceAssetsText(VERT, context), OPallUtils.getSourceAssetsText(FRAG, context), coordsPerVertex);
 	}
-	public Shader(String vertex, String fragment) {
-		this(vertex, fragment, 3);
+	public Shader2D(String vertex, String fragment) {
+		this(vertex, fragment, 2);
 	}
-	public Shader(String vertex, String fragment, int coordsPerVertex) {
+	public Shader2D(String vertex, String fragment, int coordsPerVertex) {
 
 		program = GLES20.glCreateProgram();
 		GLES20.glAttachShader(program, OPallShader.methods.loadShader(GLES20.GL_VERTEX_SHADER, vertex));
@@ -68,6 +69,7 @@ public abstract class Shader implements OPallShader {
 
 		GLESUtils.glUseProgram(program, () -> camera2D.backTranslate(() -> {
 
+			camera2D.translateXY(correctFunc(getX(), getY(), (float) Math.toRadians(getAngle())));
 			camera2D.rotate(getAngle()).update();
 			methods.applyCameraMatrix(program, camera2D.getMVPMatrix());
 			render(program, camera2D, setter);
@@ -79,6 +81,23 @@ public abstract class Shader implements OPallShader {
 		render(camera, integer -> {});
     }
 
+
+
+	private static float[] correctFunc(float trueX, float trueY, float a) {
+
+		if (a == 0 || (trueX == 0 && trueY == 0)) return new float[]{0,0};
+
+		float sinf = (float) Math.sin(a);
+		float cosf = (float) Math.cos(a);
+
+		float[] v = {trueX, trueY};
+		float[] m = {cosf, sinf, -sinf, cosf};
+
+		float xy[] = OPallGeometry.multiplyMat_Vec(m, v);
+		xy[0] *= -1;
+		xy[1] *= -1;
+		return xy;
+	}
 
 
 

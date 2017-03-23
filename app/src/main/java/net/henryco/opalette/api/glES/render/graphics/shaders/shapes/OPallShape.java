@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
+import net.henryco.opalette.api.glES.render.graphics.shaders.Shader2D;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.bounds.Bounds2D;
 import net.henryco.opalette.api.utils.bounds.OPallBounds;
@@ -16,7 +16,7 @@ import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
  * Created by HenryCo on 07/03/17.
  */
 
-public abstract class OPallShape extends Shader implements OPallBoundsHolder<Bounds2D> {
+public abstract class OPallShape extends Shader2D implements OPallBoundsHolder<Bounds2D> {
 
 	protected final Bounds2D bounds2D = new Bounds2D();
 

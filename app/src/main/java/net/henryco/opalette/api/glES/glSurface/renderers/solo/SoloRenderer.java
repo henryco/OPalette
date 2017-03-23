@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.shaders.Shader;
+import net.henryco.opalette.api.glES.render.graphics.shaders.Shader2D;
 
 /**
  * Created by root on 15/02/17.
@@ -14,7 +14,7 @@ public class SoloRenderer extends OPallSoloRenderer {
 
 	@FunctionalInterface
 	public interface ShaderMaker {
-		Shader createShader(Context context);
+		Shader2D createShader(Context context);
 	}
 
 	private ShaderMaker shaderMaker;
@@ -40,7 +40,7 @@ public class SoloRenderer extends OPallSoloRenderer {
 	}
 
 	@Override
-	protected Shader createShader(Context context) {
+	protected Shader2D createShader(Context context) {
 		return shaderMaker.createShader(context);
 	}
 
