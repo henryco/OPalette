@@ -144,7 +144,9 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 	public synchronized float getDef_height() {
 		return def_height;
 	}
-
+	public synchronized float getScale(){
+		return scale;
+	}
 	public synchronized Bounds2D resetBounds() {
 		return resetBounds(false);
 	}

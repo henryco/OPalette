@@ -9,6 +9,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 
@@ -28,6 +29,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	public static final int TYPE_NORMAL = R.layout.bar_control_layout;
 	public static final int TYPE_SMALL = R.layout.bar_small_control_layout;
 
+	private OPallFunction<Float, Float> textValueCorrector;
 
 	private OnBarCreate onBarCreator;
 	public interface OnBarCreate {
@@ -88,7 +90,8 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 				.onBarCreate(seekBar -> {})
 				.setTextColor(default_text_color)
 				.setBarColor(default_bar_color)
-				.setBarListener(new OPallSeekBarListener());
+				.setBarListener(new OPallSeekBarListener())
+				.setTextValuerCorrector(Float::floatValue);
 		lazyProgress = 0;
 	}
 
@@ -109,7 +112,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 		TextView valBar = (TextView) view.findViewById(R.id.barValue);
 		if (value_color != -1) valBar.setTextColor(value_color);
-		valBar.setText(calcBarValue(seekBar.getMax(), valueCorrection, seekBar.getProgress()));
+		valBar.setText(calcTextVal(seekBar.getProgress()));
 
 
 		seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener()
@@ -117,10 +120,18 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 				.onStop(barListener)
 				.onProgress((sBar, progress, fromUser) -> {
 					barListener.onProgressChanged(sBar, progress, fromUser);
-					valBar.setText(calcBarValue(seekBar.getMax(), valueCorrection, progress));
+					valBar.setText(calcTextVal(progress));
 				})
 		);
 
+	}
+
+	private static final String df = "%.2f";
+	private static final String di = "%.0f";
+	private String calcTextVal(float value) {
+		float val = textValueCorrector.apply(calcBarValue(seekBar.getMax(), valueCorrection, value));
+		String format = (int) Math.ceil(val) == val ? di : df;
+		return String.format(format, val);
 	}
 
 	public int de_norm(float v) {
@@ -191,7 +202,12 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		return this;
 	}
 
-	private static String calcBarValue(float barMax, int corr, int value) {
-		return Integer.toString((int)((barMax / (barMax - Math.abs((float) corr))) * (value + corr)));
+	public InjectableSeekBar setTextValuerCorrector(OPallFunction<Float, Float> corrector) {
+		this.textValueCorrector = corrector;
+		return this;
+	}
+
+	private static float calcBarValue(float barMax, float corr, float value) {
+		return ((barMax / (barMax - Math.abs(corr))) * (value + corr));
 	}
 }

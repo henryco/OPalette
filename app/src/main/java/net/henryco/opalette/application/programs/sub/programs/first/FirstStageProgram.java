@@ -72,7 +72,9 @@ public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubPro
 		proxyRenderData.getRenderData().setEffectScale(0);
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new RotationControl(proxyRenderData));
+		OPallViewInjector.inject(context.getActivityContext(), new ZoomControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
+
 	}
 
 
