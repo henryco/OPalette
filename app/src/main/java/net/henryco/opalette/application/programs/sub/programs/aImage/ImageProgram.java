@@ -28,6 +28,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private ProxyRenderData<ConvolveTexture> proxyRenderData = new ProxyRenderData<>();
 	private FrameBuffer textureBuffer;
 
+
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
 
@@ -65,15 +66,16 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	public void create(GL10 gl, int width, int height, AppMainProto context) {
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
+
 		textureBuffer = OPallFBOCreator.FrameBuffer();
 		proxyRenderData.setRenderData(new ConvolveTexture());
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen1());
 		proxyRenderData.getRenderData().setEffectScale(0);
+
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new RotationControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
-
 	}
 
 
@@ -90,16 +92,13 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
-		boolean e = proxyRenderData.getRenderData().isFilterEnable();
 		if (proxyRenderData.stateUpdated()) {
+			boolean e = proxyRenderData.getRenderData().isFilterEnable();
 			feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
 			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
 		}
 		textureBuffer.render(camera);
-		if (!e) {
-
-		}
 	}
 
 

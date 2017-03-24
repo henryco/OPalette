@@ -100,15 +100,15 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 		final float[] last = {0,0};
-		RefreshableTimer timer = new RefreshableTimer(150, stopFunc);
+		RefreshableTimer timer = new RefreshableTimer(350, stopFunc);
 		surface.addOnTouchEventListener(touchEventListener = event -> {
 
 			float x = event.getX();
 			float y = event.getY();
 
 			switch (event.getAction()) {
+
 				case MotionEvent.ACTION_MOVE:
-					timer.startIfWaiting().refresh();
 					float dx = x - last[0];
 					float dy = y - last[1];
 
@@ -120,6 +120,10 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 					image.setFilterEnable(false).bounds2D.setPosition(px, py);
 					updateFunc.run();
+				break;
+
+				case MotionEvent.ACTION_UP:
+					timer.startIfWaiting().refresh();
 				break;
 			}
 			last[0] = x;

@@ -4,6 +4,7 @@ import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.GridLines;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
@@ -26,6 +27,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	private FrameBuffer imageBuffer;
 	private EdTexture imageTexture;
+	private GridLines gridLines;
 
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
@@ -42,7 +44,8 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void acceptRequest(Request request) {
-
+		request.openRequest(set_filters_enable, () -> gridLines.setVisible(false));
+		request.openRequest(set_filters_disable, () -> gridLines.setVisible(true));
 	}
 
 	@Override
@@ -60,8 +63,8 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
+		gridLines = new GridLines(width, height);
 		imageBuffer = OPallFBOCreator.FrameBuffer();
-
 		imageTexture = new EdTexture();
 		imageTexture.setScreenDim(width, height);
 
@@ -78,6 +81,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		imageBuffer.createFBO(width, height, false);
 		imageTexture.setScreenDim(width, height);
+		gridLines.setScreenDim(width, height);
 	}
 
 
@@ -86,6 +90,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
 		imageBuffer.render(camera);
+		gridLines.render(camera);
 	}
 
 

@@ -61,6 +61,7 @@ public class GridLines extends OPallShape {
 	private final FrameBuffer imageBuffer;
 	private final GLESUtils.Color color;
 	private boolean needUpDate;
+	private boolean visible;
 	private float lineSize;
 	private float n;
 
@@ -73,6 +74,7 @@ public class GridLines extends OPallShape {
 		imageBuffer = OPallFBOCreator.FrameBuffer();
 		color = new GLESUtils.Color(GLESUtils.Color.GREY);
 		setGridNumber(5).setLineSize(4).setScreenDim(w, h);
+		setVisible(false);
 	}
 
 
@@ -102,6 +104,11 @@ public class GridLines extends OPallShape {
 		return this;
 	}
 
+	public GridLines setVisible(boolean visible) {
+		this.visible = visible;
+		return this;
+	}
+
 
 	@Override
 	protected void render(int program, Camera2D camera) {
@@ -114,17 +121,19 @@ public class GridLines extends OPallShape {
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
 
-		if (needUpDate) {
-			imageBuffer.beginFBO(() -> {
-				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
-				super.render(glProgram, camera, setter);
+		if (visible) {
+			if (needUpDate) {
+				imageBuffer.beginFBO(() -> {
+					GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
+					super.render(glProgram, camera, setter);
+				});
+				needUpDate = false;
+			}
+			camera.backTranslate(() -> {
+				camera.setPosXY_absolute(0,0);
+				imageBuffer.render(camera);
 			});
-			needUpDate = false;
 		}
-		camera.backTranslate(() -> {
-			camera.setPosXY_absolute(0,0);
-			imageBuffer.render(camera);
-		});
 	}
 
 	@Override
