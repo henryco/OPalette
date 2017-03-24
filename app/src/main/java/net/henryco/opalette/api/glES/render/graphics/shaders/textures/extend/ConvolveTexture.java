@@ -22,16 +22,15 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private static final String u_matrix5 = "u_matrix5";
 	private static final String u_texDim = "u_screenDim";
 	private static final String u_enable = "u_enable";
-	private static final String u_angle = "u_angle";
 
 	public static final FilterMatrices matrix = new FilterMatrices();
-
 
 	private float[] original_filter_matrix;
 	private float[] work_filter_matrix;
 	private float center_scale = 1;
 	private int matrix_size = 0;
 	private int matrix_sqrt_size = 0;
+	private int scale_pow;
 
 	private boolean enable = true;
 
@@ -64,6 +63,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 
 	private void init() {
 		setFilterMatrix(matrix.m_identity());
+		setScalePower(2);
 	}
 
 	@Override
@@ -93,24 +93,30 @@ public class ConvolveTexture extends OPallTextureExtended {
 		return setEffectScale(center_scale);
 	}
 
-	public ConvolveTexture setEffectScale(float s) {
+	public ConvolveTexture setEffectScale(final float s) {
 
-		center_scale = s;
+		float sc = (float) Math.min(1, Math.pow(s, scale_pow));
 		float[] matrix = new float[matrix_size];
 		int center = (int) (0.5f * (matrix_sqrt_size - 1f));
 		int cp = (center * matrix_sqrt_size) + center;
 		for (int i = 0; i < matrix_size; i++) {
 			matrix[i] = original_filter_matrix[i];
-			if (i != cp) matrix[i] *= s;
+			if (i != cp) matrix[i] *= sc;
 			else {
 				float x = matrix[i];
 				if (x != 0) {
 					float rx = 1f / x;
-					matrix[i] = rx + ((x - rx) * s);
-				} else matrix[i] = 1 - s;
+					matrix[i] = rx + ((x - rx) * sc);
+				} else matrix[i] = 1 - sc;
 			}
 		}
 		work_filter_matrix = normalize(matrix);
+		center_scale = s;
+		return this;
+	}
+
+	public ConvolveTexture setScalePower(int scale_pow) {
+		this.scale_pow = scale_pow;
 		return this;
 	}
 

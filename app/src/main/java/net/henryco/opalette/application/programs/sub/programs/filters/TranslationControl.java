@@ -87,11 +87,8 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 					float dx = x - last[0];
 					float dy = y - last[1];
 
-					float ix = image.bounds2D.getX();
-					float iy = image.bounds2D.getY();
-
-					float px = ix + dx;
-					float py = iy + dy;
+					float px = image.bounds2D.getX() + dx;
+					float py = image.bounds2D.getY() + dy;
 
 					horBar.setProgress(clamp(horBar.de_norm((px / image.getWidth()))));
 					verBar.setProgress(clamp(verBar.de_norm((py / image.getHeight()))));
