@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.api.utils.animation.OPallAnimated;
+import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.proto.AppMainProto;
 

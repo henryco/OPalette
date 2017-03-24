@@ -9,8 +9,8 @@ import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.OPallGeometry;
 import net.henryco.opalette.api.utils.Utils;
-import net.henryco.opalette.api.utils.geom.OPallGeometry;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 public abstract class Shader2D implements OPallShader {
@@ -65,7 +65,7 @@ public abstract class Shader2D implements OPallShader {
 
 
 	@Override
-	public void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
+	public synchronized void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
 
 		GLESUtils.glUseProgram(program, () -> camera2D.backTranslate(() -> {
 
@@ -77,13 +77,13 @@ public abstract class Shader2D implements OPallShader {
 	}
 
 	@Override
-    public void render(Camera2D camera) {
+    public synchronized void render(Camera2D camera) {
 		render(camera, integer -> {});
     }
 
 
 
-	private static float[] correctFunc(float trueX, float trueY, float a) {
+	private static synchronized float[] correctFunc(float trueX, float trueY, float a) {
 
 		if (a == 0 || (trueX == 0 && trueY == 0)) return new float[]{0,0};
 

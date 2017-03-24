@@ -124,7 +124,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	}
 
 	public int de_norm(float v) {
-		return (int) (v * (max + valueCorrection) - valueCorrection);
+		return (int) Math.ceil(v * (max + valueCorrection) - valueCorrection);
 	}
 
 	public float norm(float v) {

@@ -1,4 +1,4 @@
-package net.henryco.opalette.api.utils.geom;
+package net.henryco.opalette.api.utils;
 
 /**
  * Created by HenryCo on 06/03/17.

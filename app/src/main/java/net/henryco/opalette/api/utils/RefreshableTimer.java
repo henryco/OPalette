@@ -20,11 +20,9 @@ public class RefreshableTimer {
 		wait = new AtomicBoolean(true);
 	}
 
-	public synchronized RefreshableTimer startIfWaiting(){
-		return startIfWaiting(100);
-	}
 
-	public synchronized RefreshableTimer startIfWaiting(long thr_sleep_time) {
+
+	public synchronized RefreshableTimer startIfWaiting() {
 
 		if (wait.get()) {
 			wait.set(false);
@@ -32,7 +30,7 @@ public class RefreshableTimer {
 				refresh();
 				while (time_remaining_ms - timeLeft() > 0)
 					try {
-						Thread.sleep(thr_sleep_time);
+						Thread.sleep(time_remaining_ms - timeLeft());
 					} catch (InterruptedException ignored) {}
 				timeOutAction.run();
 				forceStop();

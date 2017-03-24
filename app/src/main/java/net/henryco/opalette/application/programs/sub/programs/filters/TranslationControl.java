@@ -9,6 +9,7 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
+import net.henryco.opalette.api.utils.RefreshableTimer;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -35,7 +36,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 	}
 
 
-	private Runnable updateFunc = () -> {};
+	private Runnable updateFunc = () -> imgHolder.setStateUpdated();
 	private Runnable stopFunc = () -> {
 		imgHolder.getRenderData().setFilterEnable(true);
 		updateFunc.run();
@@ -66,17 +67,22 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		};
 
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			image.setFilterEnable(false).bounds2D.setX(horBar.norm(progress) * image.getScreenWidth());
-			updateFunc.run();
+			if (fromUser) {
+				image.setFilterEnable(false).bounds2D.setX(horBar.norm(progress) * image.getScreenWidth());
+				updateFunc.run();
+			}
 		}).onStop(stop));
 
 		verBar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {
-			image.setFilterEnable(false).bounds2D.setY(verBar.norm(progress) * image.getScreenHeight());
-			updateFunc.run();
+			if (fromUser) {
+				image.setFilterEnable(false).bounds2D.setY(verBar.norm(progress) * image.getScreenHeight());
+				updateFunc.run();
+			}
 		}).onStop(stop));
 
 
 		final float[] last = {0,0};
+		RefreshableTimer timer = new RefreshableTimer(150, stopFunc);
 		surface.addOnTouchEventListener(touchEventListener = event -> {
 
 			float x = event.getX();
@@ -84,6 +90,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 			switch (event.getAction()) {
 				case MotionEvent.ACTION_MOVE:
+					timer.startIfWaiting().refresh();
 					float dx = x - last[0];
 					float dy = y - last[1];
 
@@ -93,7 +100,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 					horBar.setProgress(clamp(horBar.de_norm((px / image.getWidth()))));
 					verBar.setProgress(clamp(verBar.de_norm((py / image.getHeight()))));
 
-					image.bounds2D.setPosition(px, py);
+					image.setFilterEnable(false).bounds2D.setPosition(px, py);
 					updateFunc.run();
 				break;
 			}

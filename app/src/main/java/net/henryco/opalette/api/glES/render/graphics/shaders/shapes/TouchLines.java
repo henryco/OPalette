@@ -5,7 +5,7 @@ import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.geom.OPallGeometry;
+import net.henryco.opalette.api.utils.OPallGeometry;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 /**
