@@ -95,6 +95,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 					image.bounds2D.setPosition(px, py);
 					updateFunc.run();
+				break;
 			}
 			last[0] = x;
 			last[1] = y;
