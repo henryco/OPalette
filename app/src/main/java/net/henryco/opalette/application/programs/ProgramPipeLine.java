@@ -16,8 +16,8 @@ import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
-import net.henryco.opalette.application.programs.sub.programs.aImage.FirstStageProgram;
-import net.henryco.opalette.application.programs.sub.programs.color.ImageProgram;
+import net.henryco.opalette.application.programs.sub.programs.aImage.ImageProgram;
+import net.henryco.opalette.application.programs.sub.programs.color.ColorProgram;
 import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.line.ShapeLinesProgram;
 import net.henryco.opalette.application.programs.sub.programs.palette.PaletteBarProgram;
@@ -58,8 +58,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		return new AppSubProgram[]{
 
-				new FirstStageProgram(),
 				new ImageProgram(),
+				new ColorProgram(),
 				new ShapeLinesProgram(),
 				new GradientBarProgram(),
 				new PaletteBarProgram()

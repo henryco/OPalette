@@ -20,11 +20,11 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 21/03/17.
  */
 
-public class FirstStageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
+public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
 
 
-	private long id = methods.genID(FirstStageProgram.class);
+	private long id = methods.genID(ImageProgram.class);
 	private ProxyRenderData<ConvolveTexture> proxyRenderData = new ProxyRenderData<>();
 	private FrameBuffer textureBuffer;
 

@@ -20,9 +20,9 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
+public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
-	private long id = methods.genID(ImageProgram.class);
+	private long id = methods.genID(ColorProgram.class);
 
 	private FrameBuffer imageBuffer;
 	private EdTexture imageTexture;
