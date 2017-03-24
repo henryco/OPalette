@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by root on 13/02/17.
  */
 
-public class OPallUtils {
+public class Utils {
 
 	public interface ImageLoadable {
 		void onActivityResult(int requestCode, int resultCode, Intent data);
@@ -129,7 +129,7 @@ public class OPallUtils {
 	public static void loadGalleryImageActivity(ImageLoadable activity) {
 		activity.getActivity().startActivityForResult(new Intent(Intent.ACTION_PICK,
 						android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
-				OPallUtils.activity.REQUEST_PICK_IMAGE);
+				Utils.activity.REQUEST_PICK_IMAGE);
 	}
 
 	public static long millisTimer(Runnable runnable) {

@@ -1,7 +1,7 @@
 package net.henryco.opalette.api.utils.bounds;
 
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.OPallUtils;
+import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.api.utils.bounds.consumer.BoundsConsumer;
 import net.henryco.opalette.api.utils.bounds.observer.OPallBoundsHolder;
 
@@ -40,7 +40,7 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 	}
 
 	public float[] calculate(float dimX, float dimY) {
-		float[] verts = OPallUtils.arrayFlatCopy(vertices);
+		float[] verts = Utils.arrayFlatCopy(vertices);
 		if (width != 0 && height != 0 && dimX != 0 && dimY != 0) {
 			float sc_x = width / dimX;
 			float sc_y = height / dimY;
@@ -150,10 +150,10 @@ public class Bounds2D implements OPallBounds <Bounds2D> {
 	}
 
 	public float[] getVertices() {
-		return OPallUtils.arrayFlatCopy(vertices);
+		return Utils.arrayFlatCopy(vertices);
 	}
 	public short[] getOrder() {
-		return OPallUtils.arrayFlatCopy(order);
+		return Utils.arrayFlatCopy(order);
 	}
 	public Bounds2D setVertices(float[] vertices) {
 		this.vertices = vertices;

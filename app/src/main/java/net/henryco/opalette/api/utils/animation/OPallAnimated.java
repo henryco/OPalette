@@ -1,4 +1,4 @@
-package net.henryco.opalette.api.utils;
+package net.henryco.opalette.api.utils.animation;
 
 import android.content.Context;
 import android.os.Handler;

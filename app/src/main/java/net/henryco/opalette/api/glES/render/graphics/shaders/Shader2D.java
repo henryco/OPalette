@@ -9,7 +9,7 @@ import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.OPallUtils;
+import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.api.utils.geom.OPallGeometry;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
@@ -27,7 +27,7 @@ public abstract class Shader2D implements OPallShader {
         this(context, VERT, FRAG, 2);
     }
     public Shader2D(Context context, String VERT, String FRAG, int coordsPerVertex) {
-		this(OPallUtils.getSourceAssetsText(VERT, context), OPallUtils.getSourceAssetsText(FRAG, context), coordsPerVertex);
+		this(Utils.getSourceAssetsText(VERT, context), Utils.getSourceAssetsText(FRAG, context), coordsPerVertex);
 	}
 	public Shader2D(String vertex, String fragment) {
 		this(vertex, fragment, 2);

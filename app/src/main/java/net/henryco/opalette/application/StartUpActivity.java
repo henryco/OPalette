@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.api.utils.OPallUtils;
+import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.application.dialogs.PickImageDialog;
 
 
@@ -25,7 +25,7 @@ import net.henryco.opalette.application.dialogs.PickImageDialog;
  * status bar and navigation/system bar) with user interaction.
  */
 public class StartUpActivity extends AppCompatActivity
-		implements OPallUtils.ImageLoadable, PickImageDialog.PickImageDialogListener {
+		implements Utils.ImageLoadable, PickImageDialog.PickImageDialogListener {
 
 
 	public static final long PICKBUTTON_SLEEP_TIME = 2;
@@ -187,12 +187,12 @@ public class StartUpActivity extends AppCompatActivity
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			if (requestCode == OPallUtils.activity.REQUEST_PICK_IMAGE) {
+			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
 
 				disableButtons();
 
 				Intent intent = new Intent(this, MainActivity.class);
-				BitmapPack.pushUpBitmap = OPallUtils.loadIntentBitmap(this, data);
+				BitmapPack.pushUpBitmap = Utils.loadIntentBitmap(this, data);
 
 				findViewById(R.id.textView).setVisibility(View.GONE);
 
@@ -218,7 +218,7 @@ public class StartUpActivity extends AppCompatActivity
 
 	@Override
 	public void dialogSelectedGallery(PickImageDialog dialog) {
-		OPallUtils.loadGalleryImageActivity(this);
+		Utils.loadGalleryImageActivity(this);
 	}
 
 

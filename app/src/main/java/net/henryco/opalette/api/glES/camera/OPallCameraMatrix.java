@@ -3,7 +3,7 @@ package net.henryco.opalette.api.glES.camera;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
-import net.henryco.opalette.api.utils.OPallUtils;
+import net.henryco.opalette.api.utils.Utils;
 
 /**
  * Created by HenryCo on 23/02/17.
@@ -18,10 +18,10 @@ public class OPallCameraMatrix {
 	public final float[] mRotMatrix;
 	public final float[] mVProxyMatrix;
 
-	public final OPallUtils.HoldXYZ eye;
-	public final OPallUtils.HoldXYZ center;
-	public final OPallUtils.HoldXYZ up;
-	public final OPallUtils.HoldXYZ rotation;
+	public final Utils.HoldXYZ eye;
+	public final Utils.HoldXYZ center;
+	public final Utils.HoldXYZ up;
+	public final Utils.HoldXYZ rotation;
 
 
 	public OPallCameraMatrix() {
@@ -30,10 +30,10 @@ public class OPallCameraMatrix {
 		mVProxyMatrix = new float[16];
 		mProjectionMatrix = new float[16];
 		mViewMatrix = new float[16];
-		eye = new OPallUtils.HoldXYZ(0, 0, -3);
-		center = new OPallUtils.HoldXYZ(0, 0, 0);
-		up = new OPallUtils.HoldXYZ(0, 1, 0);
-		rotation = new OPallUtils.HoldXYZ(0, 0, 0);
+		eye = new Utils.HoldXYZ(0, 0, -3);
+		center = new Utils.HoldXYZ(0, 0, 0);
+		up = new Utils.HoldXYZ(0, 1, 0);
+		rotation = new Utils.HoldXYZ(0, 0, 0);
 	}
 
 
