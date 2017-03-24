@@ -17,14 +17,14 @@ import net.henryco.opalette.application.proto.AppMainProto;
  * Created by HenryCo on 19/03/17.
  */
 
-public class TuneControl extends AppAutoSubControl<AppMainProto> {
+public class AddColorControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int IMG = R.drawable.ic_tune_white_24dp;
-	private static final int TUNE = R.string.control_tune;
+	private static final int TUNE = R.string.control_add;
 
 	private EdTexture edTexture;
 
-	public TuneControl(EdTexture edTexture) {
+	public AddColorControl(EdTexture edTexture) {
 		super(IMG, TUNE);
 		this.edTexture = edTexture;
 	}

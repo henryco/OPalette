@@ -68,7 +68,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		OPallViewInjector.inject(context.getActivityContext(), new MaxColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new MinColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new BrightnessControl(imageTexture));
-		OPallViewInjector.inject(context.getActivityContext(), new TuneControl(imageTexture));
+		OPallViewInjector.inject(context.getActivityContext(), new AddColorControl(imageTexture));
 	}
 
 

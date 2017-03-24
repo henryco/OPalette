@@ -27,6 +27,8 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 	private static final int MOVE = R.string.control_move;
 	private static final int BUTTON_IMAGE = R.drawable.ic_transform_white_24dp;
 
+	private static final float MAX_SCALE = 4;
+
 	private OPallSurfaceView.OnTouchEventListener touchEventListener;
 	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;
 	private final float defaultScale; // TODO
@@ -87,11 +89,11 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		}).onStop(stop));
 
 
-		zoomBar.setTextValuerCorrector(f -> f * 0.04f); // 0.01f * 4f
-		zoomBar.onBarCreate(bar -> bar.setProgress(zoomBar.de_norm(image.bounds2D.getScale() / 4f)));
+		zoomBar.setTextValuerCorrector(f -> f * 0.01f * MAX_SCALE); // 0.01f * 4f
+		zoomBar.onBarCreate(bar -> bar.setProgress(zoomBar.de_norm(image.bounds2D.getScale() / MAX_SCALE)));
 		zoomBar.setBarListener(new OPallSeekBarListener().onStop(stop).onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
-				image.setFilterEnable(false).bounds2D.setScale(zoomBar.norm(progress) * 4f);
+				image.setFilterEnable(false).bounds2D.setScale(zoomBar.norm(progress) * MAX_SCALE);
 				updateFunc.run();
 			}
 		}));
