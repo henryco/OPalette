@@ -22,7 +22,7 @@ public abstract class AppAutoSubControl<T extends AppMainProto> extends AppSubCo
 	}
 
 	@Override
-	protected void onInject(T context, View view) {
+	protected final void onInject(T context, View view) {
 
 		loadImageOptionButton(view, txt_button_res, img_button_res, context.getActivityContext(),
 				v -> context.switchToFragmentOptions(loadControlFragment(this::onFragmentCreate, this::onFragmentDestroyed)));
