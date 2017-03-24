@@ -85,7 +85,7 @@ public abstract class Shader2D implements OPallShader {
 
 	private static synchronized float[] correctFunc(float trueX, float trueY, float a) {
 
-		if (a == 0 || (trueX == 0 && trueY == 0)) return new float[]{0,0};
+		if (a == 0 && trueX == 0 && trueY == 0) return new float[]{0,0};
 
 		float sinf = (float) Math.sin(a);
 		float cosf = (float) Math.cos(a);
