@@ -90,13 +90,16 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
+		boolean e = proxyRenderData.getRenderData().isFilterEnable();
 		if (proxyRenderData.stateUpdated()) {
-			boolean e = proxyRenderData.getRenderData().isFilterEnable();
 			feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
 			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
 		}
 		textureBuffer.render(camera);
+		if (!e) {
+
+		}
 	}
 
 
