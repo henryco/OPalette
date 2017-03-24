@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.sub.programs.first;
+package net.henryco.opalette.application.programs.sub.programs.aImage;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -76,10 +76,10 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 			}
 		};
 
-		InjectableSeekBar angleBar = new InjectableSeekBar(view, "Angle").setDefaultPoint(0, 15).setMax(30);
-		angleBar.onBarCreate(bar -> bar.setProgress(angleBar.de_norm(imgHolder.getRenderData().getRotation() / 30f)));
+		InjectableSeekBar angleBar = new InjectableSeekBar(view, "Angle").setDefaultPoint(0, 45).setMax(90);
+		angleBar.onBarCreate(bar -> bar.setProgress(angleBar.de_norm(imgHolder.getRenderData().getRotation() / 90f)));
 		angleBar.setBarListener(new OPallSeekBarListener().onStop(stop).onProgress((bar, progress, fromUser) -> {
-			imgHolder.getRenderData().setFilterEnable(false).setRotation(angleBar.norm(progress) * 30f);
+			imgHolder.getRenderData().setFilterEnable(false).setRotation(angleBar.norm(progress) * 90f);
 			updateFunc.run();
 		}));
 

@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.sub.programs.image;
+package net.henryco.opalette.application.programs.sub.programs.color;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

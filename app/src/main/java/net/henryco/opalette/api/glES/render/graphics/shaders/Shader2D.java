@@ -94,8 +94,9 @@ public abstract class Shader2D implements OPallShader {
 		float[] m = {cosf, sinf, -sinf, cosf};
 
 		float xy[] = OPallGeometry.multiplyMat_Vec(m, v);
-		xy[0] *= -1;
-		xy[1] *= -1;
+
+		xy[0] = (sinf * trueX + xy[0]) * (-1f);
+		xy[1] = (sinf * trueY + xy[1]) * (-1f);
 		return xy;
 	}
 
