@@ -30,6 +30,6 @@
     <string name="control_tune">Add</string>
     <string name="control_minimum">Minimum</string>
     <string name="control_maximum">Maximum</string>
-    <string name="control_sharpness">Sharpness</string>
+    <string name="control_sharpness">Sharp</string>
     <string name="control_rotation">Rotate</string>
 </resources>

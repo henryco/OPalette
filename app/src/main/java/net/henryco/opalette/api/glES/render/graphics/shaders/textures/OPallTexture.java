@@ -108,6 +108,7 @@ public interface OPallTexture extends OPallShader {
 	OPallTexture setRotation(float angle);
 	int getTextureDataHandle();
 	float getRotation();
+	boolean[] getFlip();
 
 	final class methods {
 

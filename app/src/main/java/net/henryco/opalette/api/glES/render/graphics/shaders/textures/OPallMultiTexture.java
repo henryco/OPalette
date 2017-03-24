@@ -76,7 +76,7 @@ public interface OPallMultiTexture extends OPallTexture {
 	OPallMultiTexture setSize(int n, int w, int h);
 	OPallMultiTexture setTextureDataHandle(int n, int textureDataHandle);
 	int getTextureDataHandle(int n);
-
+	boolean[] getFlip(int n);
 
 	final class methods {
 

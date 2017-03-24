@@ -16,7 +16,7 @@ import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
-import net.henryco.opalette.application.programs.sub.programs.filters.FirstStageProgram;
+import net.henryco.opalette.application.programs.sub.programs.first.FirstStageProgram;
 import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.image.ImageProgram;
 import net.henryco.opalette.application.programs.sub.programs.line.ShapeLinesProgram;

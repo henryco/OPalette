@@ -1,4 +1,4 @@
-package net.henryco.opalette.application.programs.sub.programs.filters;
+package net.henryco.opalette.application.programs.sub.programs.first;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;

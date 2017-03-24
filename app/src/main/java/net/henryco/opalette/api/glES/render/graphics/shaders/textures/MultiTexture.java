@@ -240,7 +240,15 @@ public class MultiTexture extends Shader2D implements OPallMultiBoundsHolder <Bo
 	}
 
 
+	@Override
+	public boolean[] getFlip(int n) {
+		return new boolean[]{textureFlip[n][0], textureFlip[n][1]};
+	}
 
+	@Override
+	public boolean[] getFlip() {
+		return getFlip(focus);
+	}
 
 	@Override
 	public int getWidth() {
