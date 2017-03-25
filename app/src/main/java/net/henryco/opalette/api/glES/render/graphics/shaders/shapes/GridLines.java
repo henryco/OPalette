@@ -31,11 +31,21 @@ public class GridLines extends OPallShape {
 			"uniform float u_cellW;\n" +
 			"uniform float u_cellH;\n" +
 			"uniform vec4 u_gridColor;\n" +
+			"uniform vec2 u_dimension;\n" +
+			"uniform int u_type;\n" +
+			"\n" +
+			"\n" +
+			"vec4 colorize(vec2 position) {\n" +
+			"    if (u_type == 1) return vec4(normalize(vec3(position.x, 1, position.y)), 1.);\n" +
+			"    if (u_type == 2) {\n" +
+			"        vec2 xy = position / u_dimension;\n" +
+			"        return vec4(normalize(vec3(xy, 1. - length(xy) / sqrt(2.))), 1.);\n" +
+			"    }   return u_gridColor;\n" +
+			"}\n" +
 			"\n" +
 			"void main() {\n" +
 			"\n" +
 			"  vec2 pos = gl_FragCoord.xy;\n" +
-			"\n" +
 			"  float nx = floor(pos.x / u_cellW);\n" +
 			"  float ny = floor(pos.y / u_cellH);\n" +
 			"\n" +
@@ -46,16 +56,17 @@ public class GridLines extends OPallShape {
 			"  float top_y = ((ny + 1.) * u_cellH) - u_halfLineSize;\n" +
 			"\n" +
 			"  if (pos.x <= left_x || pos.x >= right_x)\n" +
-			"    gl_FragColor = u_gridColor;\n" +
+			"    gl_FragColor = colorize(pos);\n" +
 			"  else if (pos.y <= bot_y || pos.y >= top_y)\n" +
-			"    gl_FragColor = u_gridColor;\n" +
+			"    gl_FragColor = colorize(pos);\n" +
 			"  else gl_FragColor = vec4(0.);\n" +
-			"\n" +
 			"}";
 	private static final String u_halfLineSize = "u_halfLineSize";
 	private static final String u_gridColor = "u_gridColor";
+	private static final String u_dimension = "u_dimension";
 	private static final String u_cellW = "u_cellW";
 	private static final String u_cellH = "u_cellH";
+	private static final String u_type = "u_type";
 
 
 	private final FrameBuffer imageBuffer;
@@ -64,6 +75,7 @@ public class GridLines extends OPallShape {
 	private boolean visible;
 	private float lineSize;
 	private float n;
+	private int type;
 
 
 	public GridLines() {
@@ -74,7 +86,7 @@ public class GridLines extends OPallShape {
 		imageBuffer = OPallFBOCreator.FrameBuffer();
 		color = new GLESUtils.Color(GLESUtils.Color.GREY);
 		setGridNumber(5).setLineSize(4).setScreenDim(w, h);
-		setVisible(false);
+		setVisible(false).setType(ColorType.NORMALIZED);
 	}
 
 
@@ -109,13 +121,20 @@ public class GridLines extends OPallShape {
 		return this;
 	}
 
+	public GridLines setType(ColorType type) {
+		this.type = type.type;
+		needUpDate = true;
+		return this;
+	}
 
 	@Override
 	protected void render(int program, Camera2D camera) {
 		GLES20.glUniform4f(GLES20.glGetUniformLocation(program, u_gridColor), color.r, color.g, color.b, color.a);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_halfLineSize), lineSize * 0.5f);
+		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), getScreenWidth(), getScreenHeight());
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellW), getScreenWidth() / n);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellH), getScreenHeight() / n);
+		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_type), type);
 	}
 
 	@Override

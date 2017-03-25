@@ -45,11 +45,9 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		imgHolder.getRenderData().setFilterEnable(true);
 		updateFunc.run();
 	};
-	private OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> stopFunc.run());
+	private RefreshableTimer timer = new RefreshableTimer(500, stopFunc);
+	private OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> timer.startIfWaiting().refresh());
 
-	private static int clamp(int val) {
-		return Math.max(Math.min(val, 100), -100);
-	}
 
 
 
@@ -100,7 +98,6 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 		final float[] last = {0,0};
-		RefreshableTimer timer = new RefreshableTimer(350, stopFunc);
 		surface.addOnTouchEventListener(touchEventListener = event -> {
 
 			float x = event.getX();
@@ -136,10 +133,14 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 
-
-
 	@Override
 	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
 		context.getRenderSurface().removeTouchEventListener(touchEventListener);
+	}
+
+
+
+	private static int clamp(int val) {
+		return Math.max(Math.min(val, 100), -100);
 	}
 }

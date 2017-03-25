@@ -87,14 +87,6 @@ public class TouchLines extends OPallShape {
 	private static final String u_color = "u_color";
 
 
-	public enum TouchType {
-		NORMALS(1), GRADIENT(2), COLOR(0);
-		public int type;
-		TouchType(int type) {
-			this.type = type;
-		}
-	}
-
 
 	private float defaultWidth = 0;
 	private float defaultHeight = 0;
@@ -208,7 +200,7 @@ public class TouchLines extends OPallShape {
 		return this;
 	}
 
-	public TouchLines setType(TouchType type) {
+	public TouchLines setType(ColorType type) {
 		this.type = type.type;
 		return this;
 	}

@@ -18,6 +18,15 @@ import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 public abstract class OPallShape extends Shader2D implements OPallBoundsHolder<Bounds2D> {
 
+	public enum ColorType {
+		NORMALIZED(1), GRADIENT(2), COLOR(0);
+		public int type;
+		ColorType(int type) {
+			this.type = type;
+		}
+	}
+
+
 	protected final Bounds2D bounds2D = new Bounds2D();
 
 
