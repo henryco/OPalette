@@ -137,7 +137,5 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 
-	private static float clamp(float val, float rangeMax, float rangeMin) {
-		return Math.max(Math.min(val, rangeMax), rangeMin);
-	}
+
 }

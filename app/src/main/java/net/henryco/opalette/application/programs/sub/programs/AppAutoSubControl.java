@@ -23,7 +23,6 @@ public abstract class AppAutoSubControl<T extends AppMainProto> extends AppSubCo
 
 	@Override
 	protected final void onInject(T context, View view) {
-
 		loadImageOptionButton(view, txt_button_res, img_button_res, context.getActivityContext(),
 				v -> context.switchToFragmentOptions(loadControlFragment(this::onFragmentCreate, this::onFragmentDestroyed)));
 	}
@@ -34,4 +33,7 @@ public abstract class AppAutoSubControl<T extends AppMainProto> extends AppSubCo
 		// OPTIONAL METHOD FOR OVERRIDE
 	}
 
+	protected static float clamp(float val, float rangeMax, float rangeMin) {
+		return Math.max(Math.min(val, rangeMax), rangeMin);
+	}
 }
