@@ -32,6 +32,8 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
 
+	private final float[] defDim = {0,0};
+
 	@Override
 	public void setProgramHolder(AppSubProgramHolder holder) {
 		this.holder = holder;
@@ -74,9 +76,13 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		proxyRenderData.getRenderData().setEffectScale(0);
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 
+		defDim[0] = width;
+		defDim[1] =height;
+
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new RotationControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
+		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
 	}
 
 
@@ -93,10 +99,13 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		if (proxyRenderData.stateUpdated()) {
-			boolean e = proxyRenderData.getRenderData().isFilterEnable();
-			feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
-			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
-			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
+			camera.backTranslate(() -> {
+				camera.translateXY(w - defDim[0], h - defDim[1]); // position correction while canvas size changed
+				boolean e = proxyRenderData.getRenderData().isFilterEnable();
+				feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
+				feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
+				textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
+			});
 		}
 		textureBuffer.render(camera);
 	}
