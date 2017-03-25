@@ -133,7 +133,7 @@ public class OPallSurfaceTouchListener implements OPallSurfaceView.OnTouchEventL
 
 
 	public OPallSurfaceTouchListener setConcurrentScaling(boolean concurrentScaling) {
-		scaleMatters = concurrentScaling;
+		scaleMatters = !concurrentScaling;
 		return this;
 	}
 

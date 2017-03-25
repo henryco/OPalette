@@ -9,6 +9,7 @@ import android.widget.Switch;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
+import net.henryco.opalette.api.utils.RefreshableTimer;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -37,7 +38,8 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 		imgHolder.getRenderData().setFilterEnable(true);
 		updateFunc.run();
 	};
-	private OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> stopFunc.run());
+	private RefreshableTimer timer = new RefreshableTimer(500, stopFunc);
+	private OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> timer.startIfWaiting().refresh());
 
 
 	@Override

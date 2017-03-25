@@ -28,6 +28,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 	private static final int BUTTON_IMAGE = R.drawable.ic_transform_white_24dp;
 
 	private static final float MAX_SCALE = 4;
+	private static final float MIN_SCALE = 0.25f;
 
 	private OPallSurfaceTouchListener touchEventListener;
 	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;
@@ -93,11 +94,11 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 
-		zoomBar.setTextValuerCorrector(f -> f * 0.01f * MAX_SCALE);
+		zoomBar.setTextValuerCorrector(f -> Math.max(f * 0.01f * MAX_SCALE, MIN_SCALE));
 		zoomBar.onBarCreate(bar -> bar.setProgress(zoomBar.de_norm(image.bounds2D.getScale() / MAX_SCALE)));
 		zoomBar.setBarListener(new OPallSeekBarListener().onStop(stop).onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
-				image.setFilterEnable(false).bounds2D.setScale(zoomBar.norm(progress) * MAX_SCALE);
+				image.setFilterEnable(false).bounds2D.setScale(Math.max(zoomBar.norm(progress) * MAX_SCALE, MIN_SCALE));
 				updateFunc.run();
 			}
 		}));
@@ -117,7 +118,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		});
 
 		touchEventListener.setOnScale(scaleGestureDetector -> {
-			float scale = clamp(image.bounds2D.getScale() * scaleGestureDetector.getScaleFactor(), MAX_SCALE, 0.1f);
+			float scale = clamp(image.bounds2D.getScale() * scaleGestureDetector.getScaleFactor(), MAX_SCALE, MIN_SCALE);
 			zoomBar.setProgress(zoomBar.de_norm(scale / MAX_SCALE));
 			image.setFilterEnable(false).bounds2D.setScale(scale);
 			updateFunc.run();
