@@ -6,7 +6,7 @@
     android:id="@+id/mainLayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/DARK"
+    android:background="@color/DARKER"
     android:orientation="vertical"
     android:visibility="visible"
     android:weightSum="1"
@@ -37,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.285"
+            android:background="@color/DARK"
             android:visibility="visible">
 
             <net.henryco.opalette.api.utils.views.OPallHorizontalScrollView

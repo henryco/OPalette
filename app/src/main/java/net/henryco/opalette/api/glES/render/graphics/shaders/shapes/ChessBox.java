@@ -61,7 +61,12 @@ public class ChessBox extends OPallShape {
 	private float cellSize;
 	private boolean needUpDate;
 
+	private final float[] defDim = {0,0};
 
+	public ChessBox(int w, int h) {
+		this();
+		create(w, h).setScreenDim(w, h);
+	}
 
 	public ChessBox() {
 		super(VERT_FILE, FRAG_FILE, 2);
@@ -106,12 +111,12 @@ public class ChessBox extends OPallShape {
 		super.setScreenDim(scr_width, scr_height);
 		if (scr_width != 0 && scr_height != 0) {
 			imageBuffer.createFBO(scr_width, scr_height, false);
+			defDim[0] = scr_width;
+			defDim[1] = scr_height;
 			needUpDate = true;
 		}
 		return this;
 	}
-
-
 
 
 	@Override
@@ -132,7 +137,7 @@ public class ChessBox extends OPallShape {
 			needUpDate = false;
 		}
 		camera.backTranslate(() -> {
-			camera.setPosXY_absolute(0,0);
+			camera.translateXY(getScreenWidth() - defDim[0], getScreenHeight() - defDim[1]); // position correction while canvas size changed
 			imageBuffer.render(camera);
 		});
 
@@ -154,15 +159,6 @@ public class ChessBox extends OPallShape {
 		needUpDate = true;
 		return this;
 	}
-
-
-
-
-	@Override
-	public void setScreenDim(float w, float h) {
-		create((int) w, (int)h);
-	}
-
 
 
 }

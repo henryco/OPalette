@@ -61,7 +61,6 @@ public abstract class OPallShape extends Shader2D implements OPallBoundsHolder<B
 			camera.setPosXY_absolute(0,0);
 			render(camera, program -> render(program, camera));
 		});
-
 	}
 
 

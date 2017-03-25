@@ -52,7 +52,6 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	private List<AppSubProgram> subPrograms;
 	private List<OPallTriConsumer<AppMainProto, Integer, Integer>> onDrawQueue;
 
-
 	@SuppressWarnings("unchecked")
 	public static AppSubProgram[] getDefaultPipeLineArray() {
 
@@ -137,8 +136,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		FrameBuffer.debug = true;
 
 		camera2D = new Camera2D(width, height, true);
-		chessBox = new ChessBox();
-		chessBox.setScreenDim(width, height);
+		chessBox = new ChessBox(width, height);
 
 		OPallRenderable renderData = null;
 		for (AppSubProgram asp : subPrograms) {
@@ -146,6 +144,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 			asp.create(gl, width, height, context);
 			renderData = asp.getRenderData();
 		}
+
 	}
 
 
@@ -153,9 +152,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	@Override
 	public final void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 
-//		camera2D.set(width, height).update();
-//		chessBox.setScreenDim(width, height);
-
+		chessBox.setScreenDim(width, height);
 		OPallRenderable renderData = null;
 		for (AppSubProgram asp : subPrograms) {
 			asp.setRenderData(renderData);

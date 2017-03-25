@@ -50,16 +50,16 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 		});
 
 
-		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
+//		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
 		InjectableSeekBar hBar = new InjectableSeekBar(view, "Canvas height").setMax((int) defScrH);
 
-		wBar.onBarCreate(bar -> bar.setProgress(surface.getWidth()));
-		wBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			if (fromUser) {
-				requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
-				surface.setSize(progress, surface.getHeight()).update();
-			}
-		}).onStop(stop));
+//		wBar.onBarCreate(bar -> bar.setProgress(surface.getWidth()));
+//		wBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+//			if (fromUser) {
+//				requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
+//				surface.setSize(progress, surface.getHeight()).update();
+//			}
+//		}).onStop(stop));
 
 		hBar.onBarCreate(bar -> bar.setProgress(surface.getHeight()));
 		hBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
@@ -71,7 +71,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 
 
 		OPallViewInjector.inject(context.getActivityContext(), hBar);
-//		OPallViewInjector.inject(context.getActivityContext(), hBar);
+//		OPallViewInjector.inject(context.getActivityContext(), wBar);
 	}
 
 }
