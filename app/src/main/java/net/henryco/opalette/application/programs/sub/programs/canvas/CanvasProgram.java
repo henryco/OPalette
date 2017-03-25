@@ -27,6 +27,7 @@ public class CanvasProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	private AppSubProgramHolder holder;
 	private final float[] defDim = {0,0};
 	private final float[] translation = {0,0};
+	private final float[] lastTrans = {0,0};
 
 	@Override
 	public void acceptRequest(Request request) {
@@ -48,6 +49,8 @@ public class CanvasProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 		synchronized (this) {
 			proxyRenderData.setStateUpdated();
+			lastTrans[0] = translation[0];
+			lastTrans[1] = translation[1];
 			translation[0] = (defDim[0] - width);// - translation[0];
 			translation[1] = (defDim[1] - height);// - translation[1];
 		}
@@ -55,9 +58,15 @@ public class CanvasProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 	@Override
 	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
-		if (proxyRenderData.stateUpdated()) {
-			//
-		}
+//		if (proxyRenderData.stateUpdated()) {
+//			float pxc = 1 / (w * 0.5f);
+//			float pyc = 1 / (h * 0.5f);
+//			float cpx = camera.getPosition()[0] + lastTrans[0];
+//			float cpy = camera.getPosition()[1] + lastTrans[1];
+//
+//			camera.setPosXY_absolute((cpx-translation[0])*pxc, (cpy-translation[1])*pyc).update();
+//			context.getRenderSurface().update();
+//		}
 	}
 
 
