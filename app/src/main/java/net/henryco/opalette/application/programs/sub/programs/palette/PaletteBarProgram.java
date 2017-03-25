@@ -1,5 +1,7 @@
 package net.henryco.opalette.application.programs.sub.programs.palette;
 
+import android.support.annotation.Nullable;
+
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
@@ -57,7 +59,7 @@ public class PaletteBarProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	}
 
 	@Override
-	public void create(GL10 gl, int width, int height, AppMainProto context) {
+	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 
 		cellPaletter = new CellPaletter();
 		cellPaletter.setScreenDim(width, height);
@@ -67,14 +69,14 @@ public class PaletteBarProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	}
 
 	@Override
-	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
+	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 
 		proxyRenderData.setStateUpdated();
 		sendBarHeightInfo();
 	}
 
 	@Override
-	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
+	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		cellPaletter.generate(getRenderData(), camera);
 		backBar.render(camera, cellPaletter, buffer_quantum);

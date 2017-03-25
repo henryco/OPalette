@@ -1,6 +1,7 @@
 package net.henryco.opalette.application.programs.sub.programs.gradient;
 
 import android.opengl.GLES20;
+import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
@@ -72,7 +73,7 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	}
 
 	@Override
-	public void create(GL10 gl, int width, int height, MainActivity context) {
+	public void create(@Nullable GL10 gl, int width, int height, MainActivity context) {
 
 		barGradientBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 		barSrcBuffer = OPallFBOCreator.FrameBuffer()
@@ -82,13 +83,13 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	}
 
 	@Override
-	public void onSurfaceChange(GL10 gl, MainActivity context, int width, int height) {
+	public void onSurfaceChange(@Nullable GL10 gl, MainActivity context, int width, int height) {
 
 		proxyRenderData.setStateUpdated();
 	}
 
 	@Override
-	public void render(GL10 gl10, MainActivity context, Camera2D camera, int w, int h) {
+	public void render(@Nullable GL10 gl10, MainActivity context, Camera2D camera, int w, int h) {
 
 		multiTexture.set(0, getRenderData());
 		multiTexture.set(1, barSrcBuffer.getTexture());

@@ -1,5 +1,7 @@
 package net.henryco.opalette.application.programs.sub;
 
+import android.support.annotation.Nullable;
+
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallSubProgram;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
@@ -13,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public interface AppSubProgram<T> extends OPallSubProgram<T>, OPallRequestFeedBack {
 
-	void render(GL10 gl10, T context, Camera2D camera, int w, int h);
+	void render(@Nullable GL10 gl10, T context, Camera2D camera, int w, int h);
 	void setID(long id);
 
 	void setRenderData(OPallRenderable data);

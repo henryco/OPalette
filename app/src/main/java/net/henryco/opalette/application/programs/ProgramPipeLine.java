@@ -2,6 +2,7 @@ package net.henryco.opalette.application.programs;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
+import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
@@ -53,7 +54,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	private List<OPallTriConsumer<AppMainProto, Integer, Integer>> onDrawQueue;
 
 	@SuppressWarnings("unchecked")
-	public static AppSubProgram[] getDefaultPipeLineArray() {
+	private static AppSubProgram[] getDefaultPipeLineArray() {
 
 		return new AppSubProgram[]{
 
@@ -92,6 +93,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		p.setProgramHolder(this);
 		p.setID(subPrograms.size());
 		subPrograms.add(p);
+		hotStart(p);
 	}
 
 	@Override
@@ -102,6 +104,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		subPrograms.set(i, p);
 		for (int k = 0; k < subPrograms.size(); k++)
 			subPrograms.get(k).setID(k);
+		hotStart(p);
 	}
 
 	@Override
@@ -123,12 +126,19 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		return true;
 	}
 
-
+	@SuppressWarnings("unchecked")
+	private void hotStart(AppSubProgram p) {
+		if (uCan) {
+			p.setRenderData(subPrograms.get((int)p.getID() - 1).getRenderData());
+			onDrawQueue.add((context, w, h) -> p.create(null, w, h, context));
+		}
+	}
 
 
 
 	@Override
-	public final void create(GL10 gl, int width, int height, AppMainProto context) {
+	@SuppressWarnings("unchecked")
+	public final void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 
 		System.out.println("OpenGL version is: "+ GLES20.glGetString(GLES20.GL_VERSION));
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
@@ -150,7 +160,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 
 	@Override
-	public final void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
+	@SuppressWarnings("unchecked")
+	public final void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 
 		chessBox.setScreenDim(width, height);
 		OPallRenderable renderData = null;
@@ -165,7 +176,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 
 	@Override
-	public final void onDraw(GL10 gl, AppMainProto context, int width, int height) {
+	@SuppressWarnings("unchecked")
+	public final void onDraw(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 
 		for (int i = 0; i < onDrawQueue.size(); i++) {
 			onDrawQueue.remove(i).consume(context, width, height);

@@ -1,5 +1,7 @@
 package net.henryco.opalette.application.programs.sub.programs.aImage;
 
+import android.support.annotation.Nullable;
+
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
@@ -65,7 +67,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 
 	@Override
-	public void create(GL10 gl, int width, int height, AppMainProto context) {
+	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
@@ -89,20 +91,18 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 
 	@Override
-	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
+	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 		proxyRenderData.setStateUpdated();
 	}
 
 
 
 	@Override
-	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
+	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		if (proxyRenderData.stateUpdated()) {
 			camera.backTranslate(() -> {
-				float tx = w - defDim[0];
-				float ty = h - defDim[1];
-				camera.translateXY(0, ty); // position correction while canvas size changed
+				camera.translateXY(w - defDim[0], h - defDim[1]); // position correction while canvas size changed
 				boolean e = proxyRenderData.getRenderData().isFilterEnable();
 				feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 				feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));

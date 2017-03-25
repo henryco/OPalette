@@ -1,6 +1,8 @@
 package net.henryco.opalette.api.glES.glSurface.renderers.universal;
 
 
+import android.support.annotation.Nullable;
+
 import net.henryco.opalette.api.utils.requester.OPallRequestListener;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -11,8 +13,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 public interface OPallSubProgram<T> extends OPallRequestListener {
 
-	void create(GL10 gl, int width, int height, T context);
-	void onSurfaceChange(GL10 gl, T context, int width, int height);
+	void create(@Nullable GL10 gl, int width, int height, T context);
+	void onSurfaceChange(@Nullable GL10 gl, T context, int width, int height);
 
 	final class methods  {
 		public static long genID() {

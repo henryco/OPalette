@@ -1,5 +1,7 @@
 package net.henryco.opalette.application.programs.sub.programs.color;
 
+import android.support.annotation.Nullable;
+
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
@@ -59,7 +61,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	}
 
 	@Override
-	public void create(GL10 gl, int width, int height, AppMainProto context) {
+	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
@@ -78,7 +80,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 
 	@Override
-	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
+	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 
 		gridLines.setScreenDim(width, height);
 	}
@@ -86,7 +88,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 
 	@Override
-	public void render(GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
+	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
 		imageBuffer.render(camera);
 		gridLines.render(camera);
