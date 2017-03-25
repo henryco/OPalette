@@ -1,5 +1,6 @@
 package net.henryco.opalette.application.programs.sub.programs.aImage;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Switch;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceTouchListener;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.RefreshableTimer;
@@ -25,8 +27,10 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_crop_rotate_white_24dp;
 	private static final int txt_button_res = R.string.control_rotation;
+	private static final float touch_sensitivity = 0.4f;
+	private static final float max_angle = 90f;
 	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;
-
+	private OPallSurfaceTouchListener touchEventListener;
 
 	public RotationControl(final AppSubProgram.ProxyRenderData<ConvolveTexture> renderData) {
 		super(img_button_res, txt_button_res);
@@ -78,18 +82,33 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 			}
 		};
 
-		InjectableSeekBar angleBar = new InjectableSeekBar(view, "Angle").setDefaultPoint(0, 45).setMax(90);
-		angleBar.onBarCreate(bar -> bar.setProgress(angleBar.de_norm(imgHolder.getRenderData().getRotation() / 90f)));
+		InjectableSeekBar angleBar = new InjectableSeekBar(view, "Angle").setDefaultPoint(0, (int) (max_angle * 0.5f)).setMax((int) max_angle);
+		angleBar.onBarCreate(bar -> bar.setProgress(angleBar.de_norm(imgHolder.getRenderData().getRotation() / max_angle)));
 		angleBar.setBarListener(new OPallSeekBarListener().onStop(stop).onProgress((bar, progress, fromUser) -> {
-			imgHolder.getRenderData().setFilterEnable(false).setRotation(angleBar.norm(progress) * 90f);
+			if (fromUser) {
+				imgHolder.getRenderData().setFilterEnable(false).setRotation(angleBar.norm(progress) * max_angle);
+				updateFunc.run();
+			}
+		}));
+
+
+		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
+		touchEventListener.setOnActionUp(() -> timer.startIfWaiting().refresh());
+		context.getRenderSurface().addOnTouchEventListener(touchEventListener.setOnActionMove((dx, dy) -> {
+			float angle = clamp(imgHolder.getRenderData().getRotation() + dx * touch_sensitivity, max_angle, -max_angle);
+			imgHolder.getRenderData().setFilterEnable(false).setRotation(angle);
+			angleBar.setProgress(angleBar.de_norm(angle / max_angle));
 			updateFunc.run();
 		}));
+
 
 		OPallViewInjector.inject(context.getActivityContext(), flipButtons, angleBar);
 	}
 
-
-
+	@Override
+	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
+		context.getRenderSurface().removeTouchEventListener(touchEventListener);
+	}
 }
 
 
