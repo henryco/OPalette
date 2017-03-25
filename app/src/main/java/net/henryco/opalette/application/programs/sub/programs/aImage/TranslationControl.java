@@ -3,10 +3,10 @@ package net.henryco.opalette.application.programs.sub.programs.aImage;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.MotionEvent;
 import android.view.View;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceTouchListener;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.RefreshableTimer;
@@ -29,7 +29,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final float MAX_SCALE = 4;
 
-	private OPallSurfaceView.OnTouchEventListener touchEventListener;
+	private OPallSurfaceTouchListener touchEventListener;
 	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;
 	private final float defaultScale; // TODO
 
@@ -69,7 +69,9 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		};
 
 
-		horBar.onBarCreate(bar -> bar.setProgress(clamp(horBar.de_norm(image.bounds2D.getX() / image.getScreenWidth()))));
+
+
+		horBar.onBarCreate(bar -> bar.setProgress((int)clamp(horBar.de_norm(image.bounds2D.getX() / image.getScreenWidth()), 100, -100)));
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
 				image.setFilterEnable(false).bounds2D.setX(horBar.norm(progress) * image.getScreenWidth());
@@ -78,7 +80,9 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		}).onStop(stop));
 
 
-		verBar.onBarCreate(bar -> bar.setProgress(clamp(verBar.de_norm(image.bounds2D.getY() / image.getScreenHeight()))));
+
+
+		verBar.onBarCreate(bar -> bar.setProgress((int)clamp(verBar.de_norm(image.bounds2D.getY() / image.getScreenHeight()), 100, -100)));
 		verBar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {
 			if (fromUser) {
 				image.setFilterEnable(false).bounds2D.setY(verBar.norm(progress) * image.getScreenHeight());
@@ -87,7 +91,9 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		}).onStop(stop));
 
 
-		zoomBar.setTextValuerCorrector(f -> f * 0.01f * MAX_SCALE); // 0.01f * 4f
+
+
+		zoomBar.setTextValuerCorrector(f -> f * 0.01f * MAX_SCALE);
 		zoomBar.onBarCreate(bar -> bar.setProgress(zoomBar.de_norm(image.bounds2D.getScale() / MAX_SCALE)));
 		zoomBar.setBarListener(new OPallSeekBarListener().onStop(stop).onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
@@ -97,37 +103,29 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		}));
 
 
-		final float[] last = {0,0};
-		surface.addOnTouchEventListener(touchEventListener = event -> {
 
-			float x = event.getX();
-			float y = event.getY();
 
-			switch (event.getAction()) {
+		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
+		touchEventListener.setOnActionUp(() -> timer.startIfWaiting().refresh());
+		touchEventListener.setOnActionMove((dx, dy) -> {
+			float px = image.bounds2D.getX() + dx;
+			float py = image.bounds2D.getY() + dy;
+			horBar.setProgress((int) clamp(horBar.de_norm((px / image.getWidth())), 100, -100));
+			verBar.setProgress((int) clamp(verBar.de_norm((py / image.getHeight())), 100, -100));
+			image.setFilterEnable(false).bounds2D.setPosition(px, py);
+			updateFunc.run();
+		});
 
-				case MotionEvent.ACTION_MOVE:
-					float dx = x - last[0];
-					float dy = y - last[1];
-
-					float px = image.bounds2D.getX() + dx;
-					float py = image.bounds2D.getY() + dy;
-
-					horBar.setProgress(clamp(horBar.de_norm((px / image.getWidth()))));
-					verBar.setProgress(clamp(verBar.de_norm((py / image.getHeight()))));
-
-					image.setFilterEnable(false).bounds2D.setPosition(px, py);
-					updateFunc.run();
-				break;
-
-				case MotionEvent.ACTION_UP:
-					timer.startIfWaiting().refresh();
-				break;
-			}
-			last[0] = x;
-			last[1] = y;
+		touchEventListener.setOnScale(scaleGestureDetector -> {
+			float scale = clamp(image.bounds2D.getScale() * scaleGestureDetector.getScaleFactor(), MAX_SCALE, 0.1f);
+			zoomBar.setProgress(zoomBar.de_norm(scale / MAX_SCALE));
+			image.setFilterEnable(false).bounds2D.setScale(scale);
+			updateFunc.run();
+			return true;
 		});
 
 
+		surface.addOnTouchEventListener(touchEventListener);
 		OPallViewInjector.inject(context.getActivityContext(), zoomBar, verBar, horBar);
 	}
 
@@ -140,7 +138,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 
-	private static int clamp(int val) {
-		return Math.max(Math.min(val, 100), -100);
+	private static float clamp(float val, float rangeMax, float rangeMin) {
+		return Math.max(Math.min(val, rangeMax), rangeMin);
 	}
 }

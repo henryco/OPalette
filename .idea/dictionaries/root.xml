@@ -9,6 +9,7 @@
       <w>coord</w>
       <w>coords</w>
       <w>cosf</w>
+      <w>cscale</w>
       <w>excp</w>
       <w>extr</w>
       <w>flipx</w>
@@ -30,6 +31,7 @@
       <w>paletter</w>
       <w>pickbutton</w>
       <w>renderable</w>
+      <w>scaler</w>
       <w>shaders</w>
       <w>signin</w>
       <w>sinf</w>
