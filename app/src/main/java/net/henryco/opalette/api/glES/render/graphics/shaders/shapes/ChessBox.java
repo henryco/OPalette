@@ -137,7 +137,9 @@ public class ChessBox extends OPallShape {
 			needUpDate = false;
 		}
 		camera.backTranslate(() -> {
-			camera.translateXY(getScreenWidth() - defDim[0], getScreenHeight() - defDim[1]); // position correction while canvas size changed
+			float tx = getScreenWidth() - defDim[0];
+			float ty = getScreenHeight() - defDim[1];
+			camera.translateXY(0, ty); // position correction while canvas size changed
 			imageBuffer.render(camera);
 		});
 

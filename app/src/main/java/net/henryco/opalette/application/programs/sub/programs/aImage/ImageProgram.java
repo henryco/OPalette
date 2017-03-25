@@ -100,7 +100,9 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		if (proxyRenderData.stateUpdated()) {
 			camera.backTranslate(() -> {
-				camera.translateXY(w - defDim[0], h - defDim[1]); // position correction while canvas size changed
+				float tx = w - defDim[0];
+				float ty = h - defDim[1];
+				camera.translateXY(0, ty); // position correction while canvas size changed
 				boolean e = proxyRenderData.getRenderData().isFilterEnable();
 				feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 				feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));

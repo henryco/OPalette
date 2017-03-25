@@ -50,9 +50,8 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 		});
 
 
-//		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
 		InjectableSeekBar hBar = new InjectableSeekBar(view, "Canvas height").setMax((int) defScrH);
-
+//		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
 //		wBar.onBarCreate(bar -> bar.setProgress(surface.getWidth()));
 //		wBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 //			if (fromUser) {
