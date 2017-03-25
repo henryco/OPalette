@@ -67,11 +67,12 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
-		textureBuffer = OPallFBOCreator.FrameBuffer();
+		textureBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 		proxyRenderData.setRenderData(new ConvolveTexture());
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen1());
 		proxyRenderData.getRenderData().setEffectScale(0);
+		proxyRenderData.getRenderData().setScreenDim(width, height);
 
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new RotationControl(proxyRenderData));
@@ -83,8 +84,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
-		textureBuffer.createFBO(width, height, false);
-		proxyRenderData.getRenderData().setScreenDim(width, height);
+		proxyRenderData.setStateUpdated();
 	}
 
 
@@ -95,7 +95,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		if (proxyRenderData.stateUpdated()) {
 			boolean e = proxyRenderData.getRenderData().isFilterEnable();
 			feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
-			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.id(this.id + 1)));
+			feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
 			textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
 		}
 		textureBuffer.render(camera);

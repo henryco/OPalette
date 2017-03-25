@@ -17,6 +17,7 @@ import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.aImage.ImageProgram;
+import net.henryco.opalette.application.programs.sub.programs.canvas.CanvasProgram;
 import net.henryco.opalette.application.programs.sub.programs.color.ColorProgram;
 import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.line.ShapeLinesProgram;
@@ -59,6 +60,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		return new AppSubProgram[]{
 
 				new ImageProgram(),
+				new CanvasProgram(),
 				new ColorProgram(),
 				new ShapeLinesProgram(),
 				new GradientBarProgram(),
@@ -138,6 +140,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox();
+		chessBox.setScreenDim(width, height);
 
 		OPallRenderable renderData = null;
 		for (AppSubProgram asp : subPrograms) {
@@ -152,8 +155,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	@Override
 	public final void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 
-		camera2D.set(width, height).update();
-		chessBox.setScreenDim(width, height);
+//		camera2D.set(width, height).update();
+//		chessBox.setScreenDim(width, height);
 
 		OPallRenderable renderData = null;
 		for (AppSubProgram asp : subPrograms) {
@@ -161,6 +164,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 			asp.onSurfaceChange(gl, context, width, height);
 			renderData = asp.getRenderData();
 		}
+		context.getRenderSurface().update();
 	}
 
 
@@ -215,10 +219,9 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				bitmap = null;
 				float scrWidth = startImage.getScreenWidth();
 				float w = startImage.getWidth();
-				float h = startImage.getHeight();
 				float scale = scrWidth / w;
 				subPrograms.get(0).setRenderData(startImage.bounds(b -> b.setScale(scale)));
-				requestSender.sendRequest(new Request(set_touch_lines_def_size, scrWidth, h * scale));
+				requestSender.sendRequest(new Request(set_touch_lines_def_size));
 			});
 			uCan = true;
 			observator.update();

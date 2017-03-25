@@ -38,9 +38,7 @@ public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	public void acceptRequest(Request request) {
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 		request.openRequest(set_touch_lines_def_size, () -> {
-			float w = request.getData(0);
-			float h = request.getData(1);
-			touchLines.setDefaultSize(w, h).setVisible(true).reset();
+			touchLines.reset();
 			sendCoeffInfo();
 		});
 	}
@@ -64,6 +62,7 @@ public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 		touchLines.setScreenDim(width, height);
+		proxyRenderData.setStateUpdated();
 		sendCoeffInfo();
 	}
 

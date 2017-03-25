@@ -93,7 +93,6 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 
-
 		zoomBar.setTextValuerCorrector(f -> Math.max(f * 0.01f * MAX_SCALE, MIN_SCALE));
 		zoomBar.onBarCreate(bar -> bar.setProgress(zoomBar.de_norm(image.bounds2D.getScale() / MAX_SCALE)));
 		zoomBar.setBarListener(new OPallSeekBarListener().onStop(stop).onProgress((bar, progress, fromUser) -> {
@@ -102,7 +101,6 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 				updateFunc.run();
 			}
 		}));
-
 
 
 

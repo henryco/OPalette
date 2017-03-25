@@ -57,20 +57,21 @@ public abstract class OPallShape extends Shader2D implements OPallBoundsHolder<B
 	}
 
 	public void render(Camera2D camera) {
-		render(camera, program -> render(program, camera));
+		camera.backTranslate(() -> {
+			camera.setPosXY_absolute(0,0);
+			render(camera, program -> render(program, camera));
+		});
+
 	}
 
 
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
-		camera.backTranslate(() -> {
-			camera.setPosXY_absolute(0,0);
-			int positionHandle = getPositionHandle();
-			GLESUtils.glUseVertexAttribArray(positionHandle, (Runnable) () -> {
-				setter.consume(glProgram);
-				GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
-				GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
-			});
+		int positionHandle = getPositionHandle();
+		GLESUtils.glUseVertexAttribArray(positionHandle, (Runnable) () -> {
+			setter.consume(glProgram);
+			GLES20.glVertexAttribPointer(positionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, bounds2D.vertexBuffer);
+			GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, bounds2D.getVertexCount(), GLES20.GL_UNSIGNED_SHORT, bounds2D.orderBuffer);
 		});
 	}
 

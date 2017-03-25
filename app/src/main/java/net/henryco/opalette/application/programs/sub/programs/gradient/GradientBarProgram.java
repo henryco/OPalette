@@ -74,17 +74,17 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	@Override
 	public void create(GL10 gl, int width, int height, MainActivity context) {
 
-		barGradientBuffer = OPallFBOCreator.FrameBuffer();
-		barSrcBuffer = OPallFBOCreator.FrameBuffer();
+		barGradientBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
+		barSrcBuffer = OPallFBOCreator.FrameBuffer()
+				.createFBO(width, buffer_quantum, width, height, false).beginFBO(GLESUtils::clear);
 		multiTexture = new MultiTexture(OPallMultiTexture.DEFAULT_VERT_FILE, FRAG_PROGRAM, 2);
+		multiTexture.setScreenDim(width, height);
 	}
 
 	@Override
 	public void onSurfaceChange(GL10 gl, MainActivity context, int width, int height) {
 
-		barGradientBuffer.createFBO(width, height, false);
-		barSrcBuffer.createFBO(width, buffer_quantum, width, height, false).beginFBO(GLESUtils::clear);
-		multiTexture.setScreenDim(width, height);
+		proxyRenderData.setStateUpdated();
 	}
 
 	@Override

@@ -64,7 +64,8 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
 		gridLines = new GridLines(width, height);
-		imageBuffer = OPallFBOCreator.FrameBuffer();
+
+		imageBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 		imageTexture = new EdTexture();
 		imageTexture.setScreenDim(width, height);
 
@@ -79,8 +80,6 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 
-		imageBuffer.createFBO(width, height, false);
-		imageTexture.setScreenDim(width, height);
 		gridLines.setScreenDim(width, height);
 	}
 

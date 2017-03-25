@@ -33,4 +33,5 @@
     <string name="control_sharpness">Sharp</string>
     <string name="control_rotation">Rotate</string>
     <string name="control_zoom">Scale</string>
+    <string name="control_canvas_size">Canvas</string>
 </resources>

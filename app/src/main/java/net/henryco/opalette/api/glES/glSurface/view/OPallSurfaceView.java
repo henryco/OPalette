@@ -99,7 +99,19 @@ public class OPallSurfaceView extends GLSurfaceView {
     }
 
 
-
+    private SurfaceDimension backUpDimProcessor = null;
+	public OPallSurfaceView setSize(int w, int h) {
+		resetSize();
+		backUpDimProcessor = dimProcessor;
+		this.dimProcessor = (width, height) -> new int[]{w, h};
+		getHolder().setFixedSize(w, h);
+		return this;
+	}
+	public OPallSurfaceView resetSize() {
+		if (backUpDimProcessor != null)
+			dimProcessor = backUpDimProcessor;
+		return this;
+	}
 
 
     public OPallSurfaceView update() {

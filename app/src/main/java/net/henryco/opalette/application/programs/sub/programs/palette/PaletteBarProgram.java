@@ -60,15 +60,16 @@ public class PaletteBarProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	public void create(GL10 gl, int width, int height, AppMainProto context) {
 
 		cellPaletter = new CellPaletter();
+		cellPaletter.setScreenDim(width, height);
 		backBar = new BarHorizontal();
+		backBar.createBar(width, height);
 		sendBarHeightInfo();
 	}
 
 	@Override
 	public void onSurfaceChange(GL10 gl, AppMainProto context, int width, int height) {
 
-		backBar.createBar(width, height);
-		cellPaletter.setScreenDim(width, height);
+		proxyRenderData.setStateUpdated();
 		sendBarHeightInfo();
 	}
 
