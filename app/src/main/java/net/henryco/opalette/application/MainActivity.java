@@ -270,6 +270,8 @@ public class MainActivity extends AppCompatActivity
 	@Override
 	public void switchToFragmentOptions(Fragment fragment) {
 
+		wipeTopBarButton();
+
 		if (fragment != null) {
 			FragmentTransaction fragmentTransaction = getFragmentManager()
 					.beginTransaction().add(R.id.fragmentContainer, fragment);
@@ -295,7 +297,7 @@ public class MainActivity extends AppCompatActivity
 
 		optionsSwitched = false;
 		actualFragment = null;
-		resetTopBarButton();
+		restoreTopBarButton();
 	}
 
 	@Override
@@ -313,17 +315,15 @@ public class MainActivity extends AppCompatActivity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		topBarButton = menu.add(0, topBarButtonId, 0, "");
 		topBarButton.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		topBarButton.setOnMenuItemClickListener(item -> true);
+		restoreTopBarButton();
 		return super.onCreateOptionsMenu(menu);
 	}
 
 
 	@Override
 	public void setTopControlButton(OPallConsumer<MenuItem> buttonConsumer, Runnable ... actions) {
-		topBarButton.setEnabled(false).setVisible(false);
 		for (Runnable action : actions) topBarButtonActions.add(action);
 		buttonConsumer.consume(topBarButton);
 	}
@@ -365,13 +365,20 @@ public class MainActivity extends AppCompatActivity
 	}
 
 
-	private void resetTopBarButton() {
-		topBarButtonActions.clear();
-		topBarButtonActions.add(topBarButtonDefaultAction);
-		topBarButton.setTitle(topBarButtonNameRes).setVisible(true).setEnabled(true);
+	private void restoreTopBarButton() {
+		if (topBarButton != null) {
+			topBarButtonActions.clear();
+			topBarButtonActions.add(topBarButtonDefaultAction);
+			topBarButton.setTitle(topBarButtonNameRes).setVisible(true).setEnabled(true);
+		}
 	}
 
-
+	private void wipeTopBarButton() {
+		if (topBarButton != null) {
+			topBarButton.setEnabled(false).setVisible(false);
+			topBarButtonActions.clear();
+		}
+	}
 
 
 }

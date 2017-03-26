@@ -188,6 +188,7 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
+import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -241,6 +242,16 @@ public class MinColorControl extends AppAutoSubControl<AppMainProto> {
 			edTexture.min.b = blueBar.norm(progress);
 			context.getRenderSurface().update();
 		}));
+
+		context.setTopControlButton(bar -> bar.setTitle(R.string.control_top_bar_button_reset).setVisible(true).setEnabled(true), () -> {
+			edTexture.min.set(GLESUtils.Color.TRANSPARENT);
+			redBar.setProgress(redBar.de_norm(0));
+			greenBar.setProgress(greenBar.de_norm(0));
+			blueBar.setProgress(blueBar.de_norm(0));
+			context.getRenderSurface().update();
+
+		});
+
 
 		OPallViewInjector.inject(context.getActivityContext(), blueBar, greenBar, redBar);
 	}

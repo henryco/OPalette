@@ -214,12 +214,13 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 	private OPallSurfaceTouchListener touchEventListener;
 	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;
-	private final float defaultScale; // TODO
+	private float defaultScale;
+	private boolean firstTime;
 
 	public TranslationControl(final AppSubProgram.ProxyRenderData<ConvolveTexture> renderData) {
 		super(BUTTON_IMAGE, MOVE);
 		this.imgHolder = renderData;
-		this.defaultScale = imgHolder.getRenderData().bounds2D.getScale();
+		this.firstTime = true;
 	}
 
 
@@ -237,6 +238,11 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
+
+		if (firstTime) {
+			this.defaultScale = imgHolder.getRenderData().bounds2D.getScale();
+			firstTime = false;
+		}
 
 		OPallSurfaceView surface = context.getRenderSurface();
 		ConvolveTexture image = imgHolder.getRenderData();
@@ -303,6 +309,15 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 			return true;
 		});
 
+
+		context.setTopControlButton(button
+				-> button.setTitle(R.string.control_top_bar_button_reset).setVisible(true).setEnabled(true), () -> {
+			zoomBar.setProgress(zoomBar.de_norm(defaultScale / MAX_SCALE));
+			image.bounds2D.setScale(defaultScale).setPosition(0,0);
+			horBar.setProgress(horBar.de_norm(0));
+			verBar.setProgress(verBar.de_norm(0));
+			updateFunc.run();
+		});
 
 		surface.addOnTouchEventListener(touchEventListener);
 		OPallViewInjector.inject(context.getActivityContext(), zoomBar, verBar, horBar);

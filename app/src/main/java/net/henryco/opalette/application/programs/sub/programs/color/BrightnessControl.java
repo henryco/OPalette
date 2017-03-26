@@ -228,6 +228,10 @@ public class BrightnessControl extends AppAutoSubControl<AppMainProto> {
 			context.getRenderSurface().update();
 		}));
 
+		context.setTopControlButton(bar -> bar.setTitle(R.string.control_top_bar_button_reset).setEnabled(true).setVisible(true), () -> {
+			brightnessBar.setProgress(brightnessBar.de_norm(0));
+		});
+
 		OPallViewInjector.inject(context.getActivityContext(), brightnessBar);
 	}
 

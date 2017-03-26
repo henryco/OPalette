@@ -271,6 +271,14 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 			surface.setSize(surface.getWidth(), py).update();
 			hBar.setProgress(py);
 		}));
+
+		context.setTopControlButton(button
+				-> button.setTitle(R.string.control_top_bar_button_reset).setVisible(true).setEnabled(true), () -> {
+			if (surface.getHeight() != defScrH) {
+				hBar.setProgress((int) defScrH);
+				surface.setSize((int) defScrW, (int) defScrH).update();
+			}
+		});
 	}
 
 

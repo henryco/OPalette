@@ -236,6 +236,7 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 			context.getRenderSurface().update();
 		};
 
+		Switch[] switches = new Switch[2];
 		OPallViewInjector<AppMainProto> flipButtons = new OPallViewInjector<AppMainProto>
 				(view, R.layout.flip_buttons_layout) {
 
@@ -247,6 +248,9 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 
 				Switch horizontal = (Switch) view.findViewById(R.id.flipHorizontalButton);
 				Switch vertical = (Switch) view.findViewById(R.id.flipVerticalButton);
+
+				switches[0] = horizontal;
+				switches[1] = vertical;
 
 				horizontal.setTextColor(textColor);
 				horizontal.setChecked(image.getFlip()[0]);
@@ -282,6 +286,16 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 			angleBar.setProgress(angleBar.de_norm(angle / max_angle));
 			updateFunc.run();
 		}));
+
+
+		context.setTopControlButton(button
+				-> button.setTitle(R.string.control_top_bar_button_reset).setVisible(true).setEnabled(true), () -> {
+			angleBar.setProgress(angleBar.de_norm(0));
+			imgHolder.getRenderData().setRotation(0).setFlip(false, false);
+			switches[0].setChecked(false);
+			switches[1].setChecked(false);
+			updateFunc.run();
+		});
 
 
 		OPallViewInjector.inject(context.getActivityContext(), flipButtons, angleBar);

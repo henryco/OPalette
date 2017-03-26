@@ -218,6 +218,8 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	private final float[] defDim = {0,0};
 
+	private boolean firstTime = true;
+
 	@Override
 	public void setProgramHolder(AppSubProgramHolder holder) {
 		this.holder = holder;
@@ -260,13 +262,11 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		proxyRenderData.getRenderData().setEffectScale(0);
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 
+		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
+		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
+
 		defDim[0] = width;
 		defDim[1] =height;
-
-		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
-		OPallViewInjector.inject(context.getActivityContext(), new RotationControl(proxyRenderData));
-		OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
-		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
 	}
 
 
@@ -281,6 +281,12 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
+
+		if (firstTime) { // lazy init
+			OPallViewInjector.inject(context.getActivityContext(), new RotationControl(proxyRenderData));
+			OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
+			firstTime = false;
+		}
 
 		if (proxyRenderData.stateUpdated()) {
 			camera.backTranslate(() -> {

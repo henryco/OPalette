@@ -188,6 +188,7 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
+import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -228,17 +229,32 @@ public class MaxColorControl extends AppAutoSubControl<AppMainProto> {
 		blueBar.onBarCreate(bar -> bar.setProgress(blueBar.de_norm(edTexture.max.b)));
 
 		redBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			edTexture.max.r = redBar.norm(progress);
-			context.getRenderSurface().update();
+			if (fromUser) {
+				edTexture.max.r = redBar.norm(progress);
+				context.getRenderSurface().update();
+			}
 		}));
 		greenBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			edTexture.max.g = greenBar.norm(progress);
-			context.getRenderSurface().update();
+			if (fromUser) {
+				edTexture.max.g = greenBar.norm(progress);
+				context.getRenderSurface().update();
+			}
 		}));
 		blueBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
-			edTexture.max.b = blueBar.norm(progress);
-			context.getRenderSurface().update();
+			if (fromUser) {
+				edTexture.max.b = blueBar.norm(progress);
+				context.getRenderSurface().update();
+			}
 		}));
+
+
+		context.setTopControlButton(bar -> bar.setTitle(R.string.control_top_bar_button_reset).setVisible(true).setEnabled(true), () -> {
+			edTexture.max.set(GLESUtils.Color.WHITE);
+			redBar.setProgress(redBar.de_norm(100));
+			greenBar.setProgress(greenBar.de_norm(100));
+			blueBar.setProgress(blueBar.de_norm(100));
+			context.getRenderSurface().update();
+		});
 
 		OPallViewInjector.inject(context.getActivityContext(), blueBar, greenBar, redBar);
 	}

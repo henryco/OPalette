@@ -220,9 +220,18 @@ public class FilterSharpnessControl extends AppAutoSubControl<AppMainProto> {
 		seekBar.setBarName(context.getActivityContext().getResources().getString(txt_button_res));
 		seekBar.onBarCreate(bar -> bar.setProgress(seekBar.de_norm(filterHolder.getRenderData().getEffectScale())));
 		seekBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			filterHolder.setStateUpdated().getRenderData().setEffectScale(seekBar.norm(progress));
-			context.getRenderSurface().update();
+			if (fromUser) {
+				filterHolder.setStateUpdated().getRenderData().setEffectScale(seekBar.norm(progress));
+				context.getRenderSurface().update();
+			}
 		}));
 		OPallViewInjector.inject(context.getActivityContext(), seekBar);
+
+		context.setTopControlButton(button
+				-> button.setTitle(R.string.control_top_bar_button_reset).setEnabled(true).setVisible(true), () -> {
+			seekBar.setProgress(seekBar.de_norm(0));
+			filterHolder.setStateUpdated().getRenderData().setEffectScale(0);
+			context.getRenderSurface().update();
+		});
 	}
 }
