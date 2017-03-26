@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="" />
+  <settings default="HenryCo Apache-2.0">
+    <module2copyright>
+      <element module="All" copyright="HenryCo Apache-2.0" />
+    </module2copyright>
+  </settings>
 </component>
