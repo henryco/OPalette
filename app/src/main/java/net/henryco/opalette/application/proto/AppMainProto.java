@@ -183,8 +183,10 @@
 package net.henryco.opalette.application.proto;
 
 import android.app.Fragment;
+import android.view.MenuItem;
 
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceActivity;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 /**
  * Created by HenryCo on 19/03/17.
@@ -194,5 +196,6 @@ public interface AppMainProto extends OPallSurfaceActivity {
 
 	void switchToFragmentOptions(Fragment fragment);
 	void switchToScrollOptionsView();
+	void setTopControlButton(OPallConsumer<MenuItem> buttonConsumer, Runnable ... action);
 
 }

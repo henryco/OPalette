@@ -191,6 +191,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -199,10 +200,14 @@ import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRende
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.ProgramPipeLine;
 import net.henryco.opalette.application.proto.AppMainProto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 		implements AppMainProto, ProgramPipeLine.AppProgramProtocol {
@@ -210,13 +215,17 @@ public class MainActivity extends AppCompatActivity
 
 	private final RequestSender stateRequester = new RequestSender();
 
-
 	private Fragment actualFragment = null;
-	boolean optionsSwitched = false;
-	long renderID = 0;
+	private boolean optionsSwitched = false;
 
 
+	private MenuItem topBarButton;
+	private final List<Runnable> topBarButtonActions = new ArrayList<>();
+	private final int topBarButtonId = 2137;
+	private final static int topBarButtonNameRes = R.string.main_top_bar_button;
+	private final Runnable topBarButtonDefaultAction = () -> {
 
+	};
 
 
 	@Override
@@ -234,9 +243,27 @@ public class MainActivity extends AppCompatActivity
 			getSupportActionBar().setDisplayShowHomeEnabled(true);
 		}
 
-		initialization();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
+		}
+
+		OPallUniRenderer renderer = new UniRenderer(this, new ProgramPipeLine());
+		stateRequester.addRequestListener(renderer);
+
+		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
+		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
+		oPallSurfaceView.setRenderer(renderer);
+
+		oPallSurfaceView.addToGLContextQueue(gl ->
+				stateRequester.sendNonSyncRequest(new Request(send_bitmap_to_program, StartUpActivity.BitmapPack.get()))
+		);
+
 		switchToScrollOptionsView();
 	}
+
+
+
+
 
 
 
@@ -268,6 +295,7 @@ public class MainActivity extends AppCompatActivity
 
 		optionsSwitched = false;
 		actualFragment = null;
+		resetTopBarButton();
 	}
 
 	@Override
@@ -283,36 +311,32 @@ public class MainActivity extends AppCompatActivity
 
 
 
-	private void initialization() {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
-		}
-
-		OPallUniRenderer renderer = new UniRenderer(this, new ProgramPipeLine());
-		renderID = stateRequester.addRequestListener(renderer);
-
-		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
-		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
-		oPallSurfaceView.setRenderer(renderer);
-
-		oPallSurfaceView.addToGLContextQueue(gl ->
-				stateRequester.sendNonSyncRequest(new Request(send_bitmap_to_program, StartUpActivity.BitmapPack.get()))
-		);
-
+		topBarButton = menu.add(0, topBarButtonId, 0, "");
+		topBarButton.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		topBarButton.setOnMenuItemClickListener(item -> true);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 
-
-
-
+	@Override
+	public void setTopControlButton(OPallConsumer<MenuItem> buttonConsumer, Runnable ... actions) {
+		topBarButton.setEnabled(false).setVisible(false);
+		for (Runnable action : actions) topBarButtonActions.add(action);
+		buttonConsumer.consume(topBarButton);
+	}
 
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) onBackPressed();
+		else if (item.getItemId() == topBarButtonId)
+			for (Runnable action : topBarButtonActions) action.run();
 		return super.onOptionsItemSelected(item);
 	}
+
 
 
 
@@ -331,6 +355,7 @@ public class MainActivity extends AppCompatActivity
 
 
 	private void startBackDialog() {
+		//TODO
 		new OPallAlertDialog()
 				.title("U SURE?")
 				.message("SURE?")
@@ -340,7 +365,11 @@ public class MainActivity extends AppCompatActivity
 	}
 
 
-
+	private void resetTopBarButton() {
+		topBarButtonActions.clear();
+		topBarButtonActions.add(topBarButtonDefaultAction);
+		topBarButton.setTitle(topBarButtonNameRes).setVisible(true).setEnabled(true);
+	}
 
 
 

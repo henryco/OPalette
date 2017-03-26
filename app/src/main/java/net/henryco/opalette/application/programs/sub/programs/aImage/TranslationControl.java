@@ -253,7 +253,6 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 
-
 		horBar.onBarCreate(bar -> bar.setProgress((int)clamp(horBar.de_norm(image.bounds2D.getX() / image.getScreenWidth()), 100, -100)));
 		horBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
@@ -261,7 +260,6 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 				updateFunc.run();
 			}
 		}).onStop(stop));
-
 
 
 

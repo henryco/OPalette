@@ -319,6 +319,7 @@ public class ChessBox extends OPallShape {
 			needUpDate = false;
 		}
 		camera.backTranslate(() -> {
+			camera.setPosXY_absolute(0,0);
 			float tx = getScreenWidth() - defDim[0];
 			float ty = getScreenHeight() - defDim[1];
 			camera.translateXY(0, ty); // position correction while canvas size changed
