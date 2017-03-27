@@ -232,14 +232,18 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	private OPallSeekBarListener barListener;
 	private String barName;
 	private int valueCorrection;
+	private int width;
 	private int max;
 	private int text_color;
 	private int value_color;
 	private int progress_color;
 	private int thumb_color;
 	private int lazyProgress;
+	private boolean val_visible;
+
 
 	private SeekBar seekBar;
+	private TextView valBar;
 
 	public InjectableSeekBar(View container, int type, String ... name) {
 		super(container, type);
@@ -267,8 +271,8 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	public void reset(String ... nm) {
 		String name = "";
 		for (String n : nm) name += n + " ";
-		setDefaultPoint(0, 0)
-				.setMax(-1).setBarName(name)
+		setDefaultPoint(0, 0).setValueVisible(true)
+				.setWidth(-1).setMax(-1).setBarName(name)
 				.onBarCreate(seekBar -> {})
 				.setTextColor(default_text_color)
 				.setBarColor(default_bar_color)
@@ -286,16 +290,21 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		seekBar.setProgress(lazyProgress);
 		seekBar.getProgressDrawable().setColorFilter(progress_color, PorterDuff.Mode.SRC_IN);
 		seekBar.getThumb().setColorFilter(thumb_color, PorterDuff.Mode.SRC_IN);
+		if (width != -1) {
+			ViewGroup.LayoutParams p = seekBar.getLayoutParams();
+			p.width = width;
+			seekBar.setLayoutParams(p);
+		}
 		onBarCreator.onSeekBarCreate(seekBar);
 
 		TextView textBar = (TextView) view.findViewById(R.id.barName);
 		if (text_color != -1) textBar.setTextColor(text_color);
 		textBar.setText(barName);
 
-		TextView valBar = (TextView) view.findViewById(R.id.barValue);
+		valBar = (TextView) view.findViewById(R.id.barValue);
 		if (value_color != -1) valBar.setTextColor(value_color);
 		valBar.setText(calcTextVal(seekBar.getProgress()));
-
+		valBar.setVisibility(val_visible ? View.VISIBLE : View.GONE);
 
 		seekBar.setOnSeekBarChangeListener(new OPallSeekBarListener()
 				.onStart(barListener)
@@ -324,6 +333,12 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		return (v + valueCorrection) / (max + valueCorrection);
 	}
 
+
+	public InjectableSeekBar setValueVisible(boolean visible) {
+		this.val_visible = visible;
+		if (valBar != null) valBar.setVisibility(val_visible ? View.VISIBLE : View.GONE);
+		return this;
+	}
 
 	public InjectableSeekBar setProgress(int progress) {
 		lazyProgress = progress;
@@ -381,6 +396,11 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 	public InjectableSeekBar setBarName(String barName) {
 		this.barName = barName;
+		return this;
+	}
+
+	public InjectableSeekBar setWidth(int w) {
+		this.width = w;
 		return this;
 	}
 

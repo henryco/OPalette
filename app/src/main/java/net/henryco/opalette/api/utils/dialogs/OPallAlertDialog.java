@@ -182,11 +182,15 @@
 
 package net.henryco.opalette.api.utils.dialogs;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by HenryCo on 15/03/17.
@@ -205,6 +209,9 @@ public class OPallAlertDialog extends AppCompatDialogFragment {
 	private Runnable onNegative = null;
 	private Runnable onNeutral = null;
 
+	private View dialogContent = null;
+
+	private float size = 0;
 
 	@NonNull @Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -212,6 +219,7 @@ public class OPallAlertDialog extends AppCompatDialogFragment {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
 		if (dialogTitle != null) dialogBuilder.setTitle(dialogTitle);
 		if (dialogMessage != null) dialogBuilder.setMessage(dialogMessage);
+		if (dialogContent != null) dialogBuilder.setView(dialogContent);
 
 		dialogBuilder.setPositiveButton(positive, (dialog, which) -> onPositive.run());
 		if (onNegative != null && negative != null)
@@ -221,6 +229,10 @@ public class OPallAlertDialog extends AppCompatDialogFragment {
 		return  dialogBuilder.create();
 	}
 
+	public OPallAlertDialog content(View content) {
+		this.dialogContent = content;
+		return this;
+	}
 
 	public OPallAlertDialog message(String dialogMessage) {
 		this.dialogMessage = dialogMessage;
@@ -229,6 +241,11 @@ public class OPallAlertDialog extends AppCompatDialogFragment {
 
 	public OPallAlertDialog title(String dialogTitle) {
 		this.dialogTitle = dialogTitle;
+		return this;
+	}
+
+	public OPallAlertDialog size(float pct) {
+		this.size = pct;
 		return this;
 	}
 
@@ -257,4 +274,17 @@ public class OPallAlertDialog extends AppCompatDialogFragment {
 		return this;
 	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		Dialog dialog = getDialog();
+		if (dialog != null && size != 0)
+			dialog.getWindow().setLayout((int) (getScreenWidth(getActivity()) * size), ViewGroup.LayoutParams.MATCH_PARENT);
+	}
+
+	private static int getScreenWidth(Activity activity) {
+		Point size = new Point();
+		activity.getWindowManager().getDefaultDisplay().getSize(size);
+		return size.x;
+	}
 }

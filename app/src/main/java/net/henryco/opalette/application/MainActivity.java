@@ -203,6 +203,7 @@ import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
+import net.henryco.opalette.api.utils.views.ColorPickerView;
 import net.henryco.opalette.application.programs.ProgramPipeLine;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -361,6 +362,7 @@ public class MainActivity extends AppCompatActivity
 				.message("SURE?")
 				.negative("cancel")
 				.positive("accept", this::closeActivity)
+				.content(new ColorPickerView(this).create(this))
 		.show(getSupportFragmentManager(), "backDialog");
 	}
 

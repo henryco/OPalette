@@ -214,7 +214,6 @@ public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInj
 
 
 
-
 	protected static <T> ControlFragment<T> loadControlFragment
 			(AppControlFragmentLoader<T> loader, AppControlFragmentDestroyer<T> destroyer) {
 		return new ControlFragment<T>().onFragmentCreated(loader).onFragmentDestroyed(destroyer);
@@ -238,8 +237,6 @@ public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInj
 		);
 
 	}
-
-
 
 
 
