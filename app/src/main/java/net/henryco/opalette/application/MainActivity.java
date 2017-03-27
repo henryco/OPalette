@@ -182,7 +182,6 @@
 
 package net.henryco.opalette.application;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.pm.ActivityInfo;
@@ -203,11 +202,11 @@ import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
-import net.henryco.opalette.api.utils.views.ColorPickerView;
 import net.henryco.opalette.application.programs.ProgramPipeLine;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -307,7 +306,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	@Override
-	public Activity getActivityContext() {
+	public AppCompatActivity getActivityContext() {
 		return this;
 	}
 
@@ -325,7 +324,7 @@ public class MainActivity extends AppCompatActivity
 
 	@Override
 	public void setTopControlButton(OPallConsumer<MenuItem> buttonConsumer, Runnable ... actions) {
-		for (Runnable action : actions) topBarButtonActions.add(action);
+		Collections.addAll(topBarButtonActions, actions);
 		buttonConsumer.consume(topBarButton);
 	}
 
@@ -362,7 +361,6 @@ public class MainActivity extends AppCompatActivity
 				.message("SURE?")
 				.negative("cancel")
 				.positive("accept", this::closeActivity)
-				.content(new ColorPickerView(this).create(this))
 		.show(getSupportFragmentManager(), "backDialog");
 	}
 

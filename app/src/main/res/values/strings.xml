@@ -218,4 +218,5 @@
     <string name="control_zoom">Scale</string>
     <string name="control_canvas_size">Canvas</string>
     <string name="control_palette_region">Region</string>
+    <string name="control_background">Background</string>
 </resources>

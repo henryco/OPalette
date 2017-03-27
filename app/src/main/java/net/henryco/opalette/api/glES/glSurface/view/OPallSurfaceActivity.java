@@ -182,7 +182,7 @@
 
 package net.henryco.opalette.api.glES.glSurface.view;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by HenryCo on 19/03/17.
@@ -191,6 +191,6 @@ import android.app.Activity;
 public interface OPallSurfaceActivity {
 
 	OPallSurfaceView getRenderSurface();
-	Activity getActivityContext();
+	AppCompatActivity getActivityContext();
 
 }

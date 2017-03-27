@@ -260,6 +260,12 @@ public class GLESUtils {
 			this.b = color.b;
 			this.a = color.a;
 		}
+		public void set(float r, float g, float b, float a) {
+			set(new Color(r, g, b, a));
+		}
+		public void set(int r, int g, int b, int a) {
+			set(new Color(r, g, b, a));
+		}
 
 		public int hex() {
 			return android.graphics.Color.argb((int) a * 255, (int) r * 255, (int) g * 255, (int) b * 255);

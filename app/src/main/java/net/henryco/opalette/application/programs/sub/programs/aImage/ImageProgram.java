@@ -217,6 +217,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private AppSubProgramHolder holder;
 
 	private final float[] defDim = {0,0};
+	private final GLESUtils.Color bgColor = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
 
 	private boolean firstTime = true;
 
@@ -264,6 +265,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
+		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor, proxyRenderData));
 
 		defDim[0] = width;
 		defDim[1] =height;
@@ -294,7 +296,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 				boolean e = proxyRenderData.getRenderData().isFilterEnable();
 				feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 				feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
-				textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
+				textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear(bgColor)));
 			});
 		}
 		textureBuffer.render(camera);
