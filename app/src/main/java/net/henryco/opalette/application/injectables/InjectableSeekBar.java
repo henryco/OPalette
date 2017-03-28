@@ -201,11 +201,7 @@ import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 
 public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
-	public static final int TEXT_COLOR_DEFAULT_DARK = R.color.common_google_signin_btn_text_light_default;
-	public static final int TEXT_COLOR_BLACK_OVERLAY = R.color.black_overlay;
-	public static final int TEXT_COLOR_DEFAULT_LIGHT = R.color.common_google_signin_btn_text_dark_default;
-	public static final int TEXT_COLOR_LIGHT_OVERLAY = R.color.common_google_signin_btn_text_dark_disabled;
-	public static final int TEXT_COLOR_LIGHT = R.attr.colorButtonNormal;
+
 
 
 	public static final int TYPE_NORMAL = R.layout.bar_control_layout;
@@ -317,11 +313,11 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 
 	}
 
-	private static final String df = "%.2f";
-	private static final String di = "%.0f";
+	private static final String ff = "%.2f";
+	private static final String fi = "%.0f";
 	private String calcTextVal(float value) {
 		float val = textValueCorrector.apply(calcBarValue(seekBar.getMax(), valueCorrection, value));
-		String format = (int) Math.ceil(val) == val ? di : df;
+		String format = (int) Math.ceil(val) == val ? fi : ff;
 		return String.format(format, val);
 	}
 

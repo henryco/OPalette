@@ -189,11 +189,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.henryco.opalette.R;
+
 /**
  * Created by HenryCo on 15/03/17.
  */
 
 public abstract class OPallViewInjector<T> {
+
+	public static final int TEXT_COLOR_DEFAULT_DARK = R.color.common_google_signin_btn_text_light_default;
+	public static final int TEXT_COLOR_BLACK_OVERLAY = R.color.black_overlay;
+	public static final int TEXT_COLOR_DEFAULT_LIGHT = R.color.common_google_signin_btn_text_dark_default;
+	public static final int TEXT_COLOR_LIGHT_OVERLAY = R.color.common_google_signin_btn_text_dark_disabled;
+	public static final int TEXT_COLOR_LIGHT = R.attr.colorButtonNormal;
 
 
 	@SuppressWarnings("unchecked")
