@@ -193,6 +193,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ToggleButton;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
@@ -219,13 +220,17 @@ public class MainActivity extends AppCompatActivity
 	private boolean optionsSwitched = false;
 
 
+	private ToggleButton imageToggle, paletteToggle;
+
 	private MenuItem topBarButton;
 	private final List<Runnable> topBarButtonActions = new ArrayList<>();
 	private final int topBarButtonId = 2137;
 	private final static int topBarButtonNameRes = R.string.main_top_bar_button;
 	private final Runnable topBarButtonDefaultAction = () -> {
-
+		//TODO
 	};
+
+
 
 
 	@Override
@@ -237,6 +242,12 @@ public class MainActivity extends AppCompatActivity
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+
+		imageToggle = (ToggleButton) toolbar.findViewById(R.id.toolbarButtonImage);
+		paletteToggle = (ToggleButton) toolbar.findViewById(R.id.toolbarButtonPalette);
+
+		imageToggle.setOnClickListener(this::toggleImage);
+		paletteToggle.setOnClickListener(this::togglePalette);
 
 		if (getSupportActionBar() != null){
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -262,7 +273,23 @@ public class MainActivity extends AppCompatActivity
 	}
 
 
+	private void toggleImage(View v) {
+		if (imageToggle.isChecked()) {
+			paletteToggle.setChecked(!imageToggle.isChecked());
+			findViewById(R.id.imageOptionsContainer).setVisibility(View.VISIBLE);
+			findViewById(R.id.paletteOptionsContainer).setVisibility(View.GONE);
+		}
+		imageToggle.setChecked(true);
+	}
 
+	private void togglePalette(View v) {
+		if (paletteToggle.isChecked()) {
+			imageToggle.setChecked(!paletteToggle.isChecked());
+			findViewById(R.id.paletteOptionsContainer).setVisibility(View.VISIBLE);
+			findViewById(R.id.imageOptionsContainer).setVisibility(View.GONE);
+		}
+		paletteToggle.setChecked(true);
+	}
 
 
 
@@ -281,6 +308,9 @@ public class MainActivity extends AppCompatActivity
 		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
 		findViewById(R.id.fragmentSuperContainer).setVisibility(View.VISIBLE);
 
+		imageToggle.setVisibility(View.GONE);
+		paletteToggle.setVisibility(View.GONE);
+
 		optionsSwitched = true;
 		actualFragment = fragment;
 	}
@@ -294,6 +324,9 @@ public class MainActivity extends AppCompatActivity
 
 		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
 		findViewById(R.id.fragmentSuperContainer).setVisibility(View.GONE);
+
+		imageToggle.setVisibility(View.VISIBLE);
+		paletteToggle.setVisibility(View.VISIBLE);
 
 		optionsSwitched = false;
 		actualFragment = null;

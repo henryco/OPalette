@@ -211,7 +211,7 @@ public class StartUpActivity extends AppCompatActivity
 
 
 	public static final long PICKBUTTON_SLEEP_TIME = 2;
-	public static final long SPLASH_LOADING_TIME = 3000;
+	public static final long SPLASH_LOADING_TIME = 1500;
 	public static final long ANIMATION_TIME = 300;
 
 	public static final long AFTER_SPLASH_DELAY = 225;

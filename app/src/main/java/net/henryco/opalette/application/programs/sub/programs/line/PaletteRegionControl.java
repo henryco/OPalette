@@ -207,15 +207,11 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 	private OPallRequester requester;
 
 	public PaletteRegionControl(TouchLines touchLines, OPallRequester feedBackListener) {
-		super(img_button_res, txt_button_res);
+		super(R.id.paletteOptionsContainer, img_button_res, txt_button_res);
 		this.touchLines = touchLines;
 		this.requester = feedBackListener;
 	}
 
-	@Override
-	protected void onFragmentInject(AppMainProto context, View view, int img_button_res, int txt_button_res) {
-		super.onFragmentInject(context, view, img_button_res, txt_button_res);
-	}
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {

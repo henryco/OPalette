@@ -192,6 +192,9 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.MultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallMultiTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.units.bar.BarHorizontal;
+import net.henryco.opalette.api.glES.render.graphics.units.bar.OPallBar;
+import net.henryco.opalette.api.glES.render.graphics.units.palette.CellPaletter;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -205,9 +208,9 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 16/03/17.
  */
 
-public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
+public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
-	private long id = methods.genID(GradientBarProgram.class);
+	private long id = methods.genID(BarProgram.class);
 	private ProxyRenderData<Texture> proxyRenderData = new ProxyRenderData<>();
 
 
@@ -217,9 +220,10 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 
 
 	private float[] externalLineCoeffs = {};
-	private float externalBarStart = 0;
-	private float externalBarEnd = 0;
 	private int buffer_quantum = 5;
+
+	private CellPaletter cellPaletter;
+	private OPallBar backBar;
 
 
 	private OPallRequester feedBackListener;
@@ -238,8 +242,6 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest(set_buffer_quantum, () -> buffer_quantum = request.getData());
-		request.openRequest(send_back_bar_end, () -> externalBarEnd = request.getData());
-		request.openRequest(send_back_bar_start, () -> externalBarStart = request.getData());
 		request.openRequest(send_line_coeffs, () -> externalLineCoeffs = request.getData());
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 	}
@@ -257,16 +259,26 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, MainActivity context) {
 
+		buffer_quantum = 5;
+
 		barGradientBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 		barSrcBuffer = OPallFBOCreator.FrameBuffer()
 				.createFBO(width, buffer_quantum, width, height, false).beginFBO(GLESUtils::clear);
 		multiTexture = new MultiTexture(OPallMultiTexture.DEFAULT_VERT_FILE, FRAG_PROGRAM, 2);
 		multiTexture.setScreenDim(width, height);
+
+		cellPaletter = new CellPaletter(CellPaletter.CellType.Horizontal);
+		cellPaletter.setScreenDim(width, height);
+		backBar = new BarHorizontal();
+		backBar.createBar(width, height);
+
+
 	}
 
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, MainActivity context, int width, int height) {
 		proxyRenderData.setStateUpdated();
+
 	}
 
 	@Override
@@ -279,14 +291,33 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 		//CREATE GRADIENT BAR
 		barGradientBuffer.beginFBO(() -> multiTexture.render(camera, program -> {
 			GLESUtils.clear();
-			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_barEnd), h - externalBarStart);
-			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_barStart), h - externalBarEnd);
+			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_barEnd), h - backBar.getPosY());
+			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_barStart), h - backBar.getPosY() + backBar.getHeight());
 			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), w, h);
 			GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, externalLineCoeffs, 0);
 		}));
 
 
+		cellPaletter.generate(barGradientBuffer.getTexture(), camera);
+		backBar.render(camera, cellPaletter, buffer_quantum);
 	}
+
+
+	private OPallRenderable finalRenderData = new OPallRenderable() {
+
+		@Override public void render(Camera2D camera) {
+			backBar.render(camera, cellPaletter, buffer_quantum);
+		}
+		@Override public void setScreenDim(float w, float h) {
+
+		}
+		@Override public int getWidth() {
+			return 0;
+		}
+		@Override public int getHeight() {
+			return 0;
+		}
+	};
 
 
 	@Override
@@ -296,23 +327,23 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 
 	@Override
 	public Texture getRenderData() {
-		return barGradientBuffer.getTexture();
+		return proxyRenderData.getRenderData();
 	}
 
 	@Nullable @Override
 	public OPallRenderable getFinalRenderData() {
-		return null;
+		return finalRenderData;
 	}
 
 
 
 
-	public static final String u_barEnd = "u_barEnd";
-	public static final String u_barStart = "u_barStart";
-	public static final String u_dimension = "u_dimension";
-	public static final String u_line = "u_line";
-	public static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPaletteHorizontal.frag";
-	public static final String FRAG_PROGRAM =
+	private static final String u_barEnd = "u_barEnd";
+	private static final String u_barStart = "u_barStart";
+	private static final String u_dimension = "u_dimension";
+	private static final String u_line = "u_line";
+	private static final String FRAG_FILE = OPallMultiTexture.FRAG_DIR+"/StdPaletteHorizontal.frag";
+	private static final String FRAG_PROGRAM =
 			"#version 100\n" +
 			"precision mediump float;\n" +
 			"\n" +

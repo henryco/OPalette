@@ -252,7 +252,7 @@ public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 		gridLines = new GridLines(width, height);
 
 		OPallViewInjector.inject(context.getActivityContext(), new BordersControl(borders));
-
+		OPallViewInjector.inject(context.getActivityContext(), new PaletteRegionControl(touchLines, feedBackListener));
 		sendCoeffInfo();
 	}
 

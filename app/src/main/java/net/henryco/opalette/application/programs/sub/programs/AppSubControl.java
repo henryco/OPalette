@@ -208,10 +208,12 @@ public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInj
 
 
 	public AppSubControl() {
-		super(R.id.scrollContainer, R.layout.image_option_button);
+		this(R.id.imageOptionsContainer);
 	}
 
-
+	public AppSubControl(int container) {
+		super(container, R.layout.image_option_button);
+	}
 
 
 	protected static <T> ControlFragment<T> loadControlFragment
