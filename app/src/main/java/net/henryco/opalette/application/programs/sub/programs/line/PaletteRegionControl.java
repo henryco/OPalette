@@ -202,12 +202,13 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_texture_white_24dp;
 	private static final int txt_button_res = R.string.control_palette_region;
+	private static final int target_layer = R.id.paletteOptionsContainer;
 
 	private TouchLines touchLines;
 	private OPallRequester requester;
 
 	public PaletteRegionControl(TouchLines touchLines, OPallRequester feedBackListener) {
-		super(R.id.paletteOptionsContainer, img_button_res, txt_button_res);
+		super(target_layer, img_button_res, txt_button_res);
 		this.touchLines = touchLines;
 		this.requester = feedBackListener;
 	}
