@@ -274,7 +274,6 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
-		System.out.println(bgColor);
 		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear(bgColor)));
 		imageBuffer.render(camera);
 	}

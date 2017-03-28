@@ -47,7 +47,8 @@ public class InjectableColorButtons extends OPallViewInjector<Activity> {
 	private CompoundButton.OnCheckedChangeListener changeListener;
 	private View.OnClickListener clickListener;
 	private Button colorButton;
-
+	private Switch swi;
+	private boolean checked;
 
 
 	public InjectableColorButtons(int container, String ... name) {
@@ -69,7 +70,7 @@ public class InjectableColorButtons extends OPallViewInjector<Activity> {
 		String n = "";
 		for (String nn : name) n += nn + " ";
 		setTextValue(n)
-				.setButtonColor(-1)
+				.setButtonColor(Integer.MAX_VALUE).setChecked(false)
 				.setTextColor(default_text_color)
 				.setSwitchListener((buttonView, isChecked) -> {})
 				.setColorButtonListener(v -> {});
@@ -83,20 +84,25 @@ public class InjectableColorButtons extends OPallViewInjector<Activity> {
 		text.setText(textValue);
 
 		colorButton = (Button) view.findViewById(R.id.color_button);
-		colorButton.setEnabled(false);
+		colorButton.setEnabled(checked);
 		colorButton.setOnClickListener(v -> clickListener.onClick(v));
 		colorButton.setBackgroundColor(0x00000000);
-		if (button_color != -1) colorButton.setBackgroundColor(button_color);
+		if (button_color != Integer.MAX_VALUE) colorButton.setBackgroundColor(button_color);
 
 
-
-		Switch swi = (Switch) view.findViewById(R.id.color_switch);
-		swi.setChecked(false);
+		swi = (Switch) view.findViewById(R.id.color_switch);
+		swi.setChecked(checked);
 		swi.setOnCheckedChangeListener((button, isChecked) -> {
 			colorButton.setEnabled(isChecked);
 			if (!isChecked) colorButton.setBackgroundColor(0x00000000);
 			changeListener.onCheckedChanged(button, isChecked);
 		});
+	}
+
+	public InjectableColorButtons setChecked(boolean checked) {
+		this.checked = checked;
+		if (swi != null) swi.setChecked(checked);
+		return this;
 	}
 
 	public InjectableColorButtons setTextValue(String textValue) {

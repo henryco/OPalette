@@ -213,7 +213,7 @@
         android:text="Example text"
         android:textAlignment="center"
         android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-        android:textSize="12sp"/>
+        android:textSize="10sp"/>
 
 
 </LinearLayout>

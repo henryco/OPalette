@@ -266,7 +266,6 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, MainActivity context, int width, int height) {
-
 		proxyRenderData.setStateUpdated();
 	}
 

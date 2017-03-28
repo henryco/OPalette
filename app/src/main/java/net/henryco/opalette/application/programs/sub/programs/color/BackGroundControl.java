@@ -57,6 +57,9 @@ public class BackGroundControl extends AppAutoSubControl<AppMainProto> {
 
 
 		InjectableColorButtons background = new InjectableColorButtons(view, "Background");
+		int col = color.hex();
+		background.setChecked(color.a != 0);
+		background.setButtonColor(col);
 		background.setSwitchListener((buttonView, isChecked) -> {
 			if (isChecked) {
 				background.setButtonColor(Color.WHITE);

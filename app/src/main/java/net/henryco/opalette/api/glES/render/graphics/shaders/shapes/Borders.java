@@ -77,6 +77,7 @@ public class Borders extends OPallShapeBuffered {
 
 	public Borders setSize(float size) {
 		this.size = size;
+		update();
 		return this;
 	}
 
@@ -88,6 +89,7 @@ public class Borders extends OPallShapeBuffered {
 
 	public Borders setColor(GLESUtils.Color color) {
 		this.color.set(color);
+		update();
 		return this;
 	}
 
@@ -95,6 +97,9 @@ public class Borders extends OPallShapeBuffered {
 		return size;
 	}
 
+	public boolean isVisible() {
+		return visible;
+	}
 
 	@Override
 	protected void render(int program, Camera2D camera) {

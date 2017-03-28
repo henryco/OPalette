@@ -202,8 +202,8 @@ import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.aImage.ImageProgram;
 import net.henryco.opalette.application.programs.sub.programs.color.ColorProgram;
 import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
+import net.henryco.opalette.application.programs.sub.programs.gradient.PaletteBarProgram;
 import net.henryco.opalette.application.programs.sub.programs.line.ShapeLinesProgram;
-import net.henryco.opalette.application.programs.sub.programs.palette.PaletteBarProgram;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import java.util.ArrayList;

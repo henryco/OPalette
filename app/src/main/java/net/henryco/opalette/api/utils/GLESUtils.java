@@ -268,7 +268,7 @@ public class GLESUtils {
 		}
 
 		public int hex() {
-			return android.graphics.Color.argb((int) a * 255, (int) r * 255, (int) g * 255, (int) b * 255);
+			return android.graphics.Color.argb((int) (a * 255), (int) (r * 255), (int) (g * 255), (int) (b * 255));
 		}
 
 		@Override
@@ -279,6 +279,29 @@ public class GLESUtils {
 					", b=" + b +
 					", a=" + a +
 					'}';
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			Color color = (Color) o;
+
+			if (Float.compare(color.r, r) != 0) return false;
+			if (Float.compare(color.g, g) != 0) return false;
+			if (Float.compare(color.b, b) != 0) return false;
+			return Float.compare(color.a, a) == 0;
+
+		}
+
+		@Override
+		public int hashCode() {
+			int result = (r != +0.0f ? Float.floatToIntBits(r) : 0);
+			result = 31 * result + (g != +0.0f ? Float.floatToIntBits(g) : 0);
+			result = 31 * result + (b != +0.0f ? Float.floatToIntBits(b) : 0);
+			result = 31 * result + (a != +0.0f ? Float.floatToIntBits(a) : 0);
+			return result;
 		}
 	}
 
