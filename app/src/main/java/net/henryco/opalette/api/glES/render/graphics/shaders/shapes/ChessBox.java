@@ -185,20 +185,15 @@ package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
-import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.OPallShader;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.bounds.Bounds2D;
-import net.henryco.opalette.api.utils.bounds.consumer.BoundsConsumer;
-import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 
 /**
  * Created by HenryCo on 05/03/17.
  */
 
-public class ChessBox extends OPallShape {
+public class ChessBox extends OPallShapeBuffered {
 
 	private static final String FRAG_FILE =
 			"#version 100\n" +
@@ -236,25 +231,21 @@ public class ChessBox extends OPallShape {
 
 
 
-	private final FrameBuffer imageBuffer;
 	private final GLESUtils.Color[] colors;
 
 	private float[] colorsArray;
 	private float cellSize;
-	private boolean needUpDate;
 
 	private final float[] defDim = {0,0};
 
 	public ChessBox(int w, int h) {
 		this();
-		create(w, h).setScreenDim(w, h);
+		create(w, h);
 	}
 
 	public ChessBox() {
-		super(VERT_FILE, FRAG_FILE, 2);
+		super(VERT_FILE, FRAG_FILE);
 		cellSize = 25;
-		needUpDate = false;
-		imageBuffer = OPallFBOCreator.FrameBuffer();
 		colors = new GLESUtils.Color[]{GLESUtils.Color.GREY, GLESUtils.Color.SILVER};
 		colorsUpDate();
 	}
@@ -275,7 +266,7 @@ public class ChessBox extends OPallShape {
 
 	public ChessBox setCellSize(float size) {
 		this.cellSize = size;
-		needUpDate = true;
+		update();
 		return this;
 	}
 
@@ -285,20 +276,9 @@ public class ChessBox extends OPallShape {
 				colors[0].r, colors[0].g, colors[0].b, colors[0].a,
 				colors[1].r, colors[1].g, colors[1].b, colors[1].a,
 		};
-		needUpDate = true;
+		update();
 	}
 
-
-	public ChessBox create(int scr_width, int scr_height) {
-		super.setScreenDim(scr_width, scr_height);
-		if (scr_width != 0 && scr_height != 0) {
-			imageBuffer.createFBO(scr_width, scr_height, false);
-			defDim[0] = scr_width;
-			defDim[1] = scr_height;
-			needUpDate = true;
-		}
-		return this;
-	}
 
 
 	@Override
@@ -308,42 +288,7 @@ public class ChessBox extends OPallShape {
 	}
 
 
-	@Override
-	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
 
-		if (needUpDate) {
-			imageBuffer.beginFBO(() -> {
-				GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
-				super.render(glProgram, camera, setter);
-			});
-			needUpDate = false;
-		}
-		camera.backTranslate(() -> {
-			camera.setPosXY_absolute(0,0);
-			float tx = getScreenWidth() - defDim[0];
-			float ty = getScreenHeight() - defDim[1];
-			camera.translateXY(0, ty); // position correction while canvas size changed
-			imageBuffer.render(camera);
-		});
-
-	}
-
-
-
-
-	@Override
-	public ChessBox bounds(BoundsConsumer<Bounds2D> processor) {
-		super.bounds(processor);
-		needUpDate = true;
-		return this;
-	}
-
-	@Override
-	public ChessBox updateBounds() {
-		super.updateBounds();
-		needUpDate = true;
-		return this;
-	}
 
 
 }

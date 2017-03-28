@@ -16,7 +16,7 @@
  *
  */
 
-package net.henryco.opalette.application.programs.sub.programs.aImage;
+package net.henryco.opalette.application.programs.sub.programs.color;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,7 +28,6 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.injectables.InjectableColorButtons;
-import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -41,46 +40,35 @@ import me.priyesh.chroma.ColorSelectListener;
  */
 public class BackGroundControl extends AppAutoSubControl<AppMainProto> {
 
-	private static final int img_button_res = R.drawable.ic_crop_din_white_24dp;
+	private static final int img_button_res = R.drawable.ic_insert_photo_white_24dp;
 	private static final int txt_button_res = R.string.control_background;
 
 	private final GLESUtils.Color color;
-	private final AppSubProgram.ProxyRenderData proxyUpdater;
 
-	public BackGroundControl(GLESUtils.Color color, AppSubProgram.ProxyRenderData proxyUpdater) {
+	public BackGroundControl(GLESUtils.Color color) {
 		super(img_button_res, txt_button_res);
 		this.color = color;
-		this.proxyUpdater = proxyUpdater;
 	}
 
 
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
-		//TODO
 
-		Runnable update = () -> {
-			proxyUpdater.setStateUpdated();
-			context.getRenderSurface().update();
-		};
 
 		InjectableColorButtons background = new InjectableColorButtons(view, "Background");
 		background.setSwitchListener((buttonView, isChecked) -> {
 			if (isChecked) {
 				background.setButtonColor(Color.WHITE);
-				this.color.set(GLESUtils.Color.WHITE);
-				update.run();
-			}
-			else {
-				this.color.set(GLESUtils.Color.TRANSPARENT);
-				update.run();
-			}
+				color.set(GLESUtils.Color.WHITE);
+			} else color.set(GLESUtils.Color.TRANSPARENT);
+			context.getRenderSurface().update();
 		});
 
 		background.setColorButtonListener(v -> runColorPicker(context.getActivityContext(), i -> {
-			this.color.set(Color.red(i), Color.green(i), Color.blue(i), 1);
+			color.set(Color.red(i), Color.green(i), Color.blue(i), 255);
 			background.setButtonColor(i);
-			update.run();
+			context.getRenderSurface().update();
 		}));
 
 

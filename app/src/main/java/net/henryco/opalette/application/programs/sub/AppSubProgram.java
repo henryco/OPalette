@@ -203,7 +203,7 @@ public interface AppSubProgram<T> extends OPallSubProgram<T>, OPallRequestFeedBa
 	void setRenderData(OPallRenderable data);
 	void setProgramHolder(AppSubProgramHolder holder);
 	OPallRenderable getRenderData();
-
+	@Nullable OPallRenderable getFinalRenderData();
 
 	interface AppSubProgramHolder {
 		void addSubProgram(AppSubProgram p);

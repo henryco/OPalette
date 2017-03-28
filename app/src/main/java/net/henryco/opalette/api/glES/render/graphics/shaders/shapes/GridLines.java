@@ -185,18 +185,14 @@ package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
-import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.bounds.Bounds2D;
-import net.henryco.opalette.api.utils.bounds.consumer.BoundsConsumer;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 /**
  * Created by HenryCo on 24/03/17.
  */
 
-public class GridLines extends OPallShape {
+public class GridLines extends OPallShapeBuffered {
 
 	private static final String VERTEX = "#version 100\n" +
 			"\n" +
@@ -251,9 +247,7 @@ public class GridLines extends OPallShape {
 	private static final String u_type = "u_type";
 
 
-	private final FrameBuffer imageBuffer;
 	private final GLESUtils.Color color;
-	private boolean needUpDate;
 	private boolean visible;
 	private float lineSize;
 	private float n;
@@ -266,38 +260,29 @@ public class GridLines extends OPallShape {
 	}
 	public GridLines(int w, int h) {
 		super(VERTEX, FRAGMENT);
-		imageBuffer = OPallFBOCreator.FrameBuffer();
 		color = new GLESUtils.Color(GLESUtils.Color.GREY);
 		setGridNumber(5).setLineSize(4).create(w, h);
 		setVisible(false).setType(ColorType.NORMALIZED);
 	}
 
 
-	public GridLines create(int scr_width, int scr_height) {
-		super.setScreenDim(scr_width, scr_height);
-		if (scr_width != 0 && scr_height != 0) {
-			imageBuffer.createFBO(scr_width, scr_height, false);
-			defDim[0] = scr_width;
-			defDim[1] = scr_height;
-			needUpDate = true;
-		}	return this;
-	}
+
 
 	public GridLines setLineSize(float lineSize) {
 		this.lineSize = lineSize;
-		needUpDate = true;
+		update();
 		return this;
 	}
 
 	public GridLines setGridNumber(float n) {
-		needUpDate = true;
+		update();
 		this.n = n;
 		return this;
 	}
 
 	public GridLines setColor(GLESUtils.Color color) {
 		this.color.set(color);
-		needUpDate = true;
+		update();
 		return this;
 	}
 
@@ -308,7 +293,7 @@ public class GridLines extends OPallShape {
 
 	public GridLines setType(ColorType type) {
 		this.type = type.type;
-		needUpDate = true;
+		update();
 		return this;
 	}
 
@@ -324,38 +309,7 @@ public class GridLines extends OPallShape {
 
 	@Override
 	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
-
-		if (visible) {
-			if (needUpDate) {
-				imageBuffer.beginFBO(() -> {
-					GLESUtils.clear(GLESUtils.Color.TRANSPARENT);
-					super.render(glProgram, camera, setter);
-				});
-				needUpDate = false;
-			}
-			camera.backTranslate(() -> {
-				camera.setPosXY_absolute(0,0);
-				float tx = getScreenWidth() - defDim[0];
-				float ty = getScreenHeight() - defDim[1];
-				camera.translateXY(0, ty); // position correction while canvas size changed
-
-				imageBuffer.render(camera);
-			});
-		}
-	}
-
-	@Override
-	public GridLines bounds(BoundsConsumer<Bounds2D> processor) {
-		super.bounds(processor);
-		needUpDate = true;
-		return this;
-	}
-
-	@Override
-	public GridLines updateBounds() {
-		super.updateBounds();
-		needUpDate = true;
-		return this;
+		if (visible) super.render(glProgram, camera, setter);
 	}
 
 

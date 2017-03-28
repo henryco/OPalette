@@ -265,6 +265,24 @@ public class PaletteBarProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	}
 
 
+	private OPallRenderable finalRenderData = new OPallRenderable() {
+
+		@Override public void render(Camera2D camera) {
+			backBar.render(camera, cellPaletter, buffer_quantum);
+		}
+		@Override public void setScreenDim(float w, float h) {
+
+		}
+		@Override public int getWidth() {
+			return 0;
+		}
+		@Override public int getHeight() {
+			return 0;
+		}
+	};
+
+
+
 	@Override
 	public void setRenderData(OPallRenderable data) {
 		proxyRenderData.setRenderData((Texture) data);
@@ -273,6 +291,11 @@ public class PaletteBarProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public Texture getRenderData() {
 		return proxyRenderData.getRenderData();
+	}
+
+	@Nullable @Override
+	public OPallRenderable getFinalRenderData() {
+		return finalRenderData;
 	}
 
 	private void sendBarHeightInfo() {

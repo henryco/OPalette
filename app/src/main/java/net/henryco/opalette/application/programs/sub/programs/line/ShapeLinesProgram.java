@@ -186,6 +186,8 @@ import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Borders;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.GridLines;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -205,6 +207,9 @@ public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	private ProxyRenderData<OPallRenderable> proxyRenderData = new ProxyRenderData<>();
 
 	private TouchLines touchLines;
+	private Borders borders;
+	private GridLines gridLines;
+
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
 
@@ -220,6 +225,8 @@ public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 
 	@Override
 	public void acceptRequest(Request request) {
+		request.openRequest(set_filters_enable, () -> gridLines.setVisible(false));
+		request.openRequest(set_filters_disable, () -> gridLines.setVisible(true));
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 		request.openRequest(set_touch_lines_def_size, () -> {
 			touchLines.reset();
@@ -240,19 +247,25 @@ public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 		touchLines = new TouchLines(width, height);
+		borders = new Borders(width, height);
+		gridLines = new GridLines(width, height);
 		sendCoeffInfo();
 	}
 
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 		touchLines.setScreenDim(width, height);
+		borders.setScreenDim(width, height);
+		gridLines.setScreenDim(width, height);
 		proxyRenderData.setStateUpdated();
 		sendCoeffInfo();
 	}
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
+		borders.render(camera);
 		touchLines.render(camera);
+		gridLines.render(camera);
 	}
 
 
@@ -266,6 +279,11 @@ public class ShapeLinesProgram implements AppSubProgram<AppMainProto>, AppSubPro
 	@Override
 	public OPallRenderable getRenderData() {
 		return proxyRenderData.getRenderData();
+	}
+
+	@Nullable @Override
+	public OPallRenderable getFinalRenderData() {
+		return borders;
 	}
 
 	private void sendCoeffInfo() {

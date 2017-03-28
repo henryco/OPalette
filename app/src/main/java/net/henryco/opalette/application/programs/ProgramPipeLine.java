@@ -234,6 +234,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	private RequestSender requestSender;
 	private List<AppSubProgram> subPrograms;
 	private List<OPallTriConsumer<AppMainProto, Integer, Integer>> onDrawQueue;
+	private List<Texture> finalDataList;
 
 	@SuppressWarnings("unchecked")
 	private static AppSubProgram[] getDefaultPipeLineArray() {
@@ -242,9 +243,9 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 				new ImageProgram(),
 				new ColorProgram(),
-				new ShapeLinesProgram(),
 				new GradientBarProgram(),
-				new PaletteBarProgram()
+				new PaletteBarProgram(),
+				new ShapeLinesProgram()
 		};
 	}
 
@@ -258,6 +259,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		subPrograms = new ArrayList<>();
 		onDrawQueue = new ArrayList<>();
+		finalDataList = new ArrayList<>();
 		requestSender = new RequestSender();
 
 		AppSubProgram[] pipeLine = getDefaultPipeLineArray();
@@ -266,6 +268,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		}
 
 	}
+
 
 
 	@Override

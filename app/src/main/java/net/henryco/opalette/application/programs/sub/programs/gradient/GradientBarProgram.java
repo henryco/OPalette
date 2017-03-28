@@ -273,7 +273,7 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 	@Override
 	public void render(@Nullable GL10 gl10, MainActivity context, Camera2D camera, int w, int h) {
 
-		multiTexture.set(0, getRenderData());
+		multiTexture.set(0, proxyRenderData.getRenderData());
 		multiTexture.set(1, barSrcBuffer.getTexture());
 		multiTexture.setFocusOn(1);
 
@@ -285,7 +285,8 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), w, h);
 			GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, externalLineCoeffs, 0);
 		}));
-		setRenderData(barGradientBuffer.getTexture());
+
+
 	}
 
 
@@ -296,8 +297,16 @@ public class GradientBarProgram implements AppSubProgram<MainActivity>, AppSubPr
 
 	@Override
 	public Texture getRenderData() {
-		return proxyRenderData.getRenderData();
+		return barGradientBuffer.getTexture();
 	}
+
+	@Nullable @Override
+	public OPallRenderable getFinalRenderData() {
+		return null;
+	}
+
+
+
 
 	public static final String u_barEnd = "u_barEnd";
 	public static final String u_barStart = "u_barStart";

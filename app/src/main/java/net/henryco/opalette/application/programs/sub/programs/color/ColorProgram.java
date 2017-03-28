@@ -188,7 +188,6 @@ import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
-import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.GridLines;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
@@ -209,9 +208,12 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	private long id = methods.genID(ColorProgram.class);
 
+	private final GLESUtils.Color bgColor = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
+
 	private FrameBuffer imageBuffer;
 	private EdTexture imageTexture;
-	private GridLines gridLines;
+
+
 
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
@@ -228,8 +230,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void acceptRequest(Request request) {
-		request.openRequest(set_filters_enable, () -> gridLines.setVisible(false));
-		request.openRequest(set_filters_disable, () -> gridLines.setVisible(true));
+
 	}
 
 	@Override
@@ -247,12 +248,14 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
-		gridLines = new GridLines(width, height);
+
+
 
 		imageBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 		imageTexture = new EdTexture();
 		imageTexture.setScreenDim(width, height);
 
+		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor));
 		OPallViewInjector.inject(context.getActivityContext(), new MaxColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new MinColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new BrightnessControl(imageTexture));
@@ -264,16 +267,16 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 
-		gridLines.setScreenDim(width, height);
+
 	}
 
 
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
-		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
+		System.out.println(bgColor);
+		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear(bgColor)));
 		imageBuffer.render(camera);
-		gridLines.render(camera);
 	}
 
 
@@ -286,5 +289,10 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public OPallRenderable getRenderData() {
 		return imageBuffer.getTexture();
+	}
+
+	@Nullable @Override
+	public OPallRenderable getFinalRenderData() {
+		return imageBuffer;
 	}
 }
