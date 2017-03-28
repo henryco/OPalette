@@ -190,6 +190,7 @@ import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
+import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.ChessBox;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.utils.GLESUtils;
@@ -201,8 +202,7 @@ import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.aImage.ImageProgram;
 import net.henryco.opalette.application.programs.sub.programs.color.ColorProgram;
-import net.henryco.opalette.application.programs.sub.programs.gradient.GradientBarProgram;
-import net.henryco.opalette.application.programs.sub.programs.gradient.PaletteBarProgram;
+import net.henryco.opalette.application.programs.sub.programs.gradient.BarProgram;
 import net.henryco.opalette.application.programs.sub.programs.line.ShapeLinesProgram;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -221,6 +221,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 	public interface AppProgramProtocol {
 		int send_bitmap_to_program = 233938111;
+		int get_bitmap_from_program = 248237153;
 	}
 
 
@@ -230,11 +231,10 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	private Camera2D camera2D;
 	private ChessBox chessBox;
 
-	private OPallUpdObserver observator;
 	private RequestSender requestSender;
+	private OPallUpdObserver observator;
 	private List<AppSubProgram> subPrograms;
 	private List<OPallTriConsumer<AppMainProto, Integer, Integer>> onDrawQueue;
-	private List<Texture> finalDataList;
 
 	@SuppressWarnings("unchecked")
 	private static AppSubProgram[] getDefaultPipeLineArray() {
@@ -243,8 +243,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 				new ImageProgram(),
 				new ColorProgram(),
-				new GradientBarProgram(),
-				new PaletteBarProgram(),
+				new BarProgram(),
 				new ShapeLinesProgram()
 		};
 	}
@@ -259,7 +258,6 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		subPrograms = new ArrayList<>();
 		onDrawQueue = new ArrayList<>();
-		finalDataList = new ArrayList<>();
 		requestSender = new RequestSender();
 
 		AppSubProgram[] pipeLine = getDefaultPipeLineArray();
@@ -418,6 +416,24 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 			uCan = true;
 			observator.update();
 		});
+
+
+		request.openRequest(AppProgramProtocol.get_bitmap_from_program, () -> {
+			onDrawQueue.add((appMainProto, w, h) -> {
+				Bitmap image = OPallFBOCreator.FrameBuffer().createFBO(w, h, false).beginFBO(() ->
+						camera2D.backTranslate(() -> {
+							camera2D.setPosXY_absolute(0,0).update();
+							GLESUtils.clear();
+							for (AppSubProgram asp : subPrograms) {
+								OPallRenderable r = asp.getFinalRenderData();
+								if (r != null) r.render(camera2D);
+							}
+						})
+				).getBitmap();
+			});
+			observator.update();
+		});
+
 	}
 
 
