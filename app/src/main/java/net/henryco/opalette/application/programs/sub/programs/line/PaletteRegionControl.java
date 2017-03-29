@@ -185,11 +185,15 @@ package net.henryco.opalette.application.programs.sub.programs.line;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
 import android.view.View;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
+import net.henryco.opalette.api.utils.requester.Request;
+import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -207,6 +211,8 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 	private TouchLines touchLines;
 	private OPallRequester requester;
 
+	private OPallSurfaceView.OnTouchEventListener listener;
+
 	public PaletteRegionControl(TouchLines touchLines, OPallRequester feedBackListener) {
 		super(target_layer, img_button_res, txt_button_res);
 		this.touchLines = touchLines;
@@ -217,11 +223,31 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
+		touchLines.setVisible(true);
+		context.getRenderSurface().update();
+		listener = event -> {
+			final int action = event.getAction();
+			final int count = event.getPointerCount();
+			if (count >= 2) {
+				switch (action & MotionEvent.ACTION_MASK) {
+					case MotionEvent.ACTION_MOVE: {
+						touchLines.setPoints(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+						requester.sendRequest(new Request(AppSubProtocol.send_line_coeffs, touchLines.getCoefficients()));
+						context.getRenderSurface().update();
+						break;
+					}
+				}
+			}
+		};
+
+		context.getRenderSurface().addOnTouchEventListener(listener);
 	}
 
 
 	@Override
 	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
-
+		context.getRenderSurface().removeTouchEventListener(listener);
+		touchLines.setVisible(false);
+		context.getRenderSurface().update();
 	}
 }

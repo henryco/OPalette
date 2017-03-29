@@ -313,6 +313,14 @@ public class TouchLines extends OPallShape {
 	/**
 	 * Calculate region bounded by 2 perpendicular lines between 2 fingers position.<br>
 	 * (finger1) <----------> (finger2) <br>
+	 */
+	public TouchLines setPoints(float x1, float y1, float x2, float y2) {
+		return setPoints(new float[]{x1, y1}, new float[]{x2, y2});
+	}
+
+	/**
+	 * Calculate region bounded by 2 perpendicular lines between 2 fingers position.<br>
+	 * (finger1) <----------> (finger2) <br>
 	 * @param p1 point where is first finger
 	 * @param p2 point where is second finger
 	 */

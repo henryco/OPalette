@@ -239,12 +239,12 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	@SuppressWarnings("unchecked")
 	private static AppSubProgram[] getDefaultPipeLineArray() {
 
-		return new AppSubProgram[]{
+		return new AppSubProgram[] {
 
 				new ImageProgram(),
 				new ColorProgram(),
-				new BarProgram(),
-				new ShapeLinesProgram()
+				new ShapeLinesProgram(),
+				new BarProgram()
 		};
 	}
 
