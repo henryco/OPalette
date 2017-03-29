@@ -185,14 +185,19 @@ package net.henryco.opalette.application.programs.sub.programs.line;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
+import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
+import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -220,8 +225,14 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 	}
 
 
+
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
+
+		final Runnable update = () -> {
+			requester.sendRequest(new Request(AppSubProtocol.send_line_coeffs, touchLines.getCoefficients()));
+			context.getRenderSurface().update();
+		};
 
 		touchLines.setVisible(true);
 		context.getRenderSurface().update();
@@ -232,15 +243,46 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 				switch (action & MotionEvent.ACTION_MASK) {
 					case MotionEvent.ACTION_MOVE: {
 						touchLines.setPoints(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-						requester.sendRequest(new Request(AppSubProtocol.send_line_coeffs, touchLines.getCoefficients()));
-						context.getRenderSurface().update();
+						update.run();
 						break;
 					}
 				}
 			}
 		};
 
-		context.getRenderSurface().addOnTouchEventListener(listener);
+		OPallViewInjector<AppMainProto> controls = new OPallViewInjector<AppMainProto>(view, R.layout.palette_region_layout) {
+			@Override
+			protected void onInject(AppMainProto context, View view) {
+				final TextView reg = (TextView) view.findViewById(R.id.paletteTextRegion);
+				final TextView non = (TextView) view.findViewById(R.id.paletteTextNone);
+				final Button regButton = (Button) view.findViewById(R.id.paletteButtonRegion);
+				final Button nonButton = (Button) view.findViewById(R.id.paletteButtonNone);
+
+				final int fca = ContextCompat.getColor(context.getActivityContext(), TEXT_COLOR_BLACK_OVERLAY);
+				final int fcb = 0xFF000000;
+
+				reg.setTextColor(touchLines.isDefault() ? fca : fcb);
+				non.setTextColor(touchLines.isDefault() ? fcb : fca);
+				if (!touchLines.isDefault()) context.getRenderSurface().addOnTouchEventListener(listener);
+
+				regButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
+					context.getRenderSurface().addOnTouchEventListener(listener);
+					reg.setTextColor(fcb);
+					non.setTextColor(fca);
+				}));
+
+				nonButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
+					context.getRenderSurface().removeTouchEventListener(listener);
+					non.setTextColor(fcb);
+					reg.setTextColor(fca);
+					touchLines.reset();
+					update.run();
+				}));
+			}
+		};
+
+		OPallViewInjector.inject(context.getActivityContext(), controls);
+
 	}
 
 

@@ -17,8 +17,68 @@
   ~    */
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/paletteButtonRegion"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="80dp"
+            android:background="@drawable/ic_tonality_black_24dp"/>
+
+        <Button
+            android:id="@+id/paletteButtonNone"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="80dp"
+            android:background="@drawable/ic_block_black_24dp"/>
+
+        <TextView
+            android:id="@+id/paletteTextRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/paletteButtonRegion"
+            android:layout_alignStart="@+id/paletteButtonRegion"
+            android:layout_below="@+id/paletteButtonRegion"
+            android:text="@string/line"
+            android:textAlignment="center"
+            android:textColor="@color/black_overlay"/>
+
+        <TextView
+            android:id="@+id/paletteTextNone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/paletteButtonNone"
+            android:layout_alignStart="@+id/paletteButtonNone"
+            android:layout_below="@+id/paletteButtonNone"
+            android:text="@string/none"
+            android:textAlignment="center"
+            android:textColor="@color/black_overlay"/>
+
+        <TextView
+            android:id="@+id/paletteTextInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/palette_region_multi_touch_info"
+            android:textColor="@color/black_overlay"
+            android:textSize="12sp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

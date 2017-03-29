@@ -220,5 +220,8 @@
     <string name="control_palette_region">Region</string>
     <string name="control_background">Background</string>
     <string name="control_borders">Borders</string>
+    <string name="palette_region_multi_touch_info">Use multi-touch to select a palette region.</string>
+    <string name="line">Line</string>
+    <string name="none">None</string>
 
 </resources>

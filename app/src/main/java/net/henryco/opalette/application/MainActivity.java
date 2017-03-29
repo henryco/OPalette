@@ -199,6 +199,7 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.UniRenderer;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
+import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -274,21 +275,25 @@ public class MainActivity extends AppCompatActivity
 
 
 	private void toggleImage(View v) {
-		if (imageToggle.isChecked()) {
-			paletteToggle.setChecked(!imageToggle.isChecked());
-			findViewById(R.id.imageOptionsContainer).setVisibility(View.VISIBLE);
-			findViewById(R.id.paletteOptionsContainer).setVisibility(View.GONE);
-		}
-		imageToggle.setChecked(true);
+		OPallAnimated.pressButton75_225(this, v, () -> {
+			if (imageToggle.isChecked()) {
+				paletteToggle.setChecked(!imageToggle.isChecked());
+				findViewById(R.id.imageOptionsContainer).setVisibility(View.VISIBLE);
+				findViewById(R.id.paletteOptionsContainer).setVisibility(View.GONE);
+			}
+			imageToggle.setChecked(true);
+		});
 	}
 
 	private void togglePalette(View v) {
-		if (paletteToggle.isChecked()) {
-			imageToggle.setChecked(!paletteToggle.isChecked());
-			findViewById(R.id.paletteOptionsContainer).setVisibility(View.VISIBLE);
-			findViewById(R.id.imageOptionsContainer).setVisibility(View.GONE);
-		}
-		paletteToggle.setChecked(true);
+		OPallAnimated.pressButton75_225(this, v, () -> {
+			if (paletteToggle.isChecked()) {
+				imageToggle.setChecked(!paletteToggle.isChecked());
+				findViewById(R.id.paletteOptionsContainer).setVisibility(View.VISIBLE);
+				findViewById(R.id.imageOptionsContainer).setVisibility(View.GONE);
+			}
+			paletteToggle.setChecked(true);
+		});
 	}
 
 

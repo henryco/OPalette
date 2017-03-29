@@ -282,7 +282,7 @@ public class TouchLines extends OPallShape {
 	private float lines_a = -1;
 	private int type = 1;
 	private boolean visible = false;
-
+	private boolean isDefault;
 
 	public TouchLines() {
 		this(0,0);
@@ -325,7 +325,6 @@ public class TouchLines extends OPallShape {
 	 * @param p2 point where is second finger
 	 */
 	public TouchLines setPoints(float[] p1, float[] p2) {
-
 		float x1 = p1[0] == p2[0] ? p1[0] + 0.01f : p1[0];
 		float y1 = p1[1] == p2[1] ? p1[1] + 0.01f : p1[1];
 		float x2 = p2[0];
@@ -336,6 +335,7 @@ public class TouchLines extends OPallShape {
 
 		linesCoefficients = new float[] {
 				c1[0], c1[1], c1[2], c2[0], c2[1], c2[2]};
+		isDefault = false;
 		return this;
 	}
 
@@ -344,9 +344,9 @@ public class TouchLines extends OPallShape {
 	}
 
 	public TouchLines reset(float width, float height) {
-		return setPoints(
-				new float[]{0, 0}, new float[]{0, height}
-		);
+		setPoints(new float[]{0, 0}, new float[]{0, height});
+		isDefault = true;
+		return this;
 	}
 
 	public TouchLines reset() {
@@ -393,5 +393,9 @@ public class TouchLines extends OPallShape {
 	public TouchLines setType(ColorType type) {
 		this.type = type.type;
 		return this;
+	}
+
+	public boolean isDefault() {
+		return isDefault;
 	}
 }
