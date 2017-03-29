@@ -42,11 +42,12 @@ public class BackGroundControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_insert_photo_white_24dp;
 	private static final int txt_button_res = R.string.control_background;
+	private static final int target_layer = R.id.paletteOptionsContainer;
 
 	private final GLESUtils.Color color;
 
 	public BackGroundControl(GLESUtils.Color color) {
-		super(img_button_res, txt_button_res);
+		super(target_layer, img_button_res, txt_button_res);
 		this.color = color;
 	}
 

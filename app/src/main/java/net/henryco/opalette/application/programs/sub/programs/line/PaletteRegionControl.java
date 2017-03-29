@@ -282,7 +282,6 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 		};
 
 		OPallViewInjector.inject(context.getActivityContext(), controls);
-
 	}
 
 

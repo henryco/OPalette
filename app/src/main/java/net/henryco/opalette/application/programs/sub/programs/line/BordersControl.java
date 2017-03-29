@@ -46,12 +46,13 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_crop_din_white_24dp;
 	private static final int txt_button_res = R.string.control_borders;
+	private static final int target_layer = R.id.paletteOptionsContainer;
 
 	private final Borders borders;
 	private final float defSize;
 
 	public BordersControl(final Borders borders) {
-		super(img_button_res, txt_button_res);
+		super(target_layer, img_button_res, txt_button_res);
 		this.borders = borders;
 		this.defSize = borders.getSize();
 	}
