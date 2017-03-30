@@ -208,6 +208,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_aspect_ratio_white_24dp;
 	private static final int txt_button_res = R.string.control_canvas_size;
+	private static final int target_layer = R.id.paletteOptionsContainer;
 	private static final int MIN_SIZE = 100;
 	private final float defScrW;
 	private final float defScrH;
@@ -217,7 +218,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 	private OPallSurfaceTouchListener touchEventListener;
 
 	public CanvasSizeControl(final float defScrW, final float defScrH, final OPallRequester requester) {
-		super(img_button_res, txt_button_res);
+		super(target_layer, img_button_res, txt_button_res);
 		this.defScrW = defScrW;
 		this.defScrH = defScrH;
 		this.requester = requester;

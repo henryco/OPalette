@@ -208,8 +208,6 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	private long id = methods.genID(ColorProgram.class);
 
-	private final GLESUtils.Color bgColor = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
-
 	private FrameBuffer imageBuffer;
 	private EdTexture imageTexture;
 
@@ -252,7 +250,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		imageTexture = new EdTexture();
 		imageTexture.setScreenDim(width, height);
 
-		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor));
+		OPallViewInjector.inject(context.getActivityContext(), new BlackWhiteControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new MaxColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new MinColorControl(imageTexture));
 		OPallViewInjector.inject(context.getActivityContext(), new BrightnessControl(imageTexture));
@@ -270,7 +268,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
-		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear(bgColor)));
+		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
 		imageBuffer.render(camera);
 	}
 

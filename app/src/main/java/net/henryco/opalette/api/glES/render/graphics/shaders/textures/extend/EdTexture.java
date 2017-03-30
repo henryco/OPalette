@@ -203,7 +203,11 @@ public class EdTexture extends OPallTextureExtended  {
 	public final GLESUtils.Color max = new GLESUtils.Color(GLESUtils.Color.WHITE);
 
 	private float addBrightness = 0;
+	private float threshold = 0.5f;
 	private float alpha = 1;
+
+	private boolean bwEnable = false;
+	private boolean thresholdEnable = false;
 
 
 	public EdTexture(Context context) {
@@ -250,6 +254,14 @@ public class EdTexture extends OPallTextureExtended  {
 		return this;
 	}
 
+	public boolean isBwEnable() {
+		return bwEnable;
+	}
+
+	public EdTexture setBwEnable(boolean bwEnable) {
+		this.bwEnable = bwEnable;
+		return this;
+	}
 
 	public float getBrightness() {
 		return addBrightness;
@@ -259,6 +271,23 @@ public class EdTexture extends OPallTextureExtended  {
 		return alpha;
 	}
 
+	public float getThreshold() {
+		return threshold;
+	}
+
+	public EdTexture setThreshold(float threshold) {
+		this.threshold = threshold;
+		return this;
+	}
+
+	public boolean isThresholdEnable() {
+		return thresholdEnable;
+	}
+
+	public EdTexture setThresholdEnable(boolean thresholdEnable) {
+		this.thresholdEnable = thresholdEnable;
+		return this;
+	}
 
 	@Override
 	protected void render(int program, Camera2D camera) {
@@ -267,40 +296,45 @@ public class EdTexture extends OPallTextureExtended  {
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_addColor"), add.r, add.g, add.b);
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_minColor"), min.r, min.g, min.b);
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_maxColor"), max.r, max.g, max.b);
+		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_bwEnable"), bwEnable ? 1 : 0);
+		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_thresholdEnable"), thresholdEnable ? 1 : 0);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_threshold"), threshold);
 	}
 
 
 
 	private static final String FRAG_DIR = OPallTexture.FRAG_DIR+"/EditableDefault.frag";
-	private static final String FRAG_FILE =
-			"precision mediump float;\n" +
-					"\n" +
-					"varying vec4 v_Position;\n" +
-					"varying vec4 v_WorldPos;\n" +
-					"varying vec2 v_TexCoordinate;\n" +
-					"\n" +
-					"uniform sampler2D u_Texture0;\n" +
-					"\n" +
-					"\n" +
-					"uniform vec3 u_addColor;\n" +
-					"uniform vec3 u_minColor;\n" +
-					"uniform vec3 u_maxColor;\n" +
-					"uniform float u_alpha;\n" +
-					"uniform float u_addBrightness;\n" +
-					"\n" +
-					"\n" +
-					"void main() {\n" +
-					"\n" +
-					"    vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
-					"\n" +
-					"    if (color.a != 0.) {\n" +
-					"        color.r = max(min(u_maxColor.r, color.r + u_addBrightness + u_addColor.r), u_minColor.r);\n" +
-					"        color.g = max(min(u_maxColor.g, color.g + u_addBrightness + u_addColor.g), u_minColor.g);\n" +
-					"        color.b = max(min(u_maxColor.b, color.b + u_addBrightness + u_addColor.b), u_minColor.b);\n" +
-					"        color.a = u_alpha;\n" +
-					"    }\n" +
-					"\n" +
-					"    gl_FragColor = color;\n" +
-					"}";
+	private static final String FRAG_FILE = "precision mediump float;\n" +
+			"\n" +
+			"varying vec4 v_Position;\n" +
+			"varying vec4 v_WorldPos;\n" +
+			"varying vec2 v_TexCoordinate;\n" +
+			"\n" +
+			"uniform sampler2D u_Texture0;\n" +
+			"\n" +
+			"uniform vec3 u_addColor;\n" +
+			"uniform vec3 u_minColor;\n" +
+			"uniform vec3 u_maxColor;\n" +
+			"uniform float u_alpha;\n" +
+			"uniform float u_addBrightness;\n" +
+			"uniform float u_threshold;\n" +
+			"uniform int u_bwEnable;\n" +
+			"uniform int u_thresholdEnable;\n" +
+			"\n" +
+			"void main() {\n" +
+			"    vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
+			"    if (color.a != 0.) {\n" +
+			"        color.r = max(min(u_maxColor.r, color.r + u_addBrightness + u_addColor.r), u_minColor.r);\n" +
+			"        color.g = max(min(u_maxColor.g, color.g + u_addBrightness + u_addColor.g), u_minColor.g);\n" +
+			"        color.b = max(min(u_maxColor.b, color.b + u_addBrightness + u_addColor.b), u_minColor.b);\n" +
+			"        color.a = u_alpha;\n" +
+			"        if (u_bwEnable == 1 || u_thresholdEnable == 1) {\n" +
+			"            float val = dot(vec3(1.), color.rgb);\n" +
+			"            if (u_thresholdEnable == 1) color.rgb = val >= u_threshold ? vec3(1.) : vec3(0.);\n" +
+			"            else color.rgb = vec3(val);\n" +
+			"        }\n" +
+			"    }\n" +
+			"    gl_FragColor = color;\n" +
+			"}";
 
 }

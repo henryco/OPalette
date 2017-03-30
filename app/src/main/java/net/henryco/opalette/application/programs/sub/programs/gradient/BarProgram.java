@@ -297,7 +297,6 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 			GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, externalLineCoeffs, 0);
 		}));
 
-
 		cellPaletter.generate(barGradientBuffer.getTexture(), camera);
 		backBar.render(camera, cellPaletter, buffer_quantum);
 	}

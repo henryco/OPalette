@@ -196,6 +196,7 @@ import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
+import net.henryco.opalette.application.programs.sub.programs.color.BackGroundControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -207,7 +208,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
 
-
+	private final GLESUtils.Color bgColor = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
 	private long id = methods.genID(ImageProgram.class);
 	private ProxyRenderData<ConvolveTexture> proxyRenderData = new ProxyRenderData<>();
 	private FrameBuffer textureBuffer;
@@ -265,6 +266,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
+		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor));
 
 		defDim[0] = width;
 		defDim[1] =height;
@@ -298,7 +300,27 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 				textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
 			});
 		}
+		finalBackGroundData.render(camera);
 	}
+
+
+	private OPallRenderable finalBackGroundData = new OPallRenderable() {
+		@Override
+		public void render(Camera2D camera) {
+			camera.backTranslate(() -> {
+				if (!bgColor.equals(GLESUtils.Color.TRANSPARENT)) GLESUtils.clear(bgColor);
+			});
+		}
+		@Override public void setScreenDim(float w, float h) {
+
+		}
+		@Override public int getWidth() {
+			return 0;
+		}
+		@Override public int getHeight() {
+			return 0;
+		}
+	};
 
 
 
@@ -318,6 +340,6 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Nullable @Override
 	public OPallRenderable getFinalRenderData() {
-		return null;
+		return finalBackGroundData;
 	}
 }

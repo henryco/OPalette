@@ -255,8 +255,8 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 			protected void onInject(AppMainProto context, View view) {
 				final TextView reg = (TextView) view.findViewById(R.id.paletteTextRegion);
 				final TextView non = (TextView) view.findViewById(R.id.paletteTextNone);
-				final Button regButton = (Button) view.findViewById(R.id.paletteButtonRegion);
-				final Button nonButton = (Button) view.findViewById(R.id.paletteButtonNone);
+				final Button regButton = (Button) view.findViewById(R.id.bwButtonOn);
+				final Button nonButton = (Button) view.findViewById(R.id.bwButtonOff);
 
 				final int fca = ContextCompat.getColor(context.getActivityContext(), TEXT_COLOR_BLACK_OVERLAY);
 				final int fcb = 0xFF000000;
