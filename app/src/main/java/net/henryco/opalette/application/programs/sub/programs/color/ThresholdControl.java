@@ -82,6 +82,7 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(R.string.control_top_bar_button_reset), () -> {
 			texture.setThreshold(0.5f);
 			texture.thr.set(GLESUtils.Color.WHITE);
+			bar.setProgress(bar.de_norm(texture.getThreshold()));
 			threshold.setButtonColor(texture.isThresholdEnable() ? texture.thr.hex() : Color.TRANSPARENT);
 			context.getRenderSurface().update();
 		});
