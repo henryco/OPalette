@@ -115,8 +115,4 @@ public class Borders extends OPallShapeBuffered {
 		if (visible) super.render(glProgram, camera, setter);
 	}
 
-	@Override
-	public void setScreenDim(float w, float h) {
-		super.create((int) w, (int) h);
-	}
 }
