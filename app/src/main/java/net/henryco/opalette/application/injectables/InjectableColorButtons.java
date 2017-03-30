@@ -19,6 +19,8 @@
 package net.henryco.opalette.application.injectables;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,6 +30,10 @@ import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+
+import me.priyesh.chroma.ChromaDialog;
+import me.priyesh.chroma.ColorMode;
+import me.priyesh.chroma.ColorSelectListener;
 
 /**
  * Created by HenryCo on 28/03/17.
@@ -129,5 +135,13 @@ public class InjectableColorButtons extends OPallViewInjector<Activity> {
 		this.button_color = color;
 		if (colorButton != null) colorButton.setBackgroundColor(color);
 		return this;
+	}
+
+	public static void runColorPicker(AppCompatActivity context, ColorSelectListener listener) {
+		new ChromaDialog.Builder()
+				.initialColor(Color.WHITE)
+				.colorMode(ColorMode.RGB) // There's also ARGB and HSV
+				.onColorSelected(listener)
+				.create().show(context.getSupportFragmentManager(), "ColorPicker");
 	}
 }

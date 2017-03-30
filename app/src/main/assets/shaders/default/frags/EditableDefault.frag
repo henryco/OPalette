@@ -9,6 +9,7 @@ uniform sampler2D u_Texture0;
 uniform vec3 u_addColor;
 uniform vec3 u_minColor;
 uniform vec3 u_maxColor;
+uniform vec3 u_thrColor;
 uniform float u_alpha;
 uniform float u_addBrightness;
 uniform float u_threshold;
@@ -24,7 +25,7 @@ void main() {
         color.a = u_alpha;
         if (u_bwEnable == 1 || u_thresholdEnable == 1) {
             float val = dot(vec3(1.), color.rgb);
-            if (u_thresholdEnable == 1) color.rgb = val >= u_threshold ? vec3(1.) : vec3(0.);
+            if (u_thresholdEnable == 1) color.rgb = val >= u_threshold ? u_thrColor : vec3(0.);
             else color.rgb = vec3(val);
         }
     }

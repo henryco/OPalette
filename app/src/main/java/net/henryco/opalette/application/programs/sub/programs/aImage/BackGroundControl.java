@@ -16,7 +16,7 @@
  *
  */
 
-package net.henryco.opalette.application.programs.sub.programs.color;
+package net.henryco.opalette.application.programs.sub.programs.aImage;
 
 import android.graphics.Color;
 import android.os.Bundle;

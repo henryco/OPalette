@@ -196,7 +196,6 @@ import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
-import net.henryco.opalette.application.programs.sub.programs.color.BackGroundControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import javax.microedition.khronos.opengles.GL10;

@@ -235,6 +235,9 @@ public class GLESUtils {
 
 
 		public float r, g, b, a;
+		public Color(int i) {
+			this.set(i);
+		}
 		public Color(int r255, int g255, int b255, int a255) {
 			this(r255 / 255f, g255 / 255f, b255 / 255f, a255 / 255f);
 		}
@@ -266,7 +269,9 @@ public class GLESUtils {
 		public void set(int r, int g, int b, int a) {
 			set(new Color(r, g, b, a));
 		}
-
+		public void set(int i) {
+			set(android.graphics.Color.red(i), android.graphics.Color.green(i), android.graphics.Color.blue(i), 255);
+		}
 		public int hex() {
 			return android.graphics.Color.argb((int) (a * 255), (int) (r * 255), (int) (g * 255), (int) (b * 255));
 		}

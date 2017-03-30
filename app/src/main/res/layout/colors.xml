@@ -20,7 +20,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:padding="@dimen/channel_view_margin_top">
+                android:padding="@dimen/appbar_padding_top">
 
     <RelativeLayout
         android:id="@+id/color_container"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/appbar_padding_top"
         android:layout_marginRight="@dimen/activity_vertical_margin">
 
         <Button
@@ -45,16 +45,15 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:text="Background"
-            android:textSize="18sp"/>
+            android:textSize="14sp"/>
 
         <Switch
             android:id="@+id/color_switch"
-            android:theme="@style/DarkSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/color_button"
-            android:layout_alignBottom="@+id/color_button"
-            android:layout_centerHorizontal="true"/>
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:theme="@style/DarkSwitch"/>
     </RelativeLayout>
 
 </RelativeLayout>

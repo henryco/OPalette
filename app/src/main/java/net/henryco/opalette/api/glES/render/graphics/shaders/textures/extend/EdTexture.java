@@ -201,6 +201,7 @@ public class EdTexture extends OPallTextureExtended  {
 	public final GLESUtils.Color add = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
 	public final GLESUtils.Color min = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
 	public final GLESUtils.Color max = new GLESUtils.Color(GLESUtils.Color.WHITE);
+	public final GLESUtils.Color thr = new GLESUtils.Color(GLESUtils.Color.WHITE);
 
 	private float addBrightness = 0;
 	private float threshold = 0.5f;
@@ -243,6 +244,10 @@ public class EdTexture extends OPallTextureExtended  {
 	}
 	public EdTexture addColor(OPallConsumer<GLESUtils.Color> add) {
 		add.consume(this.add);
+		return this;
+	}
+	public EdTexture thrColor(OPallConsumer<GLESUtils.Color> thr) {
+		thr.consume(this.thr);
 		return this;
 	}
 	public EdTexture brightness(OPallFunction<Float, Float> brightness) {
@@ -296,6 +301,7 @@ public class EdTexture extends OPallTextureExtended  {
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_addColor"), add.r, add.g, add.b);
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_minColor"), min.r, min.g, min.b);
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_maxColor"), max.r, max.g, max.b);
+		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_thrColor"), thr.r, thr.g, thr.b);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_bwEnable"), bwEnable ? 1 : 0);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_thresholdEnable"), thresholdEnable ? 1 : 0);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_threshold"), threshold);
@@ -315,6 +321,7 @@ public class EdTexture extends OPallTextureExtended  {
 			"uniform vec3 u_addColor;\n" +
 			"uniform vec3 u_minColor;\n" +
 			"uniform vec3 u_maxColor;\n" +
+			"uniform vec3 u_thrColor;\n" +
 			"uniform float u_alpha;\n" +
 			"uniform float u_addBrightness;\n" +
 			"uniform float u_threshold;\n" +
@@ -330,7 +337,7 @@ public class EdTexture extends OPallTextureExtended  {
 			"        color.a = u_alpha;\n" +
 			"        if (u_bwEnable == 1 || u_thresholdEnable == 1) {\n" +
 			"            float val = dot(vec3(1.), color.rgb);\n" +
-			"            if (u_thresholdEnable == 1) color.rgb = val >= u_threshold ? vec3(1.) : vec3(0.);\n" +
+			"            if (u_thresholdEnable == 1) color.rgb = val >= u_threshold ? u_thrColor : vec3(0.);\n" +
 			"            else color.rgb = vec3(val);\n" +
 			"        }\n" +
 			"    }\n" +
