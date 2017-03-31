@@ -284,10 +284,15 @@ public class CellPaletter implements OPallRenderable {
 		texture = new Texture(VERT_FILE, FRAG_FILE[type.type]);
 	}
 
+	public CellPaletter(CellType type, int w, int h) {
+		this(type);
+		setScreenDim(w, h);
+	}
+
 	
 	public void generate(Texture source, Camera2D camera2D) {
 
-		float cellSize = width / numb;
+		float cellSize = Math.max(width, height) / numb;
 		float margin = cellSize * margin_pct;
 
 		texture.set(source);

@@ -193,7 +193,13 @@ import net.henryco.opalette.api.utils.GLESUtils;
 public class BarVertical implements OPallBar {
 
 
+	public BarVertical() {
 
+	}
+	public BarVertical(int scrWidth, int scrHeight) {
+		this();
+		createBar(scrWidth, scrHeight);
+	}
 
 	@Override
 	public void createBar(int scrWidth, int scrHeight) {

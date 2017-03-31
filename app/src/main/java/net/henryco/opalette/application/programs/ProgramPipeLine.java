@@ -411,7 +411,6 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				float w = startImage.getWidth();
 				float scale = scrWidth / w;
 				subPrograms.get(0).setRenderData(startImage.bounds(b -> b.setScale(scale)));
-				requestSender.sendRequest(new Request(set_touch_lines_def_size));
 			});
 			uCan = true;
 			observator.update();

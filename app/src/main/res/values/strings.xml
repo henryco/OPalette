@@ -222,10 +222,16 @@
     <string name="control_borders">Borders</string>
     <string name="control_black_white">B &amp; W</string>
     <string name="control_threshold">Threshold</string>
+    <string name="control_palette_type">Palette type</string>
+
+
 
 
     <string name="palette_region_multi_touch_info">Use multi-touch to select a palette region.</string>
     <string name="line">Line</string>
     <string name="none">None</string>
+    <string name="vertical">Vertical</string>
+    <string name="horizontal">Horizontal</string>
+    <string name="palette_type">Palette type</string>
 
 </resources>

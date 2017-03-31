@@ -195,10 +195,7 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.utils.OPallAnimated;
-import net.henryco.opalette.api.utils.requester.OPallRequester;
-import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
-import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -214,23 +211,18 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 	private static final int target_layer = R.id.paletteOptionsContainer;
 
 	private TouchLines touchLines;
-	private OPallRequester requester;
-
 	private OPallSurfaceView.OnTouchEventListener listener;
 
-	public PaletteRegionControl(TouchLines touchLines, OPallRequester feedBackListener) {
+
+	public PaletteRegionControl(TouchLines touchLines) {
 		super(target_layer, img_button_res, txt_button_res);
 		this.touchLines = touchLines;
-		this.requester = feedBackListener;
 	}
-
-
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		final Runnable update = () -> {
-			requester.sendRequest(new Request(AppSubProtocol.send_line_coeffs, touchLines.getCoefficients()));
 			context.getRenderSurface().update();
 		};
 

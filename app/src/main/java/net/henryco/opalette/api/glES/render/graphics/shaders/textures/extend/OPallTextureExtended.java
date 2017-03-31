@@ -227,7 +227,7 @@ public abstract class OPallTextureExtended extends Texture {
 
 
 	@Override
-	public void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
+	public synchronized void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
 		super.render(camera2D, program -> {
 			setter.consume(program);
 			render(program, camera2D);
