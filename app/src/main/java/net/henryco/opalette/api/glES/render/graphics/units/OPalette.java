@@ -57,6 +57,7 @@ public class OPalette implements OPallRenderable {
 	private int buffer_quantum;
 	private float scrW, scrH;
 	private float[] lineCoeffs;
+	private boolean discrete;
 
 	private Texture renderData;
 
@@ -68,6 +69,7 @@ public class OPalette implements OPallRenderable {
 		setRangeLineCoeffs(new float[]{});
 		setOrientation(orientation);
 		setBufferQuantum(5);
+		setDiscrete(true);
 		create(w, h);
 	}
 
@@ -110,9 +112,10 @@ public class OPalette implements OPallRenderable {
 				paletteTextureW.render(camera);
 			});
 
-			cellPaletterW.generate(barGradientBuffer.getTexture(), camera);
-			backBarW.render(camera, cellPaletterW, buffer_quantum);
-//			backBarW.render(camera, barGradientBuffer, buffer_quantum);
+			if (discrete) {
+				cellPaletterW.generate(barGradientBuffer.getTexture(), camera);
+				backBarW.render(camera, cellPaletterW, buffer_quantum);
+			} else backBarW.render(camera, barGradientBuffer, buffer_quantum);
 
 		} else if (orientation == ORIENTATION_VERTICAL) {
 
@@ -129,10 +132,43 @@ public class OPalette implements OPallRenderable {
 				paletteTextureH.render(camera);
 			});
 
-			cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
-			backBarH.render(camera, cellPaletterH, buffer_quantum);
-//			backBarH.render(camera, barGradientBuffer, buffer_quantum);
+			if (discrete) {
+				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
+				backBarH.render(camera, cellPaletterH, buffer_quantum);
+			} else backBarH.render(camera, barGradientBuffer, buffer_quantum);
 		}
+	}
+
+
+
+	public OPalette setRelativeSize(float size_pct) {
+		backBarW.setRelativeSize(size_pct);
+		backBarH.setRelativeSize(size_pct);
+		return this;
+	}
+
+	public OPalette setRelativePosition(float pos_pct) {
+		backBarW.setRelativePosition(pos_pct);
+		backBarH.setRelativePosition(pos_pct);
+		return this;
+	}
+
+	public OPalette setRelativeContentSize(float size_pct) {
+		backBarW.setRelativeContentSize(size_pct);
+		backBarH.setRelativeContentSize(size_pct);
+		return this;
+	}
+
+	public OPalette setCellNumb(int n) {
+		cellPaletterW.setCellNumb(n);
+		cellPaletterH.setCellNumb(n);
+		return this;
+	}
+
+	public OPalette setMargin_pct(float m) {
+		cellPaletterW.setMargin_pct(m);
+		cellPaletterH.setMargin_pct(m);
+		return this;
 	}
 
 	public OPalette setBufferQuantum(int bufferQuantum) {
@@ -159,6 +195,15 @@ public class OPalette implements OPallRenderable {
 		this.backBarH.setColor(color);
 		this.backBarW.setColor(color);
 		return this;
+	}
+
+	public OPalette setDiscrete(boolean discrete) {
+		this.discrete = discrete;
+		return this;
+	}
+
+	public boolean isDiscrete() {
+		return discrete;
 	}
 
 	public int getOrientation() {
