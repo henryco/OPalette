@@ -182,7 +182,6 @@
 
 package net.henryco.opalette.api.glES.render.graphics.units.bar;
 
-import android.content.Context;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
@@ -197,20 +196,16 @@ import net.henryco.opalette.api.utils.GLESUtils;
 public class BarHorizontal implements OPallBar {
 
 	public final GLESUtils.Color color = GLESUtils.Color.WHITE;
-	public float cameraTranslationStep = 4.f;
-	public float height_pct = 0.201f;
-	public float yPos_pct = 0.8f;
-	public float cellHeight_pct = 0.8f;
+	private float cameraTranslationStep = 4.f;
+	private float height_pct = 0.201f;
+	private float yPos_pct = 0.8f;
+	private float cellHeight_pct = 0.8f;
 	private FrameBuffer buffer;
 
 	private float width = 0, height = 0;
 	private float posX = 0, posY = 0;
-
 	private boolean colorUpdated = false;
 
-	public BarHorizontal(Context context) {
-		buffer = OPallFBOCreator.FrameBuffer(context);
-	}
 	public BarHorizontal() {
 		buffer = OPallFBOCreator.FrameBuffer();
 	}
@@ -229,42 +224,42 @@ public class BarHorizontal implements OPallBar {
 		this.posY = scrHeight * yPos_pct;
 	}
 
-	private void drawBar(OPallRenderable barLine, Camera2D camera2D,
-						 int barHeight, int buffer_quantum, float cameraTranslationStep) {
-
-		int iter = (barHeight / buffer_quantum);
-		float d = buffer_quantum - cameraTranslationStep;
-		float lost = iter * d;
-		int extr = (int) Math.floor((lost + d) / cameraTranslationStep);
-
-		for (int i = 0; i < iter + extr; i++)
-			barLine.render(camera2D.translateY(-cameraTranslationStep).update());
-	}
-
-
-
 
 	@Override
 	public void createBar(int scrWidth, int scrHeight) {
 		createBar(scrWidth, scrHeight, (int) (scrHeight * height_pct), color);
 	}
 
+
+	private void drawBar(OPallRenderable barLine, Camera2D camera2D,
+						 int barHeight, int buffer_quantum, float cameraTranslationStep) {
+
+		int iter = (int)((float)barHeight / (float)buffer_quantum);
+		float d = buffer_quantum - cameraTranslationStep;
+		float lost = iter * d;
+		int extr = (int) Math.floor((lost + d) / cameraTranslationStep);
+
+		for (int i = 0; i < iter + extr; i++) barLine.render(camera2D.translateY(-cameraTranslationStep).update());
+	}
+
+
 	@Override
 	public void render(Camera2D camera, OPallRenderable renderable, int buffer_quantum) {
-		float[] camYPos = camera.getPosition();
-		if (colorUpdated) {
-			buffer.beginFBO(() -> GLESUtils.clear(color));
-			colorUpdated = false;
-		}
-		buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
-		float cellHeight = getHeight() * cellHeight_pct;
-		float cellPtc = (getHeight() - cellHeight);
-		float margin = cellPtc * 0.5f;
 
-		camera.translateY((int)-margin + 0.5f * buffer_quantum).update();
-		drawBar(renderable, camera, (int) (cellHeight), buffer_quantum, cameraTranslationStep);
-		camera.setPosition(camYPos).update();
+		camera.backTranslate(() -> {
 
+			if (colorUpdated) {
+				buffer.beginFBO(() -> GLESUtils.clear(color));
+				colorUpdated = false;
+			}
+			buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
+			float cellHeight = getHeight() * cellHeight_pct;
+			float cellPtc = getHeight() - cellHeight;
+			float margin = cellPtc * 0.5f;
+
+			camera.translateY((int)-margin + 0.5f * buffer_quantum).update();
+			drawBar(renderable, camera, (int) (cellHeight), buffer_quantum, cameraTranslationStep);
+		});
 	}
 
 

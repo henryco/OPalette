@@ -244,7 +244,45 @@ public class CellPaletter implements OPallRenderable {
 					"\n" +
 					"}"
 			,
-			OPallTexture.DEFAULT_FRAG_FILE
+			"precision mediump float;\n" +
+					"\n" +
+					"varying vec4 v_Position;\n" +
+					"varying vec4 v_WorldPos;\n" +
+					"varying vec2 v_TexCoordinate;\n" +
+					"\n" +
+					"uniform sampler2D u_Texture0;\n" +
+					"\n" +
+					"uniform vec2 u_dimension;\n" +
+					"uniform float u_cellSize;\n" +
+					"uniform float u_margin;\n" +
+					"uniform float u_numb;\n" +
+					"\n" +
+					"void main() {\n" +
+					"\n" +
+					"    vec2 pos = gl_FragCoord.xy / u_dimension;\n" +
+					"    float n = floor(gl_FragCoord.y / u_cellSize);\n" +
+					"\n" +
+					"    vec2 margin = vec2(\n" +
+					"        (n == 0.) ? u_margin : u_margin * .5,\n" +
+					"        (n == u_numb - 1.) ? u_margin : u_margin * .5\n" +
+					"    );\n" +
+					"\n" +
+					"    vec2 st_ed = vec2(n, n + 1.) * u_cellSize;\n" +
+					"    vec2 mrgnB = vec2(st_ed.x, st_ed.x + margin.x);\n" +
+					"    vec2 mrgnT = vec2(st_ed.y - margin.y, st_ed.y);\n" +
+					"\n" +
+					"    if ((gl_FragCoord.y >= mrgnB.x && gl_FragCoord.y <= mrgnB.y) ||\n" +
+					"        (gl_FragCoord.y >= mrgnT.x && gl_FragCoord.y <= mrgnT.y))\n" +
+					"            gl_FragColor = vec4(0.);\n" +
+					"    else if (texture2D(u_Texture0, pos).a != 0.) {\n" +
+					"        vec3 color = vec3(0.);\n" +
+					"        for (float i = st_ed.x; i < st_ed.y; i += 1.) {\n" +
+					"            vec2 point = vec2(pos.x, i / u_dimension.y);\n" +
+					"            color += texture2D(u_Texture0, point).rgb;\n" +
+					"        }\n" +
+					"        gl_FragColor = vec4(color / u_cellSize, 1.);\n" +
+					"    } else gl_FragColor = vec4(0.);\n" +
+					"}"
 	};
 
 	private static final String u_cellSize = "u_cellSize";

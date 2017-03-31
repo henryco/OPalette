@@ -21,7 +21,7 @@ void main() {
 
     for (float y = 0.0; y < u_dimension.y; y += 1.0) {
 
-        vec2 pointNormed = vec2(v_TexCoordinate[1].s, y / u_dimension.y);
+        vec2 pointNormed = vec2(v_TexCoordinate[1].x, y / u_dimension.y);
         vec2 point = vec2(pointNormed.x * u_dimension.x, u_dimension.y * (1. - pointNormed.y));
         vec4 pointColor = texture2D(u_Texture0, pointNormed).rgba;
 

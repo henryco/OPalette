@@ -79,14 +79,14 @@ public class OPalette implements OPallRenderable {
 		barScrBufferH = OPallFBOCreator.FrameBuffer()
 				.createFBO(buffer_quantum, h, w, h, false).beginFBO(GLESUtils::clear);
 
-		backBarW = new BarHorizontal(w, h);
-		backBarH = new BarVertical(w, h);
+		paletteTextureW = new PaletteTexture(PaletteTexture.TYPE_HORIZONTAL, w, h);
+		paletteTextureH = new PaletteTexture(PaletteTexture.TYPE_VERTICAL, w, h);
 
 		cellPaletterW = new CellPaletter(CellPaletter.CellType.Horizontal, w, h);
 		cellPaletterH = new CellPaletter(CellPaletter.CellType.Vertical, w, h);
 
-		paletteTextureW = new PaletteTexture(PaletteTexture.TYPE_HORIZONTAL, w, h);
-		paletteTextureH = new PaletteTexture(PaletteTexture.TYPE_VERTICAL, w, h);
+		backBarW = new BarHorizontal(w, h);
+		backBarH = new BarVertical(w, h);
 
 		setScreenDim(w, h);
 		return this;
@@ -112,6 +112,7 @@ public class OPalette implements OPallRenderable {
 
 			cellPaletterW.generate(barGradientBuffer.getTexture(), camera);
 			backBarW.render(camera, cellPaletterW, buffer_quantum);
+//			backBarW.render(camera, barGradientBuffer, buffer_quantum);
 
 		} else if (orientation == ORIENTATION_VERTICAL) {
 
@@ -123,12 +124,14 @@ public class OPalette implements OPallRenderable {
 				GLESUtils.clear();
 				paletteTextureH.setDimension(scrW, scrH);
 				paletteTextureH.setRangeLineCoeffs(lineCoeffs);
-				//TODO
+				paletteTextureH.setStart(backBarH.getPosX());
+				paletteTextureH.setEnd(backBarH.getWidth() + backBarH.getPosX());
 				paletteTextureH.render(camera);
 			});
 
 			cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
 			backBarH.render(camera, cellPaletterH, buffer_quantum);
+//			backBarH.render(camera, barGradientBuffer, buffer_quantum);
 		}
 	}
 
