@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
@@ -41,10 +42,11 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 	private static final int txt_button_res = R.string.control_palette_type;
 	private static final int target_layer = R.id.paletteOptionsContainer;
 
+	private final OPalette palette;
 
-	public BarTypeControl() {
+	public BarTypeControl(OPalette palette) {
 		super(target_layer, img_button_res, txt_button_res);
-
+		this.palette = palette;
 	}
 
 
@@ -73,7 +75,7 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 					horText.setTextColor(fcb);
 					verText.setTextColor(fcg);
 					nonText.setTextColor(fcg);
-
+					palette.setOrientation(OPalette.ORIENTATION_HORIZONTAL);
 					context.getRenderSurface().update();
 				}));
 
@@ -81,7 +83,7 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 					horText.setTextColor(fcg);
 					verText.setTextColor(fcb);
 					nonText.setTextColor(fcg);
-
+					palette.setOrientation(OPalette.ORIENTATION_VERTICAL);
 					context.getRenderSurface().update();
 				}));
 
@@ -89,7 +91,7 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 					horText.setTextColor(fcg);
 					verText.setTextColor(fcg);
 					nonText.setTextColor(fcb);
-
+					palette.setOrientation(OPalette.ORIENTATION_NONE);
 					context.getRenderSurface().update();
 				}));
 

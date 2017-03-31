@@ -245,7 +245,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 		touchLines = new TouchLines(width, height);
 		oPalette = new OPalette(OPalette.ORIENTATION_HORIZONTAL, width, height);
 
-		OPallViewInjector.inject(context.getActivityContext(), new BarTypeControl());
+		OPallViewInjector.inject(context.getActivityContext(), new BarTypeControl(oPalette));
 		OPallViewInjector.inject(context.getActivityContext(), new PaletteRegionControl(touchLines));
 	}
 
