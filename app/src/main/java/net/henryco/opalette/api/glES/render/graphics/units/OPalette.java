@@ -40,6 +40,8 @@ public class OPalette implements OPallRenderable {
 	public static final int ORIENTATION_VERTICAL = 1;
 	public static final int ORIENTATION_NONE = 0;
 
+	private final GLESUtils.Color color = new GLESUtils.Color();
+
 	private FrameBuffer barGradientBuffer;
 	private FrameBuffer barSrcBufferW;
 	private FrameBuffer barScrBufferH;
@@ -58,6 +60,13 @@ public class OPalette implements OPallRenderable {
 	private float scrW, scrH;
 	private float[] lineCoeffs;
 	private boolean discrete;
+	private boolean color_update;
+
+	private float size_pct;
+	private float pos_pct;
+	private float content_pct;
+	private float margin_pct;
+	private int cell_numb;
 
 	private Texture renderData;
 
@@ -67,9 +76,15 @@ public class OPalette implements OPallRenderable {
 
 	public OPalette(final int orientation, int w, int h) {
 		setRangeLineCoeffs(new float[]{});
+		setColor(GLESUtils.Color.WHITE);
 		setOrientation(orientation);
+		setRelativeContentSize(.8f);
+		setRelativePosition(.8f);
+		setRelativeSize(.201f);
 		setBufferQuantum(5);
+		setMargin_pct(.1f);
 		setDiscrete(true);
+		setCellNumb(4);
 		create(w, h);
 	}
 
@@ -96,6 +111,12 @@ public class OPalette implements OPallRenderable {
 
 	@Override
 	public void render(Camera2D camera) {
+
+		if (colorUpDate()) {
+			backBarW.setColor(color);
+			backBarH.setColor(color);
+		}
+
 		if (orientation == ORIENTATION_NONE) return;
 		if (orientation == ORIENTATION_HORIZONTAL) {
 
@@ -112,7 +133,13 @@ public class OPalette implements OPallRenderable {
 				paletteTextureW.render(camera);
 			});
 
-			if (discrete) {
+			backBarW.setRelativeSize(size_pct);
+			backBarW.setRelativePosition(pos_pct);
+			backBarW.setRelativeContentSize(content_pct);
+			cellPaletterW.setMargin_pct(margin_pct);
+			cellPaletterW.setCellNumb(cell_numb);
+
+			if (isDiscrete()) {
 				cellPaletterW.generate(barGradientBuffer.getTexture(), camera);
 				backBarW.render(camera, cellPaletterW, buffer_quantum);
 			} else backBarW.render(camera, barGradientBuffer, buffer_quantum);
@@ -132,7 +159,13 @@ public class OPalette implements OPallRenderable {
 				paletteTextureH.render(camera);
 			});
 
-			if (discrete) {
+			backBarH.setRelativeSize(size_pct);
+			backBarH.setRelativePosition(pos_pct);
+			backBarH.setRelativeContentSize(content_pct);
+			cellPaletterH.setMargin_pct(margin_pct);
+			cellPaletterH.setCellNumb(cell_numb);
+
+			if (isDiscrete()) {
 				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
 				backBarH.render(camera, cellPaletterH, buffer_quantum);
 			} else backBarH.render(camera, barGradientBuffer, buffer_quantum);
@@ -142,32 +175,27 @@ public class OPalette implements OPallRenderable {
 
 
 	public OPalette setRelativeSize(float size_pct) {
-		backBarW.setRelativeSize(size_pct);
-		backBarH.setRelativeSize(size_pct);
+		this.size_pct = size_pct;
 		return this;
 	}
 
 	public OPalette setRelativePosition(float pos_pct) {
-		backBarW.setRelativePosition(pos_pct);
-		backBarH.setRelativePosition(pos_pct);
+		this.pos_pct = pos_pct;
 		return this;
 	}
 
 	public OPalette setRelativeContentSize(float size_pct) {
-		backBarW.setRelativeContentSize(size_pct);
-		backBarH.setRelativeContentSize(size_pct);
+		this.content_pct = size_pct;
 		return this;
 	}
 
 	public OPalette setCellNumb(int n) {
-		cellPaletterW.setCellNumb(n);
-		cellPaletterH.setCellNumb(n);
+		this.cell_numb = n;
 		return this;
 	}
 
 	public OPalette setMargin_pct(float m) {
-		cellPaletterW.setMargin_pct(m);
-		cellPaletterH.setMargin_pct(m);
+		this.margin_pct = m;
 		return this;
 	}
 
@@ -192,14 +220,22 @@ public class OPalette implements OPallRenderable {
 	}
 
 	public OPalette setColor(GLESUtils.Color color) {
-		this.backBarH.setColor(color);
-		this.backBarW.setColor(color);
+		this.color.set(color);
+		color_update = true;
 		return this;
 	}
 
 	public OPalette setDiscrete(boolean discrete) {
 		this.discrete = discrete;
 		return this;
+	}
+
+	private boolean colorUpDate() {
+		if (color_update) {
+			color_update = false;
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isDiscrete() {
