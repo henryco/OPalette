@@ -22,83 +22,182 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/paletteTextInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:text="@string/palette_type"
+        android:textColor="@color/black_overlay"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:visibility="visible">
 
-        <TextView
-            android:id="@+id/paletteTextInfo"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/palette_type"
-            android:textColor="@color/black_overlay"
-            android:textSize="12sp"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/paletteButtonHorizontal"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/ic_straighten_black_24dp"/>
 
-        <Button
-            android:id="@+id/paletteButtonVertical"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_above="@+id/paletteTextVertical"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/ic_straighten_black_2_24dp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:visibility="visible">
 
-        <Button
-            android:id="@+id/paletteButtonNone"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_above="@+id/paletteTextVertical"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/ic_block_black_24dp"/>
+                <TextView
+                    android:id="@+id/paletteTextHorizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/paletteButtonHorizontal"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/horizontal"
+                    android:textColor="@color/black_overlay"/>
 
-        <TextView
-            android:id="@+id/paletteTextHorizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/paletteButtonHorizontal"
-            android:layout_alignStart="@+id/paletteButtonHorizontal"
-            android:layout_below="@+id/paletteButtonHorizontal"
-            android:text="@string/horizontal"
-            android:textAlignment="center"
-            android:textColor="@color/black_overlay"/>
+                <Button
+                    android:id="@+id/paletteButtonHorizontal"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_straighten_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
 
-        <TextView
-            android:id="@+id/paletteTextVertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/vertical"
-            android:textAlignment="center"
-            android:textColor="@color/black_overlay"
-            android:layout_alignBaseline="@+id/paletteTextHorizontal"
-            android:layout_alignBottom="@+id/paletteTextHorizontal"
-            android:layout_alignStart="@+id/paletteButtonVertical"
-            android:layout_alignEnd="@+id/paletteButtonVertical"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:visibility="visible">
 
-        <TextView
-            android:id="@+id/paletteTextNone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/paletteButtonNone"
-            android:layout_alignStart="@+id/paletteButtonNone"
-            android:layout_below="@+id/paletteButtonNone"
-            android:text="@string/none"
-            android:textAlignment="center"
-            android:textColor="@color/black_overlay"/>
+                <TextView
+                    android:id="@+id/paletteTextVertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/paletteButtonVertical"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/vertical"
+                    android:textColor="@color/black_overlay"/>
 
-    </RelativeLayout>
+                <Button
+                    android:id="@+id/paletteButtonVertical"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_straighten_black_2_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/paletteTextGradHorizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/paletteButtonGradHorizontal"
+                    android:layout_centerHorizontal="true"
+                    android:text="Gradient \n horizontal"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/paletteButtonGradHorizontal"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_straighten_black_3_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/paletteTextGradVertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/paletteButtonGradVertical"
+                    android:layout_centerHorizontal="true"
+                    android:text="Gradient \n vertical"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/paletteButtonGradVertical"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_straighten_black_4_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/paletteTextNone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/paletteButtonNone"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/none"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/paletteButtonNone"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_block_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
 </LinearLayout>

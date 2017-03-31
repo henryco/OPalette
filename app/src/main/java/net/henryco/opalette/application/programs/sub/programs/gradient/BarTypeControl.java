@@ -31,6 +31,7 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.OPallAnimated;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -73,47 +74,67 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 				final Button horButton = (Button) view.findViewById(R.id.paletteButtonHorizontal);
 				final Button verButton = (Button) view.findViewById(R.id.paletteButtonVertical);
 				final Button nonButton = (Button) view.findViewById(R.id.paletteButtonNone);
+				final Button gradHorButton = (Button) view.findViewById(R.id.paletteButtonGradHorizontal);
+				final Button gradVerButton = (Button) view.findViewById(R.id.paletteButtonGradVertical);
 				final TextView horText = (TextView) view.findViewById(R.id.paletteTextHorizontal);
 				final TextView verText = (TextView) view.findViewById(R.id.paletteTextVertical);
 				final TextView nonText = (TextView) view.findViewById(R.id.paletteTextNone);
+				final TextView gradHorText = (TextView) view.findViewById(R.id.paletteTextGradHorizontal);
+				final TextView gradVerText = (TextView) view.findViewById(R.id.paletteTextGradVertical);
+
+				final TextView[] textViews = {horText, verText, nonText, gradHorText, gradVerText};
+				OPallConsumer<TextView> clickF = textView -> {
+					for (TextView t: textViews) {
+						if (t == textView) t.setTextColor(fcb);
+						else t.setTextColor(fcg);
+					}
+				};
 
 				int o = palette.getOrientation();
-				if (o == OPalette.ORIENTATION_HORIZONTAL) horText.setTextColor(fcb);
-				else if (o == OPalette.ORIENTATION_VERTICAL) verText.setTextColor(fcb);
-				else nonText.setTextColor(fcb);
+				if (o == OPalette.ORIENTATION_HORIZONTAL) {
+					if (palette.isDiscrete()) horText.setTextColor(fcb);
+					else gradHorText.setTextColor(fcb);
+				} else if (o == OPalette.ORIENTATION_VERTICAL) {
+					if (palette.isDiscrete()) verText.setTextColor(fcb);
+					else gradVerText.setTextColor(fcb);
+				} else nonText.setTextColor(fcb);
 
 				horButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
 
-					runColorPicker(context.getActivityContext(), i -> {
-
-						horText.setTextColor(fcb);
-						verText.setTextColor(fcg);
-						nonText.setTextColor(fcg);
-						palette.setOrientation(OPalette.ORIENTATION_HORIZONTAL);
-						palette.setColor(new GLESUtils.Color(i));
-						context.getRenderSurface().update();
-					});
+					clickF.consume(horText);
+					palette.setOrientation(OPalette.ORIENTATION_HORIZONTAL);
+					palette.setDiscrete(true);
+					context.getRenderSurface().update();
 				}));
 
 				verButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
 
-					runColorPicker(context.getActivityContext(), i -> {
+					clickF.consume(verText);
+					palette.setOrientation(OPalette.ORIENTATION_VERTICAL);
+					palette.setDiscrete(true);
+					context.getRenderSurface().update();
+				}));
 
-						horText.setTextColor(fcg);
-						verText.setTextColor(fcb);
-						nonText.setTextColor(fcg);
-						palette.setOrientation(OPalette.ORIENTATION_VERTICAL);
-						palette.setColor(new GLESUtils.Color(i));
-						context.getRenderSurface().update();
-					});
+				gradHorButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
+
+					clickF.consume(gradHorText);
+					palette.setOrientation(OPalette.ORIENTATION_HORIZONTAL);
+					palette.setDiscrete(false);
+					context.getRenderSurface().update();
+				}));
+
+				gradVerButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
+
+					clickF.consume(gradVerText);
+					palette.setOrientation(OPalette.ORIENTATION_VERTICAL);
+					palette.setDiscrete(false);
+					context.getRenderSurface().update();
 				}));
 
 				nonButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
-					horText.setTextColor(fcg);
-					verText.setTextColor(fcg);
-					nonText.setTextColor(fcb);
+
+					clickF.consume(nonText);
 					palette.setOrientation(OPalette.ORIENTATION_NONE);
-					palette.setColor(new GLESUtils.Color(GLESUtils.Color.WHITE));
 					context.getRenderSurface().update();
 				}));
 
