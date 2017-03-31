@@ -104,9 +104,9 @@ public class OPalette implements OPallRenderable {
 			barGradientBuffer.beginFBO(() -> {
 				GLESUtils.clear();
 				paletteTextureW.setDimension(scrW, scrH);
+				paletteTextureW.setRangeLineCoeffs(lineCoeffs);
 				paletteTextureW.setStart(scrH - backBarW.getPosY() + backBarW.getHeight());
 				paletteTextureW.setEnd(scrH - backBarW.getPosY());
-				paletteTextureW.setRangeLineCoeffs(lineCoeffs);
 				paletteTextureW.render(camera);
 			});
 
@@ -114,7 +114,21 @@ public class OPalette implements OPallRenderable {
 			backBarW.render(camera, cellPaletterW, buffer_quantum);
 
 		} else if (orientation == ORIENTATION_VERTICAL) {
-			// TODO
+
+			paletteTextureH.set(0, renderData);
+			paletteTextureH.set(1, barScrBufferH.getTexture());
+			paletteTextureH.setFocusOn(1);
+
+			barGradientBuffer.beginFBO(() -> {
+				GLESUtils.clear();
+				paletteTextureH.setDimension(scrW, scrH);
+				paletteTextureH.setRangeLineCoeffs(lineCoeffs);
+				//TODO
+				paletteTextureH.render(camera);
+			});
+
+			cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
+			backBarH.render(camera, cellPaletterH, buffer_quantum);
 		}
 	}
 
@@ -136,6 +150,16 @@ public class OPalette implements OPallRenderable {
 	public OPalette setOrientation(int orientation) {
 		this.orientation = orientation;
 		return this;
+	}
+
+	public OPalette setColor(GLESUtils.Color color) {
+		this.backBarH.setColor(color);
+		this.backBarW.setColor(color);
+		return this;
+	}
+
+	public int getOrientation() {
+		return orientation;
 	}
 
 	@Override

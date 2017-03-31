@@ -206,6 +206,8 @@ public class BarHorizontal implements OPallBar {
 	private float width = 0, height = 0;
 	private float posX = 0, posY = 0;
 
+	private boolean colorUpdated = false;
+
 	public BarHorizontal(Context context) {
 		buffer = OPallFBOCreator.FrameBuffer(context);
 	}
@@ -250,6 +252,10 @@ public class BarHorizontal implements OPallBar {
 	@Override
 	public void render(Camera2D camera, OPallRenderable renderable, int buffer_quantum) {
 		float[] camYPos = camera.getPosition();
+		if (colorUpdated) {
+			buffer.beginFBO(() -> GLESUtils.clear(color));
+			colorUpdated = false;
+		}
 		buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
 		float cellHeight = getHeight() * cellHeight_pct;
 		float cellPtc = (getHeight() - cellHeight);
@@ -270,6 +276,7 @@ public class BarHorizontal implements OPallBar {
 	@Override
 	public BarHorizontal setColor(GLESUtils.Color color) {
 		this.color.set(color);
+		colorUpdated = true;
 		return this;
 	}
 

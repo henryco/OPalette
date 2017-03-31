@@ -18,19 +18,26 @@
 
 package net.henryco.opalette.application.programs.sub.programs.gradient;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
+import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
+
+import me.priyesh.chroma.ChromaDialog;
+import me.priyesh.chroma.ColorMode;
+import me.priyesh.chroma.ColorSelectListener;
 
 /**
  * Created by HenryCo on 31/03/17.
@@ -70,21 +77,35 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 				final TextView verText = (TextView) view.findViewById(R.id.paletteTextVertical);
 				final TextView nonText = (TextView) view.findViewById(R.id.paletteTextNone);
 
+				int o = palette.getOrientation();
+				if (o == OPalette.ORIENTATION_HORIZONTAL) horText.setTextColor(fcb);
+				else if (o == OPalette.ORIENTATION_VERTICAL) verText.setTextColor(fcb);
+				else nonText.setTextColor(fcb);
 
 				horButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
-					horText.setTextColor(fcb);
-					verText.setTextColor(fcg);
-					nonText.setTextColor(fcg);
-					palette.setOrientation(OPalette.ORIENTATION_HORIZONTAL);
-					context.getRenderSurface().update();
+
+					runColorPicker(context.getActivityContext(), i -> {
+
+						horText.setTextColor(fcb);
+						verText.setTextColor(fcg);
+						nonText.setTextColor(fcg);
+						palette.setOrientation(OPalette.ORIENTATION_HORIZONTAL);
+						palette.setColor(new GLESUtils.Color(i));
+						context.getRenderSurface().update();
+					});
 				}));
 
 				verButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
-					horText.setTextColor(fcg);
-					verText.setTextColor(fcb);
-					nonText.setTextColor(fcg);
-					palette.setOrientation(OPalette.ORIENTATION_VERTICAL);
-					context.getRenderSurface().update();
+
+					runColorPicker(context.getActivityContext(), i -> {
+
+						horText.setTextColor(fcg);
+						verText.setTextColor(fcb);
+						nonText.setTextColor(fcg);
+						palette.setOrientation(OPalette.ORIENTATION_VERTICAL);
+						palette.setColor(new GLESUtils.Color(i));
+						context.getRenderSurface().update();
+					});
 				}));
 
 				nonButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
@@ -92,12 +113,27 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 					verText.setTextColor(fcg);
 					nonText.setTextColor(fcb);
 					palette.setOrientation(OPalette.ORIENTATION_NONE);
+					palette.setColor(new GLESUtils.Color(GLESUtils.Color.WHITE));
 					context.getRenderSurface().update();
 				}));
 
 			}
 		};
 
+		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(R.string.control_top_bar_button_reset), () -> {
+			palette.setColor(new GLESUtils.Color(GLESUtils.Color.WHITE));
+			context.getRenderSurface().update();
+		});
+
 		OPallViewInjector.inject(context.getActivityContext(), controls);
+	}
+
+
+	public static void runColorPicker(AppCompatActivity context, ColorSelectListener listener) {
+		new ChromaDialog.Builder()
+				.initialColor(Color.WHITE)
+				.colorMode(ColorMode.RGB) // There's also ARGB and HSV
+				.onColorSelected(listener)
+				.create().show(context.getSupportFragmentManager(), "ColorPicker");
 	}
 }
