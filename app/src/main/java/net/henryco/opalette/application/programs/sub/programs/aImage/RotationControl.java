@@ -279,8 +279,8 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 
 
 		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
-		touchEventListener.setOnActionUp(() -> timer.startIfWaiting().refresh());
-		context.getRenderSurface().addOnTouchEventListener(touchEventListener.setOnActionMove((dx, dy) -> {
+		touchEventListener.setOnActionUp(event -> timer.startIfWaiting().refresh());
+		context.getRenderSurface().addOnTouchEventListener(touchEventListener.setOnActionMove((dx, dy, event) -> {
 			float angle = clamp(imgHolder.getRenderData().getRotation() + dx * touch_sensitivity, max_angle, -max_angle);
 			imgHolder.getRenderData().setFilterEnable(false).setRotation(angle);
 			angleBar.setProgress(angleBar.de_norm(angle / max_angle));

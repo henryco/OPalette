@@ -66,15 +66,14 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 
 		InjectableColorButtons border = new InjectableColorButtons(view, "Borders");
 		border.setChecked(borders.isVisible());
-		if (!borders.isVisible()) borders.color.set(new GLESUtils.Color(0x00000000));
+		if (!borders.isVisible()) borders.color.set(new GLESUtils.Color(Color.TRANSPARENT));
 		int col = borders.color.hex();
 		border.setButtonColor(col);
 		border.setSwitchListener((buttonView, isChecked) -> {
 			if (isChecked) {
 				border.setButtonColor(Color.WHITE);
 				borders.setColor(new GLESUtils.Color(Color.WHITE));
-			} else borders.setColor(new GLESUtils.Color(0x00000000));
-			System.out.println("SET");
+			} else borders.setColor(new GLESUtils.Color(Color.TRANSPARENT));
 			palette.setColor(new GLESUtils.Color(Color.WHITE));
 			borders.setVisible(isChecked);
 			context.getRenderSurface().update();

@@ -192,6 +192,7 @@ import net.henryco.opalette.api.utils.GLESUtils;
 /**
  * Created by HenryCo on 15/03/17.
  */
+@Deprecated
 public class OPallHorizontalScrollView extends HorizontalScrollView {
 
 	public OPallHorizontalScrollView(Context context) {

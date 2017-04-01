@@ -203,15 +203,18 @@ public class OPallSurfaceTouchListener implements OPallSurfaceView.OnTouchEventL
 
 
 	public interface OnActionMove {
-		void onActionMove(final float dx, final float dy);
+		void onActionMove(final float dx, final float dy, final MotionEvent event);
 	}
 	public interface OnActionDown {
-		void onActionDown(final float x, final float u);
+		void onActionDown(final float x, final float u, final MotionEvent event);
+	}
+	public interface OnAction {
+		void onAction(final MotionEvent event);
 	}
 
 	private OnActionDown onActionDown;
 	private OnActionMove onActionMove;
-	private Runnable onActionUp, onActionPointerUp;
+	private OnAction onActionUp, onActionPointerUp;
 	private OPallFunction<Boolean, ScaleGestureDetector> onScale;
 
 
@@ -251,7 +254,7 @@ public class OPallSurfaceTouchListener implements OPallSurfaceView.OnTouchEventL
 					final float x = MotionEventCompat.getX(ev, pointerIndex);
 					final float y = MotionEventCompat.getY(ev, pointerIndex);
 
-					if (onActionDown != null) onActionDown.onActionDown(x, y);
+					if (onActionDown != null) onActionDown.onActionDown(x, y, ev);
 
 					// Remember where we started (for dragging)
 					last[0] = x;
@@ -272,7 +275,7 @@ public class OPallSurfaceTouchListener implements OPallSurfaceView.OnTouchEventL
 					final float dx = x - last[0];
 					final float dy = y - last[1];
 
-					if (onActionMove != null) onActionMove.onActionMove(dx, dy);
+					if (onActionMove != null) onActionMove.onActionMove(dx, dy, ev);
 
 					// Remember this touch position for the next move event
 					last[0] = x;
@@ -283,7 +286,7 @@ public class OPallSurfaceTouchListener implements OPallSurfaceView.OnTouchEventL
 
 				case MotionEvent.ACTION_UP: {
 					mActivePointerId = MotionEvent.INVALID_POINTER_ID;
-					if (onActionUp != null) onActionUp.run();
+					if (onActionUp != null) onActionUp.onAction(ev);
 					break;
 				}
 
@@ -305,7 +308,7 @@ public class OPallSurfaceTouchListener implements OPallSurfaceView.OnTouchEventL
 						last[1] = MotionEventCompat.getY(ev, newPointerIndex);
 						mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
 					}
-					if (onActionPointerUp != null) onActionPointerUp.run();
+					if (onActionPointerUp != null) onActionPointerUp.onAction(ev);
 					break;
 				}
 			}
@@ -334,12 +337,12 @@ public class OPallSurfaceTouchListener implements OPallSurfaceView.OnTouchEventL
 		return this;
 	}
 
-	public OPallSurfaceTouchListener setOnActionUp(Runnable onActionUp) {
+	public OPallSurfaceTouchListener setOnActionUp(OnAction onActionUp) {
 		this.onActionUp = onActionUp;
 		return this;
 	}
 
-	public OPallSurfaceTouchListener setOnActionPointerUp(Runnable onActionPointerUp) {
+	public OPallSurfaceTouchListener setOnActionPointerUp(OnAction onActionPointerUp) {
 		this.onActionPointerUp = onActionPointerUp;
 		return this;
 	}

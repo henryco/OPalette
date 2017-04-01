@@ -264,8 +264,8 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 
 
 		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
-		touchEventListener.setOnActionUp(() -> timer.startIfWaiting().refresh());
-		surface.addOnTouchEventListener(touchEventListener.setOnActionMove((dx, dy) -> {
+		touchEventListener.setOnActionUp(event -> timer.startIfWaiting().refresh());
+		surface.addOnTouchEventListener(touchEventListener.setOnActionMove((dx, dy, event) -> {
 
 			requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
 			int py = (int) clamp(surface.getHeight() + dy, defScrH, MIN_SIZE);

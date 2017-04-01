@@ -209,7 +209,9 @@
     <string name="control_top_bar_button_reset">Reset</string>
     <string name="control_brightness">Brightness</string>
     <string name="control_move">Move</string>
-    <string name="control_translate">Translate</string>
+    <string name="control_move_bar">Move bar</string>
+    <string name="control_cells">Palette Cells</string>
+    <string name="control_translate">Move &amp; Scale</string>
     <string name="control_add">Add</string>
     <string name="control_minimum">Minimum</string>
     <string name="control_maximum">Maximum</string>

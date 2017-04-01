@@ -248,8 +248,10 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 		oPalette = new OPalette(OPalette.ORIENTATION_HORIZONTAL, width, height);
 
 		OPallViewInjector.inject(context.getActivityContext(), new BordersControl(borders, oPalette));
-		OPallViewInjector.inject(context.getActivityContext(), new BarTypeControl(oPalette));
 		OPallViewInjector.inject(context.getActivityContext(), new PaletteRegionControl(touchLines));
+		OPallViewInjector.inject(context.getActivityContext(), new BarCellControl(oPalette));
+		OPallViewInjector.inject(context.getActivityContext(), new BarTypeControl(oPalette));
+		OPallViewInjector.inject(context.getActivityContext(), new BarTranslateControl(oPalette, width, height));
 	}
 
 	@Override
@@ -263,9 +265,9 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 	@Override
 	public void render(@Nullable GL10 gl10, MainActivity context, Camera2D camera, int w, int h) {
 
-		touchLines.render(camera);
 		oPalette.setRangeLineCoeffs(touchLines.getCoefficients());
 		oPalette.setRenderData(proxyRenderData.getRenderData());
+		touchLines.render(camera);
 		oPalette.render(camera);
 		borders.render(camera);
 	}

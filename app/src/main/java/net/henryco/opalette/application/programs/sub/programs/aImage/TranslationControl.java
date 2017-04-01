@@ -206,7 +206,7 @@ import net.henryco.opalette.application.proto.AppMainProto;
 public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
-	private static final int MOVE = R.string.control_move;
+	private static final int MOVE = R.string.control_translate;
 	private static final int BUTTON_IMAGE = R.drawable.ic_transform_white_24dp;
 
 	private static final float MAX_SCALE = 4;
@@ -291,8 +291,8 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
-		touchEventListener.setOnActionUp(() -> timer.startIfWaiting().refresh());
-		touchEventListener.setOnActionMove((dx, dy) -> {
+		touchEventListener.setOnActionUp(event -> timer.startIfWaiting().refresh());
+		touchEventListener.setOnActionMove((dx, dy, event) -> {
 			float px = image.bounds2D.getX() + dx;
 			float py = image.bounds2D.getY() + dy;
 			horBar.setProgress((int) clamp(horBar.de_norm((px / image.getWidth())), 100, -100));

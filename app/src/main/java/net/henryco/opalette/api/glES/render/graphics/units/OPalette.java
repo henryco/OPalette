@@ -238,6 +238,27 @@ public class OPalette implements OPallRenderable {
 		return false;
 	}
 
+
+	public float getSize_pct() {
+		return size_pct;
+	}
+
+	public float getPos_pct() {
+		return pos_pct;
+	}
+
+	public float getContentSize_pct() {
+		return content_pct;
+	}
+
+	public float getMargin_pct() {
+		return margin_pct;
+	}
+
+	public int getCellNumb() {
+		return cell_numb;
+	}
+
 	public boolean isDiscrete() {
 		return discrete;
 	}
