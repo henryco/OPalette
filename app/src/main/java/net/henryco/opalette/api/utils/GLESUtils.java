@@ -270,7 +270,7 @@ public class GLESUtils {
 			set(new Color(r, g, b, a));
 		}
 		public void set(int i) {
-			set(android.graphics.Color.red(i), android.graphics.Color.green(i), android.graphics.Color.blue(i), 255);
+			set(android.graphics.Color.red(i), android.graphics.Color.green(i), android.graphics.Color.blue(i), android.graphics.Color.alpha(i));
 		}
 		public int hex() {
 			return android.graphics.Color.argb((int) (a * 255), (int) (r * 255), (int) (g * 255), (int) (b * 255));

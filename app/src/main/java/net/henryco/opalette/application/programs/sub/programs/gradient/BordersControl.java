@@ -16,7 +16,7 @@
  *
  */
 
-package net.henryco.opalette.application.programs.sub.programs.line;
+package net.henryco.opalette.application.programs.sub.programs.gradient;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Borders;
+import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
@@ -49,10 +50,12 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 	private static final int target_layer = R.id.paletteOptionsContainer;
 
 	private final Borders borders;
+	private final OPalette palette;
 	private final float defSize;
 
-	public BordersControl(final Borders borders) {
+	public BordersControl(final Borders borders, final OPalette palette) {
 		super(target_layer, img_button_res, txt_button_res);
+		this.palette = palette;
 		this.borders = borders;
 		this.defSize = borders.getSize();
 	}
@@ -63,20 +66,23 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 
 		InjectableColorButtons border = new InjectableColorButtons(view, "Borders");
 		border.setChecked(borders.isVisible());
-		if (!borders.isVisible()) borders.color.set(GLESUtils.Color.TRANSPARENT);
-		int col = Color.argb((int) (borders.color.a * 255), (int) (borders.color.r * 255), (int) (borders.color.g * 255), (int) (borders.color.b * 255));
+		if (!borders.isVisible()) borders.color.set(new GLESUtils.Color(0x00000000));
+		int col = borders.color.hex();
 		border.setButtonColor(col);
 		border.setSwitchListener((buttonView, isChecked) -> {
 			if (isChecked) {
 				border.setButtonColor(Color.WHITE);
-				borders.setColor(GLESUtils.Color.WHITE);
-			} else borders.setColor(GLESUtils.Color.TRANSPARENT);
+				borders.setColor(new GLESUtils.Color(Color.WHITE));
+			} else borders.setColor(new GLESUtils.Color(0x00000000));
+			System.out.println("SET");
+			palette.setColor(new GLESUtils.Color(Color.WHITE));
 			borders.setVisible(isChecked);
 			context.getRenderSurface().update();
 		});
 
 		border.setColorButtonListener(v -> runColorPicker(context.getActivityContext(), i -> {
-			borders.setColor(new GLESUtils.Color(Color.red(i), Color.green(i), Color.blue(i), 255));
+			borders.setColor(new GLESUtils.Color(i));
+			palette.setColor(new GLESUtils.Color(i));
 			border.setButtonColor(i);
 			context.getRenderSurface().update();
 		}));
@@ -93,6 +99,9 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 		context.setTopControlButton(button ->
 				button.setEnabled(true).setVisible(true).setTitle(R.string.control_top_bar_button_reset), () -> {
 			borders.setSize(defSize);
+			if (borders.isVisible()) border.setButtonColor(Color.WHITE);
+			borders.setColor(new GLESUtils.Color(Color.WHITE));
+			palette.setColor(new GLESUtils.Color(Color.WHITE));
 			sizeBar.setProgress(sizeBar.de_norm(defSize));
 			context.getRenderSurface().update();
 		});
@@ -104,7 +113,7 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 	private static void runColorPicker(AppCompatActivity context, ColorSelectListener listener) {
 		new ChromaDialog.Builder()
 				.initialColor(Color.WHITE)
-				.colorMode(ColorMode.RGB) // There's also ARGB and HSV
+				.colorMode(ColorMode.ARGB) // There's also ARGB and HSV
 				.onColorSelected(listener)
 				.create().show(context.getSupportFragmentManager(), "ColorPicker");
 	}

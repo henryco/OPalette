@@ -180,107 +180,93 @@
  *
  */
 
-package net.henryco.opalette.application.programs.sub.programs.line;
+package net.henryco.opalette.application.programs.sub.programs.gridlines;
 
-import android.app.Fragment;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
-import net.henryco.opalette.R;
-import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
-import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
-import net.henryco.opalette.api.utils.OPallAnimated;
-import net.henryco.opalette.api.utils.views.OPallViewInjector;
-import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
+import net.henryco.opalette.api.glES.camera.Camera2D;
+import net.henryco.opalette.api.glES.render.OPallRenderable;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.GridLines;
+import net.henryco.opalette.api.utils.requester.OPallRequester;
+import net.henryco.opalette.api.utils.requester.Request;
+import net.henryco.opalette.application.programs.sub.AppSubProgram;
+import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.proto.AppMainProto;
 
+import javax.microedition.khronos.opengles.GL10;
+
 /**
- * Created by HenryCo on 26/03/17.
+ * Created by HenryCo on 16/03/17.
  */
 
-public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
+public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
 
+	private long id = methods.genID(GridLinesProgram.class);
+	private ProxyRenderData<OPallRenderable> proxyRenderData = new ProxyRenderData<>();
 
-	private static final int img_button_res = R.drawable.ic_texture_white_24dp;
-	private static final int txt_button_res = R.string.control_palette_region;
-	private static final int target_layer = R.id.paletteOptionsContainer;
+	private GridLines gridLines;
 
-	private TouchLines touchLines;
-	private OPallSurfaceView.OnTouchEventListener listener;
+	private OPallRequester feedBackListener;
+	private AppSubProgramHolder holder;
 
-
-	public PaletteRegionControl(TouchLines touchLines) {
-		super(target_layer, img_button_res, txt_button_res);
-		this.touchLines = touchLines;
+	@Override
+	public void setProgramHolder(AppSubProgramHolder holder) {
+		this.holder = holder;
 	}
 
 	@Override
-	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
-
-		final Runnable update = () -> {
-			context.getRenderSurface().update();
-		};
-
-		touchLines.setVisible(true);
-		context.getRenderSurface().update();
-		listener = event -> {
-			final int action = event.getAction();
-			final int count = event.getPointerCount();
-			if (count >= 2) {
-				switch (action & MotionEvent.ACTION_MASK) {
-					case MotionEvent.ACTION_MOVE: {
-						touchLines.setPoints(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-						update.run();
-						break;
-					}
-				}
-			}
-		};
-
-		OPallViewInjector<AppMainProto> controls = new OPallViewInjector<AppMainProto>(view, R.layout.palette_region_layout) {
-			@Override
-			protected void onInject(AppMainProto context, View view) {
-				final TextView reg = (TextView) view.findViewById(R.id.paletteTextRegion);
-				final TextView non = (TextView) view.findViewById(R.id.paletteTextNone);
-				final Button regButton = (Button) view.findViewById(R.id.bwButtonOn);
-				final Button nonButton = (Button) view.findViewById(R.id.bwButtonOff);
-
-				final int fca = ContextCompat.getColor(context.getActivityContext(), TEXT_COLOR_BLACK_OVERLAY);
-				final int fcb = 0xFF000000;
-
-				reg.setTextColor(touchLines.isDefault() ? fca : fcb);
-				non.setTextColor(touchLines.isDefault() ? fcb : fca);
-				if (!touchLines.isDefault()) context.getRenderSurface().addOnTouchEventListener(listener);
-
-				regButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
-					context.getRenderSurface().addOnTouchEventListener(listener);
-					reg.setTextColor(fcb);
-					non.setTextColor(fca);
-				}));
-
-				nonButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
-					context.getRenderSurface().removeTouchEventListener(listener);
-					non.setTextColor(fcb);
-					reg.setTextColor(fca);
-					touchLines.reset();
-					update.run();
-				}));
-			}
-		};
-
-		OPallViewInjector.inject(context.getActivityContext(), controls);
+	public void setFeedBackListener(OPallRequester feedBackListener) {
+		this.feedBackListener = feedBackListener;
 	}
+
+	@Override
+	public void acceptRequest(Request request) {
+		request.openRequest(set_filters_enable, () -> gridLines.setVisible(false));
+		request.openRequest(set_filters_disable, () -> gridLines.setVisible(true));
+	}
+
+	@Override
+	public long getID() {
+		return id;
+	}
+
+	@Override
+	public void setID(long id) {
+		this.id = id;
+	}
+
 
 
 	@Override
-	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
-		context.getRenderSurface().removeTouchEventListener(listener);
-		touchLines.setVisible(false);
-		context.getRenderSurface().update();
+	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
+		gridLines = new GridLines(width, height);
 	}
+
+	@Override
+	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
+		gridLines.setScreenDim(width, height);
+	}
+
+	@Override
+	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
+		gridLines.render(camera);
+	}
+
+
+
+	@Override
+	public void setRenderData(OPallRenderable data) {
+		proxyRenderData.setRenderData(data);
+	}
+
+	@Override
+	public OPallRenderable getRenderData() {
+		return proxyRenderData.getRenderData();
+	}
+
+	@Nullable @Override
+	public OPallRenderable getFinalRenderData() {
+		return null;
+	}
+
 }

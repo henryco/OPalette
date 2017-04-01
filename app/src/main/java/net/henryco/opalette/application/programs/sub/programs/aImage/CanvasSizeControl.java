@@ -208,7 +208,6 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_aspect_ratio_white_24dp;
 	private static final int txt_button_res = R.string.control_canvas_size;
-	private static final int target_layer = R.id.paletteOptionsContainer;
 	private static final int MIN_SIZE = 100;
 	private final float defScrW;
 	private final float defScrH;
@@ -218,7 +217,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 	private OPallSurfaceTouchListener touchEventListener;
 
 	public CanvasSizeControl(final float defScrW, final float defScrH, final OPallRequester requester) {
-		super(target_layer, img_button_res, txt_button_res);
+		super(img_button_res, txt_button_res);
 		this.defScrW = defScrW;
 		this.defScrH = defScrH;
 		this.requester = requester;
@@ -239,16 +238,17 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 		});
 
 
-
-//		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
-//		wBar.onBarCreate(bar -> bar.setProgress(surface.getWidth()));
-//		wBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-//			if (fromUser) {
-//				requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
-//				surface.setSize((int) clamp(progress, defScrW, MIN_SIZE), surface.getHeight()).update();
-//			}
-//		}).onStop(stop));
-//		OPallViewInjector.inject(context.getActivityContext(), wBar);
+		/*
+		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
+		wBar.onBarCreate(bar -> bar.setProgress(surface.getWidth()));
+		wBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+			if (fromUser) {
+				requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
+				surface.setSize((int) clamp(progress, defScrW, MIN_SIZE), surface.getHeight()).update();
+			}
+		}).onStop(stop));
+		OPallViewInjector.inject(context.getActivityContext(), wBar);
+		*/
 
 
 

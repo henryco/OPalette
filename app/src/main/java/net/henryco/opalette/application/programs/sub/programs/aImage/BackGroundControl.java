@@ -47,7 +47,7 @@ public class BackGroundControl extends AppAutoSubControl<AppMainProto> {
 	private final GLESUtils.Color color;
 
 	public BackGroundControl(GLESUtils.Color color) {
-		super(target_layer, img_button_res, txt_button_res);
+		super(img_button_res, txt_button_res);
 		this.color = color;
 	}
 

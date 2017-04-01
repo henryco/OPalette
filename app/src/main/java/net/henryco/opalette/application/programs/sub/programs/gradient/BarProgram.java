@@ -186,6 +186,7 @@ import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Borders;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
@@ -195,7 +196,6 @@ import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.MainActivity;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
-import net.henryco.opalette.application.programs.sub.programs.line.PaletteRegionControl;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -209,6 +209,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 	private ProxyRenderData<Texture> proxyRenderData = new ProxyRenderData<>();
 
 	private TouchLines touchLines;
+	private Borders borders;
 	private OPalette oPalette;
 
 	private OPallRequester feedBackListener;
@@ -242,15 +243,18 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, MainActivity context) {
 
+		borders = new Borders(width, height);
 		touchLines = new TouchLines(width, height);
 		oPalette = new OPalette(OPalette.ORIENTATION_HORIZONTAL, width, height);
 
+		OPallViewInjector.inject(context.getActivityContext(), new BordersControl(borders, oPalette));
 		OPallViewInjector.inject(context.getActivityContext(), new BarTypeControl(oPalette));
 		OPallViewInjector.inject(context.getActivityContext(), new PaletteRegionControl(touchLines));
 	}
 
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, MainActivity context, int width, int height) {
+		borders.setScreenDim(width, height);
 		touchLines.setScreenDim(width, height);
 		oPalette.setScreenDim(width, height);
 		proxyRenderData.setStateUpdated();
@@ -263,7 +267,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 		oPalette.setRangeLineCoeffs(touchLines.getCoefficients());
 		oPalette.setRenderData(proxyRenderData.getRenderData());
 		oPalette.render(camera);
-
+		borders.render(camera);
 	}
 
 
@@ -271,6 +275,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 		@Override public void render(Camera2D camera) {
 			oPalette.render(camera);
+			borders.render(camera);
 		}
 		@Override public void setScreenDim(float w, float h) {
 

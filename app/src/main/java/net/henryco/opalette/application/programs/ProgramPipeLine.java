@@ -203,7 +203,7 @@ import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.aImage.ImageProgram;
 import net.henryco.opalette.application.programs.sub.programs.color.ColorProgram;
 import net.henryco.opalette.application.programs.sub.programs.gradient.BarProgram;
-import net.henryco.opalette.application.programs.sub.programs.line.ShapeLinesProgram;
+import net.henryco.opalette.application.programs.sub.programs.gridlines.GridLinesProgram;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import java.util.ArrayList;
@@ -243,8 +243,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 				new ImageProgram(),
 				new ColorProgram(),
-				new ShapeLinesProgram(),
-				new BarProgram()
+				new BarProgram(),
+				new GridLinesProgram()
 		};
 	}
 

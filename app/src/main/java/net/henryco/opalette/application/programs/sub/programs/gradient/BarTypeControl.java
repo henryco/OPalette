@@ -18,27 +18,20 @@
 
 package net.henryco.opalette.application.programs.sub.programs.gradient;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
-import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
-
-import me.priyesh.chroma.ChromaDialog;
-import me.priyesh.chroma.ColorMode;
-import me.priyesh.chroma.ColorSelectListener;
 
 /**
  * Created by HenryCo on 31/03/17.
@@ -141,20 +134,7 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 			}
 		};
 
-		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(R.string.control_top_bar_button_reset), () -> {
-			palette.setColor(new GLESUtils.Color(GLESUtils.Color.WHITE));
-			context.getRenderSurface().update();
-		});
-
 		OPallViewInjector.inject(context.getActivityContext(), controls);
 	}
 
-
-	public static void runColorPicker(AppCompatActivity context, ColorSelectListener listener) {
-		new ChromaDialog.Builder()
-				.initialColor(Color.WHITE)
-				.colorMode(ColorMode.RGB) // There's also ARGB and HSV
-				.onColorSelected(listener)
-				.create().show(context.getSupportFragmentManager(), "ColorPicker");
-	}
 }
