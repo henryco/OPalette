@@ -202,7 +202,7 @@ public class CellPaletter implements OPallRenderable {
 	private static final String VERT_FILE = OPallTexture.DEFAULT_VERT_FILE;
 	private static final String[] FRAG_FILE = {
 
-			"precision mediump float;\n" +
+			"precision highp float;\n" +
 					"\n" +
 					"varying vec4 v_Position;\n" +
 					"varying vec4 v_WorldPos;\n" +
@@ -244,7 +244,7 @@ public class CellPaletter implements OPallRenderable {
 					"\n" +
 					"}"
 			,
-			"precision mediump float;\n" +
+			"precision highp float;\n" +
 					"\n" +
 					"varying vec4 v_Position;\n" +
 					"varying vec4 v_WorldPos;\n" +
