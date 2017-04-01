@@ -264,7 +264,11 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
-		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
+
+//		Actually disabled need fix
+//		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
+//		FIXME: 01/04/17 // TODO: 01/04/17
+
 		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor));
 
 		defDim[0] = width;

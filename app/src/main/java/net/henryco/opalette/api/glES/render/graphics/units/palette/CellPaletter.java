@@ -313,17 +313,10 @@ public class CellPaletter implements OPallRenderable {
 	private Texture texture;
 
 
-	public CellPaletter() {
-		this(CellType.Horizontal);
-	}
-
-	public CellPaletter(CellType type) {
-		this.buffer = OPallFBOCreator.FrameBuffer();
-		texture = new Texture(VERT_FILE, FRAG_FILE[type.type]);
-	}
 
 	public CellPaletter(CellType type, int w, int h) {
-		this(type);
+		texture = new Texture(VERT_FILE, FRAG_FILE[type.type]);
+		create(w, h);
 		setScreenDim(w, h);
 	}
 
@@ -355,7 +348,14 @@ public class CellPaletter implements OPallRenderable {
 		return this;
 	}
 
-
+	public CellPaletter create(float w, float h) {
+		buffer = OPallFBOCreator.FrameBuffer();
+		buffer.createFBO((int) w, (int) h, false);
+		buffer.setScreenDim(w, h);
+		texture.setScreenDim(w, h);
+//		setScreenDim(w, h);
+		return this;
+	}
 
 
 
@@ -369,8 +369,6 @@ public class CellPaletter implements OPallRenderable {
 	public void setScreenDim(float w, float h) {
 		this.width = w;
 		this.height = h;
-		buffer.createFBO(getWidth(), getHeight(), false);
-		texture.setScreenDim(w, h);
 	}
 
 	@Override

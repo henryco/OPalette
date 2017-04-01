@@ -236,7 +236,9 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	private int thumb_color;
 	private int lazyProgress;
 	private boolean val_visible;
+	private boolean discrete;
 
+	private int[] delta;
 
 	private SeekBar seekBar;
 	private TextView valBar;
@@ -269,7 +271,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		for (String n : nm) name += n + " ";
 		setDefaultPoint(0, 0).setValueVisible(true)
 				.setWidth(-1).setMax(-1).setBarName(name)
-				.onBarCreate(seekBar -> {})
+				.onBarCreate(seekBar -> {}).setDiscrete(false)
 				.setTextColor(default_text_color)
 				.setBarColor(default_bar_color)
 				.setBarListener(new OPallSeekBarListener())
@@ -291,6 +293,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 			p.width = width;
 			seekBar.setLayoutParams(p);
 		}
+		if (discrete) setBarDiscrete();
 		onBarCreator.onSeekBarCreate(seekBar);
 
 		TextView textBar = (TextView) view.findViewById(R.id.barName);
@@ -311,6 +314,38 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 				})
 		);
 
+	}
+
+	/**
+	 * Method calls only one time per bar life-cycle.
+	 * @param discrete flag set bar discrete if true.
+	 * @param d If discrete == false then<b>d</b> might be empty.
+	 *          If discrete == true and <b>d</b> is empty, then bar
+	 *          will be increased form range: min to max by 1.
+	 *          If discrete == true and <b>d</b> has only 1 element, then
+	 *          this elements will be minimal step from range: min to max.
+	 *          If discrete == true and <b>d</b> has more then 1 element, then
+	 *          bar will me incremented by those values.
+	 * @return {@link InjectableSeekBar}
+	 */
+	public InjectableSeekBar setDiscrete(final boolean discrete, int ... d) {
+		this.discrete = discrete;
+		this.delta = d;
+		if (discrete && seekBar != null) setBarDiscrete();
+		return this;
+	}
+
+	private void setBarDiscrete() {
+		if (delta == null || delta.length == 0)
+			for (int i = de_norm(0); i < de_norm(max); i++)
+				seekBar.incrementProgressBy(i);
+		else if (delta.length == 1)
+			for (int i = de_norm(0); i < de_norm(max); i += delta[0])
+				seekBar.incrementProgressBy(i);
+		else if (delta.length > 1)
+			for (int i: delta)
+				seekBar.incrementProgressBy(i);
+		this.discrete = false;
 	}
 
 	private static final String ff = "%.2f";

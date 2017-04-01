@@ -44,6 +44,7 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 
 	private final OPalette palette;
 	private final float DEF_W, DEF_H, DEF_P;
+	private final float def_size;
 
 	private OPallSurfaceTouchListener touchEventListener;
 
@@ -54,6 +55,7 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 		this.DEF_W = defW;
 		this.DEF_H = defH;
 		this.DEF_P = palette.getPos_pct();
+		this.def_size = palette.getSize_pct();
 	}
 
 	@Override
@@ -67,6 +69,17 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 				context.getRenderSurface().update();
 			}
 		}));
+
+		InjectableSeekBar sizeBar = new InjectableSeekBar(view, "Size");
+		sizeBar.onBarCreate(bar -> bar.setProgress(sizeBar.de_norm(palette.getSize_pct())));
+		sizeBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+			if (fromUser && palette.getOrientation() != OPalette.ORIENTATION_NONE) {
+				palette.setRelativeSize(sizeBar.norm(progress));
+				context.getRenderSurface().update();
+			}
+		}));
+
+
 
 		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
 		touchEventListener.setOnActionMove((dx, dy, event) -> {
@@ -84,12 +97,14 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 
 		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.control_top_bar_button_reset), () -> {
 			palette.setRelativePosition(DEF_P);
+			palette.setRelativeSize(def_size);
 			moveBar.setProgress(moveBar.de_norm(DEF_P));
+			sizeBar.setProgress(sizeBar.de_norm(def_size));
 			context.getRenderSurface().update();
 		});
 
 		context.getRenderSurface().addOnTouchEventListener(touchEventListener);
-		OPallViewInjector.inject(context.getActivityContext(), moveBar);
+		OPallViewInjector.inject(context.getActivityContext(), sizeBar, moveBar);
 	}
 
 	@Override

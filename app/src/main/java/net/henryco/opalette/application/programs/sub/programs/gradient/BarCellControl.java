@@ -24,6 +24,9 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
+import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
+import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -37,15 +40,36 @@ public class BarCellControl extends AppAutoSubControl<AppMainProto> {
 	private static final int txt_button_res = R.string.control_cells;
 	private static final int target_layer = R.id.paletteOptionsContainer;
 
+	private static final int MAX_CELLS = 20;
+
 	private final OPalette palette;
+	private final int def_cell_numb;
+	private final float def_cell_margin;
+	private final float def_cell_content_size;
 
 	public BarCellControl(final OPalette palette) {
 		super(target_layer, img_button_res, txt_button_res);
+		this.def_cell_numb = palette.getCellNumb();
+		this.def_cell_margin = palette.getMargin_pct();
+		this.def_cell_content_size = palette.getContentSize_pct();
 		this.palette = palette;
 	}
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
+
+		InjectableSeekBar numBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_SMALL, "Number");
+		numBar.setMax(MAX_CELLS).setDiscrete(true);
+		numBar.onBarCreate(bar -> bar.setProgress(Math.min(MAX_CELLS, palette.getCellNumb())));
+		numBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+			palette.setCellNumb(progress);
+			if (palette.isDiscrete()) context.getRenderSurface().update();
+		}));
+
+
+
+
+		OPallViewInjector.inject(context.getActivityContext(), numBar);
 
 	}
 }

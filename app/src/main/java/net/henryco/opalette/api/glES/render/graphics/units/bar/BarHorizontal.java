@@ -205,6 +205,10 @@ public class BarHorizontal implements OPallBar {
 	private float width = 0, height = 0;
 	private float posX = 0, posY = 0;
 	private boolean colorUpdated = false;
+	private boolean sizeUpdated = false;
+
+	private int scrW, scrH;
+
 
 	public BarHorizontal() {
 		buffer = OPallFBOCreator.FrameBuffer();
@@ -222,6 +226,9 @@ public class BarHorizontal implements OPallBar {
 		this.height = height;
 		this.posX = 0;
 		this.posY = scrHeight * yPos_pct;
+
+		scrW = scrWidth;
+		scrH = scrHeight;
 	}
 
 
@@ -252,6 +259,11 @@ public class BarHorizontal implements OPallBar {
 				buffer.beginFBO(() -> GLESUtils.clear(color));
 				colorUpdated = false;
 			}
+			if (sizeUpdated) {
+				createBar(scrW, scrH);
+				sizeUpdated = false;
+			}
+
 			buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
 			float cellHeight = getHeight() * cellHeight_pct;
 			float cellPtc = getHeight() - cellHeight;
@@ -277,6 +289,7 @@ public class BarHorizontal implements OPallBar {
 
 	@Override
 	public BarHorizontal setRelativeSize(float size_pct) {
+		if (size_pct != height_pct) sizeUpdated = true;
 		this.height_pct = size_pct;
 		return this;
 	}

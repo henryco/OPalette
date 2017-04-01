@@ -88,7 +88,9 @@ public class OPalette implements OPallRenderable {
 		create(w, h);
 	}
 
+	// FIXME: 01/04/17 // TODO: 01/04/17 when canvas size changes, vertical palette shows with error
 	public OPalette create(int w, int h) {
+
 		barGradientBuffer = OPallFBOCreator.FrameBuffer(w, h, false);
 
 		barSrcBufferW = OPallFBOCreator.FrameBuffer()
@@ -168,7 +170,7 @@ public class OPalette implements OPallRenderable {
 			if (isDiscrete()) {
 				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
 				backBarH.render(camera, cellPaletterH, buffer_quantum);
-			} else backBarH.render(camera, barGradientBuffer, buffer_quantum);
+			} else backBarH.render(camera, barGradientBuffer.getTexture(), buffer_quantum);
 		}
 	}
 
@@ -271,6 +273,8 @@ public class OPalette implements OPallRenderable {
 	public void setScreenDim(float w, float h) {
 		scrW = w;
 		scrH = h;
+		cellPaletterW.setScreenDim(w, h);
+		cellPaletterH.setScreenDim(w, h);
 	}
 
 	@Override
