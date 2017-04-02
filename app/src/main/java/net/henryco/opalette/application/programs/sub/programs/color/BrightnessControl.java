@@ -219,9 +219,7 @@ public class BrightnessControl extends AppAutoSubControl<AppMainProto> {
 		InjectableSeekBar brightnessBar = new InjectableSeekBar(view, brightness);
 		brightnessBar.setDefaultPoint(0, 50);
 
-		brightnessBar.onBarCreate(bar ->
-				bar.setProgress(brightnessBar.de_norm(edTexture.getBrightness()))
-		);
+		brightnessBar.onBarCreate(bar -> bar.setProgress(brightnessBar.de_norm(edTexture.getBrightness())));
 
 		brightnessBar.setBarListener(new OPallSeekBarListener().onProgress((sBar, progress, fromUser) -> {
 			edTexture.brightness(b -> brightnessBar.norm(progress));

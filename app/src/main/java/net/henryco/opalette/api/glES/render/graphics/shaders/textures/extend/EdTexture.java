@@ -206,6 +206,7 @@ public class EdTexture extends OPallTextureExtended  {
 	private float addBrightness = 0;
 	private float threshold = 0.5f;
 	private float alpha = 1;
+	private float contrast = 1;
 
 	private boolean bwEnable = false;
 	private boolean thresholdEnable = false;
@@ -259,6 +260,11 @@ public class EdTexture extends OPallTextureExtended  {
 		return this;
 	}
 
+	public EdTexture setContrast(float c) {
+		this.contrast = c;
+		return this;
+	}
+
 	public boolean isBwEnable() {
 		return bwEnable;
 	}
@@ -278,6 +284,10 @@ public class EdTexture extends OPallTextureExtended  {
 
 	public float getThreshold() {
 		return threshold;
+	}
+
+	public float getContrast() {
+		return contrast;
 	}
 
 	public EdTexture setThreshold(float threshold) {
@@ -305,6 +315,7 @@ public class EdTexture extends OPallTextureExtended  {
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_bwEnable"), bwEnable ? 1 : 0);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_thresholdEnable"), thresholdEnable ? 1 : 0);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_threshold"), threshold);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_contrast"), contrast);
 	}
 
 
@@ -324,16 +335,21 @@ public class EdTexture extends OPallTextureExtended  {
 			"uniform vec3 u_thrColor;\n" +
 			"uniform float u_alpha;\n" +
 			"uniform float u_addBrightness;\n" +
+			"uniform float u_contrast;\n" +
 			"uniform float u_threshold;\n" +
 			"uniform int u_bwEnable;\n" +
 			"uniform int u_thresholdEnable;\n" +
 			"\n" +
+			"float correction(float color) {\n" +
+			"    return 0.5 + u_addBrightness + (u_contrast * (color - 0.5));\n" +
+			"}\n" +
+			"\n" +
 			"void main() {\n" +
 			"    vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
 			"    if (color.a != 0.) {\n" +
-			"        color.r = max(min(u_maxColor.r, color.r + u_addBrightness + u_addColor.r), u_minColor.r);\n" +
-			"        color.g = max(min(u_maxColor.g, color.g + u_addBrightness + u_addColor.g), u_minColor.g);\n" +
-			"        color.b = max(min(u_maxColor.b, color.b + u_addBrightness + u_addColor.b), u_minColor.b);\n" +
+			"        color.r = max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r);\n" +
+			"        color.g = max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g);\n" +
+			"        color.b = max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b);\n" +
 			"        color.a = u_alpha;\n" +
 			"        if (u_bwEnable == 1 || u_thresholdEnable == 1) {\n" +
 			"            float val = dot(vec3(1.), color.rgb);\n" +

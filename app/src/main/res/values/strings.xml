@@ -208,6 +208,7 @@
 
     <string name="control_top_bar_button_reset">Reset</string>
     <string name="control_brightness">Brightness</string>
+    <string name="control_contrast">Contrast</string>
     <string name="control_move">Move</string>
     <string name="control_move_bar">Move bar</string>
     <string name="control_cells">Palette Cells</string>
