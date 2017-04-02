@@ -334,8 +334,8 @@ public class OPallSurfaceView extends GLSurfaceView {
 			public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 				GLESUtils.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA, () -> {
 					surfaceInfo.surfaceCreated.set(false);
-					renderer.onSurfaceCreated(gl, config);
 					drawAction.onDrawFrameAction(gl);
+					renderer.onSurfaceCreated(gl, config);
 					surfaceInfo.surfaceCreated.set(true);
 				});
 			}
@@ -343,8 +343,8 @@ public class OPallSurfaceView extends GLSurfaceView {
 			public void onSurfaceChanged(GL10 gl, int width, int height) {
 				GLESUtils.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA, () -> {
 					surfaceInfo.surfaceChanged.set(false);
-					renderer.onSurfaceChanged(gl, width, height);
 					drawAction.onDrawFrameAction(gl);
+					renderer.onSurfaceChanged(gl, width, height);
 					surfaceInfo.surfaceChanged.set(true);
 				});
 			}
@@ -352,8 +352,8 @@ public class OPallSurfaceView extends GLSurfaceView {
 			public void onDrawFrame(GL10 gl) {
 				GLESUtils.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA, () -> {
 					surfaceInfo.surfaceDrawing.set(true);
-					renderer.onDrawFrame(gl);
 					drawAction.onDrawFrameAction(gl);
+					renderer.onDrawFrame(gl);
 					surfaceInfo.surfaceDrawing.set(false);
 				});
 			}

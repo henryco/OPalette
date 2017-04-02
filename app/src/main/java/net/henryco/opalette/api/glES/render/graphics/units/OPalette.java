@@ -61,6 +61,7 @@ public class OPalette implements OPallRenderable {
 	private float[] lineCoeffs;
 	private boolean discrete;
 	private boolean color_update;
+	private boolean size_update;
 
 	private float size_pct;
 	private float pos_pct;
@@ -70,9 +71,8 @@ public class OPalette implements OPallRenderable {
 
 	private Texture renderData;
 
-	public OPalette(final int orientation) {
-		this(orientation, 0, 0);
-	}
+	private FrameBuffer adapter;
+	private final float dimX, dimY;
 
 	public OPalette(final int orientation, int w, int h) {
 		setRangeLineCoeffs(new float[]{});
@@ -86,11 +86,14 @@ public class OPalette implements OPallRenderable {
 		setDiscrete(true);
 		setCellNumb(4);
 		create(w, h);
+		dimX = w;
+		dimY = h;
 	}
 
 	// FIXME: 01/04/17 // TODO: 01/04/17 when canvas size changes, vertical palette shows with error
 	public OPalette create(int w, int h) {
 
+		adapter = OPallFBOCreator.FrameBuffer(w, h, false);
 		barGradientBuffer = OPallFBOCreator.FrameBuffer(w, h, false);
 
 		barSrcBufferW = OPallFBOCreator.FrameBuffer()
@@ -152,6 +155,7 @@ public class OPalette implements OPallRenderable {
 			paletteTextureH.set(1, barScrBufferH.getTexture());
 			paletteTextureH.setFocusOn(1);
 
+
 			barGradientBuffer.beginFBO(() -> {
 				GLESUtils.clear();
 				paletteTextureH.setDimension(scrW, scrH);
@@ -167,13 +171,29 @@ public class OPalette implements OPallRenderable {
 			cellPaletterH.setMargin_pct(margin_pct);
 			cellPaletterH.setCellNumb(cell_numb);
 
+
 			if (isDiscrete()) {
 				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
 				backBarH.render(camera, cellPaletterH, buffer_quantum);
 			} else backBarH.render(camera, barGradientBuffer.getTexture(), buffer_quantum);
+
+
+//			 FIXME: 02/04/17 // TODO: 02/04/17
+//			if (isDiscrete()) {
+//				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
+//				adapter.beginFBO(() -> {
+//					GLESUtils.clear();
+//					backBarH.render(camera, cellPaletterH, buffer_quantum);
+//				});
+//			} else adapter.beginFBO(() -> {
+//				GLESUtils.clear();
+//				backBarH.render(camera, barGradientBuffer.getTexture(), buffer_quantum);
+//			});
+//			adapter.render(camera);
+
+
 		}
 	}
-
 
 
 	public OPalette setRelativeSize(float size_pct) {
@@ -240,6 +260,13 @@ public class OPalette implements OPallRenderable {
 		return false;
 	}
 
+	private boolean sizeUpDate() {
+		if (size_update) {
+			size_update = false;
+			return true;
+		}
+		return false;
+	}
 
 	public float getSize_pct() {
 		return size_pct;
@@ -273,8 +300,8 @@ public class OPalette implements OPallRenderable {
 	public void setScreenDim(float w, float h) {
 		scrW = w;
 		scrH = h;
-		cellPaletterW.setScreenDim(w, h);
-		cellPaletterH.setScreenDim(w, h);
+
+		size_update = true;
 	}
 
 	@Override

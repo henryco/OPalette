@@ -351,9 +351,7 @@ public class CellPaletter implements OPallRenderable {
 	public CellPaletter create(float w, float h) {
 		buffer = OPallFBOCreator.FrameBuffer();
 		buffer.createFBO((int) w, (int) h, false);
-		buffer.setScreenDim(w, h);
 		texture.setScreenDim(w, h);
-//		setScreenDim(w, h);
 		return this;
 	}
 

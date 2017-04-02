@@ -241,7 +241,7 @@ public class BarHorizontal implements OPallBar {
 	private void drawBar(OPallRenderable barLine, Camera2D camera2D,
 						 int barHeight, int buffer_quantum, float cameraTranslationStep) {
 
-		int iter = (int)((float)barHeight / (float)buffer_quantum);
+		int iter = (int) Math.floor(((float)barHeight / (float)buffer_quantum));
 		float d = buffer_quantum - cameraTranslationStep;
 		float lost = iter * d;
 		int extr = (int) Math.floor((lost + d) / cameraTranslationStep);
@@ -254,15 +254,6 @@ public class BarHorizontal implements OPallBar {
 	public void render(Camera2D camera, OPallRenderable renderable, int buffer_quantum) {
 
 		camera.backTranslate(() -> {
-
-			if (colorUpdated) {
-				buffer.beginFBO(() -> GLESUtils.clear(color));
-				colorUpdated = false;
-			}
-			if (sizeUpdated) {
-				createBar(scrW, scrH);
-				sizeUpdated = false;
-			}
 
 			buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
 			float cellHeight = getHeight() * cellHeight_pct;
@@ -283,14 +274,16 @@ public class BarHorizontal implements OPallBar {
 	@Override
 	public BarHorizontal setColor(GLESUtils.Color color) {
 		this.color.set(color);
-		colorUpdated = true;
+		buffer.beginFBO(() -> GLESUtils.clear(color));
 		return this;
 	}
 
 	@Override
 	public BarHorizontal setRelativeSize(float size_pct) {
-		if (size_pct != height_pct) sizeUpdated = true;
-		this.height_pct = size_pct;
+		if (size_pct != height_pct) {
+			this.height_pct = size_pct;
+			createBar(scrW, scrH);
+		}
 		return this;
 	}
 
