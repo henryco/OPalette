@@ -23,6 +23,8 @@ import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
+import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
+import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -46,6 +48,9 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
 
+	private boolean firstTime;
+	private Texture filterTexture; //TODO
+	private FrameBuffer filterBuffer;
 
 	@Override public void setProgramHolder(AppSubProgramHolder holder) {
 		this.holder = holder;
@@ -72,7 +77,8 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
-
+		firstTime = true;
+		filterBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 	}
 
 	@Override
@@ -82,7 +88,8 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
-
+		firstTime = false;
+//		filterBuffer.beginFBO(() -> filterTexture.render(camera, program -> GLESUtils.clear()));
 	}
 
 
@@ -90,12 +97,19 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 	@Override
 	public void setRenderData(OPallRenderable data) {
-		if (data != null) proxyRenderData.setRenderData((Texture) data);
+		if (data != null) {
+			proxyRenderData.setRenderData((Texture) data);
+			if (filterTexture != null) {
+				if (firstTime) filterTexture.set((Texture) data); //WE EXPECT FULLSCREEN FRAMEBUFFER
+				filterTexture.setTextureDataHandle(((Texture) data).getTextureDataHandle());
+			}
+		}
 	}
 
 
 	@NonNull @Override
 	public OPallRenderable getRenderData() {
+//		return filterBuffer.getTexture();
 		return proxyRenderData.getRenderData();
 	}
 

@@ -255,7 +255,7 @@ public interface OPallMultiTexture extends OPallTexture {
 	OPallMultiTexture setBitmap(int n, Bitmap image, Filter filter);
 	OPallMultiTexture setBitmap(int n, Bitmap image);
 	OPallMultiTexture setFlip(int n, boolean x, boolean y);
-	OPallMultiTexture setSize(int n, int w, int h);
+	OPallMultiTexture setSize(int n, float w, float h);
 	OPallMultiTexture setTextureDataHandle(int n, int textureDataHandle);
 	int getTextureDataHandle(int n);
 	boolean[] getFlip(int n);

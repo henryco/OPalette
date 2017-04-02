@@ -333,7 +333,7 @@ public class Texture extends Shader2D implements OPallBoundsHolder<Bounds2D>, OP
 	}
 
 	@Override
-	public Texture setSize(int w, int h) {
+	public Texture setSize(float w, float h) {
 		bounds2D.setSize(w, h);
 		return this;
 	}
@@ -373,7 +373,7 @@ public class Texture extends Shader2D implements OPallBoundsHolder<Bounds2D>, OP
 
 
 	@Override
-	public Texture setRegion(int x, int y, int width, int height) {
+	public Texture setRegion(float x, float y, float width, float height) {
 
 		region[0] = x;
 		region[1] = y;
@@ -384,13 +384,14 @@ public class Texture extends Shader2D implements OPallBoundsHolder<Bounds2D>, OP
 		return this;
 	}
 
-	public Texture setRegion(int w, int h) {
+	public Texture setRegion(float w, float h) {
 		return setRegion(0,0,w,h);
 	}
 	public Texture resetRegion() {
 		region[4] = 0;
 		return this;
 	}
+
 
 	@Override
 	public int getWidth() {

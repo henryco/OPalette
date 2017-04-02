@@ -212,7 +212,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private FrameBuffer imageBuffer;
 	private EdTexture imageTexture;
 
-
+	private boolean firstTime;
 
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
@@ -245,6 +245,8 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 
+		firstTime = true;
+
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
 		imageBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
@@ -270,6 +272,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
+		firstTime = false;
 		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
 		imageBuffer.render(camera);
 	}
@@ -278,7 +281,10 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void setRenderData(OPallRenderable data) {
-		if (imageTexture != null) imageTexture.set((Texture) data);
+		if (imageTexture != null && data != null) {
+			if (firstTime) imageTexture.set((Texture) data);
+			imageTexture.setTextureDataHandle(((Texture)data).getTextureDataHandle());
+		}
 	}
 
 	@NonNull

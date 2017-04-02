@@ -327,21 +327,24 @@ public class MainActivity extends AppCompatActivity
 	@Override
 	public void switchToFragmentOptions(Fragment fragment) {
 
-		wipeTopBarButton();
+		if (!optionsSwitched) {
+			wipeTopBarButton();
 
-		if (fragment != null) {
-			FragmentTransaction fragmentTransaction = getFragmentManager()
-					.beginTransaction().add(R.id.fragmentContainer, fragment);
-			fragmentTransaction.commit();
+			if (fragment != null) {
+				FragmentTransaction fragmentTransaction = getFragmentManager()
+						.beginTransaction().add(R.id.fragmentContainer, fragment);
+				fragmentTransaction.commit();
+			}
+
+			findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
+			findViewById(R.id.fragmentSuperContainer).setVisibility(View.VISIBLE);
+
+			for (ToggleButton t: toggleGroup) t.setVisibility(View.GONE);
+
+			optionsSwitched = true;
+			actualFragment = fragment;
 		}
 
-		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
-		findViewById(R.id.fragmentSuperContainer).setVisibility(View.VISIBLE);
-
-		for (ToggleButton t: toggleGroup) t.setVisibility(View.GONE);
-
-		optionsSwitched = true;
-		actualFragment = fragment;
 	}
 
 	@Override

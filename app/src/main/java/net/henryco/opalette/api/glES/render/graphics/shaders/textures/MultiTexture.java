@@ -291,7 +291,6 @@ public class MultiTexture extends Shader2D implements OPallMultiBoundsHolder <Bo
 	@Override
 	public OPallTexture setRotation(float angle) {
 		this.rot_angle = angle;
-		//TODO
 		return this;
 	}
 
@@ -355,7 +354,7 @@ public class MultiTexture extends Shader2D implements OPallMultiBoundsHolder <Bo
 
 
 	@Override
-	public MultiTexture setSize(int n, int w, int h) {
+	public MultiTexture setSize(int n, float w, float h) {
 		bounds2D[n].setSize(w, h);
 		return this;
 	}
@@ -363,13 +362,16 @@ public class MultiTexture extends Shader2D implements OPallMultiBoundsHolder <Bo
 
 
 	@Override
-	public MultiTexture setSize(int w, int h) {
+	public MultiTexture setSize(float w, float h) {
 		for (int i = 0; i < texNumb; i++) setSize(i, w, h);
 		return this;
 	}
 
+	/**
+	 * Actually this method is disabled for {@link MultiTexture}
+	 */
 	@Override
-	public MultiTexture setRegion(int x, int y, int width, int height) {
+	public MultiTexture setRegion(float x, float y, float width, float height) {
 		for (int i = 0; i < texNumb; i++) ;// TODO
 		return this;
 	}
