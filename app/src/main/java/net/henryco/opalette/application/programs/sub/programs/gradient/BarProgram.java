@@ -182,6 +182,7 @@
 
 package net.henryco.opalette.application.programs.sub.programs.gradient;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
@@ -245,13 +246,13 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 		borders = new Borders(width, height);
 		touchLines = new TouchLines(width, height);
-		oPalette = new OPalette(OPalette.ORIENTATION_HORIZONTAL, width, height);
+		oPalette = new OPalette(width, height);
 
 		OPallViewInjector.inject(context.getActivityContext(), new BordersControl(borders, oPalette));
 		OPallViewInjector.inject(context.getActivityContext(), new PaletteRegionControl(touchLines));
 		OPallViewInjector.inject(context.getActivityContext(), new BarCellControl(oPalette));
-		OPallViewInjector.inject(context.getActivityContext(), new BarTypeControl(oPalette));
 		OPallViewInjector.inject(context.getActivityContext(), new BarTranslateControl(oPalette, width, height));
+		OPallViewInjector.inject(context.getActivityContext(), new BarTypeControl(oPalette));
 	}
 
 	@Override
@@ -296,6 +297,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 		proxyRenderData.setRenderData((Texture) data);
 	}
 
+	@NonNull
 	@Override
 	public Texture getRenderData() {
 		return proxyRenderData.getRenderData();

@@ -18,11 +18,11 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true"
-          android:color="#ffffff"
-    /> <!-- pressed -->
-
-    <item android:color="#838383"/> <!-- default -->
-
+    <!-- When not selected, use white-->
+    <item android:drawable="@drawable/ic_palette_white_24dp"
+          android:state_checked="true" />
+    <!-- When selected, use grey -->
+    <item android:drawable="@drawable/ic_palette_black_24dp"
+          android:state_checked="false"/>
 
 </selector>

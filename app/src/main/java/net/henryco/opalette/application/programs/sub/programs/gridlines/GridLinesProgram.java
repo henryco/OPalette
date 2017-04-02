@@ -182,6 +182,7 @@
 
 package net.henryco.opalette.application.programs.sub.programs.gridlines;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
@@ -259,6 +260,7 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 		proxyRenderData.setRenderData(data);
 	}
 
+	@NonNull
 	@Override
 	public OPallRenderable getRenderData() {
 		return proxyRenderData.getRenderData();

@@ -201,6 +201,7 @@ import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.aImage.ImageProgram;
+import net.henryco.opalette.application.programs.sub.programs.bFilter.FilterProgram;
 import net.henryco.opalette.application.programs.sub.programs.color.ColorProgram;
 import net.henryco.opalette.application.programs.sub.programs.gradient.BarProgram;
 import net.henryco.opalette.application.programs.sub.programs.gridlines.GridLinesProgram;
@@ -242,6 +243,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		return new AppSubProgram[] {
 
 				new ImageProgram(),
+				new FilterProgram(),
 				new ColorProgram(),
 				new BarProgram(),
 				new GridLinesProgram()
@@ -327,7 +329,6 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		System.out.println("GLSL version is: "+ GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 
 		FrameBuffer.debug = true;
-
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox(width, height);
 

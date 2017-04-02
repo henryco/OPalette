@@ -221,7 +221,11 @@ public class MainActivity extends AppCompatActivity
 	private boolean optionsSwitched = false;
 
 
-	private ToggleButton imageToggle, paletteToggle;
+	private ToggleButton imageToggle, paletteToggle, filterToggle;
+	private ToggleButton[] toggleGroup;
+
+	private View imageContainer, paletteContainer, filterContainer;
+	private View[] containerGroup;
 
 	private MenuItem topBarButton;
 	private final List<Runnable> topBarButtonActions = new ArrayList<>();
@@ -246,9 +250,20 @@ public class MainActivity extends AppCompatActivity
 
 		imageToggle = (ToggleButton) toolbar.findViewById(R.id.toolbarButtonImage);
 		paletteToggle = (ToggleButton) toolbar.findViewById(R.id.toolbarButtonPalette);
+		filterToggle = (ToggleButton) toolbar.findViewById(R.id.toolbarButtonFilter);
+
+		toggleGroup = new ToggleButton[]{imageToggle, paletteToggle, filterToggle};
+
+
+		imageContainer = findViewById(R.id.imageOptionsContainer);
+		paletteContainer = findViewById(R.id.paletteOptionsContainer);
+		filterContainer = findViewById(R.id.filterOptionsContainer);
+		containerGroup = new View[]{imageContainer, paletteContainer, filterContainer};
+
 
 		imageToggle.setOnClickListener(this::toggleImage);
 		paletteToggle.setOnClickListener(this::togglePalette);
+		filterToggle.setOnClickListener(this::toggleFilter);
 
 		if (getSupportActionBar() != null){
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -273,30 +288,40 @@ public class MainActivity extends AppCompatActivity
 		switchToScrollOptionsView();
 	}
 
+	private void checkToggle(ToggleButton button) {
+		for (ToggleButton b: toggleGroup) {
+			if (b == button) button.setChecked(true);
+			else b.setChecked(false);
+		}
+	}
+
+	private void showContainer(View view) {
+		for (View v: containerGroup) {
+			if (v == view) view.setVisibility(View.VISIBLE);
+			else v.setVisibility(View.GONE);
+		}
+	}
 
 	private void toggleImage(View v) {
 		OPallAnimated.pressButton75_225(this, v, () -> {
-			if (imageToggle.isChecked()) {
-				paletteToggle.setChecked(!imageToggle.isChecked());
-				findViewById(R.id.imageOptionsContainer).setVisibility(View.VISIBLE);
-				findViewById(R.id.paletteOptionsContainer).setVisibility(View.GONE);
-			}
-			imageToggle.setChecked(true);
+			if (imageToggle.isChecked()) showContainer(imageContainer);
+			checkToggle(imageToggle);
 		});
 	}
 
 	private void togglePalette(View v) {
 		OPallAnimated.pressButton75_225(this, v, () -> {
-			if (paletteToggle.isChecked()) {
-				imageToggle.setChecked(!paletteToggle.isChecked());
-				findViewById(R.id.paletteOptionsContainer).setVisibility(View.VISIBLE);
-				findViewById(R.id.imageOptionsContainer).setVisibility(View.GONE);
-			}
-			paletteToggle.setChecked(true);
+			if (paletteToggle.isChecked()) showContainer(paletteContainer);
+			checkToggle(paletteToggle);
 		});
 	}
 
-
+	private void toggleFilter(View v) {
+		OPallAnimated.pressButton75_225(this, v, () -> {
+			if (filterToggle.isChecked()) showContainer(filterContainer);
+			checkToggle(filterToggle);
+		});
+	}
 
 
 	@Override
@@ -313,8 +338,7 @@ public class MainActivity extends AppCompatActivity
 		findViewById(R.id.scrollOptionsView).setVisibility(View.GONE);
 		findViewById(R.id.fragmentSuperContainer).setVisibility(View.VISIBLE);
 
-		imageToggle.setVisibility(View.GONE);
-		paletteToggle.setVisibility(View.GONE);
+		for (ToggleButton t: toggleGroup) t.setVisibility(View.GONE);
 
 		optionsSwitched = true;
 		actualFragment = fragment;
@@ -330,8 +354,7 @@ public class MainActivity extends AppCompatActivity
 		findViewById(R.id.scrollOptionsView).setVisibility(View.VISIBLE);
 		findViewById(R.id.fragmentSuperContainer).setVisibility(View.GONE);
 
-		imageToggle.setVisibility(View.VISIBLE);
-		paletteToggle.setVisibility(View.VISIBLE);
+		for (ToggleButton t: toggleGroup) t.setVisibility(View.VISIBLE);
 
 		optionsSwitched = false;
 		actualFragment = null;
@@ -417,6 +440,5 @@ public class MainActivity extends AppCompatActivity
 			topBarButtonActions.clear();
 		}
 	}
-
 
 }

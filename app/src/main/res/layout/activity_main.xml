@@ -209,7 +209,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -217,28 +217,47 @@
 
                 <ToggleButton
                     android:id="@+id/toolbarButtonImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/select_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/image_toggle_on_selector"
                     android:checked="true"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/select_button_color"
-                    android:textOff="Image"
-                    android:textOn="Image"
+                    android:textOff=""
+                    android:textOn=""
                     android:textSize="12sp"/>
 
                 <ToggleButton
                     android:id="@+id/toolbarButtonPalette"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/select_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/palette_toggle_on_selector"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/select_button_color"
-                    android:textOff="Palette"
-                    android:textOn="Palette"
+                    android:textOff=""
+                    android:textOn=""
                     android:textSize="12sp"/>
+
+                <ToggleButton
+                    android:id="@+id/toolbarButtonFilter"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/filter_toggle_on_selector"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/select_button_color"
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="12sp"/>
+
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 

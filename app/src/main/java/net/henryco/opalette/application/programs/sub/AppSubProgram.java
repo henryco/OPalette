@@ -182,6 +182,7 @@
 
 package net.henryco.opalette.application.programs.sub;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
@@ -200,9 +201,9 @@ public interface AppSubProgram<T> extends OPallSubProgram<T>, OPallRequestFeedBa
 	void render(@Nullable GL10 gl10, T context, Camera2D camera, int w, int h);
 	void setID(long id);
 
-	void setRenderData(OPallRenderable data);
+	void setRenderData(@Nullable OPallRenderable data);
 	void setProgramHolder(AppSubProgramHolder holder);
-	OPallRenderable getRenderData();
+	@NonNull OPallRenderable getRenderData();
 	@Nullable OPallRenderable getFinalRenderData();
 
 	interface AppSubProgramHolder {

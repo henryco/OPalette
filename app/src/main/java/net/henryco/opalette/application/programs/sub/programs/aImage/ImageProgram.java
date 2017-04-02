@@ -182,6 +182,7 @@
 
 package net.henryco.opalette.application.programs.sub.programs.aImage;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
@@ -335,6 +336,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		}
 	}
 
+	@NonNull
 	@Override
 	public OPallRenderable getRenderData() {
 		return textureBuffer.getTexture();

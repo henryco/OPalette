@@ -74,6 +74,10 @@ public class OPalette implements OPallRenderable {
 	private FrameBuffer adapter;
 	private final float dimX, dimY;
 
+
+	public OPalette(int w, int h) {
+		this(ORIENTATION_NONE, w, h);
+	}
 	public OPalette(final int orientation, int w, int h) {
 		setRangeLineCoeffs(new float[]{});
 		setColor(GLESUtils.Color.WHITE);
