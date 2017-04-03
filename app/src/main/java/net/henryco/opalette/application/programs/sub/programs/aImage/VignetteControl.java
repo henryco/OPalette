@@ -25,7 +25,6 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Vignette;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
-import net.henryco.opalette.api.utils.RefreshableTimer;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -51,19 +50,12 @@ public class VignetteControl extends AppAutoSubControl<AppMainProto> {
 		this.imgHolder = renderData;
 	}
 
-	private Runnable updateFunc = () -> imgHolder.setStateUpdated();
-	private Runnable stopFunc = () -> {
-		imgHolder.getRenderData().setFilterEnable(true);
-		updateFunc.run();
-	};
-	private RefreshableTimer timer = new RefreshableTimer(500, stopFunc);
-	private OPallSeekBarListener stop = new OPallSeekBarListener().onStop(bar -> timer.startIfWaiting().refresh());
 
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		updateFunc = () -> {
+		Runnable updateFunc = () -> {
 			imgHolder.setStateUpdated();
 			context.getRenderSurface().update();
 		};
@@ -72,12 +64,11 @@ public class VignetteControl extends AppAutoSubControl<AppMainProto> {
 		vigBar.onBarCreate(bar -> bar.setProgress(vigBar.de_norm(vignette.getPower())));
 		vigBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
-				imgHolder.getRenderData().setFilterEnable(false);
 				vignette.setPower(vigBar.norm(progress));
 				vignette.setActive(!(progress == 0));
 				updateFunc.run();
 			}
-		}).onStop(stop));
+		}));
 
 		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.disable), () -> {
 			vigBar.setProgress(0);

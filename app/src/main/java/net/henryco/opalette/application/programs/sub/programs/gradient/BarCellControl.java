@@ -61,14 +61,15 @@ public class BarCellControl extends AppAutoSubControl<AppMainProto> {
 		boolean active = palette.getOrientation() != OPalette.ORIENTATION_NONE && palette.isDiscrete();
 
 		InjectableSeekBar numBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_SMALL, "Number");
-		numBar.setMax(MAX_CELLS).setDiscrete(true);
+		numBar.setMax(MAX_CELLS - 1).setDiscrete(true);
+		numBar.setTextValuerCorrector(f -> f + 1);
 		numBar.onBarCreate(bar -> {
 			bar.setEnabled(active);
-			bar.setProgress(Math.min(MAX_CELLS, palette.getCellNumb()));
+			bar.setProgress(Math.min(MAX_CELLS, palette.getCellNumb() - 1));
 		});
 		numBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser && palette.isDiscrete()) {
-				palette.setCellNumb(progress);
+				palette.setCellNumb(progress + 1);
 				context.getRenderSurface().update();
 			}
 		}));
@@ -102,7 +103,7 @@ public class BarCellControl extends AppAutoSubControl<AppMainProto> {
 				palette.setCellNumb(def_cell_numb);
 				palette.setMargin_pct(def_cell_margin);
 				palette.setRelativeContentSize(def_cell_content_size);
-				numBar.setProgress(def_cell_numb);
+				numBar.setProgress(def_cell_numb - 1);
 				marginBar.setProgress(marginBar.de_norm(def_cell_margin));
 				sizeBar.setProgress(sizeBar.de_norm(def_cell_content_size));
 				context.getRenderSurface().update();
