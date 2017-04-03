@@ -190,4 +190,5 @@
     <color name="DARKER">#2e2f30</color>
     <color name="TRANSPARENT">#00000000</color>
     <color name="black_overlay">#50000000</color>
+    <color name="greygrey">#d6d7d7</color>
 </resources>

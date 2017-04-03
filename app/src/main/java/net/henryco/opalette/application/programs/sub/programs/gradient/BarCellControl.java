@@ -24,6 +24,7 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
+import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -112,5 +113,10 @@ public class BarCellControl extends AppAutoSubControl<AppMainProto> {
 
 		OPallViewInjector.inject(context.getActivityContext(), numBar, marginBar, sizeBar);
 
+
+		if (palette.getOrientation() == OPalette.ORIENTATION_NONE) {
+			new OPallAlertDialog().message("U have to select palette type first")
+					.show(context.getActivityContext().getSupportFragmentManager(), "Palette alert");
+		}
 	}
 }

@@ -42,22 +42,27 @@ public class Vignette extends OPallShapeBuffered {
 			"\n" +
 			"uniform vec2 u_dimension;\n" +
 			"uniform float u_power;\n" +
+			"uniform float u_radius;\n" +
+			"uniform float u_activeRadius;\n" +
 			"\n" +
 			"void main() {\n" +
 			"\n" +
 			"    vec2 pos = ((gl_FragCoord.xy / u_dimension.xy) - vec2(.5)) * vec2(2.);\n" +
 			"    float r = length(pos);\n" +
-			"    if (r >= 1.)\n" +
-			"        gl_FragColor = vec4(vec3(0.), pow((2.41 * (r - 1.)), u_power));\n" +
+			"    if (r >= u_radius) {// 2.41 = 1 / (sqrt(2) − 1)\n" +
+			"        gl_FragColor = vec4(vec3(0.), pow((u_activeRadius * (r - u_radius)), u_power));\n" +
+			"    }\n" +
 			"    else gl_FragColor = vec4(0.);\n" +
 			"}";
 	private static final String u_dimension = "u_dimension";
 	private static final String u_power = "u_power";
-
+	private static final String u_radius = "u_radius";
+	private static final String u_activeRadius = "u_activeRadius";
 
 	private static final float max = 5;
 
 	private float power = max;
+	private float radius = 1;
 	private boolean active = true;
 
 	public Vignette(float w, float h) {
@@ -78,6 +83,16 @@ public class Vignette extends OPallShapeBuffered {
 		return this;
 	}
 
+	public Vignette setRadius(float r) {
+		this.radius = 1 - r;
+		update();
+		return this;
+	}
+
+	public float getRadius() {
+		return 1 - radius;
+	}
+
 	public float getPower() {
 		return 1f - (power / max);
 	}
@@ -94,7 +109,9 @@ public class Vignette extends OPallShapeBuffered {
 	@Override
 	protected void render(int program, Camera2D camera) {
 		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), getScreenWidth(), getScreenHeight());
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_activeRadius), radius / (1.41f - radius));
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_power), Math.max(power, 0.5f));
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_radius), radius);
 	}
 
 }

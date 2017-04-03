@@ -25,6 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/DARKER"
+    android:elevation="0dp"
     android:orientation="vertical"
     android:visibility="visible"
     android:weightSum="1"
@@ -36,6 +37,7 @@
         android:id="@+id/activeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:elevation="0dp"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -44,8 +46,9 @@
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.69"
+            android:elevation="0dp"
             android:orientation="horizontal"
-            android:translationZ="0dp">
+            android:translationZ="10dp">
 
             <net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView
                 android:id="@+id/opallView"
@@ -60,6 +63,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.285"
             android:background="@color/DARK"
+            android:elevation="0dp"
             android:translationZ="-10dp"
             android:visibility="visible">
 
@@ -131,7 +135,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="?attr/colorButtonNormal"
+                android:background="@color/greygrey"
+                android:elevation="0dp"
                 android:fadingEdge="none"
                 android:paddingBottom="@dimen/appbar_padding_top"
                 android:paddingLeft="@dimen/activity_horizontal_margin"

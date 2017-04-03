@@ -30,7 +30,9 @@ import android.widget.TextView;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
+import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.OPallAnimated;
+import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -48,16 +50,16 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 
 	private TouchLines touchLines;
 	private OPallSurfaceView.OnTouchEventListener listener;
+	private final OPalette palette;
 
-
-	public PaletteRegionControl(TouchLines touchLines) {
+	public PaletteRegionControl(TouchLines touchLines, final OPalette palette) {
 		super(target_layer, img_button_res, txt_button_res);
 		this.touchLines = touchLines;
+		this.palette = palette;
 	}
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
-
 		touchLines.setVisible(true);
 		context.getRenderSurface().update();
 
@@ -107,6 +109,11 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 		};
 
 		OPallViewInjector.inject(context.getActivityContext(), controls);
+
+		if (palette.getOrientation() == OPalette.ORIENTATION_NONE) {
+			new OPallAlertDialog().message("U have to select palette type first")
+					.show(context.getActivityContext().getSupportFragmentManager(), "Palette alert");
+		}
 	}
 
 

@@ -70,12 +70,24 @@ public class VignetteControl extends AppAutoSubControl<AppMainProto> {
 			}
 		}));
 
+		InjectableSeekBar radBar = new InjectableSeekBar(view, "Radius");
+		radBar.setTextValuerCorrector(f -> f / 100);
+		radBar.onBarCreate(bar -> bar.setProgress(radBar.de_norm(vignette.getRadius())));
+		radBar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {
+			if (fromUser) {
+				vignette.setRadius(radBar.norm(progress));
+				updateFunc.run();
+			}
+		}));
+
 		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.disable), () -> {
 			vigBar.setProgress(0);
+			radBar.setProgress(radBar.de_norm(0));
 			vignette.setPower(0).setActive(false);
+			vignette.setRadius(0);
 			updateFunc.run();
 		});
 
-		OPallViewInjector.inject(context.getActivityContext(), vigBar);
+		OPallViewInjector.inject(context.getActivityContext(), radBar, vigBar);
 	}
 }

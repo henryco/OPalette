@@ -272,6 +272,7 @@ public class MainActivity extends AppCompatActivity
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
+			findViewById(R.id.fragmentSuperContainer).setElevation(0);
 		}
 
 		OPallUniRenderer renderer = new UniRenderer(this, new ProgramPipeLine());

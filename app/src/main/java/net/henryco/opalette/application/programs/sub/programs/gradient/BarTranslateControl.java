@@ -26,6 +26,7 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceTouchListener;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
+import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -62,7 +63,10 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		InjectableSeekBar moveBar = new InjectableSeekBar(view, "Position");
-		moveBar.onBarCreate(bar -> bar.setProgress(moveBar.de_norm(palette.getPos_pct())));
+		moveBar.onBarCreate(bar -> {
+			bar.setProgress(moveBar.de_norm(palette.getPos_pct()));
+			bar.setEnabled(palette.getOrientation() != OPalette.ORIENTATION_NONE);
+		});
 		moveBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser && palette.getOrientation() != OPalette.ORIENTATION_NONE) {
 				palette.setRelativePosition(moveBar.norm(progress));
@@ -71,7 +75,10 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 		}));
 
 		InjectableSeekBar sizeBar = new InjectableSeekBar(view, "Size");
-		sizeBar.onBarCreate(bar -> bar.setProgress(sizeBar.de_norm(palette.getSize_pct())));
+		sizeBar.onBarCreate(bar -> {
+			bar.setProgress(sizeBar.de_norm(palette.getSize_pct()));
+			bar.setEnabled(palette.getOrientation() != OPalette.ORIENTATION_NONE);
+		});
 		sizeBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser && palette.getOrientation() != OPalette.ORIENTATION_NONE) {
 				palette.setRelativeSize(sizeBar.norm(progress));
@@ -96,15 +103,24 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 		});
 
 		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.control_top_bar_button_reset), () -> {
-			palette.setRelativePosition(DEF_P);
-			palette.setRelativeSize(def_size);
-			moveBar.setProgress(moveBar.de_norm(DEF_P));
-			sizeBar.setProgress(sizeBar.de_norm(def_size));
-			context.getRenderSurface().update();
+			if (palette.getOrientation() != OPalette.ORIENTATION_NONE) {
+				palette.setRelativePosition(DEF_P);
+				palette.setRelativeSize(def_size);
+				moveBar.setProgress(moveBar.de_norm(DEF_P));
+				sizeBar.setProgress(sizeBar.de_norm(def_size));
+				context.getRenderSurface().update();
+			}
 		});
 
-		context.getRenderSurface().addOnTouchEventListener(touchEventListener);
+		if (palette.getOrientation() != OPalette.ORIENTATION_NONE)
+			context.getRenderSurface().addOnTouchEventListener(touchEventListener);
 		OPallViewInjector.inject(context.getActivityContext(), sizeBar, moveBar);
+
+
+		if (palette.getOrientation() == OPalette.ORIENTATION_NONE) {
+			new OPallAlertDialog().message("U have to select palette type first")
+					.show(context.getActivityContext().getSupportFragmentManager(), "Palette alert");
+		}
 	}
 
 	@Override
