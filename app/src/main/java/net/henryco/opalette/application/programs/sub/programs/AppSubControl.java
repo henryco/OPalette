@@ -184,6 +184,8 @@ package net.henryco.opalette.application.programs.sub.programs;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -258,6 +260,11 @@ public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInj
 			LinearLayout linearLayout = new LinearLayout(getActivity().getApplicationContext());
 			linearLayout.setOrientation(LinearLayout.VERTICAL);
 			linearLayout.setGravity(Gravity.CENTER);
+			linearLayout.setBackgroundColor(Color.TRANSPARENT);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				linearLayout.setElevation(0);
+				linearLayout.setTranslationZ(-10);
+			}
 			return linearLayout;
 		}
 

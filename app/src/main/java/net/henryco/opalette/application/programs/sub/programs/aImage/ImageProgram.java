@@ -280,6 +280,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor));
 		OPallViewInjector.inject(context.getActivityContext(), new VignetteControl(vignette, proxyRenderData));
+		OPallViewInjector.inject(context.getActivityContext(), new NoiseControl(proxyRenderData));
 
 		defDim[0] = width;
 		defDim[1] =height;

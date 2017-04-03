@@ -198,7 +198,7 @@ import java.nio.FloatBuffer;
 public class ConvolveTexture extends OPallTextureExtended {
 
 
-
+	private static final String u_noiseLevel = "u_noiseLevel";
 	private static final String u_matrixSize = "u_matrixSize";
 	private static final String u_matrix3 = "u_matrix3";
 	private static final String u_matrix5 = "u_matrix5";
@@ -210,6 +210,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private float[] original_filter_matrix;
 	private float[] work_filter_matrix;
 	private float center_scale = 1;
+	private float noiseLevel = 0;
 	private int matrix_size = 0;
 	private int matrix_sqrt_size = 0;
 	private int scale_pow;
@@ -252,6 +253,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	protected void render(int program, Camera2D camera) {
 		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_texDim), getWidth(), getHeight());
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_matrixSize), matrix_sqrt_size);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_noiseLevel), noiseLevel);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_enable), enable ? 1 : 0);
 		String matrixTarget;
 		if (matrix_sqrt_size == 3) matrixTarget = u_matrix3;
@@ -317,6 +319,16 @@ public class ConvolveTexture extends OPallTextureExtended {
 		return matrix;
 	}
 
+	public ConvolveTexture setNoiseLevel(float noiseLevel) {
+		this.noiseLevel = noiseLevel;
+		return this;
+	}
+
+	public float getNoiseLevel() {
+		return noiseLevel;
+	}
+
+
 
 	public ConvolveTexture setFilterEnable(boolean b) {
 		this.enable = b;
@@ -327,10 +339,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	}
 
 	private static final String FRAG_DIR = OPallTexture.FRAG_DIR+"/ConvolveFilter.frag";
-
-	private static final String FRAG_FILE =
-			"precision mediump float;\n" +
-			"\n" +
+	private static final String FRAG_FILE = "precision highp float;\n" +
 			"// necessary part\n" +
 			"varying vec4 v_Position;\n" +
 			"varying vec4 v_WorldPos;\n" +
@@ -343,8 +352,25 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"uniform float u_matrixSize;  // 3, 5\n" +
 			"uniform float u_matrix3[9];\n" +
 			"uniform float u_matrix5[25];\n" +
+			"uniform float u_noiseLevel;\n" +
 			"uniform vec2 u_screenDim;\n" +
 			"uniform int u_enable; // 0 == false, 1... == true\n" +
+			"\n" +
+			"\n" +
+			"float noise1f(vec2 co){\n" +
+			"    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);\n" +
+			"}\n" +
+			"//http://stackoverflow.com/questions/12964279/whats-the-origin-of-this-glsl-rand-one-liner\n" +
+			"vec3 noise3f(vec3 color) {\n" +
+			"    if (u_noiseLevel > 0.01) {\n" +
+			"		 float l = length(v_TexCoordinate);"+
+			"        float r = noise1f(vec2(color.r, l));\n" +
+			"        float g = noise1f(vec2(color.g, l));\n" +
+			"        float b = noise1f(vec2(color.b, l));\n" +
+			"        return mix(normalize(vec3(r, g, b)), color, vec3(1. - u_noiseLevel));\n" +
+			"    }\n" +
+			"    return color;\n" +
+			"}\n" +
 			"\n" +
 			"void main() {\n" +
 			"\n" +
@@ -365,7 +391,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"                rgb += irgb;\n" +
 			"            }\n" +
 			"        }\n" +
-			"        gl_FragColor = vec4(rgb, 1.);\n" +
+			"        gl_FragColor = vec4(noise3f(rgb), 1.);\n" +
 			"    }\n" +
 			"}";
 

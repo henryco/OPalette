@@ -230,6 +230,7 @@
     <string name="control_palette_type">Palette type</string>
     <string name="control_vignette">Vignette</string>
     <string name="control_gamma_correction">Gamma correction</string>
+    <string name="control_noise">Noise</string>
 
 
 
@@ -240,5 +241,6 @@
     <string name="vertical">Vertical</string>
     <string name="horizontal">Horizontal</string>
     <string name="palette_type">Palette type</string>
+    <string name="noise_level">Noise level</string>
 
 </resources>

@@ -184,6 +184,7 @@ package net.henryco.opalette.api.utils.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -228,6 +229,9 @@ public abstract class OPallViewInjector<T> {
 			}
 
 			view.setVisibility(View.GONE);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				view.setElevation(0);
+			}
 			new Handler().postDelayed(() -> context.runOnUiThread(() -> {
 				insertGroup.addView(view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 				view.setVisibility(View.VISIBLE);

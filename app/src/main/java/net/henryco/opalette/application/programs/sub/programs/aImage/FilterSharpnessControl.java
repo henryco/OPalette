@@ -204,7 +204,7 @@ public class FilterSharpnessControl extends AppAutoSubControl<AppMainProto> {
 	private static final int img_button_res = R.drawable.ic_details_white_24dp;
 	private static final int txt_button_res = R.string.control_sharpness;
 
-	private AppSubProgram.ProxyRenderData<ConvolveTexture> filterHolder;
+	private final AppSubProgram.ProxyRenderData<ConvolveTexture> filterHolder;
 
 	public FilterSharpnessControl(AppSubProgram.ProxyRenderData<ConvolveTexture> data) {
 		super(img_button_res, txt_button_res);
@@ -228,7 +228,7 @@ public class FilterSharpnessControl extends AppAutoSubControl<AppMainProto> {
 		OPallViewInjector.inject(context.getActivityContext(), seekBar);
 
 		context.setTopControlButton(button
-				-> button.setTitle(R.string.control_top_bar_button_reset).setEnabled(true).setVisible(true), () -> {
+				-> button.setTitle(R.string.disable).setEnabled(true).setVisible(true), () -> {
 			seekBar.setProgress(seekBar.de_norm(0));
 			filterHolder.setStateUpdated().getRenderData().setEffectScale(0);
 			context.getRenderSurface().update();
