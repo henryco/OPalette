@@ -229,6 +229,7 @@
     <string name="control_threshold">Threshold</string>
     <string name="control_palette_type">Palette type</string>
     <string name="control_vignette">Vignette</string>
+    <string name="control_gamma_correction">Gamma correction</string>
 
 
 

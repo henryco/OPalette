@@ -198,15 +198,16 @@ import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 
 public class EdTexture extends OPallTextureExtended  {
 
-	public final GLESUtils.Color add = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
-	public final GLESUtils.Color min = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
-	public final GLESUtils.Color max = new GLESUtils.Color(GLESUtils.Color.WHITE);
-	public final GLESUtils.Color thr = new GLESUtils.Color(GLESUtils.Color.WHITE);
+	public final GLESUtils.Color add = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT.hex());
+	public final GLESUtils.Color min = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT.hex());
+	public final GLESUtils.Color max = new GLESUtils.Color(GLESUtils.Color.WHITE.hex());
+	public final GLESUtils.Color thr = new GLESUtils.Color(GLESUtils.Color.WHITE.hex());
 
 	private float addBrightness = 0;
 	private float threshold = 0.5f;
 	private float alpha = 1;
 	private float contrast = 1;
+	private float gammaCorrection = 1;
 
 	private boolean bwEnable = false;
 	private boolean thresholdEnable = false;
@@ -260,6 +261,11 @@ public class EdTexture extends OPallTextureExtended  {
 		return this;
 	}
 
+	public EdTexture setGammaCorrection(float c) {
+		this.gammaCorrection = c;
+		return this;
+	}
+
 	public EdTexture setContrast(float c) {
 		this.contrast = c;
 		return this;
@@ -272,6 +278,10 @@ public class EdTexture extends OPallTextureExtended  {
 	public EdTexture setBwEnable(boolean bwEnable) {
 		this.bwEnable = bwEnable;
 		return this;
+	}
+
+	public float getGammaCorrection() {
+		return gammaCorrection;
 	}
 
 	public float getBrightness() {
@@ -314,6 +324,7 @@ public class EdTexture extends OPallTextureExtended  {
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_thrColor"), thr.r, thr.g, thr.b);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_bwEnable"), bwEnable ? 1 : 0);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_thresholdEnable"), thresholdEnable ? 1 : 0);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_gammaCorrection"), 1f / gammaCorrection);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_threshold"), threshold);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_contrast"), contrast);
 	}
@@ -337,6 +348,7 @@ public class EdTexture extends OPallTextureExtended  {
 			"uniform float u_addBrightness;\n" +
 			"uniform float u_contrast;\n" +
 			"uniform float u_threshold;\n" +
+			"uniform float u_gammaCorrection;\n" +
 			"uniform int u_bwEnable;\n" +
 			"uniform int u_thresholdEnable;\n" +
 			"\n" +
@@ -347,9 +359,9 @@ public class EdTexture extends OPallTextureExtended  {
 			"void main() {\n" +
 			"    vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
 			"    if (color.a != 0.) {\n" +
-			"        color.r = max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r);\n" +
-			"        color.g = max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g);\n" +
-			"        color.b = max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b);\n" +
+			"        color.r = pow(max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r), u_gammaCorrection);\n" +
+			"        color.g = pow(max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g), u_gammaCorrection);\n" +
+			"        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);\n" +
 			"        color.a = u_alpha;\n" +
 			"        if (u_bwEnable == 1 || u_thresholdEnable == 1) {\n" +
 			"            float val = dot(vec3(1.), color.rgb);\n" +
