@@ -266,7 +266,6 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
-
 	}
 
 

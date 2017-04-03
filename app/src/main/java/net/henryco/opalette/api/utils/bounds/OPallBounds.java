@@ -202,7 +202,7 @@ public interface OPallBounds <T extends OPallBounds> {
 
 	final class order {
 		public static short[] FLAT_SQUARE_2D(){
-			return new short[]{0,1,2, 0,2,3};
+			return new short[]{0,1,2, 2,3,0};
 		}
 	}
 

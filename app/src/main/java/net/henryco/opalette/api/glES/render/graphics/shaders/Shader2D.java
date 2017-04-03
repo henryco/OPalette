@@ -251,7 +251,7 @@ public abstract class Shader2D implements OPallShader {
 
 		GLESUtils.glUseProgram(program, () -> camera2D.backTranslate(() -> {
 
-			camera2D.translateXY(correctFunc(getX(), getY(), (float) Math.toRadians(getAngle())));
+			camera2D.translateXY(rotCorrectFunc(getX(), getY(), (float) Math.toRadians(getAngle())));
 			camera2D.rotate(getAngle()).update();
 			methods.applyCameraMatrix(program, camera2D.getMVPMatrix());
 			render(program, camera2D, setter);
@@ -265,7 +265,7 @@ public abstract class Shader2D implements OPallShader {
 
 
 
-	private static synchronized float[] correctFunc(float trueX, float trueY, float a) {
+	private static synchronized float[] rotCorrectFunc(float trueX, float trueY, float a) {
 
 		if (a == 0 && trueX == 0 && trueY == 0) return new float[]{0,0};
 		// TODO FIXME: THIS CODE WORKS, BUT IT NEED REWORK

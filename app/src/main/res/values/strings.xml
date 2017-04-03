@@ -206,6 +206,8 @@
 
     <string name="main_top_bar_button">next</string>
 
+
+
     <string name="control_top_bar_button_reset">Reset</string>
     <string name="control_brightness">Brightness</string>
     <string name="control_contrast">Contrast</string>
@@ -226,10 +228,11 @@
     <string name="control_black_white">B &amp; W</string>
     <string name="control_threshold">Threshold</string>
     <string name="control_palette_type">Palette type</string>
+    <string name="control_vignette">Vignette</string>
 
 
 
-
+    <string name="disable">Disable</string>
     <string name="palette_region_multi_touch_info">Use multi-touch to select a palette region.</string>
     <string name="line">Line</string>
     <string name="none">None</string>

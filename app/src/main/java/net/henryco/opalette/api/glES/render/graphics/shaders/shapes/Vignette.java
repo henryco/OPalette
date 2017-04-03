@@ -21,15 +21,14 @@ package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.utils.GLESUtils;
 
 /**
- * Created by HenryCo on 28/03/17.
+ * Created by HenryCo on 03/04/17.
  */
 
-public class Borders extends OPallShapeBuffered {
+public class Vignette extends OPallShapeBuffered {
 
-	private static final String VERT = "#version 100\n" +
+	private static final String VERT_FILE = "#version 100\n" +
 			"\n" +
 			"attribute vec4 a_Position;\n" +
 			"uniform mat4 u_MVPMatrix;\n" +
@@ -37,68 +36,65 @@ public class Borders extends OPallShapeBuffered {
 			"void main() {\n" +
 			"    gl_Position = u_MVPMatrix * a_Position;\n" +
 			"}";
-	private static final String FRAG = "#version 100\n" +
+	private static final String FRAG_FILE = "#version 100\n" +
+			"\n" +
 			"precision mediump float;\n" +
 			"\n" +
 			"uniform vec2 u_dimension;\n" +
-			"uniform float u_size;\n" +
-			"uniform vec4 u_color;\n" +
+			"uniform float u_power;\n" +
 			"\n" +
 			"void main() {\n" +
 			"\n" +
-			"    vec2 pos = gl_FragCoord.xy;\n" +
-			"    if (pos.x < u_size || pos.x > u_dimension.x - u_size\n" +
-			"        || pos.y < u_size || pos.y > u_dimension.y - u_size)\n" +
-			"            gl_FragColor = u_color;\n" +
-			"    else gl_FragColor = vec4(.0);\n" +
+			"    vec2 pos = ((gl_FragCoord.xy / u_dimension.xy) - vec2(.5)) * vec2(2.);\n" +
+			"    float r = length(pos);\n" +
+			"    if (r >= 1.)\n" +
+			"        gl_FragColor = vec4(vec3(0.), pow((2.41 * (r - 1.)), u_power));\n" +
+			"    else gl_FragColor = vec4(0.);\n" +
 			"}";
 	private static final String u_dimension = "u_dimension";
-	private static final String u_size = "u_size";
-	private static final String u_color = "u_color";
+	private static final String u_power = "u_power";
 
 
-	private static final float size_scale = 0.1f;
+	private static final float max = 5;
 
-	public final GLESUtils.Color color = new GLESUtils.Color();
-	private float size;
+	private float power = max;
+	private boolean active = true;
 
-	public Borders() {
-		this(0, 0);
+	public Vignette(float w, float h) {
+		super(VERT_FILE, FRAG_FILE, w, h);
+		setVisible(false);
 	}
-	public Borders(int w, int h) {
-		super(VERT, FRAG);
-		create(w, h);
-		setSize(0.2f)
-				.setColor(GLESUtils.Color.WHITE)
-				.setVisible(false);
+	public Vignette() {
+		super(VERT_FILE, FRAG_FILE);
+		setVisible(false);
 	}
 
-	public Borders setSize(float size) {
-		this.size = size;
+	/**
+	 * @param p power of vignette, this range is normed.
+	 */
+	public Vignette setPower(float p) {
+		power = max * (1 - p);
 		update();
 		return this;
 	}
 
+	public float getPower() {
+		return 1f - (power / max);
+	}
 
-
-	public Borders setColor(GLESUtils.Color color) {
-		this.color.set(color);
-		update();
+	public Vignette setActive(boolean active) {
+		this.active = active;
 		return this;
 	}
 
-	public float getSize() {
-		return size;
+	public boolean isActive() {
+		return active;
 	}
-
 
 	@Override
 	protected void render(int program, Camera2D camera) {
-		float bSize = Math.max(getScreenHeight(), getScreenWidth()) * getSize() * size_scale;
-		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_size), bSize);
 		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), getScreenWidth(), getScreenHeight());
-		GLES20.glUniform4f(GLES20.glGetUniformLocation(program, u_color), color.r, color.g, color.b, color.a);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_power), Math.max(power, 0.5f));
 	}
-
 
 }

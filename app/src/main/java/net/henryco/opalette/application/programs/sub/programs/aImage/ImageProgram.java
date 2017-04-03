@@ -189,6 +189,7 @@ import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Vignette;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
@@ -212,7 +213,8 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private long id = methods.genID(ImageProgram.class);
 	private ProxyRenderData<ConvolveTexture> proxyRenderData = new ProxyRenderData<>();
 	private FrameBuffer textureBuffer;
-
+	private Vignette vignette;
+	private Texture vignetteTexture;
 
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
@@ -257,7 +259,12 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
+		vignette = new Vignette(width, height).setActive(false).setPower(0);
+		vignetteTexture = new Texture();
+		vignetteTexture.setScreenDim(width, height);
+
 		textureBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
+
 		proxyRenderData.setRenderData(new ConvolveTexture());
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen1());
@@ -266,11 +273,13 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 
-//		Actually disabled need fix
+
 //		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
-//		FIXME: 01/04/17 // TODO: 01/04/17
+//		FIXME: 01/04/17 // TODO: 01/04/17 Actually disabled need fix
+
 
 		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor));
+		OPallViewInjector.inject(context.getActivityContext(), new VignetteControl(vignette, proxyRenderData));
 
 		defDim[0] = width;
 		defDim[1] =height;
@@ -282,6 +291,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 		proxyRenderData.setStateUpdated();
+		vignette.setScreenDim(width, height);
 	}
 
 
@@ -301,7 +311,15 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 				boolean e = proxyRenderData.getRenderData().isFilterEnable();
 				feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 				feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
-				textureBuffer.beginFBO(() -> proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear()));
+				if (vignette.isActive()) {
+					vignette.render(camera);
+					vignetteTexture.set(proxyRenderData.getRenderData());
+					vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
+				}
+				textureBuffer.beginFBO(() -> {
+					proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear());
+					if (vignette.isActive()) vignetteTexture.render(camera);
+				});
 			});
 		}
 		finalBackGroundData.render(camera);

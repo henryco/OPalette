@@ -222,20 +222,19 @@ public abstract class OPallShape extends Shader2D implements OPallBoundsHolder<B
 	}
 	public OPallShape(Context context, String VERT, String FRAG, int coordsPerVertex) {
 		super(context, VERT, FRAG, coordsPerVertex);
-		init();
+		init(bounds2D.setHolder(this));
 	}
 	public OPallShape(String vertex, String fragment) {
 		this(vertex, fragment, 2);
 	}
 	public OPallShape(String vertex, String fragment, int coordsPerVertex) {
 		super(vertex, fragment, coordsPerVertex);
-		init();
+		init(bounds2D.setHolder(this));
 	}
 
-	protected void init() {
-		this.bounds2D.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
-				.setOrder(OPallBounds.order.FLAT_SQUARE_2D())
-				.setHolder(this);
+	protected void init(Bounds2D bounds2D) {
+		bounds2D.setVertices(OPallBounds.vertices.FLAT_SQUARE_2D())
+				.setOrder(OPallBounds.order.FLAT_SQUARE_2D());
 	}
 
 	public void render(Camera2D camera) {

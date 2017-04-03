@@ -186,7 +186,6 @@ import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.utils.GLESUtils;
-import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 
 /**
  * Created by HenryCo on 24/03/17.
@@ -248,7 +247,6 @@ public class GridLines extends OPallShapeBuffered {
 
 
 	private final GLESUtils.Color color;
-	private boolean visible;
 	private float lineSize;
 	private float n;
 	private int type;
@@ -262,7 +260,7 @@ public class GridLines extends OPallShapeBuffered {
 		super(VERTEX, FRAGMENT);
 		color = new GLESUtils.Color(GLESUtils.Color.GREY);
 		setGridNumber(5).setLineSize(4).create(w, h);
-		setVisible(false).setType(ColorType.NORMALIZED);
+		setType(ColorType.NORMALIZED).setVisible(false);
 	}
 
 
@@ -286,11 +284,6 @@ public class GridLines extends OPallShapeBuffered {
 		return this;
 	}
 
-	public GridLines setVisible(boolean visible) {
-		this.visible = visible;
-		return this;
-	}
-
 	public GridLines setType(ColorType type) {
 		this.type = type.type;
 		update();
@@ -305,11 +298,6 @@ public class GridLines extends OPallShapeBuffered {
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellW), getScreenWidth() / n);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellH), getScreenHeight() / n);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_type), type);
-	}
-
-	@Override
-	protected void render(int glProgram, Camera2D camera, OPallConsumer<Integer> setter) {
-		if (visible) super.render(glProgram, camera, setter);
 	}
 
 

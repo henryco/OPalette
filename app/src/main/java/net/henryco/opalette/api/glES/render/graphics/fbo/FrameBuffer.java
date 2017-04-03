@@ -228,8 +228,8 @@ public class FrameBuffer implements OPallFBO {
 		}
 	}
 
-	public FrameBuffer createFBO(int w, int h, boolean depth) {
-		return createFBO(w, h, w, h, depth);
+	public FrameBuffer createFBO(float w, float h, boolean depth) {
+		return createFBO((int)w, (int)h, (int)w, (int)h, depth);
 	}
 
 	@Override

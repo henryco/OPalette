@@ -36,14 +36,18 @@ public abstract class OPallShapeBuffered extends OPallShape {
 	private final FrameBuffer imageBuffer;
 	private final float[] defDim = {0,0};
 	private boolean needUpDate = false;
+	private boolean visible = true;
 
-
+	public OPallShapeBuffered(String VERT_FILE, String FRAG_FILE, float w, float h) {
+		this(VERT_FILE, FRAG_FILE);
+		create(w, h);
+	}
 	public OPallShapeBuffered(String VERT_FILE, String FRAG_FILE) {
 		super(VERT_FILE, FRAG_FILE, 2);
 		imageBuffer = OPallFBOCreator.FrameBuffer();
 	}
 
-	public OPallShapeBuffered create(int scr_width, int scr_height) {
+	public OPallShapeBuffered create(float scr_width, float scr_height) {
 		super.setScreenDim(scr_width, scr_height);
 		if (scr_width != 0 && scr_height != 0) {
 			imageBuffer.createFBO(scr_width, scr_height, false);
@@ -65,16 +69,30 @@ public abstract class OPallShapeBuffered extends OPallShape {
 			});
 			needUpDate = false;
 		}
-		camera.backTranslate(() -> {
-			camera.setPosXY_absolute(0,0);
-			float tx = getScreenWidth() - defDim[0];
-			float ty = getScreenHeight() - defDim[1];
-			camera.translateXY(0, ty); // position correction while canvas size changed
-			imageBuffer.render(camera);
-		});
-
+		if (visible) {
+			camera.backTranslate(() -> {
+				camera.setPosXY_absolute(0,0);
+//				float tx = getScreenWidth() - defDim[0];
+				float ty = getScreenHeight() - defDim[1];
+				camera.translateXY(0, ty); // position correction while canvas size changed
+				imageBuffer.render(camera);
+			});
+		}
 	}
 
+	public FrameBuffer getShapeBuffer() {
+		return imageBuffer;
+	}
+
+	public OPallShapeBuffered setVisible(boolean visible) {
+		this.visible = visible;
+		update();
+		return this;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
 
 	@Override
 	public OPallShapeBuffered bounds(BoundsConsumer<Bounds2D> processor) {
