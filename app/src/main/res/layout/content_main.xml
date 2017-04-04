@@ -37,6 +37,7 @@
         android:id="@+id/activeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:elevation="0dp"
         android:orientation="vertical"
         android:visibility="visible">
@@ -44,8 +45,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.69"
+            android:layout_gravity="center_horizontal|fill_horizontal"
+            android:layout_weight="0.7"
             android:elevation="0dp"
             android:orientation="horizontal"
             android:translationZ="10dp">

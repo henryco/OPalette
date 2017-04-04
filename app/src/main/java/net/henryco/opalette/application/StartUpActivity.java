@@ -211,7 +211,7 @@ public class StartUpActivity extends AppCompatActivity
 
 
 	public static final long PICKBUTTON_SLEEP_TIME = 2;
-	public static final long SPLASH_LOADING_TIME = 1500;
+	public static final long SPLASH_LOADING_TIME = 1000;
 	public static final long ANIMATION_TIME = 300;
 
 	public static final long AFTER_SPLASH_DELAY = 225;
@@ -253,27 +253,32 @@ public class StartUpActivity extends AppCompatActivity
 		findViewById(R.id.fullscreen_content).setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 		findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
-		reloadControls(true);
+//		reloadControls(true);
+		loadControlViews();
 	}
 
 
 
 	private void reloadControls(boolean left_right) {
-		float lr = left_right ? 1 : -1;
-		new Handler().postDelayed(() ->
-				animation(1 * lr, -1 * lr, ANIMATION_TIME, () ->
-						runOnUiThread(() -> {
-							View text = findViewById(R.id.textView);
-							text.setVisibility(View.VISIBLE);
-							text.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
-							text.setOnClickListener(this::imagePickAction);
-							findViewById(R.id.fullscreen_content_controls).setOnClickListener(this::imagePickAction);
-							findViewById(R.id.imageButtonGall).setOnClickListener(this::imagePickAction);
-						})
-				), AFTER_SPLASH_DELAY
-		);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			float lr = left_right ? 1 : -1;
+			new Handler().postDelayed(() ->
+					animation(1 * lr, -1 * lr, ANIMATION_TIME, () ->
+							runOnUiThread(this::loadControlViews)), AFTER_SPLASH_DELAY);
+		} else loadControlViews();
 	}
 
+
+	private void loadControlViews() {
+		View text = findViewById(R.id.textView);
+		text.setVisibility(View.VISIBLE);
+		text.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
+		text.setOnClickListener(this::imagePickAction);
+		findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
+		findViewById(R.id.imageButtonGall).setOnClickListener(this::imagePickAction);
+		findViewById(R.id.fullscreen_content_controls).setOnClickListener(this::imagePickAction);
+	}
 
 
 	private void animation(float direction, float corner, float animTime_ms, Runnable afterAction) {

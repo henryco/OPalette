@@ -237,7 +237,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="161dp"
-                    android:backgroundTint="@android:color/transparent"
+                    android:background="@color/TRANSPARENT"
                     android:elevation="0dp"
                     android:foregroundGravity="center"
                     android:scaleType="fitCenter"

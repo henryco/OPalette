@@ -26,6 +26,8 @@ import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
+import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
@@ -49,7 +51,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	private AppSubProgramHolder holder;
 
 	private boolean firstTime;
-	private Texture filterTexture; //TODO
+	private EdTexture filterTexture;
 	private FrameBuffer filterBuffer;
 
 	@Override public void setProgramHolder(AppSubProgramHolder holder) {
@@ -79,6 +81,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 		firstTime = true;
 		filterBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
+		filterTexture = new EdTexture();
 	}
 
 	@Override
@@ -89,7 +92,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 		firstTime = false;
-//		filterBuffer.beginFBO(() -> filterTexture.render(camera, program -> GLESUtils.clear()));
+		filterBuffer.beginFBO(() -> filterTexture.render(camera, program -> GLESUtils.clear()));
 	}
 
 
@@ -109,8 +112,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 	@NonNull @Override
 	public OPallRenderable getRenderData() {
-//		return filterBuffer.getTexture();
-		return proxyRenderData.getRenderData();
+		return filterBuffer.getTexture();
 	}
 
 	@Nullable @Override

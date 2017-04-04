@@ -210,6 +210,7 @@
             android:layout_below="@+id/barName"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
+            android:theme="@style/Theme.AppCompat"
             android:visibility="visible"/>
 
         <TextView
