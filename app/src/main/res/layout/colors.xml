@@ -17,43 +17,63 @@
   ~    */
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:padding="@dimen/appbar_padding_top">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:padding="@dimen/appbar_padding_top">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/color_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/appbar_padding_top"
-        android:layout_marginRight="@dimen/activity_vertical_margin">
+        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/color_button"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"/>
-
-        <TextView
-            android:id="@+id/color_text"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="Background"
-            android:textSize="14sp"/>
+            android:layout_gravity="center"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
 
-        <Switch
-            android:id="@+id/color_switch"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/color_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:text="Background"
+                android:textAlignment="center"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:theme="@style/DarkSwitch"/>
-    </RelativeLayout>
+            android:layout_weight="0.4"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <Switch
+                android:id="@+id/color_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:theme="@style/DarkSwitch"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/color_button"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|start"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

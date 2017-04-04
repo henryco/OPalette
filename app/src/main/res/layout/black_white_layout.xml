@@ -20,12 +20,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:layout_marginTop="5dp"
               android:orientation="horizontal">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:visibility="visible">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/bwButtonOn"
@@ -33,17 +36,8 @@
             android:layout_height="70dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="80dp"
+            android:layout_gravity="center"
             android:background="@drawable/ic_lens_black_24dp"/>
-
-        <Button
-            android:id="@+id/bwButtonOff"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="80dp"
-            android:background="@drawable/ic_panorama_fish_eye_black_24dp"/>
 
         <TextView
             android:id="@+id/bwTextOn"
@@ -52,9 +46,27 @@
             android:layout_alignEnd="@+id/bwButtonOn"
             android:layout_alignStart="@+id/bwButtonOn"
             android:layout_below="@+id/bwButtonOn"
+            android:layout_gravity="center"
             android:text="ON"
             android:textAlignment="center"
             android:textColor="@color/black_overlay"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/bwButtonOff"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_panorama_fish_eye_black_24dp"/>
 
         <TextView
             android:id="@+id/bwTextOff"
@@ -63,10 +75,10 @@
             android:layout_alignEnd="@+id/bwButtonOff"
             android:layout_alignStart="@+id/bwButtonOff"
             android:layout_below="@+id/bwButtonOff"
+            android:layout_gravity="center"
             android:text="OFF"
             android:textAlignment="center"
             android:textColor="@color/black_overlay"/>
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

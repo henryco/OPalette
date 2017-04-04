@@ -20,7 +20,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal">
+              android:orientation="vertical">
 
     <TextView
         android:id="@+id/paletteTextInfo"
@@ -28,13 +28,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_weight="1"
         android:text="@string/palette_type"
         android:textColor="@color/black_overlay"
         android:textSize="12sp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -52,7 +52,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
                 android:visibility="visible">
 
                 <TextView
@@ -67,11 +66,10 @@
 
                 <Button
                     android:id="@+id/paletteButtonHorizontal"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="1"
                     android:background="@drawable/ic_straighten_black_24dp"
                     android:gravity="center"/>
             </RelativeLayout>
@@ -81,7 +79,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
+                android:gravity="center"
                 android:visibility="visible">
 
                 <TextView
@@ -96,11 +94,10 @@
 
                 <Button
                     android:id="@+id/paletteButtonVertical"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="1"
                     android:background="@drawable/ic_straighten_black_2_24dp"
                     android:gravity="center"/>
             </RelativeLayout>
@@ -111,7 +108,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
                 android:visibility="visible">
 
                 <TextView
@@ -126,8 +122,8 @@
 
                 <Button
                     android:id="@+id/paletteButtonGradHorizontal"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_weight="1"
@@ -141,7 +137,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
                 android:visibility="visible">
 
                 <TextView
@@ -156,8 +151,8 @@
 
                 <Button
                     android:id="@+id/paletteButtonGradVertical"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_weight="1"
@@ -170,7 +165,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
                 android:visibility="visible">
 
                 <TextView
@@ -185,16 +179,14 @@
 
                 <Button
                     android:id="@+id/paletteButtonNone"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_weight="1"
                     android:background="@drawable/ic_block_black_24dp"
                     android:gravity="center"/>
             </RelativeLayout>
-
-
 
 
         </LinearLayout>
