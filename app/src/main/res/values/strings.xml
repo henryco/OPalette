@@ -231,7 +231,7 @@
     <string name="control_vignette">Vignette</string>
     <string name="control_gamma_correction">Gamma correction</string>
     <string name="control_noise">Noise</string>
-
+    <string name="control_color">Color</string>
 
 
     <string name="disable">Disable</string>

@@ -16,7 +16,7 @@
  *
  */
 
-package net.henryco.opalette.application.programs.sub.programs.gradient;
+package net.henryco.opalette.application.programs.sub.programs.gridlines;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,7 +26,6 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Borders;
-import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
@@ -47,15 +46,12 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_crop_din_white_24dp;
 	private static final int txt_button_res = R.string.control_borders;
-	private static final int target_layer = R.id.paletteOptionsContainer;
 
 	private final Borders borders;
-	private final OPalette palette;
 	private final float defSize;
 
-	public BordersControl(final Borders borders, final OPalette palette) {
-		super(target_layer, img_button_res, txt_button_res);
-		this.palette = palette;
+	public BordersControl(final Borders borders) {
+		super(img_button_res, txt_button_res);
 		this.borders = borders;
 		this.defSize = borders.getSize();
 	}
@@ -64,7 +60,9 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
+		InjectableSeekBar sizeBar = new InjectableSeekBar(view, "Size");
 		InjectableColorButtons border = new InjectableColorButtons(view, "Borders");
+
 		border.setChecked(borders.isVisible());
 		if (!borders.isVisible()) borders.color.set(new GLESUtils.Color(Color.TRANSPARENT));
 		int col = borders.color.hex();
@@ -74,20 +72,22 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 				border.setButtonColor(Color.WHITE);
 				borders.setColor(new GLESUtils.Color(Color.WHITE));
 			} else borders.setColor(new GLESUtils.Color(Color.TRANSPARENT));
-			palette.setColor(new GLESUtils.Color(Color.WHITE));
 			borders.setVisible(isChecked);
+			sizeBar.setEnable(isChecked);
 			context.getRenderSurface().update();
 		});
 
 		border.setColorButtonListener(v -> runColorPicker(context.getActivityContext(), i -> {
 			borders.setColor(new GLESUtils.Color(i));
-			palette.setColor(new GLESUtils.Color(i));
 			border.setButtonColor(i);
 			context.getRenderSurface().update();
 		}));
 
-		InjectableSeekBar sizeBar = new InjectableSeekBar(view, "Size");
-		sizeBar.onBarCreate(bar -> bar.setProgress(sizeBar.de_norm(borders.getSize())));
+
+		sizeBar.onBarCreate(bar -> {
+			bar.setProgress(sizeBar.de_norm(borders.getSize()));
+			bar.setEnabled(borders.isVisible());
+		});
 		sizeBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
 				borders.setSize(sizeBar.norm(progress));
@@ -100,7 +100,6 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 			borders.setSize(defSize);
 			if (borders.isVisible()) border.setButtonColor(Color.WHITE);
 			borders.setColor(new GLESUtils.Color(Color.WHITE));
-			palette.setColor(new GLESUtils.Color(Color.WHITE));
 			sizeBar.setProgress(sizeBar.de_norm(defSize));
 			context.getRenderSurface().update();
 		});
@@ -112,7 +111,7 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 	private static void runColorPicker(AppCompatActivity context, ColorSelectListener listener) {
 		new ChromaDialog.Builder()
 				.initialColor(Color.WHITE)
-				.colorMode(ColorMode.ARGB) // There's also ARGB and HSV
+				.colorMode(ColorMode.RGB) // There's also ARGB and HSV
 				.onColorSelected(listener)
 				.create().show(context.getSupportFragmentManager(), "ColorPicker");
 	}

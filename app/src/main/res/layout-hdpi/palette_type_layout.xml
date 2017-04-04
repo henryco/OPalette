@@ -20,6 +20,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:layout_gravity="center"
               android:orientation="vertical">
 
     <TextView
@@ -30,28 +31,29 @@
         android:layout_alignParentTop="true"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="@string/palette_type"
         android:textColor="@color/black_overlay"
-        android:textSize="12sp"
+        android:textSize="9sp"
         android:visibility="visible"/>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="wrap_content"
         android:visibility="visible">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:visibility="visible">
 
                 <TextView
@@ -62,12 +64,13 @@
                     android:layout_below="@+id/paletteButtonHorizontal"
                     android:layout_centerHorizontal="true"
                     android:text="@string/horizontal"
-                    android:textColor="@color/black_overlay"/>
+                    android:textColor="@color/black_overlay"
+                    android:textSize="10sp"/>
 
                 <Button
                     android:id="@+id/paletteButtonHorizontal"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="@drawable/ic_straighten_black_24dp"
@@ -75,10 +78,10 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:gravity="center"
                 android:visibility="visible">
 
@@ -90,12 +93,13 @@
                     android:layout_below="@+id/paletteButtonVertical"
                     android:layout_centerHorizontal="true"
                     android:text="@string/vertical"
-                    android:textColor="@color/black_overlay"/>
+                    android:textColor="@color/black_overlay"
+                    android:textSize="10sp"/>
 
                 <Button
                     android:id="@+id/paletteButtonVertical"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="@drawable/ic_straighten_black_2_24dp"
@@ -104,10 +108,10 @@
 
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:visibility="visible">
 
                 <TextView
@@ -118,12 +122,13 @@
                     android:layout_below="@+id/paletteButtonGradHorizontal"
                     android:layout_centerHorizontal="true"
                     android:text="Gradient \n horizontal"
-                    android:textColor="@color/black_overlay"/>
+                    android:textColor="@color/black_overlay"
+                    android:textSize="10sp"/>
 
                 <Button
                     android:id="@+id/paletteButtonGradHorizontal"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_weight="1"
@@ -134,9 +139,9 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:visibility="visible">
 
                 <TextView
@@ -147,12 +152,13 @@
                     android:layout_below="@+id/paletteButtonGradVertical"
                     android:layout_centerHorizontal="true"
                     android:text="Gradient \n vertical"
-                    android:textColor="@color/black_overlay"/>
+                    android:textColor="@color/black_overlay"
+                    android:textSize="10sp"/>
 
                 <Button
                     android:id="@+id/paletteButtonGradVertical"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_weight="1"
@@ -162,9 +168,9 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:visibility="visible">
 
                 <TextView
@@ -175,12 +181,13 @@
                     android:layout_below="@+id/paletteButtonNone"
                     android:layout_centerHorizontal="true"
                     android:text="@string/none"
-                    android:textColor="@color/black_overlay"/>
+                    android:textColor="@color/black_overlay"
+                    android:textSize="10sp"/>
 
                 <Button
                     android:id="@+id/paletteButtonNone"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_weight="1"

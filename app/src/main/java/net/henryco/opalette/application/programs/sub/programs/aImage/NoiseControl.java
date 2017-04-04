@@ -51,10 +51,10 @@ public class NoiseControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		InjectableSeekBar noiseBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.noise_level));
-		noiseBar.onBarCreate(bar -> bar.setProgress(noiseBar.de_norm(filterHolder.getRenderData().getNoiseLevel())));
+		noiseBar.onBarCreate(bar -> bar.setProgress(2 * noiseBar.de_norm(filterHolder.getRenderData().getNoiseLevel())));
 		noiseBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
-				filterHolder.setStateUpdated().getRenderData().setNoiseLevel(noiseBar.norm(progress));
+				filterHolder.setStateUpdated().getRenderData().setNoiseLevel(noiseBar.norm(progress / 2f));
 				context.getRenderSurface().update();
 			}
 		}));

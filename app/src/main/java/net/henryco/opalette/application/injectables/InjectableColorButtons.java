@@ -29,6 +29,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 
 import me.priyesh.chroma.ChromaDialog;
@@ -55,7 +56,8 @@ public class InjectableColorButtons extends OPallViewInjector<Activity> {
 	private Button colorButton;
 	private Switch swi;
 	private boolean checked;
-
+	private boolean enable;
+	private OPallConsumer<Switch> switchConsumer;
 
 	public InjectableColorButtons(int container, String ... name) {
 		super(container, R.layout.colors);
@@ -79,7 +81,8 @@ public class InjectableColorButtons extends OPallViewInjector<Activity> {
 				.setButtonColor(Integer.MAX_VALUE).setChecked(false)
 				.setTextColor(default_text_color)
 				.setSwitchListener((buttonView, isChecked) -> {})
-				.setColorButtonListener(v -> {});
+				.setColorButtonListener(v -> {}).setSwitchEnable(true)
+				.applySwitch(aSwitch -> {});
 	}
 
 	@Override
@@ -98,11 +101,25 @@ public class InjectableColorButtons extends OPallViewInjector<Activity> {
 
 		swi = (Switch) view.findViewById(R.id.color_switch);
 		swi.setChecked(checked);
+		swi.setEnabled(enable);
+		switchConsumer.consume(swi);
 		swi.setOnCheckedChangeListener((button, isChecked) -> {
 			colorButton.setEnabled(isChecked);
 			if (!isChecked) colorButton.setBackgroundColor(0x00000000);
 			changeListener.onCheckedChanged(button, isChecked);
 		});
+	}
+
+	public InjectableColorButtons applySwitch(OPallConsumer<Switch> consumer) {
+		this.switchConsumer = consumer;
+		if (swi != null) consumer.consume(swi);
+		return this;
+	}
+
+	public InjectableColorButtons setSwitchEnable(boolean enable) {
+		this.enable = enable;
+		if (swi != null) swi.setEnabled(enable);
+		return this;
 	}
 
 	public InjectableColorButtons setChecked(boolean checked) {

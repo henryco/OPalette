@@ -187,9 +187,11 @@ import android.support.annotation.Nullable;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Borders;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.GridLines;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
+import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -206,6 +208,7 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 	private ProxyRenderData<OPallRenderable> proxyRenderData = new ProxyRenderData<>();
 
 	private GridLines gridLines;
+	private Borders borders;
 
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
@@ -241,15 +244,19 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 		gridLines = new GridLines(width, height);
+		borders = new Borders(width, height);
+		OPallViewInjector.inject(context.getActivityContext(), new BordersControl(borders));
 	}
 
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 		gridLines.setScreenDim(width, height);
+		borders.setScreenDim(width, height);
 	}
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
+		borders.render(camera);
 		gridLines.render(camera);
 	}
 
@@ -268,7 +275,7 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 
 	@Nullable @Override
 	public OPallRenderable getFinalRenderData() {
-		return null;
+		return borders;
 	}
 
 }

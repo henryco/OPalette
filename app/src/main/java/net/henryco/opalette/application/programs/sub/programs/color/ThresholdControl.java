@@ -55,8 +55,9 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		context.getRenderSurface().update();
-
+		InjectableSeekBar bar = new InjectableSeekBar(view, "Level").setMax(100);
 		InjectableColorButtons threshold = new InjectableColorButtons(view, "Color");
+
 		threshold.setChecked(texture.isThresholdEnable());
 		threshold.setButtonColor(texture.isThresholdEnable() ? texture.thr.hex() : Color.TRANSPARENT);
 		threshold.setChecked(texture.isThresholdEnable());
@@ -64,6 +65,7 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 			if (isChecked) threshold.setButtonColor(texture.thr.hex());
 			else threshold.setButtonColor(Color.TRANSPARENT);
 			texture.setThresholdEnable(isChecked);
+			bar.setEnable(isChecked);
 			context.getRenderSurface().update();
 		});
 		threshold.setColorButtonListener(v -> runColorPicker(context.getActivityContext(), i -> {
@@ -72,8 +74,11 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 			context.getRenderSurface().update();
 		}));
 
-		InjectableSeekBar bar = new InjectableSeekBar(view, "Level").setMax(100);
-		bar.onBarCreate(seekBar -> seekBar.setProgress(bar.de_norm(texture.getThreshold())));
+
+		bar.onBarCreate(seekBar -> {
+			seekBar.setProgress(bar.de_norm(texture.getThreshold()));
+			seekBar.setEnabled(texture.isThresholdEnable());
+		});
 		bar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {
 			if (fromUser) texture.setThreshold(bar.norm(progress));
 			if (texture.isThresholdEnable()) context.getRenderSurface().update();

@@ -181,14 +181,65 @@
   ~
   -->
 
-<resources>
-    <color name="colorPrimary">#2e2f30</color>
-    <color name="colorPrimaryDark">#1c1d21</color>
-    <color name="colorAccent">#212121</color>
-    <color name="SEA">#e959a8c1</color>
-    <color name="DARK">#1c1d21</color>
-    <color name="DARKER">#2e2f30</color>
-    <color name="TRANSPARENT">#00000000</color>
-    <color name="black_overlay">#50000000</color>
-    <color name="lightGrey">#d6d7d7</color>
-</resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="5dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Flip Vertical"
+            android:textColor="@color/common_google_signin_btn_text_light_focused"
+            android:textSize="12sp"/>
+
+        <Switch
+            android:id="@+id/flipVerticalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/flipHorizontalButton"
+            android:layout_alignBottom="@+id/flipHorizontalButton"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:textSize="12sp"
+            android:theme="@style/DarkSwitch"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Flip Horizontal"
+            android:textColor="@color/common_google_signin_btn_text_light_focused"
+            android:textSize="12sp"/>
+
+        <Switch
+            android:id="@+id/flipHorizontalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/flipHorizontalButton"
+            android:layout_alignBottom="@+id/flipHorizontalButton"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:textSize="12sp"
+            android:theme="@style/DarkSwitch"/>
+    </LinearLayout>
+
+</LinearLayout>

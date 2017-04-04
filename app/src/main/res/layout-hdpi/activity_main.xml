@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~                                  Apache License
   ~                            Version 2.0, January 2004
@@ -180,12 +181,89 @@
   ~
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportHeight="24.0"
-        android:viewportWidth="24.0">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M4,6H2v14c0,1.1 0.9,2 2,2h14v-2H4V6zm16,-4H8c-1.1,0 -2,0.9 -2,2v12c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2V4c0,-1.1 -0.9,-2 -2,-2zm-8,12.5v-9l6,4.5 -6,4.5z"/>
-</vector>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/DARK"
+    tools:context="net.henryco.opalette.application.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/DARK"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/DARK"
+            android:minHeight="?android:attr/actionBarSize"
+            android:weightSum="1"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:id="@+id/toolbarContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <ToggleButton
+                    android:id="@+id/toolbarButtonImage"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/image_toggle_on_selector"
+                    android:checked="true"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/select_button_color"
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="12sp"/>
+
+                <ToggleButton
+                    android:id="@+id/toolbarButtonPalette"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/palette_toggle_on_selector"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/select_button_color"
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="12sp"/>
+
+                <ToggleButton
+                    android:id="@+id/toolbarButtonFilter"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/filter_toggle_on_selector"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/select_button_color"
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main"/>
+
+</android.support.design.widget.CoordinatorLayout>

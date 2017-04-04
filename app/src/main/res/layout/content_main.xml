@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal|fill_horizontal"
-            android:layout_weight="0.7"
+            android:layout_weight="0.705"
             android:elevation="0dp"
             android:orientation="horizontal"
             android:translationZ="10dp">
@@ -55,14 +55,14 @@
                 android:id="@+id/opallView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 />
         </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.285"
+            android:layout_weight="0.275"
             android:background="@color/DARK"
             android:elevation="0dp"
             android:translationZ="-10dp"
@@ -136,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@color/greygrey"
+                android:background="@color/lightGrey"
                 android:elevation="0dp"
                 android:fadingEdge="none"
                 android:paddingBottom="@dimen/appbar_padding_top"

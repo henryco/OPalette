@@ -181,14 +181,55 @@
   ~
   -->
 
-<resources>
-    <color name="colorPrimary">#2e2f30</color>
-    <color name="colorPrimaryDark">#1c1d21</color>
-    <color name="colorAccent">#212121</color>
-    <color name="SEA">#e959a8c1</color>
-    <color name="DARK">#1c1d21</color>
-    <color name="DARKER">#2e2f30</color>
-    <color name="TRANSPARENT">#00000000</color>
-    <color name="black_overlay">#50000000</color>
-    <color name="lightGrey">#d6d7d7</color>
-</resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="1dp"
+        android:paddingTop="2dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/barName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginStart="10dp"
+            android:text="BarName"
+            android:textSize="9sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:splitTrack="false"
+                android:layout_gravity="center"
+                android:layout_weight="0.85"
+                android:thumb="@drawable/small_thumb"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/barValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.15"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="9sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

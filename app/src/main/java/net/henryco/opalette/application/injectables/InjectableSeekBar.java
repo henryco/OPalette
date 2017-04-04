@@ -237,6 +237,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 	private int lazyProgress;
 	private boolean val_visible;
 	private boolean discrete;
+	private boolean enable;
 
 	private int[] delta;
 
@@ -275,7 +276,8 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 				.setTextColor(default_text_color)
 				.setBarColor(default_bar_color)
 				.setBarListener(new OPallSeekBarListener())
-				.setTextValuerCorrector(Float::floatValue);
+				.setTextValuerCorrector(Float::floatValue)
+				.setEnable(true);
 		lazyProgress = 0;
 	}
 
@@ -286,6 +288,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 		seekBar.setMax(max);
 		seekBar.setProgress(lazyProgress);
+		seekBar.setEnabled(enable);
 		seekBar.getProgressDrawable().setColorFilter(progress_color, PorterDuff.Mode.SRC_IN);
 		seekBar.getThumb().setColorFilter(thumb_color, PorterDuff.Mode.SRC_IN);
 		if (width != -1) {
@@ -364,6 +367,16 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		return (v + valueCorrection) / (max + valueCorrection);
 	}
 
+
+	public InjectableSeekBar setEnable(boolean enable) {
+		this.enable = enable;
+		if (seekBar != null) seekBar.setEnabled(enable);
+		return this;
+	}
+
+	public boolean isEnable() {
+		return enable;
+	}
 
 	public InjectableSeekBar setValueVisible(boolean visible) {
 		this.val_visible = visible;

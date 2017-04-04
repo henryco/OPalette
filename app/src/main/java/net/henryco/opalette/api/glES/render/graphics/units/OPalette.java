@@ -272,6 +272,10 @@ public class OPalette implements OPallRenderable {
 		return false;
 	}
 
+	public GLESUtils.Color getColor() {
+		return color;
+	}
+
 	public float getSize_pct() {
 		return size_pct;
 	}

@@ -21,7 +21,6 @@ package net.henryco.opalette.application.programs.sub.programs.aImage;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import net.henryco.opalette.R;
@@ -31,9 +30,7 @@ import net.henryco.opalette.application.injectables.InjectableColorButtons;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
-import me.priyesh.chroma.ChromaDialog;
-import me.priyesh.chroma.ColorMode;
-import me.priyesh.chroma.ColorSelectListener;
+import static net.henryco.opalette.application.injectables.InjectableColorButtons.runColorPicker;
 
 /**
  * Created by HenryCo on 27/03/17.
@@ -42,7 +39,6 @@ public class BackGroundControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_insert_photo_white_24dp;
 	private static final int txt_button_res = R.string.control_background;
-	private static final int target_layer = R.id.paletteOptionsContainer;
 
 	private final GLESUtils.Color color;
 
@@ -64,8 +60,8 @@ public class BackGroundControl extends AppAutoSubControl<AppMainProto> {
 		background.setSwitchListener((buttonView, isChecked) -> {
 			if (isChecked) {
 				background.setButtonColor(Color.WHITE);
-				color.set(GLESUtils.Color.WHITE);
-			} else color.set(GLESUtils.Color.TRANSPARENT);
+				color.set(GLESUtils.Color.WHITE.hex());
+			} else color.set(GLESUtils.Color.TRANSPARENT.hex());
 			context.getRenderSurface().update();
 		});
 
@@ -79,11 +75,5 @@ public class BackGroundControl extends AppAutoSubControl<AppMainProto> {
 		OPallViewInjector.inject(context.getActivityContext(), background);
 	}
 
-	private static void runColorPicker(AppCompatActivity context, ColorSelectListener listener) {
-		new ChromaDialog.Builder()
-				.initialColor(Color.WHITE)
-				.colorMode(ColorMode.RGB) // There's also ARGB and HSV
-				.onColorSelected(listener)
-				.create().show(context.getSupportFragmentManager(), "ColorPicker");
-	}
+
 }

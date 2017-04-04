@@ -181,14 +181,88 @@
   ~
   -->
 
-<resources>
-    <color name="colorPrimary">#2e2f30</color>
-    <color name="colorPrimaryDark">#1c1d21</color>
-    <color name="colorAccent">#212121</color>
-    <color name="SEA">#e959a8c1</color>
-    <color name="DARK">#1c1d21</color>
-    <color name="DARKER">#2e2f30</color>
-    <color name="TRANSPARENT">#00000000</color>
-    <color name="black_overlay">#50000000</color>
-    <color name="lightGrey">#d6d7d7</color>
-</resources>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/DARK"
+    tools:context="net.henryco.opalette.application.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/DARK"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/DARK"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:id="@+id/toolbarContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <ToggleButton
+                    android:id="@+id/toolbarButtonImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/image_toggle_on_selector"
+                    android:checked="true"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/select_button_color"
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="12sp"/>
+
+                <ToggleButton
+                    android:id="@+id/toolbarButtonPalette"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/palette_toggle_on_selector"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/select_button_color"
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="12sp"/>
+
+                <ToggleButton
+                    android:id="@+id/toolbarButtonFilter"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/filter_toggle_on_selector"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/select_button_color"
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main"/>
+
+</android.support.design.widget.CoordinatorLayout>
