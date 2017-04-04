@@ -25,6 +25,8 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Vignette;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
+import net.henryco.opalette.api.utils.dialogs.OPallOptionListDialog;
+import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -38,16 +40,27 @@ import net.henryco.opalette.application.proto.AppMainProto;
 
 public class VignetteControl extends AppAutoSubControl<AppMainProto> {
 
+	public interface VignetteControlHolder {
+		int VIGNETTE_IMAGE = 0;
+		int VIGNETTE_SCREEN = 1;
+		void setVignetteImage();
+		void setVignetteScreen();
+	}
+
  	private static final int img_button_res = R.drawable.ic_vignette_white_24dp;
 	private static final int txt_button_res = R.string.control_vignette;
 
 	private final Vignette vignette;
 	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;
+	private final VignetteControlHolder vignetteHolder;
 
-	public VignetteControl(final Vignette vignette, final AppSubProgram.ProxyRenderData<ConvolveTexture> renderData) {
+	public VignetteControl(final Vignette vignette,
+						   final AppSubProgram.ProxyRenderData<ConvolveTexture> renderData,
+						   final VignetteControlHolder vignetteHolder) {
 		super(img_button_res, txt_button_res);
 		this.vignette = vignette;
 		this.imgHolder = renderData;
+		this.vignetteHolder = vignetteHolder;
 	}
 
 
@@ -80,12 +93,39 @@ public class VignetteControl extends AppAutoSubControl<AppMainProto> {
 			}
 		}));
 
-		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.disable), () -> {
-			vigBar.setProgress(0);
-			radBar.setProgress(radBar.de_norm(0));
-			vignette.setPower(0).setActive(false);
-			vignette.setRadius(0);
-			updateFunc.run();
+		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.options), () -> {
+
+			OPallFunction<String, Integer> stringFunc = integer
+					-> context.getActivityContext().getResources().getString(integer);
+
+			String options = stringFunc.apply(R.string.vignette_mode_pick);
+			String disable = stringFunc.apply(R.string.disable);
+			String image = stringFunc.apply(R.string.only_image);
+			String screen = stringFunc.apply(R.string.full_screen);
+
+			Runnable imgFunc = () -> {
+				vignetteHolder.setVignetteImage();
+				updateFunc.run();
+			};
+
+			Runnable scrFunc = () -> {
+				vignetteHolder.setVignetteScreen();
+				updateFunc.run();
+			};
+
+			Runnable resetFunc = () -> {
+				vigBar.setProgress(0);
+				radBar.setProgress(radBar.de_norm(0));
+				vignette.setPower(0).setActive(false);
+				vignette.setRadius(0);
+				updateFunc.run();
+			};
+
+			new OPallOptionListDialog()
+					.setTittle(options)
+					.setOptionsNames(image, screen, disable)
+					.setOptionsActions(imgFunc, scrFunc, resetFunc)
+			.show(context.getActivityContext().getSupportFragmentManager(), "Vignette options dialog");
 		});
 
 		OPallViewInjector.inject(context.getActivityContext(), radBar, vigBar);

@@ -206,7 +206,7 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by HenryCo on 21/03/17.
  */
 
-public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol {
+public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol, VignetteControl.VignetteControlHolder {
 
 
 	private final GLESUtils.Color bgColor = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT);
@@ -279,7 +279,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 
 		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor));
-		OPallViewInjector.inject(context.getActivityContext(), new VignetteControl(vignette, proxyRenderData));
+		OPallViewInjector.inject(context.getActivityContext(), new VignetteControl(vignette, proxyRenderData, this));
 		OPallViewInjector.inject(context.getActivityContext(), new NoiseControl(proxyRenderData));
 
 		defDim[0] = width;
@@ -312,15 +312,29 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 				boolean e = proxyRenderData.getRenderData().isFilterEnable();
 				feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 				feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
+
+
 				if (vignette.isActive()) {
 					vignette.render(camera);
-					vignetteTexture.set(proxyRenderData.getRenderData());
-					vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
+
+					if (vignetteMode == VIGNETTE_IMAGE) {
+						vignetteTexture.set(proxyRenderData.getRenderData());
+						vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
+					}
 				}
+
 				textureBuffer.beginFBO(() -> {
+
 					proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear());
-					if (vignette.isActive()) vignetteTexture.render(camera);
+
+
+					if (vignette.isActive()) {
+						if (vignetteMode == VIGNETTE_IMAGE) vignetteTexture.render(camera);
+						else if (vignetteMode == VIGNETTE_SCREEN) vignette.getShapeBuffer().render(camera);
+					}
 				});
+
+
 			});
 		}
 		finalBackGroundData.render(camera);
@@ -346,6 +360,13 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	};
 
 
+	private int vignetteMode = VIGNETTE_IMAGE;
+	public void setVignetteImage() {
+		this.vignetteMode = VIGNETTE_IMAGE;
+	}
+	public void setVignetteScreen() {
+		this.vignetteMode = VIGNETTE_SCREEN;
+	}
 
 	@Override
 	public void setRenderData(OPallRenderable data) {

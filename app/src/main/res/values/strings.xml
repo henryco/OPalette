@@ -249,5 +249,9 @@
     <string name="about">About</string>
     <string name="rate">Rate m8</string>
     <string name="settings">Settings</string>
+    <string name="options">Options</string>
+    <string name="vignette_mode_pick">Select vignette mode</string>
+    <string name="full_screen">Full screen</string>
+    <string name="only_image">Only image</string>
 
 </resources>
