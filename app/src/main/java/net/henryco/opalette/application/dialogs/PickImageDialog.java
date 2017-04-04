@@ -189,6 +189,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 
+import net.henryco.opalette.R;
 
 
 /**
@@ -209,7 +210,7 @@ public class PickImageDialog extends AppCompatDialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-		dialogBuilder.setTitle("Select image source");
+		dialogBuilder.setTitle(R.string.pick_image_dialog);
 		dialogBuilder.setItems(new String[]{"Camera", "Gallery"}, (dialog, which) -> {
 			if (which == 0) listener.dialogSelectedCamera(this);
 			else if (which == 1) listener.dialogSelectedGallery(this);

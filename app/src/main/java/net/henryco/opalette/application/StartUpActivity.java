@@ -192,9 +192,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import net.henryco.opalette.R;
@@ -210,15 +211,8 @@ public class StartUpActivity extends AppCompatActivity
 		implements Utils.ImageLoadable, PickImageDialog.PickImageDialogListener {
 
 
-	public static final long PICKBUTTON_SLEEP_TIME = 2;
-	public static final long SPLASH_LOADING_TIME = 1000;
-	public static final long ANIMATION_TIME = 300;
-
-	public static final long AFTER_SPLASH_DELAY = 225;
-	public static final long NEW_ACTIVITY_DELAY = 60;
-	public static final long RESUME_ACTIVITY_DELAY = 500;
-
-	public static final float PICKBUTTON_RADIUS = 0.71f;
+	public static final long SPLASH_LOADING_TIME = 2000;
+	public static final long RESUME_ACTIVITY_DELAY = 1000;
 
 
 	public static final class BitmapPack {
@@ -232,14 +226,17 @@ public class StartUpActivity extends AppCompatActivity
 		}
 	}
 
-	private boolean isClosed = false;
 
 	private void disableButtons() {
-		findViewById(R.id.fullscreen_content_controls).setOnClickListener(v -> {});
 		findViewById(R.id.imageButtonGall).setOnClickListener(v -> {});
 		findViewById(R.id.textView).setOnClickListener(v -> {});
 	}
+	private void enableButtons() {
+		findViewById(R.id.imageButtonGall).setOnClickListener(this::imagePickAction);
+		findViewById(R.id.textView).setOnClickListener(this::imagePickAction);
+	}
 
+	private boolean isClosed = false;
 	private void close() {
 		isClosed = true;
 	}
@@ -250,78 +247,37 @@ public class StartUpActivity extends AppCompatActivity
 
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) actionBar.show();
-		findViewById(R.id.fullscreen_content).setSystemUiVisibility(
+		findViewById(R.id.startContainer).setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-		findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
-//		reloadControls(true);
 		loadControlViews();
 	}
 
 
 
-	private void reloadControls(boolean left_right) {
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			float lr = left_right ? 1 : -1;
-			new Handler().postDelayed(() ->
-					animation(1 * lr, -1 * lr, ANIMATION_TIME, () ->
-							runOnUiThread(this::loadControlViews)), AFTER_SPLASH_DELAY);
-		} else loadControlViews();
-	}
-
 
 	private void loadControlViews() {
+		findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
 		View text = findViewById(R.id.textView);
 		text.setVisibility(View.VISIBLE);
 		text.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
 		text.setOnClickListener(this::imagePickAction);
 		findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
-		findViewById(R.id.imageButtonGall).setOnClickListener(this::imagePickAction);
-		findViewById(R.id.fullscreen_content_controls).setOnClickListener(this::imagePickAction);
+		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
+		enableButtons();
 	}
 
-
-	private void animation(float direction, float corner, float animTime_ms, Runnable afterAction) {
-
-		ImageButton pickButton = (ImageButton) findViewById(R.id.imageButtonGall);
-
-		float r = pickButton.getWidth() * 0.5f * PICKBUTTON_RADIUS;
-		float hlW = (findViewById(R.id.firstPickLayout).getWidth() * 0.5f) + r;
-		float s_pi = (float) (hlW / (Math.PI * r * 2f));
-
-		long t_spin_ms = (long)(animTime_ms / s_pi);
-		float deg_per_ms = 360f / (float)t_spin_ms;
-		float x_per_ms = hlW / animTime_ms;
-
-		new Thread(() -> {
-			long t0 = System.currentTimeMillis();
-			while (System.currentTimeMillis() < t0 + (long)animTime_ms)
-				synchronized (this) {
-
-					long t1 = System.currentTimeMillis() - t0;
-					float start = corner * hlW;
-					float trx = ((float)t1 * x_per_ms * direction) + start;
-					float rot = (float)t1 * deg_per_ms * direction;
-
-					try {
-						pickButton.setVisibility(View.VISIBLE);
-						pickButton.setRotation(rot);
-						pickButton.setTranslationX(trx);
-						Thread.sleep(PICKBUTTON_SLEEP_TIME);
-					} catch (Exception ignore) {}
-				}
-			runOnUiThread(() -> {
-				pickButton.setRotation(0);
-				afterAction.run();
-			});
-		}).start();
-	}
 
 
 
 
 	private void initSplash() {
+
+		findViewById(R.id.imageButtonGall).setVisibility(View.GONE);
+		findViewById(R.id.textView).setVisibility(View.GONE);
+		findViewById(R.id.firstPickLayout).setVisibility(View.GONE);
 		ImageView logo = (ImageView) findViewById(R.id.logoImageVIew);
+		logo.setVisibility(View.VISIBLE);
+
 		new Thread(() -> {
 			long t0 = System.currentTimeMillis();
 			while (System.currentTimeMillis() < t0 + SPLASH_LOADING_TIME) {
@@ -340,12 +296,14 @@ public class StartUpActivity extends AppCompatActivity
 	}
 
 
-
 	private synchronized void imagePickAction(View view) {
+
+		disableButtons();
 		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(this, R.anim.press_75pct_225ms));
 		new Handler().postDelayed(() -> {
 			AppCompatDialogFragment pickImageDialog = new PickImageDialog();
 			pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
+			new Handler().postDelayed(this::enableButtons, 150);
 		}, 175);
 	}
 
@@ -369,34 +327,44 @@ public class StartUpActivity extends AppCompatActivity
 	}
 
 
-
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.start_up_menu, menu);
+		return true;
+	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
-
 				disableButtons();
-
 				Intent intent = new Intent(this, MainActivity.class);
 				BitmapPack.pushUpBitmap = Utils.loadIntentBitmap(this, data);
-
 				findViewById(R.id.textView).setVisibility(View.GONE);
-
-				new Handler().postDelayed(() ->
-						animation(1, 0, ANIMATION_TIME, () -> {
-							findViewById(R.id.imageButtonGall).setVisibility(View.GONE);
-							new Handler().postDelayed(() ->
-									runOnUiThread(() -> {
-										startActivity(intent);
-										close();
-									}), NEW_ACTIVITY_DELAY);
-						}), AFTER_SPLASH_DELAY
-				);
+				findViewById(R.id.firstPickLayout).setVisibility(View.INVISIBLE);
+				startActivity(intent);
+				close();
 			}
 		}
 	}
 
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.startMenuAbout:
+				//TODO
+				return true;
+			case R.id.startMenuRate:
+				//TODO
+				return true;
+			case R.id.startMenuSettings:
+				//TODO
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 
 	@Override
 	public void dialogSelectedCamera(PickImageDialog dialog) {
@@ -419,12 +387,7 @@ public class StartUpActivity extends AppCompatActivity
 	protected void onResume() {
 		super.onResume();
 		if (isClosed) {
-
-			new Handler().postDelayed(() -> {
-				findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
-				reloadControls(false);
-			}, RESUME_ACTIVITY_DELAY);
-
+			new Handler().postDelayed(this::loadControlViews, RESUME_ACTIVITY_DELAY);
 			isClosed = false;
 		}
 	}

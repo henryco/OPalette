@@ -420,13 +420,12 @@ public class MainActivity extends AppCompatActivity
 
 
 	private void startBackDialog() {
-		//TODO
 		new OPallAlertDialog()
-				.title("U SURE?")
-				.message("SURE?")
-				.negative("cancel")
-				.positive("accept", this::closeActivity)
-		.show(getSupportFragmentManager(), "backDialog");
+				.title(getResources().getString(R.string.dialog_exit_tittle))
+				.message(getResources().getString(R.string.dialog_exit_msg))
+				.negative(getResources().getString(R.string.dialog_exit_decline))
+				.positive(getResources().getString(R.string.dialog_exit_accept), this::closeActivity)
+		.show(getSupportFragmentManager(), "ExitDialog");
 	}
 
 

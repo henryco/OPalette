@@ -78,7 +78,7 @@ public class PaletteColorControl extends AppAutoSubControl<AppMainProto> {
 		OPallViewInjector.inject(context.getActivityContext(), background);
 
 		if (palette.getOrientation() == OPalette.ORIENTATION_NONE) {
-			new OPallAlertDialog().message("U have to select palette type first")
+			new OPallAlertDialog().message(context.getActivityContext().getResources().getString(R.string.palette_pick_warn))
 					.show(context.getActivityContext().getSupportFragmentManager(), "Palette alert");
 		}
 	}
