@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <!--
   ~   /*
   ~    * Copyright (C) Henryk Timur Domagalski
@@ -31,14 +29,20 @@
     android:paddingTop="16dp">
 
 
-    <ImageButton
-        android:id="@+id/iopImageButton"
+    <ToggleButton
+        android:id="@+id/iopImageToggle"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        android:background="@android:color/transparent"
+        android:background="@drawable/image_toggle_on_selector"
+        android:checked="false"
         android:scaleType="fitCenter"
-        />
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/select_button_color"
+        android:textOff=""
+        android:textOn=""/>
+
 
     <TextView
         android:id="@+id/iopTextView"

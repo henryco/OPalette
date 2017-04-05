@@ -309,6 +309,11 @@ public class FrameBuffer implements OPallFBO {
 				width, height, Bitmap.Config.ARGB_8888);
 	}
 
+	public Bitmap getBitmap(int w, int h) {
+		return Bitmap.createBitmap(OPallFBO.methods.getPixelData(getFrameBufferHandle(), w, h, getTextureBufferHandle()),
+				w, h, Bitmap.Config.ARGB_8888);
+	}
+
 	@Override
 	public Texture getTexture() {
 		return texture;

@@ -256,8 +256,9 @@ public class EdTexture extends OPallTextureExtended  {
 		addBrightness = brightness.apply(addBrightness);
 		return this;
 	}
-	public EdTexture alpha(OPallFunction<Float, Float> alpha) {
-		this.alpha = alpha.apply(this.alpha);
+
+	public EdTexture setAlpha(float a) {
+		this.alpha = a;
 		return this;
 	}
 

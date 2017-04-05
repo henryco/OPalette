@@ -217,6 +217,9 @@ public abstract class AppSubControl<T extends AppMainProto> extends OPallViewInj
 		super(container, R.layout.image_option_button);
 	}
 
+	public AppSubControl(int container, int layer) {
+		super(container, layer);
+	}
 
 	protected static <T> ControlFragment<T> loadControlFragment
 			(AppControlFragmentLoader<T> loader, AppControlFragmentDestroyer<T> destroyer) {

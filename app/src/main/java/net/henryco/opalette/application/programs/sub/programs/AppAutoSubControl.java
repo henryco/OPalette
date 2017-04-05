@@ -205,6 +205,7 @@ public abstract class AppAutoSubControl<T extends AppMainProto> extends AppSubCo
 	}
 
 	public AppAutoSubControl(int img_button_res, int txt_button_res) {
+		super();
 		this.img_button_res = img_button_res;
 		this.txt_button_res = txt_button_res;
 	}

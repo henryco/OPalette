@@ -29,7 +29,6 @@ import android.support.v7.app.AppCompatDialogFragment;
 /**
  * Created by HenryCo on 04/04/17.
  */
-
 public class OPallOptionListDialog extends AppCompatDialogFragment {
 
 
