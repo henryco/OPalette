@@ -54,8 +54,8 @@
 
                 <ToggleButton
                     android:id="@+id/toolbarButtonImage"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/image_toggle_on_selector"
@@ -69,8 +69,8 @@
 
                 <ToggleButton
                     android:id="@+id/toolbarButtonPalette"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/palette_toggle_on_selector"
@@ -83,8 +83,8 @@
 
                 <ToggleButton
                     android:id="@+id/toolbarButtonFilter"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/filter_toggle_on_selector"

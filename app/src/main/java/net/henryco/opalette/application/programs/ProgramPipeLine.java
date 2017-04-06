@@ -409,9 +409,12 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				bitmap.recycle();
 				bitmap = null;
 				float scrWidth = startImage.getScreenWidth();
+				float schHeight = startImage.getScreenHeight();
 				float w = startImage.getWidth();
-				float scale = scrWidth / w;
-				subPrograms.get(0).setRenderData(startImage.bounds(b -> b.setScale(scale)));
+				float h = startImage.getHeight();
+				float scaleW = scrWidth / w;
+				float scaleH = schHeight / h;
+				subPrograms.get(0).setRenderData(startImage.bounds(b -> b.setScale(Math.max(scaleW, scaleH))));
 			});
 			uCan = true;
 			observator.update();

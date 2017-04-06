@@ -24,22 +24,22 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp">
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
+    android:paddingTop="14dp">
 
 
     <FrameLayout
         android:id="@+id/iopColorBar"
         android:layout_width="match_parent"
-        android:layout_height="8dp">
+        android:layout_height="5dp">
 
     </FrameLayout>
 
     <ImageButton
         android:id="@+id/iopImageButton"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_gravity="center"
         android:checked="false"
         android:scaleType="fitCenter"
@@ -51,11 +51,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:paddingTop="16dp"
+        android:paddingTop="12dp"
         android:text="Example text"
         android:textAlignment="center"
         android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-        android:textSize="10sp"/>
+        android:textSize="8sp"/>
 
 
 </LinearLayout>

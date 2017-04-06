@@ -59,7 +59,9 @@ public class EdFilter {
 	private static List<EdFilter> loadFilterListFromJSON() {
 
 		/*
-		{ "filters": [
+
+		{ 	"type": "t255" | "t01" ,
+			"filters": [
 			{
 				"name": "filter",
 				"contrast": "1",
@@ -85,6 +87,15 @@ public class EdFilter {
 			in.close();
 
 			JSONObject data = new JSONObject(builder.toString());
+			String type = "t01";
+			try {
+				type = data.getString("type");
+			} catch (Exception ignored){}
+
+			final OPallFunction<Float, Float> corrector;
+			if (type.equalsIgnoreCase("t255")) corrector = f -> f / 255f;
+			else corrector = Float::floatValue;
+
 			JSONArray filters = data.getJSONArray("filters");
 			for (int i = 0; i < filters.length(); i++) {
 				JSONObject filter = filters.getJSONObject(i);
@@ -110,9 +121,9 @@ public class EdFilter {
 				OPallFunction<float[], String> colorFunc = s -> {
 					try {
 						JSONArray color = filter.getJSONArray(s);
-						float r = (float) color.getDouble(0);
-						float g = (float) color.getDouble(1);
-						float b = (float) color.getDouble(2);
+						float r = corrector.apply((float) color.getDouble(0));
+						float g = corrector.apply((float) color.getDouble(1));
+						float b = corrector.apply((float) color.getDouble(2));
 						return new float[]{r, g, b};
 					} catch (JSONException e) {
 						return null;

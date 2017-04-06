@@ -276,6 +276,7 @@ public class MainActivity extends AppCompatActivity
 		}
 
 		OPallUniRenderer renderer = new UniRenderer(this, new ProgramPipeLine());
+//		OPallUniRenderer renderer = new UniRenderer(this, new TestUnderProgram());
 		stateRequester.addRequestListener(renderer);
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);

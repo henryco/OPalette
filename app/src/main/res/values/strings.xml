@@ -41,7 +41,7 @@
 
     <string name="dialog_exit_tittle">Are you sure?</string>
     <string name="dialog_exit_msg">If You leave, you will lose all progress.</string>
-    <string name="dialog_exit_accept">Sure, I am leaving</string>
+    <string name="dialog_exit_accept">Leave anyway</string>
     <string name="dialog_exit_decline">Stay</string>
 
 

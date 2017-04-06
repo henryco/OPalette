@@ -21,11 +21,13 @@ package net.henryco.opalette.application.programs.sub.programs.bFilter;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.OPallAnimated;
@@ -42,8 +44,9 @@ import net.henryco.opalette.application.proto.AppMainProto;
 public class FilterControl extends AppSubControl<AppMainProto> {
 
 	public interface EdFilterHolder {
-		void setFilter(EdFilter filter);
+		void setFilter(EdFilter filter, TextView textView);
 		EdFilter getFilter();
+		TextView getTextView();
 	}
 	private final EdFilterHolder filterHolder;
 
@@ -61,10 +64,18 @@ public class FilterControl extends AppSubControl<AppMainProto> {
 	@Override
 	protected void onInject(AppMainProto context, View view) {
 
+		view.findViewById(R.id.iopColorBar).setBackground(new ColorDrawable(filter.color));
+
 		TextView textView = (TextView) view.findViewById(R.id.iopTextView);
 		textView.setText(filter.name);
+		textView.setTextColor(ContextCompat.getColor(context.getActivityContext(), R.color.disableColor));
+		if (filter.name.equalsIgnoreCase(EdFilter.getDefaultFilter().name)) {
+			textView.setTextColor(ContextCompat.getColor(context.getActivityContext(), R.color.activeColor));
+			filterHolder.setFilter(filter, textView);
+		}
 
-		ToggleButton imageButton = (ToggleButton) view.findViewById(R.id.iopImageToggle);
+
+		ImageButton imageButton = (ImageButton) view.findViewById(R.id.iopImageButton);
 		imageButton.setBackground(new BitmapDrawable(context.getActivityContext().getResources(), filterIcon));
 		imageButton.setClickable(false);
 
@@ -73,7 +84,11 @@ public class FilterControl extends AppSubControl<AppMainProto> {
 				if (!filter.name.equalsIgnoreCase(EdFilter.getDefaultFilter().name))
 					context.switchToFragmentOptions(loadControlFragment(this::onFragmentCreate, this::onFragmentDestroyed));
 			} else {
-				filterHolder.setFilter(filter.copy());
+				TextView lastTextView = filterHolder.getTextView();
+				if (lastTextView != null)
+					lastTextView.setTextColor(ContextCompat.getColor(context.getActivityContext(), R.color.disableColor));
+				textView.setTextColor(ContextCompat.getColor(context.getActivityContext(), R.color.activeColor));
+				filterHolder.setFilter(filter.copy(), textView);
 				context.getRenderSurface().update();
 			}
 		}));
@@ -83,7 +98,7 @@ public class FilterControl extends AppSubControl<AppMainProto> {
 
 	private void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		InjectableSeekBar effectBar = new InjectableSeekBar(view, "Filter effect");
+		InjectableSeekBar effectBar = new InjectableSeekBar(view, "Effect scale");
 		effectBar.onBarCreate(bar -> bar.setProgress(effectBar.de_norm(filterHolder.getFilter().getAlpha())));
 		effectBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {

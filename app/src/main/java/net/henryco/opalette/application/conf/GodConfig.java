@@ -25,5 +25,6 @@ package net.henryco.opalette.application.conf;
 public class GodConfig {
 
 	public static final String TEXTURE_FILTERS_DATA_FILE = "assets/opall_filters.json";
+	public static final int DEFAULT_FILTER_PREVIEW_ICON_SIZE = 64;
 
 }

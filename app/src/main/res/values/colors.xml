@@ -27,4 +27,6 @@
     <color name="TRANSPARENT">#00000000</color>
     <color name="black_overlay">#50000000</color>
     <color name="lightGrey">#d6d7d7</color>
+    <color name="disableColor">#616161</color>
+    <color name="activeColor">#ffffffff</color>
 </resources>

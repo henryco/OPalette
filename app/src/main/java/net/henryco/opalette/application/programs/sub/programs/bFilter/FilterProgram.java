@@ -21,18 +21,19 @@ package net.henryco.opalette.application.programs.sub.programs.bFilter;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.TextView;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
-import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Borders;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -52,11 +53,15 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
 
+	private TextView actualTextView;
+
 	private boolean firstTime;
 	private EdTexture filterTexture;
 	private FrameBuffer filterBuffer;
 	private FrameBuffer filterPreviewBuffer;
 	private EdFilter actualFilter;
+
+	private static final int FILTER_PREV_SIZE = GodConfig.DEFAULT_FILTER_PREVIEW_ICON_SIZE;
 
 	@Override public void setProgramHolder(AppSubProgramHolder holder) {
 		this.holder = holder;
@@ -81,7 +86,8 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 
 	@Override
-	public void setFilter(EdFilter filter) {
+	public void setFilter(EdFilter filter, TextView textView) {
+		this.actualTextView = textView;
 		this.actualFilter = filter;
 	}
 
@@ -91,6 +97,11 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	}
 
 
+	@Override
+	public TextView getTextView() {
+		return actualTextView;
+	}
+
 	// TODO: 05/04/17 ADD FILTERS PIPE-LINE
 	@Override // TODO: 05/04/17 ADD GAUSSIAN BLUR
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
@@ -99,7 +110,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 		filterTexture = new EdTexture();
 		filterTexture.setScreenDim(width, height);
 		actualFilter = EdFilter.getDefaultFilter();
-		filterPreviewBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
+		filterPreviewBuffer = OPallFBOCreator.FrameBuffer(FILTER_PREV_SIZE, FILTER_PREV_SIZE, false);
 
 	}
 
@@ -112,29 +123,23 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		if (firstTime) {
-			long t0 = System.currentTimeMillis();
 
-			Borders borders = new Borders(w, h);
-			borders.setVisible(false);
-			borders.setSize(1f);
-
+			filterTexture.setSize(FILTER_PREV_SIZE, FILTER_PREV_SIZE);
 			filterTexture.setFlip(false, false);
-			for (EdFilter filter: EdFilter.getFilterList()) {
-				filter.applyFilter(filterTexture);
-				borders.setColor(new GLESUtils.Color(filter.color));
-				borders.render(camera);
-				filterPreviewBuffer.beginFBO(() -> {
-					GLESUtils.clear();
-					filterTexture.render(camera);
-					borders.getShapeBuffer().render(camera);
-				});
-				Bitmap prev = filterPreviewBuffer.getBitmap();
-				OPallViewInjector.inject(context.getActivityContext(), new FilterControl(prev, filter, this));
-			}
+
+			camera.backTranslate(() -> {
+				camera.setPosY(FILTER_PREV_SIZE - h);
+				for (EdFilter filter: EdFilter.getFilterList()) {
+					filter.applyFilter(filterTexture);
+					filterPreviewBuffer.beginFBO(() -> filterTexture.render(camera, program -> GLESUtils.clear()));
+					Bitmap prev = filterPreviewBuffer.getBitmap();
+					OPallViewInjector.inject(context.getActivityContext(), new FilterControl(prev, filter, this));
+				}
+			});
+
+			filterTexture.setSize(w, h);
 			filterTexture.setFlip(false, true);
 			firstTime = false;
-			long t1 = System.currentTimeMillis() - t0;
-			System.out.println("GENERATED IN: "+t1);
 		}
 
 		filterBuffer.beginFBO(() -> {

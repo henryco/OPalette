@@ -17,6 +17,7 @@
  */
 
 {
+	"type": "t255",
 	"filters": [{
 		"name": "filter1",
 		"color": "#FFFFFFFF",
@@ -24,153 +25,11 @@
 		"gamma": "1",
 		"bw": "false",
 		"min": ["0", "0", "0"],
-		"max": ["1", "1", "1"],
+		"max": ["255", "255", "255"],
 		"add": ["0", "0", "0"]
 	}, {
 		"name": "filter2",
 		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}, {
-		"name": "filter2",
-		"color": "RED",
-		"min": ["0.4", "0", "0"]
-	}
-
-	]
+		"min": ["75", "0", "0"]
+	}]
 }
