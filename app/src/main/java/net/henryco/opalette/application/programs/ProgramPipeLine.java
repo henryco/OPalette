@@ -453,16 +453,25 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 		request.openRequest(AppProgramProtocol.get_bitmap_from_program, () -> {
 			onDrawQueue.add((appMainProto, w, h) -> {
-				Bitmap image = OPallFBOCreator.FrameBuffer().createFBO(w, h, false).beginFBO(() ->
-						camera2D.backTranslate(() -> {
+				requestSender.sendRequest(new Request(set_pipe_line_enable));
+				FrameBuffer buffer = OPallFBOCreator.FrameBuffer(w, h, false)
+						.beginFBO(() ->
+								camera2D.backTranslate(() -> {
+									camera2D.setPosXY_absolute(0,0).update();
+									GLESUtils.clear();
+									for (AppSubProgram asp : subPrograms) {
+										OPallRenderable r = asp.getFinalRenderData();
+										if (r != null) r.render(camera2D);
+									}
+								})
+						);
+				Bitmap image = OPallFBOCreator.FrameBuffer(w, h, false)
+						.beginFBO(() -> camera2D.backTranslate(() -> {
 							camera2D.setPosXY_absolute(0,0).update();
 							GLESUtils.clear();
-							for (AppSubProgram asp : subPrograms) {
-								OPallRenderable r = asp.getFinalRenderData();
-								if (r != null) r.render(camera2D);
-							}
-						})
-				).getBitmap();
+							buffer.setFlip(false).render(camera2D);
+						})).getBitmap();
+				appMainProto.setResultBitmap(image);
 			});
 			observator.update();
 		});

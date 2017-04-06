@@ -194,6 +194,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 import net.henryco.opalette.R;
@@ -233,16 +234,17 @@ public class MainActivity extends AppCompatActivity
 
 	private final List<Runnable> topBarButtonActions = new ArrayList<>();
 	private final int topBarButtonId = 2137;
-	private final int topOptButtonId = 1488;
-	private final static int topBarButtonNameRes = R.string.main_top_bar_button;
+	private final int topOptButtonId = 7321;
 	private final Runnable topBarButtonDefaultAction = () -> {
-		//TODO
+		stateRequester.sendRequest(new Request(get_bitmap_from_program));
 	};
 
 
 	@Override
 	public void setResultBitmap(Bitmap bitmap) {
-
+		ImageView imageView = new ImageView(this);
+		imageView.setImageBitmap(bitmap);
+		new OPallAlertDialog().content(imageView).show(getSupportFragmentManager(), "Bitmapview");
 	}
 
 	@Override
@@ -315,14 +317,12 @@ public class MainActivity extends AppCompatActivity
 			checkToggle(imageToggle);
 		});
 	}
-
 	private void togglePalette(View v) {
 		OPallAnimated.pressButton75_225(this, v, () -> {
 			if (paletteToggle.isChecked()) showContainer(paletteContainer);
 			checkToggle(paletteToggle);
 		});
 	}
-
 	private void toggleFilter(View v) {
 		OPallAnimated.pressButton75_225(this, v, () -> {
 			if (filterToggle.isChecked()) showContainer(filterContainer);
@@ -442,8 +442,8 @@ public class MainActivity extends AppCompatActivity
 		if (topBarButton != null) {
 			topBarButtonActions.clear();
 			topBarButtonActions.add(topBarButtonDefaultAction);
-			topBarButton.setTitle(topBarButtonNameRes).setVisible(true).setEnabled(true);
-			topBarButton.setIcon(R.drawable.ic_send_white_24dp);
+			topBarButton.setVisible(true).setEnabled(true);
+			topBarButton.setIcon(R.drawable.ic_share_white_24dp);
 			topOptButton.setVisible(false).setEnabled(false);
 		}
 	}
