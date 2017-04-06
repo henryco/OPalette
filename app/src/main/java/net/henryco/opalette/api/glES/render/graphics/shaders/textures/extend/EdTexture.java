@@ -208,6 +208,9 @@ public class EdTexture extends OPallTextureExtended  {
 	private float alpha = 1;
 	private float contrast = 1;
 	private float gammaCorrection = 1;
+	private float addSaturation = 0;
+	private float addLightness = 0;
+	private float addHue = 0;
 
 	private boolean bwEnable = false;
 	private boolean thresholdEnable = false;
@@ -281,6 +284,32 @@ public class EdTexture extends OPallTextureExtended  {
 		return this;
 	}
 
+	public EdTexture setAddHue(float hue) {
+		this.addHue = hue;
+		return this;
+	}
+
+	public EdTexture setAddLightness(float lightness) {
+		this.addLightness = lightness;
+		return this;
+	}
+
+	public EdTexture setAddSaturation(float saturation) {
+		this.addSaturation = saturation;
+		return this;
+	}
+
+	public float getHue() {
+		return addHue;
+	}
+
+	public float getSaturation() {
+		return addSaturation;
+	}
+	public float getLightness() {
+		return addLightness;
+	}
+
 	public float getGammaCorrection() {
 		return gammaCorrection;
 	}
@@ -326,8 +355,11 @@ public class EdTexture extends OPallTextureExtended  {
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_bwEnable"), bwEnable ? 1 : 0);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_thresholdEnable"), thresholdEnable ? 1 : 0);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_gammaCorrection"), 1f / gammaCorrection);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_saturation"), addSaturation);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_lightness"), addLightness);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_threshold"), threshold);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_contrast"), contrast);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_hue"), addHue);
 	}
 
 
@@ -350,8 +382,78 @@ public class EdTexture extends OPallTextureExtended  {
 			"uniform float u_contrast;\n" +
 			"uniform float u_threshold;\n" +
 			"uniform float u_gammaCorrection;\n" +
+			"uniform float u_saturation;\n" +
+			"uniform float u_lightness;\n" +
+			"uniform float u_hue;\n" +
+			"\n" +
 			"uniform int u_bwEnable;\n" +
 			"uniform int u_thresholdEnable;\n" +
+			"\n" +
+			"\n" +
+			"\n" +
+			"vec3 RGBToHSL(in vec3 color) {\n" +
+			"\tvec3 hsl; // init to 0 to avoid warnings ? (and reverse if + remove first part)\n" +
+			"\n" +
+			"\tfloat fmin = min(min(color.r, color.g), color.b);    //Min RGB\n" +
+			"\tfloat fmax = max(max(color.r, color.g), color.b);    //Max RGB\n" +
+			"\tfloat d = fmax - fmin;             //Delta RGB value\n" +
+			"\n" +
+			"\thsl.z = (fmax + fmin) / 2.0; // Lum\n" +
+			"\n" +
+			"\tif (d == 0.0) {\t//This is a gray, no chroma...\n" +
+			"\t\thsl.x = 0.0;\t// Hue\n" +
+			"\t\thsl.y = 0.0;\t// Sat\n" +
+			"\t} else {\n" +
+			"\n" +
+			"\t    if (hsl.z < 0.5) hsl.y = d / (fmax + fmin); // Sat\n" +
+			"\t\telse hsl.y = d / (2.0 - fmax - fmin); // Sat\n" +
+			"\n" +
+			"\t\tfloat dR = (((fmax - color.r) / 6.0) + (d / 2.0)) / d;\n" +
+			"\t\tfloat dG = (((fmax - color.g) / 6.0) + (d / 2.0)) / d;\n" +
+			"\t\tfloat dB = (((fmax - color.b) / 6.0) + (d / 2.0)) / d;\n" +
+			"\n" +
+			"\t\tif (color.r == fmax ) hsl.x = dB - dG; // Hue\n" +
+			"\t\telse if (color.g == fmax) hsl.x = (1.0 / 3.0) + dR - dB; // Hue\n" +
+			"\t\telse if (color.b == fmax) hsl.x = (2.0 / 3.0) + dG - dR; // Hue\n" +
+			"\n" +
+			"\t\tif (hsl.x < 0.0) hsl.x += 1.0; // Hue\n" +
+			"\t\telse if (hsl.x > 1.0) hsl.x -= 1.0; // Hue\n" +
+			"\t}\n" +
+			"\treturn hsl;\n" +
+			"}\n" +
+			"\n" +
+			"\n" +
+			"float HueToRGB(in float f1, in float f2, in float hue) {\n" +
+			"\tif (hue < 0.0) hue += 1.0;\n" +
+			"\telse if (hue > 1.0) hue -= 1.0;\n" +
+			"\tfloat res;\n" +
+			"\tif ((6.0 * hue) < 1.0) res = f1 + (f2 - f1) * 6.0 * hue;\n" +
+			"\telse if ((2.0 * hue) < 1.0) res = f2;\n" +
+			"\telse if ((3.0 * hue) < 2.0) res = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;\n" +
+			"\telse res = f1;\n" +
+			"\treturn res;\n" +
+			"}\n" +
+			"\n" +
+			"vec3 HSLToRGB(in vec3 hsl) {\n" +
+			"\tvec3 rgb;\n" +
+			"\n" +
+			"\tif (hsl.y == 0.0) rgb = vec3(hsl.z); // Luminance\n" +
+			"\telse {\n" +
+			"\t\tfloat f2;\n" +
+			"\n" +
+			"\t\tif (hsl.z < 0.5) f2 = hsl.z * (1.0 + hsl.y);\n" +
+			"\t\telse f2 = (hsl.z + hsl.y) - (hsl.y * hsl.z);\n" +
+			"\n" +
+			"\t\tfloat f1 = 2.0 * hsl.z - f2;\n" +
+			"\n" +
+			"\t\trgb.r = HueToRGB(f1, f2, hsl.x + (1.0/3.0));\n" +
+			"\t\trgb.g = HueToRGB(f1, f2, hsl.x);\n" +
+			"\t\trgb.b= HueToRGB(f1, f2, hsl.x - (1.0/3.0));\n" +
+			"\t}\n" +
+			"\n" +
+			"\treturn rgb;\n" +
+			"}\n" +
+			"\n" +
 			"\n" +
 			"float correction(float color) {\n" +
 			"    return 0.5 + u_addBrightness + (u_contrast * (color - 0.5));\n" +
@@ -360,6 +462,15 @@ public class EdTexture extends OPallTextureExtended  {
 			"void main() {\n" +
 			"    vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
 			"    if (color.a != 0.) {\n" +
+			"\n" +
+			"        if (u_saturation != 0. || u_lightness != 0. || u_hue != 0.) {\n" +
+			"            color.rgb = RGBToHSL(color.rgb);\n" +
+			"            color.r += u_hue * 0.5; // [(H),s,l]\n" +
+			"            color.g += u_saturation * color.g; // [h,(S),l]\n" +
+			"            color.b += u_lightness * color.b; // [h,s,(L)]\n" +
+			"            color.rgb = HSLToRGB(color.rgb);\n" +
+			"        }\n" +
+			"\n" +
 			"        color.r = pow(max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r), u_gammaCorrection);\n" +
 			"        color.g = pow(max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g), u_gammaCorrection);\n" +
 			"        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);\n" +

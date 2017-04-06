@@ -6,23 +6,11 @@ varying vec2 v_TexCoordinate;
 
 uniform sampler2D u_Texture0;
 
-uniform vec3 u_addColor;
-uniform vec3 u_minColor;
-uniform vec3 u_maxColor;
-uniform vec3 u_thrColor;
-uniform float u_alpha;
-uniform float u_addBrightness;
-uniform float u_contrast;
-uniform float u_threshold;
-uniform float u_gammaCorrection;
 uniform float u_saturation;
 uniform float u_lightness;
-uniform float u_hue;
-
-uniform int u_bwEnable;
-uniform int u_thresholdEnable;
 
 
+// [RED, GREEN, BLUE] to [HUE, SATURATION, LIGHTNESS]
 
 vec3 RGBToHSL(in vec3 color) {
 	vec3 hsl; // init to 0 to avoid warnings ? (and reverse if + remove first part)
@@ -87,32 +75,6 @@ vec3 HSLToRGB(in vec3 hsl) {
 	return rgb;
 }
 
-
-float correction(float color) {
-    return 0.5 + u_addBrightness + (u_contrast * (color - 0.5));
-}
-
 void main() {
-    vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;
-    if (color.a != 0.) {
-
-        if (u_saturation != 0. || u_lightness != 0. || u_hue != 0.) {
-            color.rgb = RGBToHSL(color.rgb);
-            color.r += u_hue * 0.5; // [(H),s,l]
-            color.g += u_saturation * color.g; // [h,(S),l]
-            color.b += u_lightness * color.b; // [h,s,(L)]
-            color.rgb = HSLToRGB(color.rgb);
-        }
-
-        color.r = pow(max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r), u_gammaCorrection);
-        color.g = pow(max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g), u_gammaCorrection);
-        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);
-        color.a = u_alpha;
-        if (u_bwEnable == 1 || u_thresholdEnable == 1) {
-            float val = dot(vec3(1.), color.rgb);
-            if (u_thresholdEnable == 1) color.rgb = val >= u_threshold ? u_thrColor : vec3(0.);
-            else color.rgb = vec3(val);
-        }
-    }
-    gl_FragColor = color;
+    gl_FragColor = texture2D(u_Texture0, v_TexCoordinate).rgba;
 }
