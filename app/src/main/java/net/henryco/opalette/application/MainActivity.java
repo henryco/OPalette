@@ -185,6 +185,7 @@ package net.henryco.opalette.application;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -228,15 +229,21 @@ public class MainActivity extends AppCompatActivity
 	private View[] containerGroup;
 
 	private MenuItem topBarButton;
+	private MenuItem topOptButton;
+
 	private final List<Runnable> topBarButtonActions = new ArrayList<>();
 	private final int topBarButtonId = 2137;
+	private final int topOptButtonId = 1488;
 	private final static int topBarButtonNameRes = R.string.main_top_bar_button;
 	private final Runnable topBarButtonDefaultAction = () -> {
 		//TODO
 	};
 
 
+	@Override
+	public void setResultBitmap(Bitmap bitmap) {
 
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -381,6 +388,9 @@ public class MainActivity extends AppCompatActivity
 	public boolean onCreateOptionsMenu(Menu menu) {
 		topBarButton = menu.add(0, topBarButtonId, 0, "");
 		topBarButton.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		topOptButton = menu.add(Menu.NONE, topOptButtonId, Menu.NONE, "");
+		topOptButton.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
 		restoreTopBarButton();
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -389,14 +399,14 @@ public class MainActivity extends AppCompatActivity
 	@Override
 	public void setTopControlButton(OPallConsumer<MenuItem> buttonConsumer, Runnable ... actions) {
 		Collections.addAll(topBarButtonActions, actions);
-		buttonConsumer.consume(topBarButton);
+		buttonConsumer.consume(topOptButton);
 	}
 
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) onBackPressed();
-		else if (item.getItemId() == topBarButtonId)
+		else if (item.getItemId() == topBarButtonId || item.getItemId() == topOptButtonId)
 			for (Runnable action : topBarButtonActions) action.run();
 		return super.onOptionsItemSelected(item);
 	}
@@ -433,6 +443,8 @@ public class MainActivity extends AppCompatActivity
 			topBarButtonActions.clear();
 			topBarButtonActions.add(topBarButtonDefaultAction);
 			topBarButton.setTitle(topBarButtonNameRes).setVisible(true).setEnabled(true);
+			topBarButton.setIcon(R.drawable.ic_send_white_24dp);
+			topOptButton.setVisible(false).setEnabled(false);
 		}
 	}
 

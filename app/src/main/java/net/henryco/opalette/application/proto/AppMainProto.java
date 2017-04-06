@@ -183,6 +183,7 @@
 package net.henryco.opalette.application.proto;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.view.MenuItem;
 
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceActivity;
@@ -197,5 +198,5 @@ public interface AppMainProto extends OPallSurfaceActivity {
 	void switchToFragmentOptions(Fragment fragment);
 	void switchToScrollOptionsView();
 	void setTopControlButton(OPallConsumer<MenuItem> buttonConsumer, Runnable ... action);
-
+	void setResultBitmap(Bitmap bitmap);
 }
