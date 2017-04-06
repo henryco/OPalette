@@ -26,6 +26,7 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
+import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -39,7 +40,7 @@ public class GammaCorrControl extends AppAutoSubControl<AppMainProto> {
 	private static final int img_button_res = R.drawable.ic_brush_white_24dp;
 	private static final int txt_button_res = R.string.control_gamma_correction;
 
-	private static final float range_max = 5;
+	private static final float range_max = GodConfig.GAMMA_MAX_RANGE;
 	private static final float range_min = 1 / range_max;
 	private static final float ratio = 20;
 

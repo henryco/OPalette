@@ -21,8 +21,11 @@
 	"filters": [{
 		"name": "filter1",
 		"color": "#FFFFFFFF",
-		"contrast": "1",
+		"contrast": "0",
 		"gamma": "1",
+		"hue": "0",
+		"saturation": "0",
+		"lightness": "0",
 		"bw": "false",
 		"min": ["0", "0", "0"],
 		"max": ["255", "255", "255"],

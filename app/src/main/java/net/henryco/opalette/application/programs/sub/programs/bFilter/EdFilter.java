@@ -46,7 +46,7 @@ public class EdFilter {
 
 	private static final EdFilter DEFAULT_FILTER;
 	static {
-		DEFAULT_FILTER = new EdFilter("Default", Color.TRANSPARENT, 1f, 1f, false);
+		DEFAULT_FILTER = new EdFilter("Default", Color.TRANSPARENT, 1f, 1f, 0f, 0f, 0f, false);
 		DEFAULT_FILTER.setAdd(0,0,0);
 		DEFAULT_FILTER.setMin(0,0,0);
 		DEFAULT_FILTER.setMax(1,1,1);
@@ -61,14 +61,17 @@ public class EdFilter {
 		/*
 
 		{ 	"type": "t255" | "t01" ,
-			"filters": [
-			{
-				"name": "filter",
-				"contrast": "1",
+			"filters": [{
+				"name": "filter1",
+				"color": "#FFFFFFFF",
+				"contrast": "0",
 				"gamma": "1",
+				"hue": "0",
+				"saturation": "0",
+				"lightness": "0",
 				"bw": "false",
 				"min": ["0", "0", "0"],
-				"max": ["1", "1", "1"],
+				"max": ["255", "255", "255"],
 				"add": ["0", "0", "0"]
 			}]
 		}
@@ -93,7 +96,8 @@ public class EdFilter {
 			} catch (Exception ignored){}
 
 			final OPallFunction<Float, Float> corrector;
-			if (type.equalsIgnoreCase("t255")) corrector = f -> f / 255f;
+			final boolean type255 = type.equalsIgnoreCase("t255");
+			if (type255) corrector = f -> f / 255f;
 			else corrector = Float::floatValue;
 
 			JSONArray filters = data.getJSONArray("filters");
@@ -104,12 +108,29 @@ public class EdFilter {
 				float contrast = 1f;
 				float gamma = 1f;
 				int col = 0xFFFFFFFF;
+				float light = 0f;
+				float sat = 0f;
+				float hue = 0f;
 
+				try {
+					sat = (float) filter.getDouble("saturation");
+					if (type255) sat /= GodConfig.NORM_RANGE;
+				} catch (Exception ignored){}
+				try {
+					hue = (float) filter.getDouble("hue");
+					if (type255) hue /= GodConfig.HUE_CLAMP_RANGE;
+				} catch (Exception ignored){}
+				try {
+					light = (float) filter.getDouble("lightness");
+					if (type255) light /= GodConfig.NORM_RANGE;
+				} catch (Exception ignored){}
 				try {
 					col = Color.parseColor(filter.getString("color"));
 				} catch (Exception ignored){}
 				try {
 					contrast = (float) filter.getDouble("contrast");
+					if (type255) contrast /= GodConfig.NORM_RANGE;
+					contrast += 1f;
 				} catch (Exception ignored){}
 				try {
 					gamma = (float) filter.getDouble("gamma");
@@ -134,7 +155,7 @@ public class EdFilter {
 				float[] min = colorFunc.apply("min");
 				float[] max = colorFunc.apply("max");
 
-				EdFilter extFilter = new EdFilter(f_name, col, gamma, contrast, bw);
+				EdFilter extFilter = new EdFilter(f_name, col, gamma, contrast, hue, sat, light, bw);
 				if (add != null) extFilter.setAdd(add[0], add[1], add[2]);
 				if (min != null) extFilter.setMin(min[0], min[1], min[2]);
 				if (max != null) extFilter.setMax(max[0], max[1], max[2]);
@@ -184,6 +205,9 @@ public class EdFilter {
 	private final boolean bw_enable;
 	private final float contrast;
 	private final float gammaCorrection;
+	private final float lightness;
+	private final float saturation;
+	private final float hue;
 
 	private float alpha;
 
@@ -193,12 +217,22 @@ public class EdFilter {
 	}
 
 
-	private EdFilter(final String name, final int tag_color, final float gammaCorrection, final float contrast, final boolean bw_enable) {
+	private EdFilter(final String name,
+					 final int tag_color,
+					 final float gammaCorrection,
+					 final float contrast,
+					 final float hue,
+					 final float sat,
+					 final float lig,
+					 final boolean bw_enable) {
 		this.gammaCorrection = gammaCorrection;
 		this.bw_enable = bw_enable;
 		this.contrast = contrast;
 		this.color = tag_color;
 		this.name = name;
+		this.lightness = lig;
+		this.saturation = sat;
+		this.hue = hue;
 		this.alpha = 1f;
 	}
 
@@ -239,6 +273,9 @@ public class EdFilter {
 		texture.setGammaCorrection(gammaCorrection);
 		texture.setBwEnable(bw_enable);
 		texture.setContrast(contrast);
+		texture.setAddHue(hue);
+		texture.setAddSaturation(saturation);
+		texture.setAddLightness(lightness);
 
 		if (add != null) add.applyColor(texture.add);
 		else new Vec(0,0,0,0).applyColor(texture.add);
@@ -254,7 +291,7 @@ public class EdFilter {
 	}
 
 	public EdFilter copy() {
-		EdFilter copy = new EdFilter(name, color, gammaCorrection, contrast, bw_enable);
+		EdFilter copy = new EdFilter(name, color, gammaCorrection, contrast, hue, saturation, lightness, bw_enable);
 		if (add != null) copy.setAdd(this.add.copy());
 		if (min != null) copy.setMin(this.min.copy());
 		if (max != null) copy.setMax(this.max.copy());

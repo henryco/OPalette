@@ -26,6 +26,7 @@ import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
+import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -39,7 +40,7 @@ public class HueControl extends AppAutoSubControl<AppMainProto> {
 	private static final int img_button_res = R.drawable.ic_highlight_white_24dp;
 	private static final int txt_button_res = R.string.control_hue;
 
-	private static final int max_clamp = 180;
+	private static final int max_clamp = GodConfig.HUE_CLAMP_RANGE;
 
 	private final EdTexture texture;
 

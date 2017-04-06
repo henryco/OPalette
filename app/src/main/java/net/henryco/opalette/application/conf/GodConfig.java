@@ -26,5 +26,7 @@ public class GodConfig {
 
 	public static final String TEXTURE_FILTERS_DATA_FILE = "assets/opall_filters.json";
 	public static final int DEFAULT_FILTER_PREVIEW_ICON_SIZE = 64;
-
+	public static final int HUE_CLAMP_RANGE = 180;
+	public static final int NORM_RANGE = 100;
+	public static final float GAMMA_MAX_RANGE = 5;
 }
