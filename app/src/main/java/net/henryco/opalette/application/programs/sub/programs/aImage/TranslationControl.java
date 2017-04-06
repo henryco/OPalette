@@ -209,8 +209,8 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 	private static final int MOVE = R.string.control_translate;
 	private static final int BUTTON_IMAGE = R.drawable.ic_transform_white_24dp;
 
-	private static final float MAX_SCALE = 4;
-	private static final float MIN_SCALE = 0.25f;
+	private static final float MAX_SCALE = 5f;
+	private static final float MIN_SCALE = 1f / MAX_SCALE;
 
 	private OPallSurfaceTouchListener touchEventListener;
 	private AppSubProgram.ProxyRenderData<ConvolveTexture> imgHolder;

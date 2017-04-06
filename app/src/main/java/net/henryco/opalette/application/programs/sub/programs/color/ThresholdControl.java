@@ -55,7 +55,7 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		context.getRenderSurface().update();
-		InjectableSeekBar bar = new InjectableSeekBar(view, "Level").setMax(100);
+		InjectableSeekBar bar = new InjectableSeekBar(view, "Threshold Level").setMax(100);
 		InjectableColorButtons threshold = new InjectableColorButtons(view, "Color");
 
 		threshold.setChecked(texture.isThresholdEnable());

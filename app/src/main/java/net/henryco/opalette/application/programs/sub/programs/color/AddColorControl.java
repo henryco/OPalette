@@ -217,9 +217,9 @@ public class AddColorControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		int type = InjectableSeekBar.TYPE_SMALL;
-		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red");
-		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, "Green");
-		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, "Blue");
+		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red add");
+		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, "Green add");
+		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, "Blue add");
 
 		redBar.setDefaultPoint(0, 50);
 		greenBar.setDefaultPoint(0, 50);
