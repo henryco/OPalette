@@ -227,6 +227,17 @@ public class OPallSurfaceView extends GLSurfaceView {
 		return true;
 	}
 
+
+	private OnTouchEventListener backUPedListener;
+	public void addBackUpedTouchEventListener(OnTouchEventListener listener) {
+		backUPedListener = getLastTouchEventListener();
+		addOnTouchEventListener(listener);
+	}
+	public void removeAndRestoreOnTouchEventListener(OnTouchEventListener listener) {
+		removeTouchEventListener(listener);
+		addOnTouchEventListener(backUPedListener);
+	}
+
 	public void addOnTouchEventListener(OnTouchEventListener listener) {
 		if (listener != null) touchEventListeners.add(listener);
 	}
