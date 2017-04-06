@@ -251,7 +251,6 @@ public class MainActivity extends AppCompatActivity
 		imageToggle = (ToggleButton) toolbar.findViewById(R.id.toolbarButtonImage);
 		paletteToggle = (ToggleButton) toolbar.findViewById(R.id.toolbarButtonPalette);
 		filterToggle = (ToggleButton) toolbar.findViewById(R.id.toolbarButtonFilter);
-
 		toggleGroup = new ToggleButton[]{imageToggle, paletteToggle, filterToggle};
 
 
@@ -276,7 +275,6 @@ public class MainActivity extends AppCompatActivity
 		}
 
 		OPallUniRenderer renderer = new UniRenderer(this, new ProgramPipeLine());
-//		OPallUniRenderer renderer = new UniRenderer(this, new TestUnderProgram());
 		stateRequester.addRequestListener(renderer);
 
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);

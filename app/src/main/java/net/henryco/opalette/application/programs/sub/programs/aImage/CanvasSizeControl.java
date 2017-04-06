@@ -216,6 +216,8 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 	private RefreshableTimer timer;
 	private OPallSurfaceTouchListener touchEventListener;
 
+	private OPallSurfaceView.OnTouchEventListener backListener;
+
 	public CanvasSizeControl(final float defScrW, final float defScrH, final OPallRequester requester) {
 		super(img_button_res, txt_button_res);
 		this.defScrW = defScrW;
@@ -263,6 +265,9 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 
 
 
+		backListener = surface.getLastTouchEventListener();
+		context.getRenderSurface().removeTouchEventListener(backListener);
+
 		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
 		touchEventListener.setOnActionUp(event -> timer.startIfWaiting().refresh());
 		surface.addOnTouchEventListener(touchEventListener.setOnActionMove((dx, dy, event) -> {
@@ -286,6 +291,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
 		context.getRenderSurface().removeTouchEventListener(touchEventListener);
+		context.getRenderSurface().addOnTouchEventListener(backListener);
 	}
 
 

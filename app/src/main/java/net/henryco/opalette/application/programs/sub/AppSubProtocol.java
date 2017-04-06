@@ -192,4 +192,7 @@ public interface AppSubProtocol {
 	int set_filters_disable = 973151;
 	int update_proxy_render_state = 837566;
 
+	int set_pipe_line_enable = 95820656;
+	int set_pipe_line_disable = 13930679;
+
 }

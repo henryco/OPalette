@@ -67,6 +67,9 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 	private List<FilterPipeLiner> filterPipeLine;
 
+	private boolean pipeLineStatus;
+
+
 	private static final int FILTER_PREV_SIZE = GodConfig.DEFAULT_FILTER_PREVIEW_ICON_SIZE;
 
 	@Override public void setProgramHolder(AppSubProgramHolder holder) {
@@ -88,6 +91,8 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
+		request.openRequest(set_pipe_line_enable, () -> pipeLineStatus = true);
+		request.openRequest(set_pipe_line_disable, () -> pipeLineStatus = false);
 	}
 
 
@@ -112,7 +117,10 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	// TODO: 05/04/17 ADD FILTERS PIPE-LINE
 	@Override // TODO: 05/04/17 ADD GAUSSIAN BLUR
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
+
 		firstTime = true;
+		pipeLineStatus = true;
+
 		filterBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 		filterTexture = new EdTexture();
 		filterTexture.setScreenDim(width, height);
@@ -157,24 +165,28 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 			firstTime = false;
 		}
 
-		if (!firstTime && proxyRenderData.stateUpdated()) {	// HERE ACTIVE FILTERS PIPE-LINE
+		if (pipeLineStatus) {
+			if (!firstTime && proxyRenderData.stateUpdated()) {	// HERE ACTIVE FILTERS PIPE-LINE
 
-			int texData = proxyRenderData.getRenderData().getTextureDataHandle();
-			Texture filter = proxyRenderData.getRenderData();
-			for (FilterPipeLiner fp: filterPipeLine) {
-				fp.setTextureDataHandle(texData);
-				fp.render(camera);
-				filter = fp.getResult();
-				texData = filter.getTextureDataHandle();
+				int texData = proxyRenderData.getRenderData().getTextureDataHandle();
+				Texture filter = proxyRenderData.getRenderData();
+				for (FilterPipeLiner fp: filterPipeLine) {
+					fp.setTextureDataHandle(texData);
+					fp.render(camera);
+					filter = fp.getResult();
+					texData = filter.getTextureDataHandle();
+				}
+				final Texture lastFilter = filter;
+				filterTexture.setTextureDataHandle(texData);
+				filterBuffer.beginFBO(() -> {
+					GLESUtils.clear();
+					lastFilter.render(camera);
+					actualFilter.applyFilter(filterTexture).render(camera);
+				});
 			}
-			final Texture lastFilter = filter;
-			filterTexture.setTextureDataHandle(texData);
-			filterBuffer.beginFBO(() -> {
-				GLESUtils.clear();
-				lastFilter.render(camera);
-				actualFilter.applyFilter(filterTexture).render(camera);
-			});
 		}
+
+
 	}
 
 

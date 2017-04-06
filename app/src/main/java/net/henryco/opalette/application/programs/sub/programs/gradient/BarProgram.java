@@ -214,6 +214,9 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
 
+
+	private boolean pipeLineStatus;
+
 	@Override
 	public void setProgramHolder(AppSubProgramHolder holder) {
 		this.holder = holder;
@@ -227,6 +230,8 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 	@Override
 	public void acceptRequest(Request request) {
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
+		request.openRequest(set_pipe_line_enable, () -> pipeLineStatus = true);
+		request.openRequest(set_pipe_line_disable, () -> pipeLineStatus = false);
 	}
 
 	@Override
@@ -241,6 +246,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, MainActivity context) {
+		pipeLineStatus = true;
 		touchLines = new TouchLines(width, height);
 		oPalette = new OPalette(width, height);
 
@@ -261,11 +267,12 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 	@Override
 	public void render(@Nullable GL10 gl10, MainActivity context, Camera2D camera, int w, int h) {
-		oPalette.setRangeLineCoeffs(touchLines.getCoefficients());
-		oPalette.setRenderData(proxyRenderData.getRenderData());
-		touchLines.render(camera);
-		oPalette.render(camera);
-
+		if (pipeLineStatus) {
+			oPalette.setRangeLineCoeffs(touchLines.getCoefficients());
+			oPalette.setRenderData(proxyRenderData.getRenderData());
+			touchLines.render(camera);
+			oPalette.render(camera);
+		}
 	}
 
 

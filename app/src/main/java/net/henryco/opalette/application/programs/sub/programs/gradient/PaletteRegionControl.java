@@ -90,6 +90,10 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 
 				reg.setTextColor(touchLines.isDefault() ? fca : fcb);
 				non.setTextColor(touchLines.isDefault() ? fcb : fca);
+
+				backListener = context.getRenderSurface().getLastTouchEventListener();
+				context.getRenderSurface().removeTouchEventListener(backListener);
+
 				if (!touchLines.isDefault()) context.getRenderSurface().addOnTouchEventListener(listener);
 
 				regButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
@@ -116,11 +120,13 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 		}
 	}
 
+	private OPallSurfaceView.OnTouchEventListener backListener;
 
 	@Override
 	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
 		context.getRenderSurface().removeTouchEventListener(listener);
 		touchLines.setVisible(false);
 		context.getRenderSurface().update();
+		context.getRenderSurface().addOnTouchEventListener(backListener);
 	}
 }

@@ -235,7 +235,11 @@ public class OPallSurfaceView extends GLSurfaceView {
 		if (listener != null) touchEventListeners.remove(listener);
 	}
 
-
+	public OnTouchEventListener getLastTouchEventListener() {
+		if (touchEventListeners.size() > 0)
+			return touchEventListeners.get(0);
+		return null;
+	}
 
 	/**
 	 * Area where code will execute after context creation.
@@ -244,8 +248,7 @@ public class OPallSurfaceView extends GLSurfaceView {
 	 */
 	public final OPallSurfaceView startWhenReady(OPallConsumer<Renderer> action) {
 		new Thread(() -> {
-			while (!surfaceInfo.isSurfaceCreated()
-					|| !surfaceInfo.isSurfaceChanged()) {
+			while (!surfaceInfo.isSurfaceCreated() || !surfaceInfo.isSurfaceChanged()) {
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {

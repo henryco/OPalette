@@ -215,6 +215,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private FrameBuffer textureBuffer;
 	private Vignette vignette;
 	private Texture vignetteTexture;
+	private Texture disableStatusTexture;
 
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
@@ -222,7 +223,9 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private final float[] defDim = {0,0};
 
 
-	private boolean firstTime = true;
+	private boolean pipeLineStatus;
+
+	private boolean firstTime;
 
 	@Override
 	public void setProgramHolder(AppSubProgramHolder holder) {
@@ -239,6 +242,8 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 		request.openRequest(set_filters_enable, () -> proxyRenderData.getRenderData().setFilterEnable(true));
 		request.openRequest(set_filters_disable, () -> proxyRenderData.getRenderData().setFilterEnable(false));
+		request.openRequest(set_pipe_line_enable, () -> pipeLineStatus = true);
+		request.openRequest(set_pipe_line_disable, () -> pipeLineStatus = false);
 	}
 
 
@@ -259,9 +264,15 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
+		pipeLineStatus = true;
+		firstTime = true;
+
 		vignette = new Vignette(width, height).setActive(false).setPower(0);
 		vignetteTexture = new Texture();
 		vignetteTexture.setScreenDim(width, height);
+
+		disableStatusTexture = new Texture();
+		disableStatusTexture.setScreenDim(width, height);
 
 		textureBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 
@@ -306,38 +317,45 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 			firstTime = false;
 		}
 
-		if (proxyRenderData.stateUpdated()) {
-			camera.backTranslate(() -> {
-				camera.translateXY(w - defDim[0], h - defDim[1]); // position correction while canvas size changed
-				boolean e = proxyRenderData.getRenderData().isFilterEnable();
-				feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
-				feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
-
-
-				if (vignette.isActive()) {
-					vignette.render(camera);
-
-					if (vignetteMode == VIGNETTE_IMAGE) {
-						vignetteTexture.set(proxyRenderData.getRenderData());
-						vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
-					}
-				}
-
-				textureBuffer.beginFBO(() -> {
-
-					proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear());
+		if (pipeLineStatus) {
+			if (proxyRenderData.stateUpdated()) {
+				camera.backTranslate(() -> {
+					camera.translateXY(w - defDim[0], h - defDim[1]); // position correction while canvas size changed
+					boolean e = proxyRenderData.getRenderData().isFilterEnable();
+					feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
+					feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
 
 
 					if (vignette.isActive()) {
-						if (vignetteMode == VIGNETTE_IMAGE) vignetteTexture.render(camera);
-						else if (vignetteMode == VIGNETTE_SCREEN) vignette.getShapeBuffer().render(camera);
+						vignette.render(camera);
+
+						if (vignetteMode == VIGNETTE_IMAGE) {
+							vignetteTexture.set(proxyRenderData.getRenderData());
+							vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
+						}
 					}
+
+					textureBuffer.beginFBO(() -> {
+
+						proxyRenderData.getRenderData().render(camera, program -> GLESUtils.clear());
+
+						if (vignette.isActive()) {
+							if (vignetteMode == VIGNETTE_IMAGE) vignetteTexture.render(camera);
+							else if (vignetteMode == VIGNETTE_SCREEN) vignette.getShapeBuffer().render(camera);
+						}
+					});
+
+
 				});
-
-
-			});
+			}
+			finalBackGroundData.render(camera);
+		} else {
+			finalBackGroundData.render(camera);
+			disableStatusTexture.set(proxyRenderData.getRenderData());
+			disableStatusTexture.render(camera);
 		}
-		finalBackGroundData.render(camera);
+
+
 	}
 
 

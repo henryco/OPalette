@@ -25,6 +25,7 @@ import android.view.View;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceTouchListener;
+import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
@@ -112,8 +113,11 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 			}
 		});
 
-		if (palette.getOrientation() != OPalette.ORIENTATION_NONE)
+		if (palette.getOrientation() != OPalette.ORIENTATION_NONE) {
+			backListener = context.getRenderSurface().getLastTouchEventListener();
+			context.getRenderSurface().removeTouchEventListener(backListener);
 			context.getRenderSurface().addOnTouchEventListener(touchEventListener);
+		}
 		OPallViewInjector.inject(context.getActivityContext(), sizeBar, moveBar);
 
 
@@ -123,8 +127,11 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 		}
 	}
 
+	private OPallSurfaceView.OnTouchEventListener backListener;
+
 	@Override
 	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
 		context.getRenderSurface().removeTouchEventListener(touchEventListener);
+		context.getRenderSurface().addOnTouchEventListener(backListener);
 	}
 }

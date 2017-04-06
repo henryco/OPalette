@@ -290,6 +290,7 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 
 
 
+
 		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
 		touchEventListener.setOnActionUp(event -> timer.startIfWaiting().refresh());
 		touchEventListener.setOnActionMove((dx, dy, event) -> {
@@ -319,15 +320,19 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 			updateFunc.run();
 		});
 
+		backListener = surface.getLastTouchEventListener();
+		context.getRenderSurface().removeTouchEventListener(backListener);
+
 		surface.addOnTouchEventListener(touchEventListener);
 		OPallViewInjector.inject(context.getActivityContext(), zoomBar, verBar, horBar);
 	}
 
-
+	private OPallSurfaceView.OnTouchEventListener backListener;
 
 	@Override
 	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
 		context.getRenderSurface().removeTouchEventListener(touchEventListener);
+		context.getRenderSurface().addOnTouchEventListener(backListener);
 	}
 
 

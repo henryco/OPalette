@@ -93,7 +93,7 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 			pixelatedTexture.getFilterTexture().setPixelQuantum(defTexQuantum).setPixelsNumb(defTexPixels);
 			pixelatedTexture.setActive(false);
 			pixBar.setProgress(0);
-			quantumBar.setProgress(0);
+			quantumBar.setProgress((int) defTexQuantum);
 			updateFunc.run();
 		});
 

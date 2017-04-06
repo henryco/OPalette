@@ -213,6 +213,9 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
 
+
+	private boolean pipeLineStatus;
+
 	@Override
 	public void setProgramHolder(AppSubProgramHolder holder) {
 		this.holder = holder;
@@ -227,6 +230,8 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 	public void acceptRequest(Request request) {
 		request.openRequest(set_filters_enable, () -> gridLines.setVisible(false));
 		request.openRequest(set_filters_disable, () -> gridLines.setVisible(true));
+		request.openRequest(set_pipe_line_enable, () -> pipeLineStatus = true);
+		request.openRequest(set_pipe_line_disable, () -> pipeLineStatus = false);
 	}
 
 	@Override
@@ -243,6 +248,7 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
+		pipeLineStatus = true;
 		gridLines = new GridLines(width, height);
 		borders = new Borders(width, height);
 		OPallViewInjector.inject(context.getActivityContext(), new BordersControl(borders));
@@ -256,8 +262,10 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
-		borders.render(camera);
-		gridLines.render(camera);
+		if (pipeLineStatus) {
+			borders.render(camera);
+			gridLines.render(camera);
+		}
 	}
 
 

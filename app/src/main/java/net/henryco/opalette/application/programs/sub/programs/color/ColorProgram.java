@@ -217,6 +217,9 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
 
+
+	private boolean pipeLineStatus;
+
 	@Override
 	public void setProgramHolder(AppSubProgramHolder holder) {
 		this.holder = holder;
@@ -229,7 +232,8 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	@Override
 	public void acceptRequest(Request request) {
-
+		request.openRequest(set_pipe_line_enable, () -> pipeLineStatus = true);
+		request.openRequest(set_pipe_line_disable, () -> pipeLineStatus = false);
 	}
 
 	@Override
@@ -246,6 +250,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 
 		firstTime = true;
+		pipeLineStatus = true;
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
@@ -277,8 +282,10 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 		firstTime = false;
-		imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
-		imageBuffer.render(camera);
+		if (pipeLineStatus) {
+			imageBuffer.beginFBO(() -> imageTexture.render(camera, program -> GLESUtils.clear()));
+			imageBuffer.render(camera);
+		}
 	}
 
 

@@ -185,9 +185,11 @@ package net.henryco.opalette.application.programs;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUnderProgram;
+import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
@@ -225,6 +227,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		int get_bitmap_from_program = 24823153;
 	}
 
+
+	public static final long touchInventDelayMs = 500;
 
 	private final long id;
 	private boolean uCan = false;
@@ -331,6 +335,32 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		FrameBuffer.debug = true;
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox(width, height);
+
+
+
+		context.getRenderSurface().addOnTouchEventListener(new OPallSurfaceView.OnTouchEventListener() {
+			private boolean reset = true;
+			@Override public void onTouchEvent(MotionEvent event) {
+				if (reset) {
+					reset = false;
+					new Thread(() -> {
+						try {
+							Thread.sleep(touchInventDelayMs);
+							if (!reset) {
+								requestSender.sendRequest(new Request(set_pipe_line_disable));
+								context.getRenderSurface().update();
+							}
+						} catch (InterruptedException ignored) {}
+					}).start();
+				}
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					reset = true;
+					requestSender.sendRequest(new Request(set_pipe_line_enable));
+					context.getRenderSurface().update();
+				}
+			}
+		});
+
 
 		OPallRenderable renderData = null;
 		for (AppSubProgram asp : subPrograms) {

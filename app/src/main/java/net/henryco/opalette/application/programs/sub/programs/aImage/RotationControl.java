@@ -191,6 +191,7 @@ import android.widget.Switch;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceTouchListener;
+import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.utils.RefreshableTimer;
@@ -278,6 +279,9 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 		}));
 
 
+		backListener = context.getRenderSurface().getLastTouchEventListener();
+		context.getRenderSurface().removeTouchEventListener(backListener);
+
 		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
 		touchEventListener.setOnActionUp(event -> timer.startIfWaiting().refresh());
 		context.getRenderSurface().addOnTouchEventListener(touchEventListener.setOnActionMove((dx, dy, event) -> {
@@ -301,9 +305,12 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 		OPallViewInjector.inject(context.getActivityContext(), flipButtons, angleBar);
 	}
 
+	private OPallSurfaceView.OnTouchEventListener backListener;
+
 	@Override
 	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
 		context.getRenderSurface().removeTouchEventListener(touchEventListener);
+		context.getRenderSurface().addOnTouchEventListener(backListener);
 	}
 }
 
