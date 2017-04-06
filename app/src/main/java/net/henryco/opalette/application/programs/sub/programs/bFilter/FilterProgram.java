@@ -29,6 +29,7 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.PixelatedTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
@@ -37,6 +38,9 @@ import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.proto.AppMainProto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -61,6 +65,8 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	private FrameBuffer filterPreviewBuffer;
 	private EdFilter actualFilter;
 
+	private List<FilterPipeLiner> filterPipeLine;
+
 	private static final int FILTER_PREV_SIZE = GodConfig.DEFAULT_FILTER_PREVIEW_ICON_SIZE;
 
 	@Override public void setProgramHolder(AppSubProgramHolder holder) {
@@ -69,7 +75,6 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	@Override public void setFeedBackListener(OPallRequester feedBackListener) {
 		this.feedBackListener = feedBackListener;
 	}
-
 	@Override public void setID(long id) {
 		this.id = id;
 	}
@@ -79,9 +84,10 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 
 
+
 	@Override
 	public void acceptRequest(Request request) {
-
+		request.openRequest(update_proxy_render_state, () -> proxyRenderData.setStateUpdated());
 	}
 
 
@@ -89,6 +95,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	public void setFilter(EdFilter filter, TextView textView) {
 		this.actualTextView = textView;
 		this.actualFilter = filter;
+		proxyRenderData.setStateUpdated();
 	}
 
 	@Override
@@ -112,6 +119,14 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 		actualFilter = EdFilter.getDefaultFilter();
 		filterPreviewBuffer = OPallFBOCreator.FrameBuffer(FILTER_PREV_SIZE, FILTER_PREV_SIZE, false);
 
+
+		FilterPipeLiner<PixelatedTexture> pixelator = new FilterPipeLiner<>(new PixelatedTexture(), width, height);
+		pixelator.getFilterTexture().setPixelsNumb(Math.max(width, height));
+
+		filterPipeLine = new ArrayList<>();
+		filterPipeLine.add(pixelator);
+
+		OPallViewInjector.inject(context.getActivityContext(), new PixelateControl(proxyRenderData, pixelator));
 	}
 
 	@Override
@@ -122,7 +137,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
-		if (firstTime) {
+		if (firstTime) {	// CREATE FILTERS AND THEIR PREVIEW ICONS
 
 			filterTexture.setSize(FILTER_PREV_SIZE, FILTER_PREV_SIZE);
 			filterTexture.setFlip(false, false);
@@ -142,11 +157,24 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 			firstTime = false;
 		}
 
-		filterBuffer.beginFBO(() -> {
-			GLESUtils.clear();
-			proxyRenderData.getRenderData().render(camera);
-			actualFilter.applyFilter(filterTexture).render(camera);
-		});
+		if (!firstTime && proxyRenderData.stateUpdated()) {	// HERE ACTIVE FILTERS PIPE-LINE
+
+			int texData = proxyRenderData.getRenderData().getTextureDataHandle();
+			Texture filter = proxyRenderData.getRenderData();
+			for (FilterPipeLiner fp: filterPipeLine) {
+				fp.setTextureDataHandle(texData);
+				fp.render(camera);
+				filter = fp.getResult();
+				texData = filter.getTextureDataHandle();
+			}
+			final Texture lastFilter = filter;
+			filterTexture.setTextureDataHandle(texData);
+			filterBuffer.beginFBO(() -> {
+				GLESUtils.clear();
+				lastFilter.render(camera);
+				actualFilter.applyFilter(filterTexture).render(camera);
+			});
+		}
 	}
 
 

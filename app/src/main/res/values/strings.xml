@@ -72,6 +72,7 @@
     <string name="control_saturation">Saturation</string>
     <string name="control_lightness">Lightness</string>
     <string name="control_hue">Hue</string>
+    <string name="control_pixelization">Pixelate</string>
 
 
 
