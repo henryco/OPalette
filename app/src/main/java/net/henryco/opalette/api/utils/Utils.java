@@ -183,7 +183,9 @@ public class Utils {
 
 	public static File saveBitmapAction(Bitmap bitmap, String filename, Context activity) {
 
-		File dest = new File(Environment.getExternalStorageDirectory().toString(), filename + ".png");
+		String file_name = filename;
+		if (!file_name.endsWith(".png")) file_name+=".png";
+		File dest = new File(Environment.getExternalStorageDirectory().toString(), file_name);
 		try {
 			dest.createNewFile();
 			FileOutputStream fos = new FileOutputStream(dest);
@@ -208,6 +210,8 @@ public class Utils {
 
 	public static void shareBitmapAction(Bitmap bitmap, String filename, Context activity, boolean saveAfter) {
 
+		String file_name = filename;
+		if (!file_name.endsWith(".png")) file_name+=".png";
 
 		try {
 			File cachePath = new File(activity.getCacheDir(), "images"); // see: res/xml/filepaths.xml
@@ -215,7 +219,7 @@ public class Utils {
 			if (cachePath.exists()) deleteRecursive(cachePath);
 			cachePath.mkdirs();
 
-			FileOutputStream stream = new FileOutputStream(cachePath + "/"+filename + ".png"); // overwrites this image every time
+			FileOutputStream stream = new FileOutputStream(cachePath + "/"+file_name); // overwrites this image every time
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 			stream.close();
 		} catch (IOException e) {
@@ -223,7 +227,7 @@ public class Utils {
 		}
 
 		File imagePath = new File(activity.getCacheDir(), "images");
-		File newFile = new File(imagePath, filename + ".png");
+		File newFile = new File(imagePath, file_name);
 		Uri contentUri = FileProvider.getUriForFile(activity, "net.henryco.opalette.fileprovider", newFile);
 
 		if (contentUri != null) {
