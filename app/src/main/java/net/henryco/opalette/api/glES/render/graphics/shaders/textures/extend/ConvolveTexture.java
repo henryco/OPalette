@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.FilterMatrices;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
 
 import java.nio.FloatBuffer;
@@ -40,8 +41,6 @@ public class ConvolveTexture extends OPallTextureExtended {
 	private static final String u_matrix5 = "u_matrix5";
 	private static final String u_texDim = "u_screenDim";
 	private static final String u_enable = "u_enable";
-
-	public static final FilterMatrices matrix = new FilterMatrices();
 
 	private float[] original_filter_matrix;
 	private float[] work_filter_matrix;
@@ -81,7 +80,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 
 
 	private void init() {
-		setFilterMatrix(matrix.m_identity());
+		setFilterMatrix(FilterMatrices.m_identity());
 		setScalePower(2);
 	}
 
@@ -103,7 +102,7 @@ public class ConvolveTexture extends OPallTextureExtended {
 	public ConvolveTexture setFilterMatrix(float ... matrix) {
 
 		if (matrix.length == 0 || (matrix.length == 1 && matrix[0] == -1))
-			matrix = ConvolveTexture.matrix.m_identity();
+			matrix = FilterMatrices.m_identity();
 		if (Math.sqrt(matrix.length) % 2 == 0)
 			throw new RuntimeException(getClass().getName()
 					+ ": Filter matrix dimension must be 3x3, 5x5, 7x7, 9x9 ...");
@@ -232,125 +231,5 @@ public class ConvolveTexture extends OPallTextureExtended {
 			"}";
 
 
-	public static final class FilterMatrices {
 
-		public final float[] m_identity(){
-			return new float[] {
-					0, 0, 0,
-					0, 1, 0,
-					0, 0, 0
-			};
-		}
-		public final float[] m_boxBlur() {
-			return new float[] {
-					1, 1, 1,
-					1, 1, 1,
-					1, 1, 1
-			};
-		}
-		public final float[] m_blur() {
-			return new float[] {
-					0, 0, 1, 0, 0,
-					0, 1, 1, 1, 0,
-					1, 1, 1, 1, 1,
-					0, 1, 1, 1, 0,
-					0, 0, 1, 0, 0
-			};
-		}
-		public final float[] m_gaussianBlur() {
-			return new float[] {
-					1, 2, 1,
-					2, 4, 2,
-					1, 2, 1
-			};
-		}
-		public final float[] m_sharpen() {
-			return new float[] {
-					-1, -1, -1, -1, -1,
-					-1,  2,  2,  2, -1,
-					-1,  2,  8,  2, -1,
-					-1,  2,  2,  2, -1,
-					-1, -1, -1, -1, -1
-			};
-		}
-		public final float[] m_sharpen1() {
-			return new float[] {
-					0, -1, 0,
-					-1, 5, -1,
-					0, -1, 0
-			};
-		}
-		public final float[] m_sharpen2() {
-			return new float[] {
-					-1, -1, -1,
-					-1, 0, -1,
-					-1, -1, -1
-			};
-		}
-		public final float[] m_sharpen3() {
-			return new float[]{
-					-1, -1, -1,
-					-1, 8, -1,
-					-1, -1, -1
-			};
-		}
-		public final float[] m_sharpen4() {
-			return new float[]{
-					1, -2, 1,
-					-2, 5, -2,
-					1, -2, 1
-			};
-		}
-		public final float[] m_sharpen5() {
-			return new float[] {
-					-1, -1, -1, -1, -1,
-					-1, 3, 4, 3, -1,
-					-1, 4, 13, 4, -1,
-					-1, 3, 4, 3, -1,
-					-1, -1, -1, -1, -1
-			};
-		}
-		public final float[] m_emboss1() {
-			return new float[] {
-					-2, -1, 0,
-					-1, 1, 1,
-					0, 1, 2
-			};
-		}
-		public final float[] m_emboss2() {
-			return new float[] {
-					-2, 0, 0,
-					0, 1, 0,
-					0, 0, 2
-			};
-		}
-		public final float[] m_diagShatter() {
-			return new float[] {
-					1, 0, 0, 0, 1,
-					0, 0, 0, 0, 0,
-					0, 0, 0, 0, 0,
-					0, 0, 0, 0, 0,
-					1, 0, 0, 0, 1
-			};
-		}
-		public final float[] m_horizontalMotionBlur() {
-			return new float[] {
-					0, 0, 0, 0, 0,
-					0, 0, 0, 0, 0,
-					2, 3, 4, 5, 6,
-					0, 0, 0, 0, 0,
-					0, 0, 0, 0, 0
-			};
-		}
-		public final float[] m_unsharp() {
-			return new float[] {
-					1, 4, 6, 4, 1,
-					4, 16, 24, 16, 4,
-					6, 24, -476, 24, 6,
-					4, 16, 24, 16, 4,
-					1, 4, 6, 4, 1
-			};
-		}
-
-	}
 }

@@ -28,6 +28,7 @@ import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.BlurTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.PixelatedTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
@@ -125,7 +126,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 		firstTime = true;
 		pipeLineStatus = true;
-
+		filterPipeLine = new ArrayList<>();
 		filterBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 		filterTexture = new EdTexture();
 		filterTexture.setScreenDim(width, height);
@@ -135,11 +136,14 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 		FilterPipeLiner<PixelatedTexture> pixelator = new FilterPipeLiner<>(new PixelatedTexture(), width, height);
 		pixelator.getFilterTexture().setPixelsNumb(Math.max(width, height));
+		FilterPipeLiner<BlurTexture> blur = new FilterPipeLiner<>(new BlurTexture(), width, height);
 
-		filterPipeLine = new ArrayList<>();
+
 		filterPipeLine.add(pixelator);
+		filterPipeLine.add(blur);
 
 		OPallViewInjector.inject(context.getActivityContext(), new PixelateControl(proxyRenderData, pixelator));
+		OPallViewInjector.inject(context.getActivityContext(), new BlurControl(proxyRenderData, blur));
 	}
 
 	@Override

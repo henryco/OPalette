@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
 
 /**
  * Created by HenryCo on 06/04/17.
@@ -30,7 +29,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTextu
 
 public class PixelatedTexture extends OPallTextureExtended {
 
-	private static final String VERT = OPallTexture.DEFAULT_VERT_FILE;
+	private static final String VERT = DEFAULT_VERT_FILE;
 	private static final String FRAG = "#version 100\n" +
 			"precision mediump float;\n" +
 			"\n" +

@@ -189,6 +189,7 @@ import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.FilterMatrices;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.Vignette;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
@@ -278,7 +279,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		proxyRenderData.setRenderData(new ConvolveTexture());
 		proxyRenderData.getRenderData().setScreenDim(width, height);
-		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(ConvolveTexture.matrix.m_sharpen1());
+		proxyRenderData.setStateUpdated().getRenderData().setFilterMatrix(FilterMatrices.m_sharpen1());
 		proxyRenderData.getRenderData().setEffectScale(0);
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 

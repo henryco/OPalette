@@ -260,13 +260,10 @@ public class MainActivity extends AppCompatActivity
 							.positive(getResources().getString(R.string.save), () -> {
 								Utils.saveBitmapAction(bitmap, imageNameLine.getText().toString(), this);
 								createSaveSuccessNotification(this, name);
-							})
-							.negative(getResources().getString(R.string.cancel))
+							}).negative(getResources().getString(R.string.cancel))
 							.show(getSupportFragmentManager(), "Bitmap save");
-				})
-				.negative(getResources().getString(R.string.share), () -> {
-					Utils.shareBitmapAction(bitmap, name, this, GodConfig.SAVE_AFTER_SHARE);
-				})
+				}).negative(getResources().getString(R.string.share), () ->
+						Utils.shareBitmapAction(bitmap, name, this, GodConfig.SAVE_AFTER_SHARE))
 				.neutral(getResources().getString(R.string.cancel))
 		.show(getSupportFragmentManager(), "Bitmap preview");
 	}

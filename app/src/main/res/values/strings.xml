@@ -73,6 +73,7 @@
     <string name="control_lightness">Lightness</string>
     <string name="control_hue">Hue</string>
     <string name="control_pixelization">Pixelate</string>
+    <string name="control_blur">Blur</string>
 
 
     <string name="pick_image_dialog">Select image source</string>
