@@ -18,6 +18,10 @@
 
 package net.henryco.opalette.application.conf;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by HenryCo on 05/04/17.
  */
@@ -29,4 +33,18 @@ public class GodConfig {
 	public static final int HUE_CLAMP_RANGE = 180;
 	public static final int NORM_RANGE = 100;
 	public static final float GAMMA_MAX_RANGE = 5;
+
+	public static final String defBitmapName = "OPalette";
+	public static boolean SAVE_AFTER_SHARE = false;
+
+	public static String genDefaultImgFileName() {
+		return defBitmapName+"_"+ new SimpleDateFormat("yyyyMMddHHmmss")
+				.format(new Date(System.currentTimeMillis()));
+	}
+
+
+
+
+
+
 }

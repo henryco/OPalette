@@ -22,11 +22,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -175,6 +181,69 @@ public class Utils {
 	}
 
 
+	public static File saveBitmapAction(Bitmap bitmap, String filename, Context activity) {
+
+		File dest = new File(Environment.getExternalStorageDirectory().toString(), filename + ".png");
+		try {
+			dest.createNewFile();
+			FileOutputStream fos = new FileOutputStream(dest);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return updGallery(dest, activity);
+	}
+
+	public static File updGallery(File outputFile, Context activity) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+			final Uri contentUri = Uri.fromFile(outputFile);
+			scanIntent.setData(contentUri);
+			activity.sendBroadcast(scanIntent);
+		} else activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+		return outputFile;
+	}
+
+	public static void shareBitmapAction(Bitmap bitmap, String filename, Context activity, boolean saveAfter) {
+
+
+		try {
+			File cachePath = new File(activity.getCacheDir(), "images"); // see: res/xml/filepaths.xml
+
+			if (cachePath.exists()) deleteRecursive(cachePath);
+			cachePath.mkdirs();
+
+			FileOutputStream stream = new FileOutputStream(cachePath + "/"+filename + ".png"); // overwrites this image every time
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			stream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		File imagePath = new File(activity.getCacheDir(), "images");
+		File newFile = new File(imagePath, filename + ".png");
+		Uri contentUri = FileProvider.getUriForFile(activity, "net.henryco.opalette.fileprovider", newFile);
+
+		if (contentUri != null) {
+			Intent shareIntent = new Intent();
+			shareIntent.setAction(Intent.ACTION_SEND);
+			shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+			shareIntent.setType("image/png");
+			shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+			activity.startActivity(Intent.createChooser(shareIntent, "Share"));
+		}
+		if (saveAfter) saveBitmapAction(bitmap, filename, activity);
+	}
+
+
+	private static void deleteRecursive(File fileOrDirectory) {
+		if (fileOrDirectory.isDirectory())
+			for (File child : fileOrDirectory.listFiles())
+				deleteRecursive(child);
+		fileOrDirectory.delete();
+	}
 
 }
 
