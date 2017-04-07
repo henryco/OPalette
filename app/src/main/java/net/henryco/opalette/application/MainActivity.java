@@ -184,16 +184,20 @@ package net.henryco.opalette.application;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
@@ -247,11 +251,46 @@ public class MainActivity extends AppCompatActivity
 		String name = GodConfig.genDefaultImgFileName();
 		new OPallAlertDialog()
 				.content(imageView)
-				.positive(getResources().getString(R.string.save), () -> Utils.saveBitmapAction(bitmap, name, this))
-				.negative(getResources().getString(R.string.share), () -> Utils.shareBitmapAction(bitmap, name, this, GodConfig.SAVE_AFTER_SHARE))
+				.positive(getResources().getString(R.string.save), () -> {
+					EditText imageNameLine = new EditText(this);
+					imageNameLine.setText(name);
+					new OPallAlertDialog()
+							.title(getResources().getString(R.string.save_as))
+							.content(imageNameLine)
+							.positive(getResources().getString(R.string.save), () -> {
+								Utils.saveBitmapAction(bitmap, imageNameLine.getText().toString(), this);
+								createSaveSuccessNotification(this, name);
+							})
+							.negative(getResources().getString(R.string.cancel))
+							.show(getSupportFragmentManager(), "Bitmap save");
+				})
+				.negative(getResources().getString(R.string.share), () -> {
+					Utils.shareBitmapAction(bitmap, name, this, GodConfig.SAVE_AFTER_SHARE);
+				})
 				.neutral(getResources().getString(R.string.cancel))
-		.show(getSupportFragmentManager(), "Bitmap view");
+		.show(getSupportFragmentManager(), "Bitmap preview");
 	}
+
+
+	private static int notifications = 1;
+	private static void createSaveSuccessNotification(AppCompatActivity context, String name) {
+
+		String title =context.getResources().getString(R.string.notification_save_success);
+		NotificationCompat.Builder b = new NotificationCompat.Builder(context);
+		b.setAutoCancel(true)
+				.setVibrate(new long[]{0})
+				.setWhen(System.currentTimeMillis())
+				.setSmallIcon(R.mipmap.opalette_logo)
+				.setTicker("")
+				.setContentTitle(title)
+				.setContentText(name)
+				.setContentInfo("");
+		NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		nm.notify(notifications++, b.build());
+	}
+
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

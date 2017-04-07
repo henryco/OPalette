@@ -98,6 +98,11 @@
     <string name="title_activity_settings">Settings</string>
     <string name="cancel">Cancel</string>
     <string name="decline">Decline</string>
+    <string name="save_as">Save As</string>
+
+    <string name="notification_save_success">OPalette image saved</string>
+    <string name="saved_successfully">saved successfully.</string>
+    <string name="image">Image</string>
 
     <!-- Strings related to Settings -->
 
