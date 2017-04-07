@@ -47,6 +47,7 @@ public class FilterControl extends AppSubControl<AppMainProto> {
 		void setFilter(EdFilter filter, TextView textView);
 		EdFilter getFilter();
 		TextView getTextView();
+		void stateUpDate();
 	}
 	private final EdFilterHolder filterHolder;
 
@@ -72,6 +73,7 @@ public class FilterControl extends AppSubControl<AppMainProto> {
 		if (filter.name.equalsIgnoreCase(EdFilter.getDefaultFilter().name)) {
 			textView.setTextColor(ContextCompat.getColor(context.getActivityContext(), R.color.activeColor));
 			filterHolder.setFilter(filter, textView);
+			filterHolder.stateUpDate();
 		}
 
 
@@ -103,12 +105,14 @@ public class FilterControl extends AppSubControl<AppMainProto> {
 		effectBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
 				filterHolder.getFilter().setAlpha(effectBar.norm(progress));
+				filterHolder.stateUpDate();
 				context.getRenderSurface().update();
 			}
 		}));
 
 		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.control_top_bar_button_reset), () -> {
 			filterHolder.getFilter().setAlpha(1f);
+			filterHolder.stateUpDate();
 			context.getRenderSurface().update();
 		});
 

@@ -184,10 +184,15 @@ package net.henryco.opalette.application;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -209,8 +214,15 @@ import net.henryco.opalette.api.utils.requester.RequestSender;
 import net.henryco.opalette.application.programs.ProgramPipeLine;
 import net.henryco.opalette.application.proto.AppMainProto;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -235,16 +247,20 @@ public class MainActivity extends AppCompatActivity
 	private final List<Runnable> topBarButtonActions = new ArrayList<>();
 	private final int topBarButtonId = 2137;
 	private final int topOptButtonId = 7321;
-	private final Runnable topBarButtonDefaultAction = () -> {
-		stateRequester.sendRequest(new Request(get_bitmap_from_program));
-	};
+	private final static String defBitmapName = "OPalette";
+	private final Runnable topBarButtonDefaultAction = () -> stateRequester.sendRequest(new Request(get_bitmap_from_program));
 
 
 	@Override
 	public void setResultBitmap(Bitmap bitmap) {
 		ImageView imageView = new ImageView(this);
 		imageView.setImageBitmap(bitmap);
-		new OPallAlertDialog().content(imageView).show(getSupportFragmentManager(), "Bitmapview");
+		new OPallAlertDialog()
+				.content(imageView)
+				.positive(getResources().getString(R.string.save), () -> saveBitmapAction(bitmap))
+				.negative(getResources().getString(R.string.share), () -> shareBitmapAction(bitmap))
+				.neutral("Cancel")
+		.show(getSupportFragmentManager(), "Bitmap view");
 	}
 
 	@Override
@@ -296,6 +312,62 @@ public class MainActivity extends AppCompatActivity
 
 		switchToScrollOptionsView();
 	}
+
+
+	private void saveBitmapAction(Bitmap bitmap) {
+
+		String filename = defBitmapName+"_"+ new SimpleDateFormat ("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())) +".png";
+		File dest = new File(Environment.getExternalStorageDirectory().toString(), filename);
+		try {
+			FileOutputStream fos = new FileOutputStream(dest);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+			fos.flush();
+			fos.close();
+			try {
+				MediaStore.Images.Media.insertImage(getContentResolver(),dest.getAbsolutePath(),dest.getName(),dest.getName());
+			} catch (FileNotFoundException ignore) {}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		updGallery(dest);
+	}
+
+	private void updGallery(File outputFile) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			final Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+			final Uri contentUri = Uri.fromFile(outputFile);
+			scanIntent.setData(contentUri);
+			sendBroadcast(scanIntent);
+		} else sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+		System.out.println("result bitmap saved");
+	}
+
+	private void shareBitmapAction(Bitmap bitmap) {
+
+
+		String filename = defBitmapName+"_"+ new SimpleDateFormat ("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())) +".png";
+
+		Intent share = new Intent(Intent.ACTION_SEND);
+		share.setType("image/png");
+
+		ContentValues values = new ContentValues();
+		values.put(MediaStore.Images.Media.TITLE, filename);
+		values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+		Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+		OutputStream outStream;
+		try {
+			outStream = getContentResolver().openOutputStream(uri);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+			outStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		share.putExtra(Intent.EXTRA_STREAM, uri);
+		startActivity(Intent.createChooser(share, "Share Image"));
+
+	}
+
 
 	private void checkToggle(ToggleButton button) {
 		for (ToggleButton b: toggleGroup) {

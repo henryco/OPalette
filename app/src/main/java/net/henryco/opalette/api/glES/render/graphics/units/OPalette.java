@@ -71,9 +71,7 @@ public class OPalette implements OPallRenderable {
 
 	private Texture renderData;
 
-	private FrameBuffer adapter;
-	private final float dimX, dimY;
-
+	private FrameBuffer result;
 
 	public OPalette(int w, int h) {
 		this(ORIENTATION_NONE, w, h);
@@ -90,15 +88,13 @@ public class OPalette implements OPallRenderable {
 		setDiscrete(true);
 		setCellNumb(4);
 		create(w, h);
-		dimX = w;
-		dimY = h;
 	}
 
-	// FIXME: 01/04/17 // TODO: 01/04/17 when canvas size changes, vertical palette shows with error
+
 	public OPalette create(int w, int h) {
 
-		adapter = OPallFBOCreator.FrameBuffer(w, h, false);
 		barGradientBuffer = OPallFBOCreator.FrameBuffer(w, h, false);
+		result = OPallFBOCreator.FrameBuffer(w, h, false);
 
 		barSrcBufferW = OPallFBOCreator.FrameBuffer()
 				.createFBO(w, buffer_quantum, w, h, false).beginFBO(GLESUtils::clear);
@@ -150,8 +146,14 @@ public class OPalette implements OPallRenderable {
 
 			if (isDiscrete()) {
 				cellPaletterW.generate(barGradientBuffer.getTexture(), camera);
-				backBarW.render(camera, cellPaletterW, buffer_quantum);
-			} else backBarW.render(camera, barGradientBuffer, buffer_quantum);
+				result.beginFBO(() -> {
+					GLESUtils.clear();
+					backBarW.render(camera, cellPaletterW, buffer_quantum);
+				});
+			} else result.beginFBO(() -> {
+				GLESUtils.clear();
+				backBarW.render(camera, barGradientBuffer, buffer_quantum);
+			});
 
 		} else if (orientation == ORIENTATION_VERTICAL) {
 
@@ -175,29 +177,24 @@ public class OPalette implements OPallRenderable {
 			cellPaletterH.setMargin_pct(margin_pct);
 			cellPaletterH.setCellNumb(cell_numb);
 
-
 			if (isDiscrete()) {
 				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
-				backBarH.render(camera, cellPaletterH, buffer_quantum);
-			} else backBarH.render(camera, barGradientBuffer.getTexture(), buffer_quantum);
-
-
-//			 FIXME: 02/04/17 // TODO: 02/04/17
-//			if (isDiscrete()) {
-//				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
-//				adapter.beginFBO(() -> {
-//					GLESUtils.clear();
-//					backBarH.render(camera, cellPaletterH, buffer_quantum);
-//				});
-//			} else adapter.beginFBO(() -> {
-//				GLESUtils.clear();
-//				backBarH.render(camera, barGradientBuffer.getTexture(), buffer_quantum);
-//			});
-//			adapter.render(camera);
-
-
+				result.beginFBO(() -> {
+					GLESUtils.clear();
+					backBarH.render(camera, cellPaletterH, buffer_quantum);
+				});
+			} else result.beginFBO(() -> {
+				GLESUtils.clear();
+				backBarH.render(camera, barGradientBuffer.getTexture(), buffer_quantum);
+			});
 		}
+		result.render(camera);
 	}
+
+	public FrameBuffer getResultBuffer() {
+		return orientation == ORIENTATION_NONE ? null : result;
+	}
+
 
 
 	public OPalette setRelativeSize(float size_pct) {

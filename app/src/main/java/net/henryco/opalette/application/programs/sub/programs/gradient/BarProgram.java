@@ -275,24 +275,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 		}
 	}
 
-
-	private OPallRenderable finalRenderData = new OPallRenderable() {
-
-		@Override public void render(Camera2D camera) {
-			oPalette.render(camera);
-		}
-		@Override public void setScreenDim(float w, float h) {
-
-		}
-		@Override public int getWidth() {
-			return 0;
-		}
-		@Override public int getHeight() {
-			return 0;
-		}
-	};
-
-
+	
 	@Override
 	public void setRenderData(OPallRenderable data) {
 		proxyRenderData.setRenderData((Texture) data);
@@ -306,7 +289,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 	@Nullable @Override
 	public OPallRenderable getFinalRenderData() {
-		return finalRenderData;
+		return oPalette.getResultBuffer();
 	}
 
 }

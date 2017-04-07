@@ -241,6 +241,9 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	private List<AppSubProgram> subPrograms;
 	private List<OPallTriConsumer<AppMainProto, Integer, Integer>> onDrawQueue;
 
+
+	private FrameBuffer preResultBuffer, resultBuffer;
+
 	@SuppressWarnings("unchecked")
 	private static AppSubProgram[] getDefaultPipeLineArray() {
 
@@ -337,6 +340,9 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		chessBox = new ChessBox(width, height);
 
 
+		preResultBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
+		resultBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
+
 
 		context.getRenderSurface().addOnTouchEventListener(new OPallSurfaceView.OnTouchEventListener() {
 			private boolean reset = true;
@@ -389,25 +395,31 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 
 
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public final void onDraw(@Nullable GL10 gl, AppMainProto context, int width, int height) {
-
+	private boolean dataRendered;
+	@Override public final void onDraw(@Nullable GL10 gl, AppMainProto context, int width, int height) {
+		dataRendered = false;
 		for (int i = 0; i < onDrawQueue.size(); i++) {
 			onDrawQueue.remove(i).consume(context, width, height);
 		}
 
-		camera2D.setPosY_absolute(0).update();
-		GLESUtils.clear();
-		chessBox.render(camera2D);
+		if (!dataRendered) {
+			camera2D.setPosY_absolute(0).update();
+			GLESUtils.clear();
+			chessBox.render(camera2D);
+			renderSubData(context, width, height);
+		}
+	}
 
+	@SuppressWarnings("unchecked")
+	private void renderSubData(AppMainProto context, int width, int height) {
 		if (uCan) {
 			OPallRenderable renderData = null;
 			for (AppSubProgram asp : subPrograms) {
 				asp.setRenderData(renderData);
-				asp.render(gl, context, camera2D, width, height);
+				asp.render(null, context, camera2D, width, height);
 				renderData = asp.getRenderData();
 			}
+			dataRendered = true;
 		}
 	}
 
@@ -454,23 +466,20 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		request.openRequest(AppProgramProtocol.get_bitmap_from_program, () -> {
 			onDrawQueue.add((appMainProto, w, h) -> {
 				requestSender.sendRequest(new Request(set_pipe_line_enable));
-				FrameBuffer buffer = OPallFBOCreator.FrameBuffer(w, h, false)
-						.beginFBO(() ->
-								camera2D.backTranslate(() -> {
-									camera2D.setPosXY_absolute(0,0).update();
-									GLESUtils.clear();
-									for (AppSubProgram asp : subPrograms) {
-										OPallRenderable r = asp.getFinalRenderData();
-										if (r != null) r.render(camera2D);
-									}
-								})
-						);
-				Bitmap image = OPallFBOCreator.FrameBuffer(w, h, false)
-						.beginFBO(() -> camera2D.backTranslate(() -> {
-							camera2D.setPosXY_absolute(0,0).update();
-							GLESUtils.clear();
-							buffer.setFlip(false).render(camera2D);
-						})).getBitmap();
+				renderSubData(appMainProto, w, h);
+				preResultBuffer.beginFBO(() -> camera2D.backTranslate(() -> {
+					camera2D.setPosXY_absolute(0,0).update();
+					GLESUtils.clear();
+					for (AppSubProgram asp : subPrograms) {
+						OPallRenderable r = asp.getFinalRenderData();
+						if (r != null) r.render(camera2D);
+					}
+				}));
+				Bitmap image = resultBuffer.beginFBO(() -> camera2D.backTranslate(() -> {
+					camera2D.setPosXY_absolute(0,0).update();
+					GLESUtils.clear();
+					preResultBuffer.setFlip(false).render(camera2D);
+				})).getBitmap();
 				appMainProto.setResultBitmap(image);
 			});
 			observator.update();

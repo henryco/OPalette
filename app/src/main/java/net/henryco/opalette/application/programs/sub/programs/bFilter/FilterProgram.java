@@ -97,6 +97,11 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 
 	@Override
+	public void stateUpDate() {
+		proxyRenderData.setStateUpdated();
+	}
+
+	@Override
 	public void setFilter(EdFilter filter, TextView textView) {
 		this.actualTextView = textView;
 		this.actualFilter = filter;
