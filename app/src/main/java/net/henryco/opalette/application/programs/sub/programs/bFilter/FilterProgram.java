@@ -29,6 +29,7 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.FrameBuffer;
 import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.BlurTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.BubbleTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.PixelatedTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
@@ -134,14 +135,16 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 		filterPreviewBuffer = OPallFBOCreator.FrameBuffer(FILTER_PREV_SIZE, FILTER_PREV_SIZE, false);
 
 
+
 		FilterPipeLiner<PixelatedTexture> pixelator = new FilterPipeLiner<>(new PixelatedTexture(), width, height);
-		pixelator.getFilterTexture().setPixelsNumb(Math.max(width, height));
+		FilterPipeLiner<BubbleTexture> bubble = new FilterPipeLiner<>(new BubbleTexture(), width, height);
 		FilterPipeLiner<BlurTexture> blur = new FilterPipeLiner<>(new BlurTexture(), width, height);
 
-
 		filterPipeLine.add(pixelator);
+		filterPipeLine.add(bubble);
 		filterPipeLine.add(blur);
 
+		OPallViewInjector.inject(context.getActivityContext(), new BubbleControl(proxyRenderData, bubble));
 		OPallViewInjector.inject(context.getActivityContext(), new PixelateControl(proxyRenderData, pixelator));
 		OPallViewInjector.inject(context.getActivityContext(), new BlurControl(proxyRenderData, blur));
 	}

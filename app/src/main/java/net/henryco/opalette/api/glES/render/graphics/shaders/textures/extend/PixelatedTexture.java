@@ -105,6 +105,12 @@ public class PixelatedTexture extends OPallTextureExtended {
 
 
 	@Override
+	public void setScreenDim(float w, float h) {
+		setPixelsNumb(Math.max(w, h));
+		super.setScreenDim(w, h);
+	}
+
+	@Override
 	protected void render(int program, Camera2D camera) {
 		System.out.println(pixelsNumb);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_pixelsNumb), pixelsNumb);
