@@ -317,12 +317,13 @@ public class StartUpActivity extends AppCompatActivity
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.DARK)));
-			actionBar.setElevation(60);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
+				actionBar.setElevation(60);
+			}
 			actionBar.hide();
 		}
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.DARK));
-		}
+
 		initSplash();
 	}
 
