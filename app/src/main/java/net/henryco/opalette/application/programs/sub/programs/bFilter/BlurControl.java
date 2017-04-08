@@ -20,18 +20,26 @@ package net.henryco.opalette.application.programs.sub.programs.bFilter;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
+import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.FilterMatrices;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.BlurTexture;
 import net.henryco.opalette.api.utils.OPallAnimated;
+import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
+import net.henryco.opalette.api.utils.dialogs.OPallOptionListDialog;
+import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
+import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -122,10 +130,15 @@ public class BlurControl  extends AppAutoSubControl<AppMainProto> {
 				if (blurTexture.isActive()) context.getRenderSurface().addOnTouchEventListener(listener);
 
 				regButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
+					blurTexture.getFilterTexture().setPointsVisible(true);
 					blurTexture.setActive(true);
-					context.getRenderSurface().addOnTouchEventListener(listener);
 					reg.setTextColor(fcb);
 					non.setTextColor(fca);
+					new Handler().postDelayed(() -> {
+						context.getRenderSurface().addOnTouchEventListener(listener);
+						blurTexture.getFilterTexture().setPointsVisible(false);
+						updateFunc.run();
+					}, 300);
 					updateFunc.run();
 				}));
 
@@ -141,8 +154,80 @@ public class BlurControl  extends AppAutoSubControl<AppMainProto> {
 		};
 
 
-		OPallViewInjector.inject(context.getActivityContext(), controls);
+		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.options), () -> {
 
+			OPallFunction<String, Integer> stringFunc = integer
+					-> context.getActivityContext().getResources().getString(integer);
+
+			String options = stringFunc.apply(R.string.options);
+			String types = stringFunc.apply(R.string.blur_type);
+			String pwr = stringFunc.apply(R.string.transition_power);
+			String apl = stringFunc.apply(R.string.apply);
+
+			String sb1 = "m_default";
+			String sb2 = "m_blur";
+			String sb3 = "m_boxBlur";
+			String sb4 = "m_gaussianBlur";
+			String sb5 = "m_horizontalMotionBlur";
+
+
+			Runnable blur1 = () -> {
+				blurTexture.getFilterTexture().setBlurMatrix(FilterMatrices.m_diagShatter());
+				updateFunc.run();
+			};
+			Runnable blur2 = () -> {
+				blurTexture.getFilterTexture().setBlurMatrix(FilterMatrices.m_blur());
+				updateFunc.run();
+			};
+			Runnable blur3 = () -> {
+				blurTexture.getFilterTexture().setBlurMatrix(FilterMatrices.m_boxBlur());
+				updateFunc.run();
+			};
+			Runnable blur4 = () -> {
+				blurTexture.getFilterTexture().setBlurMatrix(FilterMatrices.m_gaussianBlur());
+				updateFunc.run();
+			};
+			Runnable blur5 = () -> {
+				blurTexture.getFilterTexture().setBlurMatrix(FilterMatrices.m_horizontalMotionBlur());
+				updateFunc.run();
+			};
+
+			Runnable power = () -> {
+				LinearLayout layout = new LinearLayout(context.getActivityContext());
+				InjectableSeekBar powerBar = new InjectableSeekBar(layout);
+				powerBar.onBarCreate(bar -> bar.setProgress(powerBar.de_norm(blurTexture.getFilterTexture().getPower())));
+				powerBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+					if (fromUser) blurTexture.getFilterTexture().setPower(powerBar.norm(progress));
+				}));
+				OPallViewInjector.inject(context.getActivityContext(), powerBar);
+				new OPallAlertDialog()
+						.content(layout)
+						.title(pwr)
+						.positive(apl, updateFunc)
+						.negative(stringFunc.apply(R.string.cancel))
+						.neutral(stringFunc.apply(R.string.control_top_bar_button_reset), () -> {
+							blurTexture.getFilterTexture().resetPower();
+							updateFunc.run();
+						}).show(context.getActivityContext().getSupportFragmentManager(), "Blur transition power dialog");
+			};
+
+
+			Runnable type = () -> new OPallOptionListDialog()
+					.setTittle(types)
+					.setOptionsNames(sb1, sb2, sb3, sb4, sb5)
+					.setOptionsActions(blur1, blur2, blur3, blur4, blur5)
+					.show(context.getActivityContext().getSupportFragmentManager(), "Blur types dialog");
+
+
+			new OPallOptionListDialog()
+					.setTittle(options)
+					.setOptionsNames(types, pwr)
+					.setOptionsActions(type, power)
+					.show(context.getActivityContext().getSupportFragmentManager(), "Blur options dialog");
+		});
+
+
+		OPallViewInjector.inject(context.getActivityContext(), controls);
 	}
 
 

@@ -95,10 +95,11 @@ public class BlurTexture extends OPallTextureExtended {
 	private static final String u_matrix3 = "u_matrix3";
 	private static final String u_matrix5 = "u_matrix5";
 
-
+	private static final float MAX_POWER = 4;
+	private static final float DEF_POWER = 2;
 	private final TouchLines touchLines;
 
-	private static final float power = 2;
+	private float power = 2;
 
 	private int matrix_sqrt_size;
 	private float[] matrix;
@@ -159,6 +160,20 @@ public class BlurTexture extends OPallTextureExtended {
 		return this;
 	}
 
+
+	public BlurTexture resetPower() {
+		this.power = DEF_POWER;
+		return this;
+	}
+
+	public float getPower() {
+		return 1f - (power / MAX_POWER);
+	}
+
+	public BlurTexture setPower(float power) {
+		this.power = (1f - power) * MAX_POWER;
+		return this;
+	}
 
 	public boolean isPointsVisible() {
 		return pointsVisible;

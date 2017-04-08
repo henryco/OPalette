@@ -43,9 +43,11 @@ public class FilterMatrices {
 	}
 	public static float[] m_boxBlur() {
 		return new float[] {
-				1, 1, 1,
-				1, 1, 1,
-				1, 1, 1
+				1, 1, 1, 1, 1,
+				1, 1, 1, 1, 1,
+				1, 1, 1, 1, 1,
+				1, 1, 1, 1, 1,
+				1, 1, 1, 1, 1
 		};
 	}
 	public static float[] m_blur() {
@@ -59,9 +61,11 @@ public class FilterMatrices {
 	}
 	public static float[] m_gaussianBlur() {
 		return new float[] {
-				1, 2, 1,
-				2, 4, 2,
-				1, 2, 1
+				0.0398f,	0.03995f,	0.04f,		0.03995f,	0.0398f,
+				0.03995f,	0.0401f,	0.04015f,	0.0401f,	0.03995f,
+				0.04f,		0.04015f,	0.0402f,	0.04015f,	0.04f,
+				0.03995f,	0.0401f,	0.04015f,	0.0401f,	0.03995f,
+				0.0398f,	0.03995f,	0.04f,		0.03995f,	0.0398f,
 		};
 	}
 	public static float[] m_sharpen() {

@@ -76,6 +76,11 @@
     <string name="control_blur">Blur</string>
 
 
+
+
+    <string name="transition_power">Transition power</string>
+    <string name="blur_type">Blur type</string>
+    <string name="apply">Apply</string>
     <string name="pick_image_dialog">Select image source</string>
     <string name="camera">Camera</string>
     <string name="disable">Disable</string>
