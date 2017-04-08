@@ -68,6 +68,8 @@ public class BubbleControl  extends AppAutoSubControl<AppMainProto> {
 		};
 
 
+		context.setTopControlButton(b -> b.setTitle(bubbleTexture.isActive() ? "Disable" : "Enable"));
+
 		boolean[] stat = {false};
 		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle("Enable"), () -> {
 
@@ -86,6 +88,7 @@ public class BubbleControl  extends AppAutoSubControl<AppMainProto> {
 				squareBar.setEnable(false);
 				radBar.setEnable(false);
 				stat[0] = false;
+				updateFunc.run();
 			}
 		});
 

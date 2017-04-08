@@ -449,7 +449,10 @@ public class MainActivity extends AppCompatActivity
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) onBackPressed();
+		if (item.getItemId() == android.R.id.home) {
+			if (!optionsSwitched) startBackDialog();
+			else switchToScrollOptionsView();
+		}
 		else if (item.getItemId() == topBarButtonId || item.getItemId() == topOptButtonId)
 			for (Runnable action : topBarButtonActions) action.run();
 		return super.onOptionsItemSelected(item);
@@ -461,8 +464,13 @@ public class MainActivity extends AppCompatActivity
 
 	@Override
 	public void onBackPressed() {
-		if (!optionsSwitched) startBackDialog();
-		else switchToScrollOptionsView();
+		if (!optionsSwitched) {
+			if (imageToggle.isChecked()) startBackDialog();
+			else {
+				showContainer(imageContainer);
+				checkToggle(imageToggle);
+			}
+		} else switchToScrollOptionsView();
 	}
 
 

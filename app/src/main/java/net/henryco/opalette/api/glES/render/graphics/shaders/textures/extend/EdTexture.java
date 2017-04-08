@@ -37,7 +37,6 @@ public class EdTexture extends OPallTextureExtended  {
 	public final GLESUtils.Color add = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT.hex());
 	public final GLESUtils.Color min = new GLESUtils.Color(GLESUtils.Color.TRANSPARENT.hex());
 	public final GLESUtils.Color max = new GLESUtils.Color(GLESUtils.Color.WHITE.hex());
-	public final GLESUtils.Color thr = new GLESUtils.Color(GLESUtils.Color.WHITE.hex());
 
 	private float addBrightness = 0;
 	private float threshold = 0.5f;
@@ -50,7 +49,7 @@ public class EdTexture extends OPallTextureExtended  {
 
 	private boolean bwEnable = false;
 	private boolean thresholdEnable = false;
-
+	private boolean thresholdColored = false;
 
 	public EdTexture(Context context) {
 		this(context, Filter.LINEAR);
@@ -87,10 +86,7 @@ public class EdTexture extends OPallTextureExtended  {
 		add.consume(this.add);
 		return this;
 	}
-	public EdTexture thrColor(OPallConsumer<GLESUtils.Color> thr) {
-		thr.consume(this.thr);
-		return this;
-	}
+
 	public EdTexture brightness(OPallFunction<Float, Float> brightness) {
 		addBrightness = brightness.apply(addBrightness);
 		return this;
@@ -133,6 +129,15 @@ public class EdTexture extends OPallTextureExtended  {
 	public EdTexture setAddSaturation(float saturation) {
 		this.addSaturation = saturation;
 		return this;
+	}
+
+	public EdTexture setThresholdColored(boolean colored) {
+		this.thresholdColored = colored;
+		return this;
+	}
+
+	public boolean isThresholdColored() {
+		return thresholdColored;
 	}
 
 	public float getHue() {
@@ -187,8 +192,8 @@ public class EdTexture extends OPallTextureExtended  {
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_addColor"), add.r, add.g, add.b);
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_minColor"), min.r, min.g, min.b);
 		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_maxColor"), max.r, max.g, max.b);
-		GLES20.glUniform3f(GLES20.glGetUniformLocation(program, "u_thrColor"), thr.r, thr.g, thr.b);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_bwEnable"), bwEnable ? 1 : 0);
+		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_thresholdColor"), thresholdColored ? 1 : 0);
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, "u_thresholdEnable"), thresholdEnable ? 1 : 0);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_gammaCorrection"), 1f / gammaCorrection);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, "u_saturation"), addSaturation);
@@ -212,7 +217,6 @@ public class EdTexture extends OPallTextureExtended  {
 			"uniform vec3 u_addColor;\n" +
 			"uniform vec3 u_minColor;\n" +
 			"uniform vec3 u_maxColor;\n" +
-			"uniform vec3 u_thrColor;\n" +
 			"uniform float u_alpha;\n" +
 			"uniform float u_addBrightness;\n" +
 			"uniform float u_contrast;\n" +
@@ -224,7 +228,7 @@ public class EdTexture extends OPallTextureExtended  {
 			"\n" +
 			"uniform int u_bwEnable;\n" +
 			"uniform int u_thresholdEnable;\n" +
-			"\n" +
+			"uniform int u_thresholdColor;\n" +
 			"\n" +
 			"\n" +
 			"vec3 RGBToHSL(in vec3 color) {\n" +
@@ -312,9 +316,13 @@ public class EdTexture extends OPallTextureExtended  {
 			"        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);\n" +
 			"        color.a = u_alpha;\n" +
 			"        if (u_bwEnable == 1 || u_thresholdEnable == 1) {\n" +
-			"            float val = dot(vec3(1.), color.rgb);\n" +
-			"            if (u_thresholdEnable == 1) color.rgb = val >= u_threshold ? u_thrColor : vec3(0.);\n" +
-			"            else color.rgb = vec3(val);\n" +
+			"            float val = dot(vec3(1.), color.rgb) * 0.3333;\n" +
+			"\n" +
+			"            if (u_thresholdEnable == 1) {\n" +
+			"                if (u_thresholdColor == 0) color.rgb = val >= u_threshold ? vec3(1.) : vec3(0.);\n" +
+			"                else if (u_thresholdColor == 1) color = val >= u_threshold ? color : vec4(0.);\n" +
+			"            }\n" +
+			"            if (u_bwEnable == 1) color.rgb = vec3(val);\n" +
 			"        }\n" +
 			"    }\n" +
 			"    gl_FragColor = color;\n" +

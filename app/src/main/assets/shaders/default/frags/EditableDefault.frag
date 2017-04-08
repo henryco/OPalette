@@ -9,7 +9,6 @@ uniform sampler2D u_Texture0;
 uniform vec3 u_addColor;
 uniform vec3 u_minColor;
 uniform vec3 u_maxColor;
-uniform vec3 u_thrColor;
 uniform float u_alpha;
 uniform float u_addBrightness;
 uniform float u_contrast;
@@ -21,7 +20,7 @@ uniform float u_hue;
 
 uniform int u_bwEnable;
 uniform int u_thresholdEnable;
-
+uniform int u_thresholdColor;
 
 
 vec3 RGBToHSL(in vec3 color) {
@@ -109,9 +108,13 @@ void main() {
         color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);
         color.a = u_alpha;
         if (u_bwEnable == 1 || u_thresholdEnable == 1) {
-            float val = dot(vec3(1.), color.rgb);
-            if (u_thresholdEnable == 1) color.rgb = val >= u_threshold ? u_thrColor : vec3(0.);
-            else color.rgb = vec3(val);
+            float val = dot(vec3(1.), color.rgb) * 0.3333;
+
+            if (u_thresholdEnable == 1) {
+                if (u_thresholdColor == 0) color.rgb = val >= u_threshold ? vec3(1.) : vec3(0.);
+                else if (u_thresholdColor == 1) color = val >= u_threshold ? color : vec4(0.);
+            }
+            if (u_bwEnable == 1) color.rgb = vec3(val);
         }
     }
     gl_FragColor = color;

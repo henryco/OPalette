@@ -111,6 +111,7 @@ public class FilterControl extends AppSubControl<AppMainProto> {
 		}));
 
 		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.control_top_bar_button_reset), () -> {
+			effectBar.setProgress(effectBar.de_norm(1));
 			filterHolder.getFilter().setAlpha(1f);
 			filterHolder.stateUpDate();
 			context.getRenderSurface().update();

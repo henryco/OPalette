@@ -18,22 +18,19 @@
 
 package net.henryco.opalette.application.programs.sub.programs.color;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
-import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
-import net.henryco.opalette.application.injectables.InjectableColorButtons;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
-
-import static net.henryco.opalette.application.injectables.InjectableColorButtons.runColorPicker;
 
 /**
  * Created by HenryCo on 30/03/17.
@@ -54,27 +51,8 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		context.getRenderSurface().update();
-		InjectableSeekBar bar = new InjectableSeekBar(view, "Threshold Level").setMax(100);
-		InjectableColorButtons threshold = new InjectableColorButtons(view, "Color");
 
-		threshold.setChecked(texture.isThresholdEnable());
-		threshold.setButtonColor(texture.isThresholdEnable() ? texture.thr.hex() : Color.TRANSPARENT);
-		threshold.setChecked(texture.isThresholdEnable());
-		threshold.setSwitchListener((button, isChecked) -> {
-			if (isChecked) threshold.setButtonColor(texture.thr.hex());
-			else threshold.setButtonColor(Color.TRANSPARENT);
-			texture.setThresholdEnable(isChecked);
-			bar.setEnable(isChecked);
-			context.getRenderSurface().update();
-		});
-		threshold.setColorButtonListener(v -> runColorPicker(context.getActivityContext(), i -> {
-			texture.thr.set(i);
-			threshold.setButtonColor(i);
-			context.getRenderSurface().update();
-		}));
-
-
+		InjectableSeekBar bar = new InjectableSeekBar(view, "Threshold Level");
 		bar.onBarCreate(seekBar -> {
 			seekBar.setProgress(bar.de_norm(texture.getThreshold()));
 			seekBar.setEnabled(texture.isThresholdEnable());
@@ -84,15 +62,42 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 			if (texture.isThresholdEnable()) context.getRenderSurface().update();
 		}));
 
-		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(R.string.control_top_bar_button_reset), () -> {
-			texture.setThreshold(0.5f);
-			texture.thr.set(GLESUtils.Color.WHITE);
-			bar.setProgress(bar.de_norm(texture.getThreshold()));
-			threshold.setButtonColor(texture.isThresholdEnable() ? texture.thr.hex() : Color.TRANSPARENT);
-			context.getRenderSurface().update();
-		});
+		OPallViewInjector<AppMainProto> control = new OPallViewInjector<AppMainProto>(view, R.layout.switcher) {
+			@Override
+			protected void onInject(AppMainProto context, View view) {
+				TextView textView = (TextView) view.findViewById(R.id.switcherText);
+				textView.setText(R.string.threshold_colored);
 
-		OPallViewInjector.inject(context.getActivityContext(), bar, threshold);
+				Switch switcher = (Switch) view.findViewById(R.id.switcherButton);
+				switcher.setChecked(texture.isThresholdColored());
+				switcher.setEnabled(texture.isThresholdEnable());
+				switcher.setOnCheckedChangeListener((buttonView, isChecked) -> {
+					texture.setThresholdColored(isChecked);
+					context.getRenderSurface().update();
+				});
+
+				context.setTopControlButton(button -> button
+						.setVisible(true).setEnabled(true)
+						.setTitle(texture.isThresholdEnable() ? "Disable" : "Enable"), () -> {
+							if (texture.isThresholdEnable()) {
+								context.setTopControlButton(b -> b.setTitle("Enable"));
+								texture.setThresholdEnable(false);
+								bar.setEnable(false);
+								switcher.setEnabled(false);
+								context.getRenderSurface().update();
+							} else {
+								context.setTopControlButton(b -> b.setTitle("Disable"));
+								texture.setThresholdEnable(true);
+								bar.setEnable(true);
+								switcher.setEnabled(true);
+								context.getRenderSurface().update();
+							}
+						}
+				);
+			}
+		};
+
+		OPallViewInjector.inject(context.getActivityContext(), bar, control);
 	}
 
 
