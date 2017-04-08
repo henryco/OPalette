@@ -122,6 +122,7 @@ public class BarHorizontal implements OPallBar {
 	public BarHorizontal setColor(GLESUtils.Color color) {
 		this.color.set(color);
 		buffer.beginFBO(() -> GLESUtils.clear(color));
+		bottomBuffer.beginFBO(() -> GLESUtils.clear(color));
 		return this;
 	}
 

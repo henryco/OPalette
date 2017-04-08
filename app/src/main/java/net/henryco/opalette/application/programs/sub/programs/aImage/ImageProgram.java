@@ -286,7 +286,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
 
 
-//		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
+		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
 //		FIXME: 01/04/17 // TODO: 01/04/17 Actually disabled need fix
 
 
@@ -342,7 +342,9 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 						if (vignette.isActive()) {
 							if (vignetteMode == VIGNETTE_IMAGE) vignetteTexture.render(camera);
-							else if (vignetteMode == VIGNETTE_SCREEN) vignette.getShapeBuffer().render(camera);
+							else if (vignetteMode == VIGNETTE_SCREEN) {
+								vignette.getShapeBuffer().render(camera);
+							}
 						}
 					});
 

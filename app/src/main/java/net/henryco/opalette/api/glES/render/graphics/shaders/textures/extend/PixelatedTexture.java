@@ -84,6 +84,8 @@ public class PixelatedTexture extends OPallTextureExtended {
 	}
 
 
+	private boolean fistTime = true;
+
 	public float getPixelsNumb() {
 		return pixelsNumb;
 	}
@@ -106,8 +108,9 @@ public class PixelatedTexture extends OPallTextureExtended {
 
 	@Override
 	public void setScreenDim(float w, float h) {
+		if (fistTime) super.setScreenDim(w, h);
 		setPixelsNumb(Math.max(w, h));
-		super.setScreenDim(w, h);
+		fistTime = false;
 	}
 
 	@Override

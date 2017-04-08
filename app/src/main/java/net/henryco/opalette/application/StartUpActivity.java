@@ -202,6 +202,7 @@ import android.widget.ImageView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.Utils;
+import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.dialogs.PickImageDialog;
 
 
@@ -266,14 +267,23 @@ public class StartUpActivity extends AppCompatActivity
 		findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
 		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
 		enableButtons();
+		loadAds();
+	}
+
+
+	private int adsTimes = 0;
+	private void loadAds() {
+		boolean ads = getPreferences(MODE_PRIVATE).getBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true);
+		if (adsTimes++ > 0 && ads)
+			findViewById(R.id.adView).setVisibility(View.VISIBLE);
+		else findViewById(R.id.adView).setVisibility(View.GONE);
+		System.out.println(ads);
 	}
 
 
 
-
-
 	private void initSplash() {
-
+		findViewById(R.id.adView).setVisibility(View.GONE);
 		findViewById(R.id.imageButtonGall).setVisibility(View.GONE);
 		findViewById(R.id.textView).setVisibility(View.GONE);
 		findViewById(R.id.firstPickLayout).setVisibility(View.GONE);

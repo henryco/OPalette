@@ -83,7 +83,9 @@ public class BubbleControl  extends AppAutoSubControl<AppMainProto> {
 			} else {
 				context.setTopControlButton(b -> b.setTitle("Enable"));
 				squareBar.setProgress((int) defSquareSize);
-				radBar.setProgress((int) defRadius);
+				radBar.setProgress(radBar.de_norm(defRadius));
+				bubbleTexture.getFilterTexture().setRadius(defRadius);
+				bubbleTexture.getFilterTexture().setSquare(defSquareSize);
 				bubbleTexture.setActive(false);
 				squareBar.setEnable(false);
 				radBar.setEnable(false);

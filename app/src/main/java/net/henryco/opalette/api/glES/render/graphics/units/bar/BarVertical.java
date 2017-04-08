@@ -113,6 +113,7 @@ public class BarVertical implements OPallBar {
 	public OPallBar setColor(GLESUtils.Color color) {
 		this.color.set(color);
 		buffer.beginFBO(() -> GLESUtils.clear(color));
+		endBuffer.beginFBO(() -> GLESUtils.clear(color));
 		return this;
 	}
 

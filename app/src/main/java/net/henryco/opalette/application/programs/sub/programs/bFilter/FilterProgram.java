@@ -135,7 +135,6 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 		filterPreviewBuffer = OPallFBOCreator.FrameBuffer(FILTER_PREV_SIZE, FILTER_PREV_SIZE, false);
 
 
-
 		FilterPipeLiner<PixelatedTexture> pixelator = new FilterPipeLiner<>(new PixelatedTexture(), width, height);
 		FilterPipeLiner<BubbleTexture> bubble = new FilterPipeLiner<>(new BubbleTexture(), width, height);
 		FilterPipeLiner<BlurTexture> blur = new FilterPipeLiner<>(new BlurTexture(), width, height);
@@ -151,7 +150,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
-
+		for (FilterPipeLiner p: filterPipeLine) p.setScreenDim(width, height);
 	}
 
 	@Override

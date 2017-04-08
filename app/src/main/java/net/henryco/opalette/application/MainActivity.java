@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity
 						}
 					});
 				})
-				.negative(getResources().getString(R.string.share), () -> Utils.shareBitmapAction(bitmap, name, this, preferences.getBoolean(GodConfig.PREF_SAVE_AFTER_SWITCH, false)))
+				.negative(getResources().getString(R.string.share), () -> Utils.shareBitmapAction(bitmap, name, this, preferences.getBoolean(GodConfig.PREF_KEY_SAVE_AFTER, false)))
 				.neutral(getResources().getString(R.string.cancel))
 		.show(getSupportFragmentManager(), "Bitmap preview");
 	}

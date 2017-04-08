@@ -80,6 +80,11 @@ public class Borders extends OPallShapeBuffered {
 	}
 
 
+	@Override
+	public void setScreenDim(float w, float h) {
+		super.setScreenDim(w, h);
+		update();
+	}
 
 	public Borders setColor(GLESUtils.Color color) {
 		this.color.set(color);

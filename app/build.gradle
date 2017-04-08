@@ -223,4 +223,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
     compile 'me.priyesh:chroma:1.0.2'
     testCompile 'junit:junit:4.12'
+    compile 'com.google.android.gms:play-services-ads:10.2.1'
 }

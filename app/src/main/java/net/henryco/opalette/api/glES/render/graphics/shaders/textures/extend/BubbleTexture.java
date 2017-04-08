@@ -67,7 +67,7 @@ public class BubbleTexture extends OPallTextureExtended {
 	private float radius = 0.75f;
 	private float square = 50f;
 
-
+	private boolean firstTime = true;
 
 	public BubbleTexture() {
 		super(VERT, FRAG);
@@ -112,13 +112,23 @@ public class BubbleTexture extends OPallTextureExtended {
 		return this;
 	}
 
+	private float innerW, innerH;
+
+	@Override
+	public void setScreenDim(float w, float h) {
+		if (firstTime) super.setScreenDim(w, h);
+		firstTime = false;
+		innerW = w;
+		innerH = h;
+	}
 
 	@Override
 	protected void render(int program, Camera2D camera) {
-		float half = square * 0.5f;
+		float sqr = square * (Math.min(innerW / getScreenWidth(), innerH / getScreenHeight()));
+		float half = sqr * 0.5f;
 		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), getScreenWidth(), getScreenHeight());
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_radius), radius * half);
-		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_sqrSize), square);
+		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_sqrSize), sqr);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_halfSize), half);
 	}
 }

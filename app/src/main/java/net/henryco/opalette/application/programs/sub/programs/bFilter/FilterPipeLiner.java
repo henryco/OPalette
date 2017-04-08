@@ -44,6 +44,11 @@ public class FilterPipeLiner<T extends Texture> implements OPallRenderable {
 		this.texture = new Texture();
 		this.texture.set(filterTexture);
 		this.active = active;
+
+		texture.setScreenDim(w, h);
+		buffer.setScreenDim(w, h);
+		this.w = scrW;
+		this.h = scrH;
 		setScreenDim(scrW, scrH);
 	}
 	public FilterPipeLiner(T filterTexture, int scrW, int scrH) {
@@ -81,11 +86,7 @@ public class FilterPipeLiner<T extends Texture> implements OPallRenderable {
 
 	@Override
 	public void setScreenDim(float w, float h) {
-		texture.setScreenDim(w, h);
 		filterTexture.setScreenDim(w, h);
-		buffer.setScreenDim(w, h);
-		this.w = w;
-		this.h = h;
 	}
 
 	@Override

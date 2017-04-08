@@ -241,6 +241,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	private List<AppSubProgram> subPrograms;
 	private List<OPallTriConsumer<AppMainProto, Integer, Integer>> onDrawQueue;
 
+	private final int[] DEF_SCR_DIM = {0, 0};
 
 	private FrameBuffer preResultBuffer, resultBuffer;
 
@@ -327,7 +328,6 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 	}
 
 
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public final void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
@@ -339,6 +339,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 		camera2D = new Camera2D(width, height, true);
 		chessBox = new ChessBox(width, height);
 
+		DEF_SCR_DIM[0] = width;
+		DEF_SCR_DIM[1] = height;
 
 		preResultBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
 		resultBuffer = OPallFBOCreator.FrameBuffer(width, height, false);
@@ -391,6 +393,10 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 			renderData = asp.getRenderData();
 		}
 		context.getRenderSurface().update();
+
+		preResultBuffer.createFBO(width, height, DEF_SCR_DIM[0], DEF_SCR_DIM[1], false);
+		resultBuffer.createFBO(width, height, DEF_SCR_DIM[0], DEF_SCR_DIM[1], false);
+
 	}
 
 
@@ -468,7 +474,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				requestSender.sendRequest(new Request(set_pipe_line_enable));
 				renderSubData(appMainProto, w, h);
 				preResultBuffer.beginFBO(() -> camera2D.backTranslate(() -> {
-					camera2D.setPosXY_absolute(0,0).update();
+					camera2D.setPosXY_absolute(0,0);
 					GLESUtils.clear();
 					for (AppSubProgram asp : subPrograms) {
 						OPallRenderable r = asp.getFinalRenderData();
@@ -476,7 +482,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 					}
 				}));
 				Bitmap image = resultBuffer.beginFBO(() -> camera2D.backTranslate(() -> {
-					camera2D.setPosXY_absolute(0,0).update();
+					camera2D.setPosXY_absolute(0,0);
+					camera2D.translateXY(DEF_SCR_DIM[0] - w, h - DEF_SCR_DIM[1]);
 					GLESUtils.clear();
 					preResultBuffer.setFlip(false).render(camera2D);
 				})).getBitmap();

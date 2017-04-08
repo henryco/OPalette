@@ -109,7 +109,7 @@
     <string name="saved_successfully">saved successfully.</string>
     <string name="image">Image</string>
 
-    <string name="pref_adds_title">Enable add\'s</string>
+    <string name="pref_adds_title">Enable ads</string>
     <string name="pref_adds_info">Remember, developers wants to eat too.</string>
     <string name="pref_save_after_share_title">Save image after sharing</string>
 
@@ -190,5 +190,8 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="threshold_colored">Threshold colored</string>
+    <string name="click_to_start">Click to start.</string>
+    <string name="click_to_start_image">Click to start image</string>
+    <string name="splash_logo_image">Splash logo image</string>
 
 </resources>

@@ -105,6 +105,8 @@ public class BlurTexture extends OPallTextureExtended {
 	private float[] matrix;
 	private boolean pointsVisible;
 
+	private boolean fistTime = true;
+
 	public BlurTexture(Filter filter) {
 		super(filter, VERT, FRAG);
 		setFlip(false, true);
@@ -140,15 +142,23 @@ public class BlurTexture extends OPallTextureExtended {
 
 	public BlurTexture setDefaultSize(float w, float h) {
 		touchLines.setDefaultSize(w, h);
+		touchLines.reset();
 		return this;
 	}
 
+
+	private float innerW, innerH;
+
 	@Override
 	public void setScreenDim(float w, float h) {
-		super.setScreenDim(w, h);
-		touchLines.setDefaultSize(w, h);
+		if (fistTime) {
+			super.setScreenDim(w, h);
+			setDefaultSize(w, h);
+		}
 		touchLines.setScreenDim(w, h);
-		touchLines.reset();
+		innerW = w;
+		innerH = h;
+		fistTime = false;
 	}
 
 	public BlurTexture setBlurMatrix(float[] matrix) {
@@ -209,7 +219,7 @@ public class BlurTexture extends OPallTextureExtended {
 
 	@Override
 	protected void render(int program, Camera2D camera) {
-		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), getScreenWidth(), getScreenHeight());
+		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), innerW, innerH);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_matrixSize), matrix_sqrt_size);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_power), power);
 		GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, touchLines.getCoefficients(), 0);

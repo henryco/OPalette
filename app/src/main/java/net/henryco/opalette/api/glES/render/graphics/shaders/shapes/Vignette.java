@@ -65,6 +65,8 @@ public class Vignette extends OPallShapeBuffered {
 	private float radius = 1;
 	private boolean active = true;
 
+	private boolean firstTime = true;
+
 	public Vignette(float w, float h) {
 		super(VERT_FILE, FRAG_FILE, w, h);
 		setVisible(false);
@@ -106,9 +108,22 @@ public class Vignette extends OPallShapeBuffered {
 		return active;
 	}
 
+
+	private float sw, sh;
+
+	@Override
+	public void setScreenDim(float w, float h) {
+		if (firstTime) super.setScreenDim(w, h);
+		getShapeBuffer().createFBO((int)w, (int)h, (int)getScreenWidth(), (int)getScreenHeight(), false);
+		update();
+		sw = w;
+		sh = h;
+		firstTime = false;
+	}
+
 	@Override
 	protected void render(int program, Camera2D camera) {
-		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), getScreenWidth(), getScreenHeight());
+		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), sw, sh);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_activeRadius), radius / (1.41f - radius));
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_power), Math.max(power, 0.5f));
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_radius), radius);

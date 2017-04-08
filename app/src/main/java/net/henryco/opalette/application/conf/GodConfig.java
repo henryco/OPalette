@@ -43,8 +43,8 @@ public class GodConfig {
 	}
 
 
-	public final static String PREF_SAVE_AFTER_SWITCH = "saveAfterShareSwitch";
-
+	public static final String PREF_KEY_SAVE_AFTER = "saveAfterShareSwitch";
+	public static final String PREF_KEY_ADS_ENABLE = "addsEnableSwitch";
 
 
 }
