@@ -182,9 +182,11 @@
 
 package net.henryco.opalette.application;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -211,7 +213,7 @@ public class StartUpActivity extends AppCompatActivity
 		implements Utils.ImageLoadable, PickImageDialog.PickImageDialogListener {
 
 
-	public static final long SPLASH_LOADING_TIME = 2000;
+	public static final long SPLASH_LOADING_TIME = 1500;
 	public static final long RESUME_ACTIVITY_DELAY = 1000;
 
 
@@ -357,20 +359,40 @@ public class StartUpActivity extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.startMenuAbout:
-				//TODO
-				return true;
-			case R.id.startMenuRate:
-				//TODO
-				return true;
-			case R.id.startMenuSettings:
 
+
+			case R.id.startMenuAbout: {
+				//TODO
+				return true;
+			}
+
+
+			case R.id.startMenuRate: {
+				Uri uri = Uri.parse("market://details?id=" + getPackageName());
+				Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+				int flags = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+				if (Build.VERSION.SDK_INT >= 21) flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+				else flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
+				goToMarket.addFlags(flags);
+				try {
+					startActivity(goToMarket);
+				} catch (ActivityNotFoundException e) {
+					startActivity(new Intent(Intent.ACTION_VIEW,
+							Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName()))
+					);
+				}
+				return true;
+			}
+
+
+			case R.id.startMenuSettings: {
 				Intent settingsIntent = new Intent(this, SettingsActivity.class);
 				startActivity(settingsIntent);
-
 				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+			}
+
+
+			default: return super.onOptionsItemSelected(item);
 		}
 	}
 

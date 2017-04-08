@@ -186,6 +186,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -249,6 +250,10 @@ public class MainActivity extends AppCompatActivity
 
 	@Override
 	public void setResultBitmap(Bitmap bitmap) {
+
+		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+
+
 		ImageView imageView = new ImageView(this);
 		imageView.setImageBitmap(bitmap);
 		String name = GodConfig.genDefaultImgFileName();
@@ -273,7 +278,7 @@ public class MainActivity extends AppCompatActivity
 						}
 					});
 				})
-				.negative(getResources().getString(R.string.share), () -> Utils.shareBitmapAction(bitmap, name, this, GodConfig.SAVE_AFTER_SHARE))
+				.negative(getResources().getString(R.string.share), () -> Utils.shareBitmapAction(bitmap, name, this, preferences.getBoolean(GodConfig.PREF_SAVE_AFTER_SWITCH, false)))
 				.neutral(getResources().getString(R.string.cancel))
 		.show(getSupportFragmentManager(), "Bitmap preview");
 	}

@@ -43,7 +43,7 @@ public class GodConfig {
 	}
 
 
-
+	public final static String PREF_SAVE_AFTER_SWITCH = "saveAfterShareSwitch";
 
 
 
