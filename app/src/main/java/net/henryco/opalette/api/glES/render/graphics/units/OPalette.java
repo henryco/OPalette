@@ -198,7 +198,7 @@ public class OPalette implements OPallRenderable {
 
 
 	public OPalette setRelativeSize(float size_pct) {
-		this.size_pct = size_pct;
+		if (size_pct != 0) this.size_pct = size_pct;
 		return this;
 	}
 
@@ -208,12 +208,12 @@ public class OPalette implements OPallRenderable {
 	}
 
 	public OPalette setRelativeContentSize(float size_pct) {
-		this.content_pct = size_pct;
+		if (size_pct != 0) this.content_pct = size_pct;
 		return this;
 	}
 
 	public OPalette setCellNumb(int n) {
-		this.cell_numb = n;
+		if (n != 0) this.cell_numb = n;
 		return this;
 	}
 

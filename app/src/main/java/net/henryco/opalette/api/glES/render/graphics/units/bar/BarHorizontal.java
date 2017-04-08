@@ -40,14 +40,14 @@ public class BarHorizontal implements OPallBar {
 
 	private float width = 0, height = 0;
 	private float posX = 0, posY = 0;
-	private boolean colorUpdated = false;
-	private boolean sizeUpdated = false;
 
 	private int scrW, scrH;
 
+	private FrameBuffer bottomBuffer;
 
 	public BarHorizontal() {
 		buffer = OPallFBOCreator.FrameBuffer();
+		bottomBuffer = OPallFBOCreator.FrameBuffer();
 	}
 
 	public BarHorizontal(int scrWidth, int scrHeight) {
@@ -65,7 +65,13 @@ public class BarHorizontal implements OPallBar {
 
 		scrW = scrWidth;
 		scrH = scrHeight;
+
+
+		float botSize = (height - (height * cellHeight_pct)) * 0.5f;
+		bottomBuffer.createFBO(scrWidth, (int) Math.ceil(botSize), scrWidth, scrHeight, false);
+		bottomBuffer.beginFBO(() -> GLESUtils.clear(color));
 	}
+
 
 
 	@Override
@@ -77,10 +83,10 @@ public class BarHorizontal implements OPallBar {
 	private void drawBar(OPallRenderable barLine, Camera2D camera2D,
 						 int barHeight, int buffer_quantum, float cameraTranslationStep) {
 
-		int iter = (int) Math.floor(((float)barHeight / (float)buffer_quantum));
+		int iter = Math.round(((float)barHeight / (float)buffer_quantum));
 		float d = buffer_quantum - cameraTranslationStep;
 		float lost = iter * d;
-		int extr = (int) Math.floor((lost + d) / cameraTranslationStep);
+		int extr = Math.round((lost + d) / cameraTranslationStep);
 
 		for (int i = 0; i < iter + extr; i++) barLine.render(camera2D.translateY(-cameraTranslationStep).update());
 	}
@@ -91,13 +97,17 @@ public class BarHorizontal implements OPallBar {
 
 		camera.backTranslate(() -> {
 
-			buffer.render(camera.setPosY_absolute(-2 * yPos_pct).update());
+			buffer.render(camera.setPosY_absolute(-2 * yPos_pct));
 			float cellHeight = getHeight() * cellHeight_pct;
 			float cellPtc = getHeight() - cellHeight;
 			float margin = cellPtc * 0.5f;
 
-			camera.translateY((int)-margin + 0.5f * buffer_quantum).update();
+			camera.translateY((int)-margin + 0.5f * buffer_quantum);
 			drawBar(renderable, camera, (int) (cellHeight), buffer_quantum, cameraTranslationStep);
+
+			camera.setPosY_absolute(-2 * yPos_pct);
+			camera.translateY(bottomBuffer.getHeight() - buffer.getHeight());
+			bottomBuffer.render(camera);
 		});
 	}
 
@@ -116,7 +126,7 @@ public class BarHorizontal implements OPallBar {
 
 	@Override
 	public BarHorizontal setRelativeSize(float size_pct) {
-		if (size_pct != height_pct) {
+		if (size_pct != height_pct && size_pct != 0) {
 			this.height_pct = size_pct;
 			createBar(scrW, scrH);
 		}
@@ -131,7 +141,7 @@ public class BarHorizontal implements OPallBar {
 
 	@Override
 	public BarHorizontal setRelativeContentSize(float size_pct) {
-		this.cellHeight_pct = size_pct;
+		if (size_pct != 0) this.cellHeight_pct = size_pct;
 		return this;
 	}
 
