@@ -208,7 +208,7 @@ public class OPalette implements OPallRenderable {
 	}
 
 	public OPalette setRelativeContentSize(float size_pct) {
-		if (size_pct != 0) this.content_pct = size_pct;
+		if (size_pct != 0 && size_pct != 1) this.content_pct = size_pct;
 		return this;
 	}
 

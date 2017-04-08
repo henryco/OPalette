@@ -194,11 +194,13 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import net.henryco.opalette.R;
@@ -211,6 +213,7 @@ import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.requester.RequestSender;
+import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.programs.ProgramPipeLine;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -252,18 +255,25 @@ public class MainActivity extends AppCompatActivity
 		new OPallAlertDialog()
 				.content(imageView)
 				.positive(getResources().getString(R.string.save), () -> {
-					EditText imageNameLine = new EditText(this);
-					imageNameLine.setText(name);
-					new OPallAlertDialog()
-							.title(getResources().getString(R.string.save_as))
-							.content(imageNameLine)
-							.positive(getResources().getString(R.string.save), () -> {
-								Utils.saveBitmapAction(bitmap, imageNameLine.getText().toString(), this);
-								createSaveSuccessNotification(this, name);
-							}).negative(getResources().getString(R.string.cancel))
-							.show(getSupportFragmentManager(), "Bitmap save");
-				}).negative(getResources().getString(R.string.share), () ->
-						Utils.shareBitmapAction(bitmap, name, this, GodConfig.SAVE_AFTER_SHARE))
+					View v = new LinearLayout(this);
+					OPallViewInjector.inject(this, new OPallViewInjector<AppMainProto>(v, R.layout.textline) {
+						@Override
+						protected void onInject(AppMainProto context, View view) {
+							TextView imageNameLine = (TextView) view.findViewById(R.id.lineText);
+							imageNameLine.setInputType(InputType.TYPE_CLASS_TEXT);
+							imageNameLine.setText(name);
+							new OPallAlertDialog()
+									.title(getResources().getString(R.string.save_as))
+									.content(v)
+									.positive(getResources().getString(R.string.save), () -> {
+										Utils.saveBitmapAction(bitmap, imageNameLine.getText().toString(), context.getActivityContext());
+										createSaveSuccessNotification(context.getActivityContext(), name);
+									}).negative(getResources().getString(R.string.cancel))
+									.show(getSupportFragmentManager(), "Bitmap save");
+						}
+					});
+				})
+				.negative(getResources().getString(R.string.share), () -> Utils.shareBitmapAction(bitmap, name, this, GodConfig.SAVE_AFTER_SHARE))
 				.neutral(getResources().getString(R.string.cancel))
 		.show(getSupportFragmentManager(), "Bitmap preview");
 	}

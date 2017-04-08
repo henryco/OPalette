@@ -106,6 +106,7 @@ public class BarHorizontal implements OPallBar {
 			drawBar(renderable, camera, (int) (cellHeight), buffer_quantum, cameraTranslationStep);
 
 			camera.setPosY_absolute(-2 * yPos_pct);
+			bottomBuffer.render(camera);
 			camera.translateY(bottomBuffer.getHeight() - buffer.getHeight());
 			bottomBuffer.render(camera);
 		});
@@ -141,7 +142,10 @@ public class BarHorizontal implements OPallBar {
 
 	@Override
 	public BarHorizontal setRelativeContentSize(float size_pct) {
-		if (size_pct != 0) this.cellHeight_pct = size_pct;
+		if (size_pct != cellHeight_pct && size_pct != 0) {
+			this.cellHeight_pct = size_pct;
+			createBar(scrW, scrH);
+		}
 		return this;
 	}
 

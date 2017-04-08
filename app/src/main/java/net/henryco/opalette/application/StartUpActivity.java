@@ -337,15 +337,19 @@ public class StartUpActivity extends AppCompatActivity
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
-				disableButtons();
 				Intent intent = new Intent(this, MainActivity.class);
 				BitmapPack.pushUpBitmap = Utils.loadIntentBitmap(this, data);
-				findViewById(R.id.textView).setVisibility(View.GONE);
-				findViewById(R.id.firstPickLayout).setVisibility(View.INVISIBLE);
+				closeAction();
 				startActivity(intent);
 				close();
 			}
 		}
+	}
+
+	private void closeAction() {
+		disableButtons();
+		findViewById(R.id.textView).setVisibility(View.GONE);
+		findViewById(R.id.firstPickLayout).setVisibility(View.INVISIBLE);
 	}
 
 
@@ -359,7 +363,10 @@ public class StartUpActivity extends AppCompatActivity
 				//TODO
 				return true;
 			case R.id.startMenuSettings:
-				//TODO
+
+				Intent settingsIntent = new Intent(this, SettingsActivity.class);
+				startActivity(settingsIntent);
+
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);

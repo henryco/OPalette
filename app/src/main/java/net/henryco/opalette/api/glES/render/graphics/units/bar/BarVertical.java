@@ -103,6 +103,7 @@ public class BarVertical implements OPallBar {
 			drawBar(renderable, camera, (int) (cellWidth), buffer_quantum, cameraTranslationStep);
 
 			camera.setPosX_absolute(-2 * xPos_pct);
+			endBuffer.render(camera);
 			camera.translateX(endBuffer.getWidth() - buffer.getWidth());
 			endBuffer.render(camera);
 		});
@@ -132,7 +133,10 @@ public class BarVertical implements OPallBar {
 
 	@Override
 	public OPallBar setRelativeContentSize(float size_pct) {
-		if (size_pct != 0) this.cellWidth_pct = size_pct;
+		if (size_pct != cellWidth_pct && size_pct != 0) {
+			this.cellWidth_pct = size_pct;
+			createBar(scrW, scrH);
+		}
 		return this;
 	}
 

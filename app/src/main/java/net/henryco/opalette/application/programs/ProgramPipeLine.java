@@ -252,8 +252,8 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				new ImageProgram(),
 				new FilterProgram(),
 				new ColorProgram(),
-				new BarProgram(),
-				new GridLinesProgram()
+				new GridLinesProgram(),
+				new BarProgram()
 		};
 	}
 
