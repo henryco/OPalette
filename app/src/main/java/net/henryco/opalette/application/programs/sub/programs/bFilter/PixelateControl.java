@@ -69,31 +69,36 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 		OPallFunction<Integer, Float> prgFunc = f -> (int)((GodConfig.NORM_RANGE / defTexPixels) * (defTexPixels - f));
 
 		InjectableSeekBar pixBar = new InjectableSeekBar(view, "Pixels");
+		InjectableSeekBar quantumBar = new InjectableSeekBar(view, "Pixel size");
+
+
 		pixBar.setMax(GodConfig.NORM_RANGE);
 		pixBar.onBarCreate(bar -> bar.setProgress(prgFunc.apply(pixelatedTexture.getFilterTexture().getPixelsNumb())));
 		pixBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
-				pixelatedTexture.getFilterTexture().setPixelsNumb(valFunc.apply((float) progress));
+				pixelatedTexture.getFilterTexture().setPixelsNumb(valFunc.apply((float) Math.min(progress, GodConfig.NORM_RANGE - 1)));
 				pixelatedTexture.setActive(progress != 0);
+				quantumBar.setEnable(progress != 0);
 				updateFunc.run();
 			}
 		}));
 
-		InjectableSeekBar quantumBar = new InjectableSeekBar(view, "Pixel size");
+
+		quantumBar.setEnable(pixelatedTexture.isActive());
 		quantumBar.onBarCreate(bar -> bar.setProgress((int) pixelatedTexture.getFilterTexture().getPixelQuantum()));
 		quantumBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
-				pixelatedTexture.getFilterTexture().setPixelQuantum(progress);
-				pixelatedTexture.setActive(progress != 0);
+				pixelatedTexture.getFilterTexture().setPixelQuantum(Math.max(1, progress));
 				updateFunc.run();
 			}
 		}));
 
-		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(R.string.disable), () -> {
+		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(R.string.control_top_bar_button_reset), () -> {
 			pixelatedTexture.getFilterTexture().setPixelQuantum(defTexQuantum).setPixelsNumb(defTexPixels);
 			pixelatedTexture.setActive(false);
 			pixBar.setProgress(0);
 			quantumBar.setProgress((int) defTexQuantum);
+			quantumBar.setEnable(false);
 			updateFunc.run();
 		});
 

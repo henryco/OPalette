@@ -108,8 +108,10 @@ public class PixelatedTexture extends OPallTextureExtended {
 
 	@Override
 	public void setScreenDim(float w, float h) {
-		if (fistTime) super.setScreenDim(w, h);
-		setPixelsNumb(Math.max(w, h));
+		if (fistTime) {
+			super.setScreenDim(w, h);
+			setPixelsNumb(Math.max(w, h));
+		}
 		fistTime = false;
 	}
 
