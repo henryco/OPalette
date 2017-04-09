@@ -62,34 +62,30 @@ public class BubbleControl  extends AppAutoSubControl<AppMainProto> {
 		InjectableSeekBar squareBar = new InjectableSeekBar(view, "Bubble size");
 		InjectableSeekBar radBar = new InjectableSeekBar(view, "Radius");
 
-		Runnable updateFunc = () -> {
+		final Runnable updateFunc = () -> {
 			proxyRenderData.setStateUpdated();
 			context.getRenderSurface().update();
 		};
 
+		final String disable = context.getActivityContext().getResources().getString(R.string.disable);
+		final String enable = context.getActivityContext().getResources().getString(R.string.enable);
 
 		boolean[] stat = {bubbleTexture.isActive()};
-		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(bubbleTexture.isActive() ? "Disable" : "Enable"), () -> {
+		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(bubbleTexture.isActive() ? disable : enable), () -> {
 
-			if (!stat[0]) {
-				context.setTopControlButton(b -> b.setTitle("Disable"));
-				bubbleTexture.setActive(true);
-				squareBar.setEnable(true);
-				radBar.setEnable(true);
-				updateFunc.run();
-				stat[0] = true;
-			} else {
-				context.setTopControlButton(b -> b.setTitle("Enable"));
+			if (!stat[0]) context.setTopControlButton(b -> b.setTitle(disable));
+			else {
+				context.setTopControlButton(b -> b.setTitle(enable));
 				squareBar.setProgress((int) defSquareSize);
 				radBar.setProgress(radBar.de_norm(defRadius));
 				bubbleTexture.getFilterTexture().setRadius(defRadius);
 				bubbleTexture.getFilterTexture().setSquare(defSquareSize);
-				bubbleTexture.setActive(false);
-				squareBar.setEnable(false);
-				radBar.setEnable(false);
-				stat[0] = false;
-				updateFunc.run();
 			}
+			stat[0] = !stat[0];
+			bubbleTexture.setActive(stat[0]);
+			squareBar.setEnable(stat[0]);
+			radBar.setEnable(stat[0]);
+			updateFunc.run();
 		});
 
 

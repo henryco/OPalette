@@ -320,21 +320,34 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		if (pipeLineStatus) {
 			if (proxyRenderData.stateUpdated()) {
+
+				if (vignette.isActive()) {
+					vignette.render(camera);
+
+					if (vignetteMode == VIGNETTE_IMAGE) {
+						vignetteTexture.set(proxyRenderData.getRenderData());
+						vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
+					}
+				}
+
 				camera.backTranslate(() -> {
-					camera.translateXY(0, h - defDim[1]); // position correction while canvas size changed
+					float dx = 0;
+					float dy = h - defDim[1];
+
+					camera.translateXY(dx, dy); // position correction while canvas size changed
 					boolean e = proxyRenderData.getRenderData().isFilterEnable();
 					feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 					feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
 
 
-					if (vignette.isActive()) {
-						vignette.render(camera);
-
-						if (vignetteMode == VIGNETTE_IMAGE) {
-							vignetteTexture.set(proxyRenderData.getRenderData());
-							vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
-						}
-					}
+//					if (vignette.isActive()) {
+//						vignette.render(camera);
+//
+//						if (vignetteMode == VIGNETTE_IMAGE) {
+//							vignetteTexture.set(proxyRenderData.getRenderData());
+//							vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
+//						}
+//					}
 
 					textureBuffer.beginFBO(() -> {
 
@@ -343,13 +356,15 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 						if (vignette.isActive()) {
 							if (vignetteMode == VIGNETTE_IMAGE) vignetteTexture.render(camera);
 							else if (vignetteMode == VIGNETTE_SCREEN) {
+								// GO BACK, BECAUSE BUFFERED SHAPES LIKE VIGNETTE, ARE TEXTURE POSITION INDEPENDENT
+								camera.translateXY(-dx, -dy);
 								vignette.getShapeBuffer().render(camera);
 							}
 						}
 					});
 
-
 				});
+
 			}
 			finalBackGroundData.render(camera);
 		} else {

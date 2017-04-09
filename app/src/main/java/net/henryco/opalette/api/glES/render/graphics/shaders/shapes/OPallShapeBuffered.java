@@ -72,9 +72,11 @@ public abstract class OPallShapeBuffered extends OPallShape {
 		if (visible) {
 			camera.backTranslate(() -> {
 				camera.setPosXY_absolute(0,0);
-				float tx = 0;
-				float ty = getScreenHeight() - defDim[1];
-				camera.translateXY(tx, ty); // position correction while canvas size changed
+//				float tx = getScreenWidth() - defDim[0];
+//				float ty = getScreenHeight() - defDim[1];
+
+				camera.translateXY(0, 0); // position correction while canvas size changed
+				// LOOKS LIKE NOT NECESSARY BECAUSE BUFFERED SHAPES ARE TEXTURE INDEPENDENT
 				imageBuffer.render(camera);
 			});
 		}

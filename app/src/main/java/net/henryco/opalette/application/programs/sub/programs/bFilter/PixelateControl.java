@@ -60,29 +60,46 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		Runnable updateFunc = () -> {
+		final Runnable updateFunc = () -> {
 			proxyRenderData.setStateUpdated();
 			context.getRenderSurface().update();
 		};
 
-		OPallFunction<Float, Float> valFunc = f -> defTexPixels * (1f - (f / GodConfig.NORM_RANGE));
-		OPallFunction<Integer, Float> prgFunc = f -> (int)((GodConfig.NORM_RANGE / defTexPixels) * (defTexPixels - f));
+		final OPallFunction<Float, Float> valFunc = f -> defTexPixels * (1f - (f / GodConfig.NORM_RANGE));
+		final OPallFunction<Integer, Float> prgFunc = f -> (int)((GodConfig.NORM_RANGE / defTexPixels) * (defTexPixels - f));
 
-		InjectableSeekBar pixBar = new InjectableSeekBar(view, "Pixels");
-		InjectableSeekBar quantumBar = new InjectableSeekBar(view, "Pixel size");
+		final InjectableSeekBar pixBar = new InjectableSeekBar(view, "Pixels");
+		final InjectableSeekBar quantumBar = new InjectableSeekBar(view, "Pixel size");
+
+		final String disable = context.getActivityContext().getResources().getString(R.string.disable);
+		final String enable = context.getActivityContext().getResources().getString(R.string.enable);
+
+		boolean[] stat = {pixelatedTexture.isActive()};
+		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(pixelatedTexture.isActive() ? disable : enable), () -> {
+
+			if (!stat[0]) context.setTopControlButton(b -> b.setTitle(disable));
+			else {
+				context.setTopControlButton(b -> b.setTitle(enable));
+				pixelatedTexture.getFilterTexture().setPixelQuantum(defTexQuantum).setPixelsNumb(defTexPixels);
+				quantumBar.setProgress((int) defTexQuantum);
+				pixBar.setProgress(0);
+			}
+			stat[0] = !stat[0];
+			pixelatedTexture.setActive(stat[0]);
+			quantumBar.setEnable(stat[0]);
+			pixBar.setEnable(stat[0]);
+			updateFunc.run();
+		});
 
 
-		pixBar.setMax(GodConfig.NORM_RANGE);
+		pixBar.setMax(GodConfig.NORM_RANGE).setEnable(pixelatedTexture.isActive());
 		pixBar.onBarCreate(bar -> bar.setProgress(prgFunc.apply(pixelatedTexture.getFilterTexture().getPixelsNumb())));
 		pixBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
 				pixelatedTexture.getFilterTexture().setPixelsNumb(valFunc.apply((float) Math.min(progress, GodConfig.NORM_RANGE - 1)));
-				pixelatedTexture.setActive(progress != 0);
-				quantumBar.setEnable(progress != 0);
 				updateFunc.run();
 			}
 		}));
-
 
 		quantumBar.setEnable(pixelatedTexture.isActive());
 		quantumBar.onBarCreate(bar -> bar.setProgress((int) pixelatedTexture.getFilterTexture().getPixelQuantum()));
@@ -92,15 +109,6 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 				updateFunc.run();
 			}
 		}));
-
-		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(R.string.control_top_bar_button_reset), () -> {
-			pixelatedTexture.getFilterTexture().setPixelQuantum(defTexQuantum).setPixelsNumb(defTexPixels);
-			pixelatedTexture.setActive(false);
-			pixBar.setProgress(0);
-			quantumBar.setProgress((int) defTexQuantum);
-			quantumBar.setEnable(false);
-			updateFunc.run();
-		});
 
 		OPallViewInjector.inject(context.getActivityContext(), quantumBar, pixBar);
 
