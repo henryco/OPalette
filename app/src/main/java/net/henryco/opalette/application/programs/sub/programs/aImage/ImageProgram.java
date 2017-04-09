@@ -321,7 +321,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		if (pipeLineStatus) {
 			if (proxyRenderData.stateUpdated()) {
 				camera.backTranslate(() -> {
-					camera.translateXY(w - defDim[0], h - defDim[1]); // position correction while canvas size changed
+					camera.translateXY(0, h - defDim[1]); // position correction while canvas size changed
 					boolean e = proxyRenderData.getRenderData().isFilterEnable();
 					feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 					feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
@@ -355,7 +355,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		} else {
 			finalBackGroundData.render(camera);
 			camera.backTranslate(() -> {
-				camera.translateXY(w - defDim[0], h - defDim[1]);
+				camera.translateXY(0, h - defDim[1]);
 				disableStatusTexture.set(proxyRenderData.getRenderData());
 				disableStatusTexture.render(camera);
 			});

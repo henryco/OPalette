@@ -177,6 +177,7 @@ public class OPalette implements OPallRenderable {
 			cellPaletterH.setMargin_pct(margin_pct);
 			cellPaletterH.setCellNumb(cell_numb);
 
+			// TODO: 09/04/17 CAMERA X TRANSLATE COMPENSATION
 			if (isDiscrete()) {
 				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
 				result.beginFBO(() -> {

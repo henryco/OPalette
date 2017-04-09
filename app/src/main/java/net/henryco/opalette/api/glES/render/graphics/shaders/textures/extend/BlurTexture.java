@@ -157,7 +157,7 @@ public class BlurTexture extends OPallTextureExtended {
 			super.setScreenDim(w, h);
 			setDefaultSize(w, h);
 		}
-		dx = w - getScreenWidth();
+		dx = 0;
 		dy = h - getScreenHeight();
 		setPoints(point1, point2);
 		fistTime = false;

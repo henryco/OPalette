@@ -483,7 +483,7 @@ public class ProgramPipeLine implements OPallUnderProgram<AppMainProto>, AppSubP
 				}));
 				Bitmap image = resultBuffer.beginFBO(() -> camera2D.backTranslate(() -> {
 					camera2D.setPosXY_absolute(0,0);
-					camera2D.translateXY(DEF_SCR_DIM[0] - w, h - DEF_SCR_DIM[1]);
+					camera2D.translateXY(0, h - DEF_SCR_DIM[1]);
 					GLESUtils.clear();
 					preResultBuffer.setFlip(false).render(camera2D);
 				})).getBitmap();
