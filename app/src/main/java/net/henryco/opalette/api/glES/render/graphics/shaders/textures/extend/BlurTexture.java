@@ -147,17 +147,19 @@ public class BlurTexture extends OPallTextureExtended {
 	}
 
 
-	private float innerW, innerH;
+	private float dx, dy;
+	private float[] point1, point2;
 
 	@Override
 	public void setScreenDim(float w, float h) {
 		if (fistTime) {
+			touchLines.setScreenDim(w, h);
 			super.setScreenDim(w, h);
 			setDefaultSize(w, h);
 		}
-		touchLines.setScreenDim(w, h);
-		innerW = w;
-		innerH = h;
+		dx = w - getScreenWidth();
+		dy = h - getScreenHeight();
+		setPoints(point1, point2);
 		fistTime = false;
 	}
 
@@ -196,12 +198,16 @@ public class BlurTexture extends OPallTextureExtended {
 	}
 
 	public BlurTexture setPoints(float x1, float y1, float x2, float y2) {
-		touchLines.setPoints(x1, y1, x2, y2);
-		return this;
+		return setPoints(new float[]{x1, y1}, new float[]{x2, y2});
 	}
 
 	public BlurTexture setPoints(float[] p1, float[] p2) {
-		touchLines.setPoints(p1, p2);
+		if (p1 != null && p2 != null) {
+			touchLines.setPoints(p1[0] - dx, p1[1] - dy, p2[0] - dx, p2[1] - dy);
+			this.point1 = p1;
+			this.point2 = p2;
+		}
+
 		return this;
 	}
 
@@ -215,11 +221,12 @@ public class BlurTexture extends OPallTextureExtended {
 	public synchronized void render(Camera2D camera2D, OPallConsumer<Integer> setter) {
 		super.render(camera2D, setter);
 		if (pointsVisible) touchLines.render(camera2D);
+
 	}
 
 	@Override
 	protected void render(int program, Camera2D camera) {
-		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), innerW, innerH);
+		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), getScreenWidth(), getScreenHeight());
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_matrixSize), matrix_sqrt_size);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_power), power);
 		GLES20.glUniform3fv(GLES20.glGetUniformLocation(program, u_line), 2, touchLines.getCoefficients(), 0);

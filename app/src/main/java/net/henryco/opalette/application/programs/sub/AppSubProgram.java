@@ -215,6 +215,18 @@ public interface AppSubProgram<T> extends OPallSubProgram<T>, OPallRequestFeedBa
 
 	final class ProxyRenderData <U extends OPallRenderable> {
 
+
+		private int scrW = 0, scrH = 0;
+		public ProxyRenderData<U> setDimension(int w, int h) {
+			this.scrW = w;
+			this.scrH = h;
+			return this;
+		}
+		@Nullable public int[] getDimension() {
+			if (scrH == 0 && scrW == 0) return null;
+			return new int[]{scrW, scrH};
+		}
+
 		private U data = null;
 		private boolean state = false;
 

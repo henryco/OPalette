@@ -151,6 +151,7 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	@Override
 	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 		for (FilterPipeLiner p: filterPipeLine) p.setScreenDim(width, height);
+		proxyRenderData.setDimension(width, height);
 	}
 
 	@Override

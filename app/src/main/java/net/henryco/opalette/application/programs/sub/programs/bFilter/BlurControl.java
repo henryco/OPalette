@@ -69,7 +69,10 @@ public class BlurControl  extends AppAutoSubControl<AppMainProto> {
 	}
 
 	private void resetPoints() {
-		float h = blurTexture.getHeight();
+		int[] dim = proxyRenderData.getDimension();
+		float h;
+		if (dim != null) h = dim[1];
+		else h = blurTexture.getHeight();
 		float d = 0.3333f;
 		blurTexture.getFilterTexture().setPoints(0, d * h, 0, d * h * 2f);
 	}
