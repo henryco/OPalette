@@ -355,9 +355,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 							}
 						}
 					});
-
 				});
-
 			}
 			finalBackGroundData.render(camera);
 		} else {

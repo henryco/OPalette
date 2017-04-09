@@ -193,7 +193,6 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -313,9 +312,13 @@ public class StartUpActivity extends AppCompatActivity
 		disableButtons();
 		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(this, R.anim.press_75pct_225ms));
 		new Handler().postDelayed(() -> {
-			AppCompatDialogFragment pickImageDialog = new PickImageDialog();
-			pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
-			new Handler().postDelayed(this::enableButtons, 150);
+
+//			TODO ADD CAMERA SOURCE
+//			AppCompatDialogFragment pickImageDialog = new PickImageDialog();
+//			pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
+//			new Handler().postDelayed(this::enableButtons, 150);
+
+			Utils.loadGalleryImageActivity(this);
 		}, 175);
 	}
 
