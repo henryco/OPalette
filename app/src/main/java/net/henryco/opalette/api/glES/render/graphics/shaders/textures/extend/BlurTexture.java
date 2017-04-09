@@ -110,7 +110,7 @@ public class BlurTexture extends OPallTextureExtended {
 	public BlurTexture(Filter filter) {
 		super(filter, VERT, FRAG);
 		setFlip(false, true);
-		setBlurMatrix(FilterMatrices.m_diagShatter());
+		setBlurMatrix(FilterMatrices.m_gaussianBlur());
 		touchLines = new TouchLines();
 		pointsVisible = false;
 	}
@@ -118,7 +118,7 @@ public class BlurTexture extends OPallTextureExtended {
 	public BlurTexture() {
 		super(VERT, FRAG);
 		setFlip(false, true);
-		setBlurMatrix(FilterMatrices.m_diagShatter());
+		setBlurMatrix(FilterMatrices.m_gaussianBlur());
 		touchLines = new TouchLines();
 		pointsVisible = false;
 	}
@@ -126,7 +126,7 @@ public class BlurTexture extends OPallTextureExtended {
 	public BlurTexture(Bitmap image) {
 		super(image, VERT, FRAG);
 		setFlip(false, true);
-		setBlurMatrix(FilterMatrices.m_diagShatter());
+		setBlurMatrix(FilterMatrices.m_gaussianBlur());
 		touchLines = new TouchLines();
 		pointsVisible = false;
 	}
@@ -134,7 +134,7 @@ public class BlurTexture extends OPallTextureExtended {
 	public BlurTexture(Bitmap image, Filter filter) {
 		super(image, filter, VERT, FRAG);
 		setFlip(false, true);
-		setBlurMatrix(FilterMatrices.m_diagShatter());
+		setBlurMatrix(FilterMatrices.m_gaussianBlur());
 		touchLines = new TouchLines();
 		pointsVisible = false;
 	}

@@ -168,10 +168,10 @@ public class BlurControl  extends AppAutoSubControl<AppMainProto> {
 			String pwr = stringFunc.apply(R.string.transition_power);
 			String apl = stringFunc.apply(R.string.apply);
 
-			String sb1 = "m_default";
+			String sb1 = "m_diagShatter";
 			String sb2 = "m_blur";
 			String sb3 = "m_boxBlur";
-			String sb4 = "m_gaussianBlur";
+			String sb4 = "m_gaussianBlur (recommended)";
 			String sb5 = "m_horizontalMotionBlur";
 
 

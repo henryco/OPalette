@@ -225,7 +225,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 
 	private boolean pipeLineStatus;
-
+	private boolean pipeLineUpDated;
 	private boolean firstTime;
 
 	@Override
@@ -265,6 +265,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
 
+		pipeLineUpDated = true;
 		pipeLineStatus = true;
 		firstTime = true;
 
@@ -309,6 +310,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 
 
+
 	@Override
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
@@ -319,8 +321,8 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		}
 
 		if (pipeLineStatus) {
-			if (proxyRenderData.stateUpdated()) {
-
+			if (proxyRenderData.stateUpdated() || pipeLineUpDated) {
+				pipeLineUpDated = false;
 				if (vignette.isActive()) {
 					vignette.render(camera);
 
@@ -339,15 +341,6 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 					feedBackListener.sendRequest(new Request(e ? set_filters_enable : set_filters_disable).destination(d -> d.except(id)));
 					feedBackListener.sendRequest(new Request(update_proxy_render_state).destination(d -> d.except(id)));
 
-
-//					if (vignette.isActive()) {
-//						vignette.render(camera);
-//
-//						if (vignetteMode == VIGNETTE_IMAGE) {
-//							vignetteTexture.set(proxyRenderData.getRenderData());
-//							vignetteTexture.setTextureDataHandle(vignette.getShapeBuffer().getTextureBufferHandle());
-//						}
-//					}
 
 					textureBuffer.beginFBO(() -> {
 
@@ -368,11 +361,17 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 			}
 			finalBackGroundData.render(camera);
 		} else {
+			pipeLineUpDated = true;
 			finalBackGroundData.render(camera);
 			camera.backTranslate(() -> {
 				camera.translateXY(0, h - defDim[1]);
 				disableStatusTexture.set(proxyRenderData.getRenderData());
-				disableStatusTexture.render(camera);
+				textureBuffer.beginFBO(() -> {
+					GLESUtils.clear();
+					disableStatusTexture.render(camera);
+				});
+				Texture texture = textureBuffer.getTexture();
+				ConvolveTexture.filterConvolutionFix(texture, () -> texture.render(camera));
 			});
 		}
 

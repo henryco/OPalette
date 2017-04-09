@@ -25,6 +25,7 @@ import android.opengl.GLES20;
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.FilterMatrices;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 
 import java.nio.FloatBuffer;
 
@@ -34,6 +35,26 @@ import java.nio.FloatBuffer;
 
 public class ConvolveTexture extends OPallTextureExtended {
 
+	public static final float FILTER_PX_CORRECTION = 5;
+
+	public static Texture filterConvolutionFixForward(Texture texture) {
+		float c = ConvolveTexture.FILTER_PX_CORRECTION;
+		float xx = texture.getWidth();
+		float yy = texture.getHeight();
+		texture.setRegion(c, c, xx - c, yy - c);
+		return texture;
+	}
+	public static Texture filterConvolutionFixBackward(Texture texture) {
+		float c = ConvolveTexture.FILTER_PX_CORRECTION;
+		texture.setRegion(texture.getWidth() + c, texture.getHeight() + c);
+		return texture;
+	}
+
+	public static Texture filterConvolutionFix(Texture texture, Runnable r) {
+		filterConvolutionFixForward(texture);
+		r.run();
+		return filterConvolutionFixBackward(texture);
+	}
 
 	private static final String u_noiseLevel = "u_noiseLevel";
 	private static final String u_matrixSize = "u_matrixSize";

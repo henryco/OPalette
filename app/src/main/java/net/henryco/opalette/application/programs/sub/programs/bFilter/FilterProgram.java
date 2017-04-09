@@ -30,6 +30,7 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.BlurTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.BubbleTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.PixelatedTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
@@ -55,6 +56,8 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 
 	private long id = methods.genID(FilterProgram.class);
 	private ProxyRenderData<Texture> proxyRenderData = new ProxyRenderData<>();
+
+	private static final EdFilter DEF_FILTER = EdFilter.getDefaultFilter();
 
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
@@ -181,20 +184,19 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 			if (!firstTime && proxyRenderData.stateUpdated()) {	// HERE ACTIVE FILTERS PIPE-LINE
 
 				int texData = proxyRenderData.getRenderData().getTextureDataHandle();
-				Texture filter = proxyRenderData.getRenderData();
 				for (FilterPipeLiner fp: filterPipeLine) {
 					fp.setTextureDataHandle(texData);
 					fp.render(camera);
-					filter = fp.getResult();
-					texData = filter.getTextureDataHandle();
+					texData = fp.getResult().getTextureDataHandle();
 				}
-				final Texture lastFilter = filter;
 				filterTexture.setTextureDataHandle(texData);
-				filterBuffer.beginFBO(() -> {
+
+				filterBuffer.beginFBO(() -> ConvolveTexture.filterConvolutionFix(filterTexture, () -> {
 					GLESUtils.clear();
-					lastFilter.render(camera);
+					DEF_FILTER.applyFilter(filterTexture).render(camera);
 					actualFilter.applyFilter(filterTexture).render(camera);
-				});
+				}));
+
 			}
 		}
 
