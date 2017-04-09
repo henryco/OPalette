@@ -239,7 +239,8 @@ public class OPallSurfaceView extends GLSurfaceView {
 	}
 
 	public void addOnTouchEventListener(OnTouchEventListener listener) {
-		if (listener != null) touchEventListeners.add(listener);
+		if (listener != null && !touchEventListeners.contains(listener))
+			touchEventListeners.add(listener);
 	}
 
 	public void removeTouchEventListener(OnTouchEventListener listener) {

@@ -97,7 +97,7 @@ public class PaletteRegionControl extends AppAutoSubControl<AppMainProto> {
 				if (!touchLines.isDefault()) context.getRenderSurface().addOnTouchEventListener(listener);
 
 				regButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
-					context.getRenderSurface().addOnTouchEventListener(listener);
+					if (touchLines.isDefault()) context.getRenderSurface().addOnTouchEventListener(listener);
 					reg.setTextColor(fcb);
 					non.setTextColor(fca);
 				}));

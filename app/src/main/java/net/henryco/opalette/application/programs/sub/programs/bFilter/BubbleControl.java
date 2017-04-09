@@ -68,10 +68,8 @@ public class BubbleControl  extends AppAutoSubControl<AppMainProto> {
 		};
 
 
-		context.setTopControlButton(b -> b.setTitle(bubbleTexture.isActive() ? "Disable" : "Enable"));
-
-		boolean[] stat = {false};
-		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle("Enable"), () -> {
+		boolean[] stat = {bubbleTexture.isActive()};
+		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(bubbleTexture.isActive() ? "Disable" : "Enable"), () -> {
 
 			if (!stat[0]) {
 				context.setTopControlButton(b -> b.setTitle("Disable"));

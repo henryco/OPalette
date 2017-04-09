@@ -262,7 +262,7 @@ public class BarProgram implements AppSubProgram<MainActivity>, AppSubProtocol {
 
 		touchLines.setScreenDim(width, height);
 		oPalette.setScreenDim(width, height);
-		proxyRenderData.setStateUpdated();
+		proxyRenderData.setDimension(width, height).setStateUpdated();
 	}
 
 	@Override

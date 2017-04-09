@@ -258,6 +258,7 @@ public class GridLinesProgram implements AppSubProgram<AppMainProto>, AppSubProt
 	public void onSurfaceChange(@Nullable GL10 gl, AppMainProto context, int width, int height) {
 		gridLines.setScreenDim(width, height);
 		borders.setScreenDim(width, height);
+		proxyRenderData.setDimension(width, height).setStateUpdated();
 	}
 
 	@Override
