@@ -70,9 +70,10 @@ public class BlurControl  extends AppAutoSubControl<AppMainProto> {
 
 	private void resetPoints() {
 		int[] dim = proxyRenderData.getDimension();
-		float h;
-		if (dim != null) h = dim[1];
-		else h = blurTexture.getHeight();
+		float h = blurTexture.getHeight();
+		if (dim != null) {
+			h = dim[1];
+		}
 		float d = 0.3333f;
 		blurTexture.getFilterTexture().setPoints(0, d * h, 0, d * h * 2f);
 	}
@@ -134,15 +135,15 @@ public class BlurControl  extends AppAutoSubControl<AppMainProto> {
 
 				regButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
 					blurTexture.getFilterTexture().setPointsVisible(true);
-					blurTexture.setActive(true);
 					reg.setTextColor(fcb);
 					non.setTextColor(fca);
+					if (!blurTexture.isActive()) context.getRenderSurface().addOnTouchEventListener(listener);
+					blurTexture.setActive(true);
+					updateFunc.run();
 					new Handler().postDelayed(() -> {
-						context.getRenderSurface().addOnTouchEventListener(listener);
 						blurTexture.getFilterTexture().setPointsVisible(false);
 						updateFunc.run();
 					}, 300);
-					updateFunc.run();
 				}));
 
 				nonButton.setOnClickListener(v -> OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {

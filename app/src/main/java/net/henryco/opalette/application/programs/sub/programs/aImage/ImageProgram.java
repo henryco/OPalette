@@ -354,8 +354,11 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 			finalBackGroundData.render(camera);
 		} else {
 			finalBackGroundData.render(camera);
-			disableStatusTexture.set(proxyRenderData.getRenderData());
-			disableStatusTexture.render(camera);
+			camera.backTranslate(() -> {
+				camera.translateXY(w - defDim[0], h - defDim[1]);
+				disableStatusTexture.set(proxyRenderData.getRenderData());
+				disableStatusTexture.render(camera);
+			});
 		}
 
 
