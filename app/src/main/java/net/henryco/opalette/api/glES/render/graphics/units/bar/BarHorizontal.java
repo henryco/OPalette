@@ -45,6 +45,8 @@ public class BarHorizontal implements OPallBar {
 
 	private FrameBuffer bottomBuffer;
 
+	private float active_h;
+
 	public BarHorizontal() {
 		buffer = OPallFBOCreator.FrameBuffer();
 		bottomBuffer = OPallFBOCreator.FrameBuffer();
@@ -52,6 +54,7 @@ public class BarHorizontal implements OPallBar {
 
 	public BarHorizontal(int scrWidth, int scrHeight) {
 		this();
+		active_h = scrHeight;
 		createBar(scrWidth, scrHeight);
 	}
 
@@ -76,7 +79,7 @@ public class BarHorizontal implements OPallBar {
 
 	@Override
 	public void createBar(int scrWidth, int scrHeight) {
-		createBar(scrWidth, scrHeight, (int) (scrHeight * height_pct), color);
+		createBar(scrWidth, scrHeight, (int) (active_h * height_pct), color);
 	}
 
 
@@ -113,8 +116,10 @@ public class BarHorizontal implements OPallBar {
 	}
 
 
-	public BarHorizontal setCameraTranslationStep(float cameraTranslationStep) {
-		this.cameraTranslationStep = cameraTranslationStep;
+	@Override
+	public OPallBar setActiveSize(float w, float h) {
+		active_h = h;
+		createBar(scrW, scrH);
 		return this;
 	}
 

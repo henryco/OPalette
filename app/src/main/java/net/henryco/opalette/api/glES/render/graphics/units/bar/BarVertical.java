@@ -44,6 +44,7 @@ public class BarVertical implements OPallBar {
 
 	private FrameBuffer endBuffer;
 
+	private float active_w;
 
 	public BarVertical() {
 		buffer = OPallFBOCreator.FrameBuffer();
@@ -51,6 +52,7 @@ public class BarVertical implements OPallBar {
 	}
 	public BarVertical(int scrWidth, int scrHeight) {
 		this();
+		active_w = scrWidth;
 		createBar(scrWidth, scrHeight);
 	}
 
@@ -74,7 +76,7 @@ public class BarVertical implements OPallBar {
 
 	@Override
 	public void createBar(int scrWidth, int scrHeight) {
-		createBar(scrWidth, scrHeight, (int) (scrWidth * width_pct), color);
+		createBar(scrWidth, scrHeight, (int) (active_w * width_pct), color);
 	}
 
 
@@ -107,6 +109,13 @@ public class BarVertical implements OPallBar {
 			camera.translateX(endBuffer.getWidth() - buffer.getWidth());
 			endBuffer.render(camera);
 		});
+	}
+
+	@Override
+	public OPallBar setActiveSize(float w, float h) {
+		active_w = w;
+		createBar(scrW, scrH);
+		return this;
 	}
 
 	@Override

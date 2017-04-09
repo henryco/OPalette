@@ -34,6 +34,7 @@ public interface OPallBar {
 	float getWidth();
 	float getHeight();
 
+	OPallBar setActiveSize(float w, float h);
 	OPallBar setColor(GLESUtils.Color color);
 	OPallBar setRelativeSize(float size_pct);
 	OPallBar setRelativePosition(float pos_pct);

@@ -312,6 +312,9 @@ public class OPalette implements OPallRenderable {
 		cellPaletterH.setScreenDim(w, h);
 		cellPaletterW.setScreenDim(w, h);
 
+		backBarH.setActiveSize((int)w, (int)h);
+		backBarW.setActiveSize((int)w, (int)h);
+
 		size_update = true;
 	}
 

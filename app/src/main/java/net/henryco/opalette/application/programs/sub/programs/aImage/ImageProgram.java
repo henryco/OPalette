@@ -285,12 +285,6 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		proxyRenderData.getRenderData().setScreenDim(width, height);
 
 		OPallViewInjector.inject(context.getActivityContext(), new FilterSharpnessControl(proxyRenderData));
-
-
-		OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(width, height, feedBackListener));
-//		FIXME: 01/04/17 // TODO: 01/04/17 Actually disabled need fix
-
-
 		OPallViewInjector.inject(context.getActivityContext(), new BackGroundControl(bgColor));
 		OPallViewInjector.inject(context.getActivityContext(), new VignetteControl(vignette, proxyRenderData, this));
 		OPallViewInjector.inject(context.getActivityContext(), new NoiseControl(proxyRenderData));
@@ -315,6 +309,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		if (firstTime) { // lazy init
+			OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(w, h, feedBackListener));
 			OPallViewInjector.inject(context.getActivityContext(), new RotationControl(proxyRenderData));
 			OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
 			firstTime = false;

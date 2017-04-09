@@ -182,13 +182,11 @@
 
 package net.henryco.opalette.application.programs.sub.programs.aImage;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceTouchListener;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
 import net.henryco.opalette.api.utils.RefreshableTimer;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
@@ -214,9 +212,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 	private final OPallSeekBarListener stop;
 	private final OPallRequester requester;
 	private RefreshableTimer timer;
-	private OPallSurfaceTouchListener touchEventListener;
 
-	private OPallSurfaceView.OnTouchEventListener backListener;
 
 	public CanvasSizeControl(final float defScrW, final float defScrH, final OPallRequester requester) {
 		super(img_button_res, txt_button_res);
@@ -233,6 +229,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 
 		OPallSurfaceView surface = context.getRenderSurface();
 		InjectableSeekBar hBar = new InjectableSeekBar(view, "Canvas height").setMax((int) defScrH);
+		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
 
 		this.timer = new RefreshableTimer(300, () -> {
 			requester.sendRequest(new Request(AppSubProtocol.set_filters_enable));
@@ -240,8 +237,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 		});
 
 
-		//*
-		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
+
 		wBar.onBarCreate(bar -> bar.setProgress(surface.getWidth()));
 		wBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
@@ -250,8 +246,6 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 			}
 		}).onStop(stop));
 		OPallViewInjector.inject(context.getActivityContext(), wBar);
-		//*/
-
 
 
 		hBar.onBarCreate(bar -> bar.setProgress(surface.getHeight()));
@@ -264,34 +258,13 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 		OPallViewInjector.inject(context.getActivityContext(), hBar);
 
 
-
-		backListener = surface.getLastTouchEventListener();
-		context.getRenderSurface().removeTouchEventListener(backListener);
-
-		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
-		touchEventListener.setOnActionUp(event -> timer.startIfWaiting().refresh());
-		surface.addOnTouchEventListener(touchEventListener.setOnActionMove((dx, dy, event) -> {
-
-			requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
-			int py = (int) clamp(surface.getHeight() + dy, defScrH, MIN_SIZE);
-			surface.setSize(surface.getWidth(), py).update();
-			hBar.setProgress(py);
-		}));
-
 		context.setTopControlButton(button
 				-> button.setTitle(R.string.control_top_bar_button_reset).setVisible(true).setEnabled(true), () -> {
-			if (surface.getHeight() != defScrH) {
-				hBar.setProgress((int) defScrH);
-				surface.setSize((int) defScrW, (int) defScrH).update();
-			}
+
+			wBar.setProgress((int) defScrW);
+			hBar.setProgress((int) defScrH);
+			surface.setSize((int) defScrW, (int) defScrH).update();
 		});
-	}
-
-
-	@Override
-	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
-		context.getRenderSurface().removeTouchEventListener(touchEventListener);
-		context.getRenderSurface().addOnTouchEventListener(backListener);
 	}
 
 
