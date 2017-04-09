@@ -316,9 +316,9 @@ public class StartUpActivity extends AppCompatActivity
 //			TODO ADD CAMERA SOURCE
 //			AppCompatDialogFragment pickImageDialog = new PickImageDialog();
 //			pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
-//			new Handler().postDelayed(this::enableButtons, 150);
 
 			Utils.loadGalleryImageActivity(this);
+			new Handler().postDelayed(this::enableButtons, 150);
 		}, 175);
 	}
 

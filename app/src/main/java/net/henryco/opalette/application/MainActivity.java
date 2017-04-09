@@ -258,6 +258,7 @@ public class MainActivity extends AppCompatActivity
 		imageView.setImageBitmap(bitmap);
 		String name = GodConfig.genDefaultImgFileName();
 		new OPallAlertDialog()
+				.message("")
 				.content(imageView)
 				.positive(getResources().getString(R.string.save), () -> {
 					View v = new LinearLayout(this);
@@ -346,12 +347,6 @@ public class MainActivity extends AppCompatActivity
 		OPallSurfaceView oPallSurfaceView = (OPallSurfaceView) findViewById(R.id.opallView);
 		oPallSurfaceView.setDimProportions(OPallSurfaceView.DimensionProcessors.RELATIVE_SQUARE);
 		oPallSurfaceView.setRenderer(renderer);
-
-
-//		View surfaceContainer = findViewById(R.id.surfaceContainer);
-//		int sw = surfaceContainer.getWidth();
-//		int sh = surfaceContainer.getHeight();
-//		oPallSurfaceView.setSize(sw, sh);
 
 		oPallSurfaceView.addToGLContextQueue(gl ->
 				stateRequester.sendNonSyncRequest(new Request(send_bitmap_to_program, StartUpActivity.BitmapPack.get()))

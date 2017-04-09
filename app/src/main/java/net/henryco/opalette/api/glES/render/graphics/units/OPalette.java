@@ -307,6 +307,11 @@ public class OPalette implements OPallRenderable {
 		scrW = w;
 		scrH = h;
 
+		paletteTextureW.setDimension(w, h);
+		paletteTextureH.setDimension(w, h);
+		cellPaletterH.setScreenDim(w, h);
+		cellPaletterW.setScreenDim(w, h);
+
 		size_update = true;
 	}
 

@@ -50,34 +50,36 @@ public class CellPaletter implements OPallRenderable {
 					"uniform float u_cellSize;\n" +
 					"uniform float u_margin;\n" +
 					"uniform float u_numb;\n" +
+					"uniform vec2 u_activeDim;\n" +
 					"\n" +
 					"void main() {\n" +
 					"\n" +
 					"    vec2 pos = gl_FragCoord.xy / u_dimension;\n" +
-					"    float n = floor(gl_FragCoord.x / u_cellSize);\n" +
+					"    if (pos.x <= u_activeDim.x && pos.y <= u_activeDim.y && pos.x >= 0. && pos.y >= 0.) {\n" +
 					"\n" +
-					"    vec2 margin = vec2(\n" +
-					"        (n == 0.) ? u_margin : u_margin * .5,\n" +
-					"        (n == u_numb - 1.) ? u_margin : u_margin * .5\n" +
-					"    );\n" +
+					"        float n = floor(gl_FragCoord.x / u_cellSize);\n" +
 					"\n" +
-					"    vec2 st_ed = vec2(n, n + 1.) * u_cellSize;\n" +
-					"    vec2 mrgnL = vec2(st_ed.x, st_ed.x + margin.x);\n" +
-					"    vec2 mrgnR = vec2(st_ed.y - margin.y, st_ed.y);\n" +
+					"        vec2 margin = vec2(\n" +
+					"            (n == 0.) ? u_margin : u_margin * .5,\n" +
+					"            (n == u_numb - 1.) ? u_margin : u_margin * .5\n" +
+					"        );\n" +
 					"\n" +
+					"        vec2 st_ed = vec2(n, n + 1.) * u_cellSize;\n" +
+					"        vec2 mrgnL = vec2(st_ed.x, st_ed.x + margin.x);\n" +
+					"        vec2 mrgnR = vec2(st_ed.y - margin.y, st_ed.y);\n" +
 					"\n" +
-					"    if ((gl_FragCoord.x >= mrgnL.x && gl_FragCoord.x <= mrgnL.y) ||\n" +
-					"        (gl_FragCoord.x >= mrgnR.x && gl_FragCoord.x <= mrgnR.y))\n" +
-					"            gl_FragColor = vec4(0.);\n" +
-					"    else if (texture2D(u_Texture0, pos).a != 0.) {\n" +
-					"        vec3 color = vec3(0.);\n" +
-					"        for (float i = st_ed.x; i < st_ed.y; i += 1.) {\n" +
-					"            vec2 point = vec2(i / u_dimension.x, pos.y);\n" +
-					"            color += texture2D(u_Texture0, point).rgb;\n" +
-					"        }\n" +
-					"        gl_FragColor = vec4(color / u_cellSize, 1.);\n" +
+					"        if ((gl_FragCoord.x >= mrgnL.x && gl_FragCoord.x <= mrgnL.y) ||\n" +
+					"            (gl_FragCoord.x >= mrgnR.x && gl_FragCoord.x <= mrgnR.y))\n" +
+					"                gl_FragColor = vec4(0.);\n" +
+					"        else if (texture2D(u_Texture0, pos).a != 0.) {\n" +
+					"            vec3 color = vec3(0.);\n" +
+					"            for (float i = st_ed.x; i < st_ed.y; i += 1.) {\n" +
+					"                vec2 point = vec2(i / u_dimension.x, pos.y);\n" +
+					"                color += texture2D(u_Texture0, point).rgb;\n" +
+					"            }\n" +
+					"            gl_FragColor = vec4(color / u_cellSize, 1.);\n" +
+					"        } else gl_FragColor = vec4(0.);\n" +
 					"    } else gl_FragColor = vec4(0.);\n" +
-					"\n" +
 					"}"
 			,
 			"precision highp float;\n" +
@@ -92,31 +94,35 @@ public class CellPaletter implements OPallRenderable {
 					"uniform float u_cellSize;\n" +
 					"uniform float u_margin;\n" +
 					"uniform float u_numb;\n" +
+					"uniform vec2 u_activeDim;\n" +
 					"\n" +
 					"void main() {\n" +
 					"\n" +
 					"    vec2 pos = gl_FragCoord.xy / u_dimension;\n" +
-					"    float n = floor(gl_FragCoord.y / u_cellSize);\n" +
 					"\n" +
-					"    vec2 margin = vec2(\n" +
-					"        (n == 0.) ? u_margin : u_margin * .5,\n" +
-					"        (n == u_numb - 1.) ? u_margin : u_margin * .5\n" +
-					"    );\n" +
+					"    if (pos.x >= 0. && pos.y >= 0. && pos.x <= u_activeDim.x && pos.y <= u_activeDim.y) {\n" +
+					"        float n = floor(gl_FragCoord.y / u_cellSize);\n" +
 					"\n" +
-					"    vec2 st_ed = vec2(n, n + 1.) * u_cellSize;\n" +
-					"    vec2 mrgnB = vec2(st_ed.x, st_ed.x + margin.x);\n" +
-					"    vec2 mrgnT = vec2(st_ed.y - margin.y, st_ed.y);\n" +
+					"        vec2 margin = vec2(\n" +
+					"            (n == 0.) ? u_margin : u_margin * .5,\n" +
+					"            (n == u_numb - 1.) ? u_margin : u_margin * .5\n" +
+					"        );\n" +
 					"\n" +
-					"    if ((gl_FragCoord.y >= mrgnB.x && gl_FragCoord.y <= mrgnB.y) ||\n" +
-					"        (gl_FragCoord.y >= mrgnT.x && gl_FragCoord.y <= mrgnT.y))\n" +
-					"            gl_FragColor = vec4(0.);\n" +
-					"    else if (texture2D(u_Texture0, pos).a != 0.) {\n" +
-					"        vec3 color = vec3(0.);\n" +
-					"        for (float i = st_ed.x; i < st_ed.y; i += 1.) {\n" +
-					"            vec2 point = vec2(pos.x, i / u_dimension.y);\n" +
-					"            color += texture2D(u_Texture0, point).rgb;\n" +
-					"        }\n" +
-					"        gl_FragColor = vec4(color / u_cellSize, 1.);\n" +
+					"        vec2 st_ed = vec2(n, n + 1.) * u_cellSize;\n" +
+					"        vec2 mrgnB = vec2(st_ed.x, st_ed.x + margin.x);\n" +
+					"        vec2 mrgnT = vec2(st_ed.y - margin.y, st_ed.y);\n" +
+					"\n" +
+					"        if ((gl_FragCoord.y >= mrgnB.x && gl_FragCoord.y <= mrgnB.y) ||\n" +
+					"            (gl_FragCoord.y >= mrgnT.x && gl_FragCoord.y <= mrgnT.y))\n" +
+					"                gl_FragColor = vec4(0.);\n" +
+					"        else if (texture2D(u_Texture0, pos).a != 0.) {\n" +
+					"            vec3 color = vec3(0.);\n" +
+					"            for (float i = st_ed.x; i < st_ed.y; i += 1.) {\n" +
+					"                vec2 point = vec2(pos.x, i / u_dimension.y);\n" +
+					"                color += texture2D(u_Texture0, point).rgb;\n" +
+					"            }\n" +
+					"            gl_FragColor = vec4(color / u_cellSize, 1.);\n" +
+					"        } else gl_FragColor = vec4(0.);\n" +
 					"    } else gl_FragColor = vec4(0.);\n" +
 					"}"
 	};
@@ -125,7 +131,7 @@ public class CellPaletter implements OPallRenderable {
 	private static final String u_margin = "u_margin";
 	private static final String u_dimension = "u_dimension";
 	private static final String u_numb = "u_numb";
-
+	private static final String u_activeDim = "u_activeDim";
 
 	public enum CellType {
 
@@ -138,12 +144,13 @@ public class CellPaletter implements OPallRenderable {
 		}
 	}
 
-
-
+	private final float[] active_reg = {0,0};
+	private boolean fistTime = true;
 	private float margin_pct = 0.1f;
 	private float width = 0;
 	private float height = 0;
 	private int numb = 4;
+	private int type = 0;
 
 	private FrameBuffer buffer;
 	private Texture texture;
@@ -154,12 +161,13 @@ public class CellPaletter implements OPallRenderable {
 		texture = new Texture(VERT_FILE, FRAG_FILE[type.type]);
 		create(w, h);
 		setScreenDim(w, h);
+		this.type = type.type;
 	}
 
 	
 	public void generate(Texture source, Camera2D camera2D) {
 
-		float cellSize = Math.max(width, height) / numb;
+		float cellSize = active_reg[type] / numb;
 		float margin = cellSize * margin_pct;
 
 		texture.set(source);
@@ -168,6 +176,7 @@ public class CellPaletter implements OPallRenderable {
 			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_cellSize), cellSize);
 			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_margin), margin);
 			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dimension), width, height);
+			GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_activeDim), active_reg[0], active_reg[1]);
 			GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_numb), numb);
 		}));
 	}
@@ -188,6 +197,7 @@ public class CellPaletter implements OPallRenderable {
 		buffer = OPallFBOCreator.FrameBuffer();
 		buffer.createFBO((int) w, (int) h, false);
 		texture.setScreenDim(w, h);
+		fistTime = true;
 		return this;
 	}
 
@@ -199,10 +209,16 @@ public class CellPaletter implements OPallRenderable {
 	}
 
 
+
 	@Override
 	public void setScreenDim(float w, float h) {
-		this.width = w;
-		this.height = h;
+		this.active_reg[0] = w;
+		this.active_reg[1] = h;
+		if (fistTime) {
+			this.width = w;
+			this.height = h;
+		}
+		fistTime = false;
 	}
 
 	@Override
