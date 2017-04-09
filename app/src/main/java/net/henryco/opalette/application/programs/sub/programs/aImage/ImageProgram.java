@@ -370,9 +370,9 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 					GLESUtils.clear();
 					disableStatusTexture.render(camera);
 				});
-				Texture texture = textureBuffer.getTexture();
-				ConvolveTexture.filterConvolutionFix(texture, () -> texture.render(camera));
 			});
+			Texture texture = textureBuffer.getTexture();
+			ConvolveTexture.filterConvolutionFix(texture, () -> texture.render(camera));
 		}
 
 
