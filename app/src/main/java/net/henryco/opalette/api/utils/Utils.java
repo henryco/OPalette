@@ -181,20 +181,25 @@ public class Utils {
 	}
 
 
-	public static File saveBitmapAction(Bitmap bitmap, String filename, Context activity) {
+
+	public static File saveBitmapAction(Bitmap bitmap, String filename, Context activity, Runnable ... runnables) {
 
 		String file_name = filename;
 		if (!file_name.endsWith(".png")) file_name+=".png";
 		File dest = new File(Environment.getExternalStorageDirectory().toString(), file_name);
+		boolean success;
 		try {
 			dest.createNewFile();
 			FileOutputStream fos = new FileOutputStream(dest);
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
 			fos.flush();
 			fos.close();
+			success = true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			success = false;
 		}
+		if (success) for (Runnable r: runnables) r.run();
 		return updGallery(dest, activity);
 	}
 
@@ -208,7 +213,7 @@ public class Utils {
 		return outputFile;
 	}
 
-	public static void shareBitmapAction(Bitmap bitmap, String filename, Context activity, boolean saveAfter) {
+	public static void shareBitmapAction(Bitmap bitmap, String filename, Context activity, boolean saveAfter, Runnable ... runnables) {
 
 		String file_name = filename;
 		if (!file_name.endsWith(".png")) file_name+=".png";
@@ -238,7 +243,7 @@ public class Utils {
 			shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
 			activity.startActivity(Intent.createChooser(shareIntent, "Share"));
 		}
-		if (saveAfter) saveBitmapAction(bitmap, filename, activity);
+		if (saveAfter) saveBitmapAction(bitmap, filename, activity, runnables);
 	}
 
 

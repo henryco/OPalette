@@ -193,6 +193,7 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -271,14 +272,7 @@ public class StartUpActivity extends AppCompatActivity
 	}
 
 
-	private int adsTimes = 0;
-	private void loadAds() {
-		boolean ads = getPreferences(MODE_PRIVATE).getBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true);
-		if (adsTimes++ > 0 && ads)
-			findViewById(R.id.adView).setVisibility(View.VISIBLE);
-		else findViewById(R.id.adView).setVisibility(View.GONE);
-		System.out.println(ads);
-	}
+
 
 
 
@@ -432,9 +426,21 @@ public class StartUpActivity extends AppCompatActivity
 	}
 
 
+	private int adsTimes = 0;
+	private void loadAds() {
+		boolean ads = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true);
+		if (adsTimes++ > 0 && ads) findViewById(R.id.adView).setVisibility(View.VISIBLE);
+		else findViewById(R.id.adView).setVisibility(View.GONE);
+		System.out.println("ADS stat["+adsTimes+"]: " + ads);
+	}
+
+
 	@Override
 	protected void onResume() {
 		super.onResume();
+		if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true))
+			findViewById(R.id.adView).setVisibility(View.GONE);
+		else if (adsTimes > 1) findViewById(R.id.adView).setVisibility(View.VISIBLE);
 		if (isClosed) {
 			new Handler().postDelayed(this::loadControlViews, RESUME_ACTIVITY_DELAY);
 			isClosed = false;

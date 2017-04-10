@@ -19,23 +19,24 @@
 package net.henryco.opalette.application;
 
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.utils.Utils;
+import net.henryco.opalette.application.conf.GodConfig;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -49,61 +50,20 @@ import net.henryco.opalette.R;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
-	/**
-	 * A preference value change listener that updates the preference's summary
-	 * to reflect its new value.
-	 */
-	private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
-		String stringValue = value.toString();
 
-		if (preference instanceof ListPreference) {
-			// For list preferences, look up the correct display value in
-			// the preference's 'entries' list.
-			ListPreference listPreference = (ListPreference) preference;
-			int index = listPreference.findIndexOfValue(stringValue);
-
-			// Set the summary to reflect the new value.
-			preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-
-		} else preference.setSummary(stringValue);
-		return true;
-	};
-
-	/**
-	 * Helper method to determine if the device has an extra-large screen. For
-	 * example, 10" tablets are extra-large.
-	 */
 	private static boolean isXLargeTablet(Context context) {
 		return (context.getResources().getConfiguration().screenLayout
 				& Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
 	}
 
-	/**
-	 * Binds a preference's summary to its value. More specifically, when the
-	 * preference's value is changed, its summary (line of text below the
-	 * preference title) is updated to reflect the value. The summary is also
-	 * immediately updated upon calling this method. The exact display format is
-	 * dependent on the type of preference.
-	 *
-	 * @see #sBindPreferenceSummaryToValueListener
-	 */
-	private static void bindPreferenceSummaryToValue(Preference preference) {
-		// Set the listener to watch for value changes.
-		preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-		// Trigger the listener immediately with the preference's
-		// current value.
-		sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-				PreferenceManager
-						.getDefaultSharedPreferences(preference.getContext())
-						.getString(preference.getKey(), ""));
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preference);
 		setupActionBar();
+		getFragmentManager()
+				.beginTransaction()
+				.replace(android.R.id.content, new GeneralPreferenceFragment())
+				.commit();
 	}
 
 	/**
@@ -144,17 +104,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 	}
 
 
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static class GeneralPreferenceFragment extends PreferenceFragment {
+
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preference);
 			setHasOptionsMenu(true);
+			PreferenceManager.setDefaultValues(getActivity(), R.xml.preference, false);
 
-			bindPreferenceSummaryToValue(findPreference("example_text"));
-			bindPreferenceSummaryToValue(findPreference("example_list"));
+			String VERSION = Utils.getSourceAssetsText(GodConfig.DEF_VERSION_FILE, getActivity());
+			findPreference(GodConfig.PREF_KEY_VERSION).setSummary(VERSION);
+			findPreference(GodConfig.PREF_KEY_ADS_ENABLE).setOnPreferenceChangeListener((preference, newValue) -> {
+				if (!(boolean) newValue)
+					new AlertDialog.Builder(getActivity())
+							.setTitle(R.string.dialog_are_u_sure)
+							.setMessage(R.string.dialog_disable_ads_info)
+							.setNegativeButton(R.string.dialog_keep_enabled, (dialog, which) -> {
+								getPreferenceManager().getSharedPreferences().edit().putBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true).apply();
+								((SwitchPreference)preference).setChecked(true);
+							}).setPositiveButton(R.string.dialog_disable_anyway, (dialog, which) -> {})
+					.create().show();
+				return true;
+			});
 		}
 
 		@Override

@@ -47,5 +47,6 @@ public class GodConfig {
 
 	public static final String PREF_KEY_SAVE_AFTER = "saveAfterShareSwitch";
 	public static final String PREF_KEY_ADS_ENABLE = "addsEnableSwitch";
+	public static final String PREF_KEY_VERSION = "pref_version";
 
 }

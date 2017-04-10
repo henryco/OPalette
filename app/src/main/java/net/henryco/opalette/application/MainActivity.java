@@ -194,6 +194,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.Menu;
@@ -251,7 +252,7 @@ public class MainActivity extends AppCompatActivity
 	@Override
 	public void setResultBitmap(Bitmap bitmap) {
 
-		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
 		ImageView imageView = new ImageView(this);
@@ -279,14 +280,16 @@ public class MainActivity extends AppCompatActivity
 						}
 					});
 				})
-				.negative(getResources().getString(R.string.share), () -> Utils.shareBitmapAction(bitmap, name, this, preferences.getBoolean(GodConfig.PREF_KEY_SAVE_AFTER, false)))
+				.negative(getResources().getString(R.string.share), () -> Utils.shareBitmapAction(
+						bitmap, name, this, preferences.getBoolean(GodConfig.PREF_KEY_SAVE_AFTER, false), () ->
+								createSaveSuccessNotification(this, name)))
 				.neutral(getResources().getString(R.string.cancel))
 		.show(getSupportFragmentManager(), "Bitmap preview");
 	}
 
 
 	private static int notifications = 1;
-	private static void createSaveSuccessNotification(AppCompatActivity context, String name) {
+	private static void createSaveSuccessNotification(Context context, String name) {
 
 		String title =context.getResources().getString(R.string.notification_save_success);
 		NotificationCompat.Builder b = new NotificationCompat.Builder(context);
@@ -311,6 +314,8 @@ public class MainActivity extends AppCompatActivity
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+		System.out.println("SAVE AFTER SHARE stat: "
+				+ PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GodConfig.PREF_KEY_SAVE_AFTER, false));
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -498,7 +503,7 @@ public class MainActivity extends AppCompatActivity
 
 	private void startBackDialog() {
 		new OPallAlertDialog()
-				.title(getResources().getString(R.string.dialog_exit_tittle))
+				.title(getResources().getString(R.string.dialog_are_u_sure))
 				.message(getResources().getString(R.string.dialog_exit_msg))
 				.negative(getResources().getString(R.string.dialog_exit_decline))
 				.positive(getResources().getString(R.string.dialog_exit_accept), this::closeActivity)

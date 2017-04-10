@@ -143,12 +143,11 @@ void main() {
     vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;
     vec2 uv_pos = (v_TexCoordinate.xy + vec2(1.)) * vec2(0.5) / u_dimension;
     if (color.a != 0.) {
-//        float b = dot(vec3(1.), color.rgb) * 0.3333;
         float b = lum(color.rgb);
-        if (u_type == 0) color.rgb *= vec3(dither2x2(gl_FragCoord.xy, b));
-        else if (u_type == 1) color.rgb *= vec3(dither4x4(gl_FragCoord.xy, b));
-        else if (u_type == 2) color.rgb *= vec3(dither8x8(gl_FragCoord.xy, b));
+        if (u_type == 0) color.rgb *= vec3(2. * dither2x2(gl_FragCoord.xy, b));
+        else if (u_type == 1) color.rgb *= vec3(2. * dither4x4(gl_FragCoord.xy, b));
+        else if (u_type == 2) color.rgb *= vec3(2. * dither8x8(gl_FragCoord.xy, b));
     }
-    gl_FragColor = vec4(min(vec3(1.), color.rgb * 2.), 1.);
+    gl_FragColor = vec4(min(vec3(1.), color.rgb), 1.);
 }
 

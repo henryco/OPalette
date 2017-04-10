@@ -85,21 +85,24 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 		final String disable = getStringFunc.apply(R.string.disable);
 		final String enable = getStringFunc.apply(R.string.enable);
 
-		boolean[] stat = {pixelatedTexture.isActive() && ditherTexture.isActive()};
+		boolean[] stat = {pixelatedTexture.isActive()};
 		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(pixelatedTexture.isActive() ? disable : enable), () -> {
 
-			if (!stat[0]) context.setTopControlButton(b -> b.setTitle(disable));
+			if (!stat[0]){
+				context.setTopControlButton(b -> b.setTitle(disable));
+				ditherTexture.setActive(true);
+			}
 			else {
 				context.setTopControlButton(b -> b.setTitle(enable));
 				pixelatedTexture.getFilterTexture().setPixelQuantum(defTexQuantum).setPixelsNumb(defTexPixels);
 				ditherTexture.getFilterTexture().setFilterType(defDitherType);
+				ditherTexture.setActive(false);
 				quantumBar.setProgress((int) defTexQuantum);
 				ditherBar.setProgress(defDitherType + 1);
 				pixBar.setProgress(0);
 			}
 			stat[0] = !stat[0];
 			pixelatedTexture.setActive(stat[0]);
-			ditherTexture.setActive(stat[0]);
 			quantumBar.setEnable(stat[0]);
 			ditherBar.setEnable(stat[0]);
 			pixBar.setEnable(stat[0]);
@@ -126,11 +129,12 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 		}));
 
 
-		ditherBar.setMax(3).setDiscrete(true).setEnable(ditherTexture.isActive());
+		ditherBar.setMax(3).setDiscrete(true).setEnable(pixelatedTexture.isActive());
 		ditherBar.onBarCreate(bar -> bar.setProgress(ditherTexture.getFilterTexture().getFilterType() + 1));
 		ditherBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {
 				ditherTexture.getFilterTexture().setFilterType(progress - 1);
+				ditherTexture.setActive(progress != 0);
 				updateFunc.run();
 			}
 		}));
