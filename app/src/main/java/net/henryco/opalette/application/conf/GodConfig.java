@@ -35,16 +35,17 @@ public class GodConfig {
 	public static final float GAMMA_MAX_RANGE = 5;
 
 	public static final String defBitmapName = "OPalette";
-	public static boolean SAVE_AFTER_SHARE = false;
 
 	public static String genDefaultImgFileName() {
 		return defBitmapName+"_"+ new SimpleDateFormat("yyyyMMddHHmmss")
 				.format(new Date(System.currentTimeMillis()));
 	}
 
+	public static final String DEF_VERSION_FILE = "VERSION";
+	public static final String DEF_ABOUT_FILE = "ABOUT.txt";
+
 
 	public static final String PREF_KEY_SAVE_AFTER = "saveAfterShareSwitch";
 	public static final String PREF_KEY_ADS_ENABLE = "addsEnableSwitch";
-
 
 }

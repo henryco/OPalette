@@ -201,6 +201,7 @@ import android.widget.ImageView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.Utils;
+import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.dialogs.PickImageDialog;
 
@@ -375,7 +376,12 @@ public class StartUpActivity extends AppCompatActivity
 
 
 			case R.id.startMenuAbout: {
-				//TODO
+				new OPallAlertDialog()
+						.title(getResources().getString(R.string.about))
+						.message(Utils.getSourceAssetsText(GodConfig.DEF_VERSION_FILE, this) +
+								"\n\n" + Utils.getSourceAssetsText(GodConfig.DEF_ABOUT_FILE, this)
+						).positive(getResources().getString(R.string.close))
+				.show(getSupportFragmentManager(), "About dialog");
 				return true;
 			}
 

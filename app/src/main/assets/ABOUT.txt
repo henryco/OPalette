@@ -1,0 +1,8 @@
+Application for simple image filtrating and creating color palette.
+Author: HenryCo (https://github.com/henryco)
+Implementation of ordered dithering algorithm by Hugh Kennedy (hughsk).
+
+Source code under license Apache-2.0
+https://github.com/henryco/OPalette
+
+You can contact with me via e-mail: hd2files@gmail.com
