@@ -184,17 +184,18 @@ package net.henryco.opalette.application.programs.sub.programs.aImage;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
+import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.RefreshableTimer;
+import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
-import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
-import net.henryco.opalette.application.injectables.InjectableSeekBar;
-import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -212,7 +213,7 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 	private final OPallSeekBarListener stop;
 	private final OPallRequester requester;
 	private RefreshableTimer timer;
-
+	private int actual;
 
 	public CanvasSizeControl(final float defScrW, final float defScrH, final OPallRequester requester) {
 		super(img_button_res, txt_button_res);
@@ -220,51 +221,130 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 		this.defScrH = defScrH;
 		this.requester = requester;
 
+		actual = 0;
+
 		this.stop = new OPallSeekBarListener().onStop(bar -> timer.startIfWaiting().refresh());
 	}
+
+
 
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		OPallSurfaceView surface = context.getRenderSurface();
-		InjectableSeekBar hBar = new InjectableSeekBar(view, "Canvas height").setMax((int) defScrH);
-		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
+		final int fcg = ContextCompat.getColor(context.getActivityContext(), TEXT_COLOR_BLACK_OVERLAY);
+		final int fcb = 0xFF000000;
 
-		this.timer = new RefreshableTimer(300, () -> {
-			requester.sendRequest(new Request(AppSubProtocol.set_filters_enable));
-			surface.update();
+		final float[][] props = {null, {1,1}, {3,2}, {4,3}, {5,4}, {7,5}, {16,9}, {5,7}, {4,5}, {3,4}, {2,3}};
+		final OPallConsumer<float[]> setDimFunc = wh -> {
+			int w = (int) Math.floor(wh[0] >= wh[1] ? defScrW : defScrW * (wh[0] / wh[1]));
+			int h = (int) Math.floor(wh[0] >= wh[1] ? defScrH * (wh[1] / wh[0]) : defScrH);
+			context.getRenderSurface().setSize(w, h).update();
+		};
+
+		OPallViewInjector.inject(context.getActivityContext(), new OPallViewInjector<AppMainProto>(view, R.layout.canvas_size) {
+			@Override
+			protected void onInject(AppMainProto context, View view) {
+
+				final Button[] buttons = {
+						(Button) view.findViewById(R.id.canvasButtonFree),
+						(Button) view.findViewById(R.id.canvasButton1_1),
+						(Button) view.findViewById(R.id.canvasButton3_2),
+						(Button) view.findViewById(R.id.canvasButton4_3),
+						(Button) view.findViewById(R.id.canvasButton5_4),
+						(Button) view.findViewById(R.id.canvasButton7_5),
+						(Button) view.findViewById(R.id.canvasButton16_9),
+						(Button) view.findViewById(R.id.canvasButton5_7),
+						(Button) view.findViewById(R.id.canvasButton4_5),
+						(Button) view.findViewById(R.id.canvasButton3_4),
+						(Button) view.findViewById(R.id.canvasButton2_3)
+				};
+				final TextView[] textViews = {
+						(TextView) view.findViewById(R.id.canvasTextFree),
+						(TextView) view.findViewById(R.id.canvasText1_1),
+						(TextView) view.findViewById(R.id.canvasText3_2),
+						(TextView) view.findViewById(R.id.canvasText4_3),
+						(TextView) view.findViewById(R.id.canvasText5_4),
+						(TextView) view.findViewById(R.id.canvasText7_5),
+						(TextView) view.findViewById(R.id.canvasText16_9),
+						(TextView) view.findViewById(R.id.canvasText5_7),
+						(TextView) view.findViewById(R.id.canvasText4_5),
+						(TextView) view.findViewById(R.id.canvasText3_4),
+						(TextView) view.findViewById(R.id.canvasText2_3),
+				};
+
+				textViews[actual].setTextColor(fcb);
+				buttons[0].setOnClickListener(v ->
+						OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
+							for (TextView t: textViews) t.setTextColor(fcg);
+							textViews[0].setTextColor(fcb);
+							actual = 0;
+							//TODO SEEK BAR DIALOG
+						}));
+				for (int i = 1; i < buttons.length; i++) {
+					final int k = i;
+					buttons[i].setOnClickListener(v ->
+							OPallAnimated.pressButton75_225(context.getActivityContext(), v, () -> {
+								actual = k;
+								setDimFunc.consume(props[k]);
+								textViews[0].setTextColor(fcg);
+								for (TextView t: textViews)
+									t.setTextColor(t == textViews[k] ? fcb : fcg);
+					}));
+				}
+			}
 		});
 
 
 
-		wBar.onBarCreate(bar -> bar.setProgress(surface.getWidth()));
-		wBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			if (fromUser) {
-				requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
-				surface.setSize((int) clamp(progress, defScrW, MIN_SIZE), surface.getHeight()).update();
-			}
-		}).onStop(stop));
-		OPallViewInjector.inject(context.getActivityContext(), wBar);
 
 
-		hBar.onBarCreate(bar -> bar.setProgress(surface.getHeight()));
-		hBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
-			if (fromUser) {
-				requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
-				surface.setSize(surface.getWidth(), (int) clamp(progress, defScrH, MIN_SIZE)).update();
-			}
-		}).onStop(stop));
-		OPallViewInjector.inject(context.getActivityContext(), hBar);
 
 
-		context.setTopControlButton(button
-				-> button.setTitle(R.string.control_top_bar_button_reset).setVisible(true).setEnabled(true), () -> {
 
-			wBar.setProgress((int) defScrW);
-			hBar.setProgress((int) defScrH);
-			surface.setSize((int) defScrW, (int) defScrH).update();
-		});
+
+
+
+
+
+//		OPallSurfaceView surface = context.getRenderSurface();
+//		InjectableSeekBar hBar = new InjectableSeekBar(view, "Canvas height").setMax((int) defScrH);
+//		InjectableSeekBar wBar = new InjectableSeekBar(view, "Canvas width").setMax((int) defScrW);
+//
+//		this.timer = new RefreshableTimer(300, () -> {
+//			requester.sendRequest(new Request(AppSubProtocol.set_filters_enable));
+//			surface.update();
+//		});
+//
+//
+//
+//		wBar.onBarCreate(bar -> bar.setProgress(surface.getWidth()));
+//		wBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+//			if (fromUser) {
+//				requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
+//				surface.setSize((int) clamp(progress, defScrW, MIN_SIZE), surface.getHeight()).update();
+//			}
+//		}).onStop(stop));
+//		OPallViewInjector.inject(context.getActivityContext(), wBar);
+//
+//
+//		hBar.onBarCreate(bar -> bar.setProgress(surface.getHeight()));
+//		hBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+//			if (fromUser) {
+//				requester.sendRequest(new Request(AppSubProtocol.set_filters_disable));
+//				surface.setSize(surface.getWidth(), (int) clamp(progress, defScrH, MIN_SIZE)).update();
+//			}
+//		}).onStop(stop));
+//		OPallViewInjector.inject(context.getActivityContext(), hBar);
+//
+//
+//		context.setTopControlButton(button
+//				-> button.setTitle(R.string.control_top_bar_button_reset).setVisible(true).setEnabled(true), () -> {
+//
+//			wBar.setProgress((int) defScrW);
+//			hBar.setProgress((int) defScrH);
+//			surface.setSize((int) defScrW, (int) defScrH).update();
+//		});
 	}
 
 

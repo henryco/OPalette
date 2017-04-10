@@ -49,7 +49,7 @@
     <string name="control_brightness">Brightness</string>
     <string name="control_contrast">Contrast</string>
     <string name="control_move">Move</string>
-    <string name="control_move_bar">Move bar</string>
+    <string name="control_move_bar">Transform bar</string>
     <string name="control_cells">Palette Cells</string>
     <string name="control_translate">Move &amp; Scale</string>
     <string name="control_add">Add</string>
