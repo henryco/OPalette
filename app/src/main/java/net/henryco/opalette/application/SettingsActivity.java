@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 	 */
 	private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
 		String stringValue = value.toString();
-
+		System.out.println("TWO");
 		if (preference instanceof ListPreference) {
 			// For list preferences, look up the correct display value in
 			// the preference's 'entries' list.
@@ -69,10 +69,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 		return true;
 	};
 
-	/**
-	 * Helper method to determine if the device has an extra-large screen. For
-	 * example, 10" tablets are extra-large.
-	 */
+
 	private static boolean isXLargeTablet(Context context) {
 		return (context.getResources().getConfiguration().screenLayout
 				& Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
@@ -91,12 +88,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 		// Set the listener to watch for value changes.
 		preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-		// Trigger the listener immediately with the preference's
-		// current value.
+		System.out.println("ONE");
+
+		// Trigger the listener immediately with the preference's current value.
 		sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-				PreferenceManager
-						.getDefaultSharedPreferences(preference.getContext())
-						.getString(preference.getKey(), ""));
+				PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
 	}
 
 	@Override
