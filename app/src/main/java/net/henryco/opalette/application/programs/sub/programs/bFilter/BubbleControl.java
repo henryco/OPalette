@@ -35,7 +35,7 @@ import net.henryco.opalette.application.proto.AppMainProto;
  * Created by HenryCo on 08/04/17.
  */
 
-public class BubbleControl  extends AppAutoSubControl<AppMainProto> {
+public class BubbleControl extends AppAutoSubControl<AppMainProto> {
 
 	private static final int img_button_res = R.drawable.ic_bubble_chart_white_24dp;
 	private static final int txt_button_res = R.string.control_bubble;

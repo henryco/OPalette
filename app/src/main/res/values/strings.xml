@@ -75,8 +75,8 @@
     <string name="control_pixelization">Pixelate</string>
     <string name="control_blur">Blur</string>
     <string name="control_bubble">Bubbles</string>
-
-
+    <string name="control_erosion">Erosion</string>
+    <string name="control_dilation">Dilation</string>
 
 
 
@@ -111,6 +111,8 @@
     <string name="set_canvas_size">Set canvas size</string>
     <string name="width">Width</string>
     <string name="height">Height</string>
+    <string name="effect_scale">Effect scale</string>
+    <string name="kernel_size">Kernel size</string>
 
     <string name="notification_save_success">OPalette image saved</string>
     <string name="saved_successfully">saved successfully.</string>

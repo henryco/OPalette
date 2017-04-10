@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
-import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.FilterMatrices;
 import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.TouchLines;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 

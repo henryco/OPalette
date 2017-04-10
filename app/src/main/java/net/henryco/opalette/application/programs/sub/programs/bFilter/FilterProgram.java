@@ -32,6 +32,7 @@ import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.Blu
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.BubbleTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.ConvolveTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.MinMaxTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.PixelatedTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
@@ -138,14 +139,21 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 		filterPreviewBuffer = OPallFBOCreator.FrameBuffer(FILTER_PREV_SIZE, FILTER_PREV_SIZE, false);
 
 
+		FilterPipeLiner<MinMaxTexture> dilation = new FilterPipeLiner<>(new MinMaxTexture(MinMaxTexture.TYPE_DILATION), width, height);
+		FilterPipeLiner<MinMaxTexture> erosion = new FilterPipeLiner<>(new MinMaxTexture(MinMaxTexture.TYPE_EROSION), width, height);
 		FilterPipeLiner<PixelatedTexture> pixelator = new FilterPipeLiner<>(new PixelatedTexture(), width, height);
 		FilterPipeLiner<BubbleTexture> bubble = new FilterPipeLiner<>(new BubbleTexture(), width, height);
 		FilterPipeLiner<BlurTexture> blur = new FilterPipeLiner<>(new BlurTexture(), width, height);
 
+		// FIFO QUEUE!!!
+		filterPipeLine.add(erosion);
+		filterPipeLine.add(dilation);
 		filterPipeLine.add(pixelator);
 		filterPipeLine.add(bubble);
 		filterPipeLine.add(blur);
 
+		OPallViewInjector.inject(context.getActivityContext(), new MinMaxControl(proxyRenderData, erosion));
+		OPallViewInjector.inject(context.getActivityContext(), new MinMaxControl(proxyRenderData, dilation));
 		OPallViewInjector.inject(context.getActivityContext(), new BubbleControl(proxyRenderData, bubble));
 		OPallViewInjector.inject(context.getActivityContext(), new PixelateControl(proxyRenderData, pixelator));
 		OPallViewInjector.inject(context.getActivityContext(), new BlurControl(proxyRenderData, blur));

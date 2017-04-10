@@ -16,7 +16,7 @@
  *
  */
 
-package net.henryco.opalette.api.glES.render.graphics.shaders.shapes;
+package net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend;
 
 /**
  * Created by HenryCo on 07/04/17.

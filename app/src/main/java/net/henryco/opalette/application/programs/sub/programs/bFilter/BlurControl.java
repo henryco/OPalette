@@ -31,8 +31,8 @@ import android.widget.TextView;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceView;
-import net.henryco.opalette.api.glES.render.graphics.shaders.shapes.FilterMatrices;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.BlurTexture;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.FilterMatrices;
 import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.dialogs.OPallOptionListDialog;
