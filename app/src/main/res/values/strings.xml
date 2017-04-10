@@ -77,6 +77,9 @@
     <string name="control_bubble">Bubbles</string>
 
 
+
+
+
     <string name="transition_power">Transition power</string>
     <string name="blur_type">Blur type</string>
     <string name="apply">Apply</string>
@@ -105,6 +108,9 @@
     <string name="cancel">Cancel</string>
     <string name="decline">Decline</string>
     <string name="save_as">Save As</string>
+    <string name="set_canvas_size">Set canvas size</string>
+    <string name="width">Width</string>
+    <string name="height">Height</string>
 
     <string name="notification_save_success">OPalette image saved</string>
     <string name="saved_successfully">saved successfully.</string>

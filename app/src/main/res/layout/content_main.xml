@@ -24,7 +24,7 @@
     android:id="@+id/mainLayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#181818"
+    android:background="@color/DarkGray"
     android:elevation="0dp"
     android:orientation="vertical"
     android:visibility="visible"

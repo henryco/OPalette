@@ -309,7 +309,7 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	public void render(@Nullable GL10 gl10, AppMainProto context, Camera2D camera, int w, int h) {
 
 		if (firstTime) { // lazy init
-			OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(w, h, feedBackListener));
+			OPallViewInjector.inject(context.getActivityContext(), new CanvasSizeControl(w, h));
 			OPallViewInjector.inject(context.getActivityContext(), new RotationControl(proxyRenderData));
 			OPallViewInjector.inject(context.getActivityContext(), new TranslationControl(proxyRenderData));
 			firstTime = false;

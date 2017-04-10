@@ -277,8 +277,7 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 				.setBarColor(default_bar_color)
 				.setBarListener(new OPallSeekBarListener())
 				.setTextValuerCorrector(Float::floatValue)
-				.setEnable(true);
-		lazyProgress = 0;
+				.setEnable(true).setProgress(0);
 	}
 
 
@@ -367,6 +366,11 @@ public class InjectableSeekBar extends OPallViewInjector<Activity> {
 		return (v + valueCorrection) / (max + valueCorrection);
 	}
 
+
+	public int getProgress() {
+		if (seekBar == null) return lazyProgress;
+		return seekBar.getProgress();
+	}
 
 	public InjectableSeekBar setEnable(boolean enable) {
 		this.enable = enable;

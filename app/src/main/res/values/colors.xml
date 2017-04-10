@@ -30,4 +30,5 @@
     <color name="disableColor">#616161</color>
     <color name="activeColor">#ffffffff</color>
     <color name="opall">#c0ad1457</color>
+    <color name="DarkGray">#181818</color>
 </resources>
