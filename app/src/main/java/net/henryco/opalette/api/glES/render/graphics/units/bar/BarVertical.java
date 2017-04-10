@@ -58,20 +58,22 @@ public class BarVertical implements OPallBar {
 
 
 	public void createBar(int scrWidth, int scrHeight, int width, GLESUtils.Color color) {
+
 		buffer.createFBO(width, scrHeight, scrWidth, scrHeight, false);
 		buffer.beginFBO(() -> GLESUtils.clear(color));
+
+		float endSize = (width - (width * cellWidth_pct)) * 0.5f;
+		endBuffer.createFBO((int) Math.ceil(endSize), scrHeight, scrWidth, scrHeight, false);
+		endBuffer.beginFBO(() -> GLESUtils.clear(color));
+
 		this.width = width;
 		this.height = scrHeight;
-		this.posX = scrWidth * xPos_pct;
+		this.posX = active_w * xPos_pct;
 		this.posY = 0;
 
 		scrW = scrWidth;
 		scrH = scrHeight;
 
-
-		float endSize = (width - (width * cellWidth_pct)) * 0.5f;
-		endBuffer.createFBO((int) Math.ceil(endSize), scrHeight, scrWidth, scrHeight, false);
-		endBuffer.beginFBO(() -> GLESUtils.clear(color));
 	}
 
 	@Override
@@ -96,7 +98,9 @@ public class BarVertical implements OPallBar {
 
 		camera.backTranslate(() -> {
 
-			buffer.render(camera.setPosX_absolute(-2 * xPos_pct));
+			posX = active_w * xPos_pct;
+			buffer.render(camera.setPosX(-posX));
+
 			float cellWidth = getWidth() * cellWidth_pct;
 			float cellPtc = getWidth() - cellWidth;
 			float margin = cellPtc * 0.5f;
@@ -104,8 +108,7 @@ public class BarVertical implements OPallBar {
 			camera.translateX((int)-margin + 0.5f * buffer_quantum);
 			drawBar(renderable, camera, (int) (cellWidth), buffer_quantum, cameraTranslationStep);
 
-			camera.setPosX_absolute(-2 * xPos_pct);
-			endBuffer.render(camera);
+			endBuffer.render(camera.setPosX(-posX));
 			camera.translateX(endBuffer.getWidth() - buffer.getWidth());
 			endBuffer.render(camera);
 		});

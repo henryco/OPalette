@@ -91,12 +91,12 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 
 		touchEventListener = new OPallSurfaceTouchListener(context.getActivityContext());
 		touchEventListener.setOnActionMove((dx, dy, event) -> {
-			final float x = (event.getX())/ DEF_W;
-			final float y = (event.getY() - palette.getHeight() + DEF_H)/ DEF_H;
+			final float x = (event.getX()) / palette.getWidth();
+			final float y = (event.getY() / palette.getHeight());
 			final int o = palette.getOrientation();
 			final float p;
-			if (o == OPalette.ORIENTATION_HORIZONTAL) p = Math.max(0f, y - palette.getSize_pct() * 0.5f);
-			else if (o == OPalette.ORIENTATION_VERTICAL) p = Math.max(0f, x - palette.getSize_pct() * 0.5f);
+			if (o == OPalette.ORIENTATION_HORIZONTAL) p = Math.max(0f, y - palette.getSize_pct() * 0.5f * (palette.getHeight() / DEF_H));
+			else if (o == OPalette.ORIENTATION_VERTICAL) p = Math.max(0f, x - palette.getSize_pct() * 0.5f* (palette.getWidth() / DEF_W));
 			else return;
 			palette.setRelativePosition(p);
 			moveBar.setProgress(moveBar.de_norm(p));
