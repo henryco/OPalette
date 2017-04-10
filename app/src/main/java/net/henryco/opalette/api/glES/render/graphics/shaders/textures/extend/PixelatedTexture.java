@@ -59,8 +59,8 @@ public class PixelatedTexture extends OPallTextureExtended {
 	private static final String u_dPix = "u_dPix";
 
 	private float pixelsNumb = 512f;
-	private float pixel_dx = 10f;
-	private float pixel_dy = 10f;
+	private float pixel_dx = 5f;
+	private float pixel_dy = 5f;
 
 
 	public PixelatedTexture(Filter filter) {

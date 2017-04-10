@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import net.henryco.opalette.R;
+import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.DitherTexture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.PixelatedTexture;
 import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
@@ -44,49 +45,63 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 
 	private final float defTexPixels;
 	private final float defTexQuantum;
+	private final int defDitherType;
 
 	private final AppSubProgram.ProxyRenderData proxyRenderData;
 	private final FilterPipeLiner<PixelatedTexture> pixelatedTexture;
+	private final FilterPipeLiner<DitherTexture> ditherTexture;
 
-	public PixelateControl(final AppSubProgram.ProxyRenderData proxyRenderData, final FilterPipeLiner<PixelatedTexture> pixelatedTexture) {
+	public PixelateControl(final AppSubProgram.ProxyRenderData proxyRenderData,
+						   final FilterPipeLiner<PixelatedTexture> pixelatedTexture,
+						   final FilterPipeLiner<DitherTexture> ditherTexture) {
+
 		super(img_button_res, txt_button_res);
 		this.proxyRenderData = proxyRenderData;
 		this.pixelatedTexture = pixelatedTexture;
+		this.ditherTexture = ditherTexture;
 		this.defTexPixels = pixelatedTexture.getFilterTexture().getPixelsNumb();
 		this.defTexQuantum = pixelatedTexture.getFilterTexture().getPixelQuantum();
+		this.defDitherType = ditherTexture.getFilterTexture().getFilterType();
 	}
 
 
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
+		final OPallFunction<String, Integer> getStringFunc = integer -> context.getActivityContext().getResources().getString(integer);
+		final OPallFunction<Float, Float> valFunc = f -> defTexPixels * (1f - (f / GodConfig.NORM_RANGE));
+		final OPallFunction<Integer, Float> prgFunc = f -> (int)((GodConfig.NORM_RANGE / defTexPixels) * (defTexPixels - f));
+
 		final Runnable updateFunc = () -> {
 			proxyRenderData.setStateUpdated();
 			context.getRenderSurface().update();
 		};
 
-		final OPallFunction<Float, Float> valFunc = f -> defTexPixels * (1f - (f / GodConfig.NORM_RANGE));
-		final OPallFunction<Integer, Float> prgFunc = f -> (int)((GodConfig.NORM_RANGE / defTexPixels) * (defTexPixels - f));
+		final int typeSmall = InjectableSeekBar.TYPE_SMALL;
+		final InjectableSeekBar pixBar = new InjectableSeekBar(view, typeSmall, "Pixels");
+		final InjectableSeekBar quantumBar = new InjectableSeekBar(view, typeSmall, "Pixel size").setMax(20);
+		final InjectableSeekBar ditherBar = new InjectableSeekBar(view, typeSmall, getStringFunc.apply(R.string.effect_scale_0_3));
 
-		final InjectableSeekBar pixBar = new InjectableSeekBar(view, "Pixels");
-		final InjectableSeekBar quantumBar = new InjectableSeekBar(view, "Pixel size");
+		final String disable = getStringFunc.apply(R.string.disable);
+		final String enable = getStringFunc.apply(R.string.enable);
 
-		final String disable = context.getActivityContext().getResources().getString(R.string.disable);
-		final String enable = context.getActivityContext().getResources().getString(R.string.enable);
-
-		boolean[] stat = {pixelatedTexture.isActive()};
+		boolean[] stat = {pixelatedTexture.isActive() && ditherTexture.isActive()};
 		context.setTopControlButton(button -> button.setEnabled(true).setVisible(true).setTitle(pixelatedTexture.isActive() ? disable : enable), () -> {
 
 			if (!stat[0]) context.setTopControlButton(b -> b.setTitle(disable));
 			else {
 				context.setTopControlButton(b -> b.setTitle(enable));
 				pixelatedTexture.getFilterTexture().setPixelQuantum(defTexQuantum).setPixelsNumb(defTexPixels);
+				ditherTexture.getFilterTexture().setFilterType(defDitherType);
 				quantumBar.setProgress((int) defTexQuantum);
+				ditherBar.setProgress(defDitherType + 1);
 				pixBar.setProgress(0);
 			}
 			stat[0] = !stat[0];
 			pixelatedTexture.setActive(stat[0]);
+			ditherTexture.setActive(stat[0]);
 			quantumBar.setEnable(stat[0]);
+			ditherBar.setEnable(stat[0]);
 			pixBar.setEnable(stat[0]);
 			updateFunc.run();
 		});
@@ -110,7 +125,17 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 			}
 		}));
 
-		OPallViewInjector.inject(context.getActivityContext(), quantumBar, pixBar);
+
+		ditherBar.setMax(3).setDiscrete(true).setEnable(ditherTexture.isActive());
+		ditherBar.onBarCreate(bar -> bar.setProgress(ditherTexture.getFilterTexture().getFilterType() + 1));
+		ditherBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+			if (fromUser) {
+				ditherTexture.getFilterTexture().setFilterType(progress - 1);
+				updateFunc.run();
+			}
+		}));
+
+		OPallViewInjector.inject(context.getActivityContext(), ditherBar, quantumBar, pixBar);
 
 	}
 }

@@ -72,7 +72,7 @@ public class MinMaxControl extends AppAutoSubControl<AppMainProto> {
 //		String enable = getStringFunc.apply(R.string.enable);
 //		String disable = getStringFunc.apply(R.string.disable);
 
-		context.setTopControlButton(b -> b.setEnabled(true).setVisible(true).setTitle(getStringFunc.apply(R.string.disable)), () -> {
+		context.setTopControlButton(b -> b.setEnabled(true).setVisible(true).setTitle(getStringFunc.apply(R.string.control_top_bar_button_reset)), () -> {
 			scaleBar.setProgress(scaleBar.de_norm(defEffectScale));
 			minMaxTexture.getFilterTexture().setEffectScale(defEffectScale);
 			minMaxTexture.setActive(false);

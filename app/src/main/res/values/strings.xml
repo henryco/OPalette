@@ -77,6 +77,10 @@
     <string name="control_bubble">Bubbles</string>
     <string name="control_erosion">Erosion</string>
     <string name="control_dilation">Dilation</string>
+    <string name="control_dither">Dither</string>
+
+
+
 
 
 
@@ -113,6 +117,7 @@
     <string name="height">Height</string>
     <string name="effect_scale">Effect scale</string>
     <string name="kernel_size">Kernel size</string>
+    <string name="effect_scale_0_3">Effect scale (from 0 to 3)</string>
 
     <string name="notification_save_success">OPalette image saved</string>
     <string name="saved_successfully">saved successfully.</string>

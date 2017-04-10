@@ -144,7 +144,7 @@ public class MinMaxTexture extends OPallTextureExtended {
 	protected void render(int program, Camera2D camera) {
 
 		float w = getWidth() == 0 ? getScreenWidth() : getWidth();
-		float h = getHeight() == 0 ? getScreenWidth() : getHeight();
+		float h = getHeight() == 0 ? getScreenHeight() : getHeight();
 
 		GLES20.glUniform1i(GLES20.glGetUniformLocation(program, u_type), type);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_kernel), kernelSize);
