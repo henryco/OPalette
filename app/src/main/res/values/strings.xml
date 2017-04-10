@@ -194,5 +194,16 @@
     <string name="click_to_start">Click to start.</string>
     <string name="click_to_start_image">Click to start image</string>
     <string name="splash_logo_image">Splash logo image</string>
+    <string name="custom">Custom</string>
+    <string name="_1_1">1 : 1</string>
+    <string name="_3_2">3 : 2</string>
+    <string name="_4_3">4 : 3</string>
+    <string name="_5_4">5 : 4</string>
+    <string name="_7_5">7 : 5</string>
+    <string name="_16_9">16 : 9</string>
+    <string name="_5_7">5 : 7</string>
+    <string name="_4_5">4 : 5</string>
+    <string name="_3_4">3 : 4</string>
+    <string name="_2_3">2 : 3</string>
 
 </resources>

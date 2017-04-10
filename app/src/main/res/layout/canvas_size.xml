@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~   /*
+  ~    * Copyright (C) Henryk Timur Domagalski
+  ~    *
+  ~    * Licensed under the Apache License, Version 2.0 (the "License");
+  ~    * you may not use this file except in compliance with the License.
+  ~    * You may obtain a copy of the License at
+  ~    *
+  ~    *      http://www.apache.org/licenses/LICENSE-2.0
+  ~    *
+  ~    * Unless required by applicable law or agreed to in writing, software
+  ~    * distributed under the License is distributed on an "AS IS" BASIS,
+  ~    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    * See the License for the specific language governing permissions and
+  ~    * limitations under the License.
+  ~    */
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/canvasTextInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:text="Canvas size"
+        android:textColor="@color/black_overlay"
+        android:textSize="12sp"
+        android:visibility="visible"/>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasTextFree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButtonFree"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/custom"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButtonFree"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_free_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:gravity="center"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText1_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton1_1"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_1_1"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton1_1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_din_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText3_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton3_2"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_3_2"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton3_2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_3_2_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText4_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton4_3"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_4_3"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton4_3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_4_3_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText5_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton5_4"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_5_4"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton5_4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_5_4_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText7_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton7_5"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_7_5"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton7_5"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_7_5_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText16_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton16_9"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_16_9"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton16_9"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_16_9_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText5_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton5_7"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_5_7"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton5_7"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_5_7_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText4_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton4_5"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_4_5"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton4_5"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_4_5_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText3_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton3_4"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_3_4"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton3_4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_3_4_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/canvasText2_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/canvasButton2_3"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/_2_3"
+                    android:textColor="@color/black_overlay"/>
+
+                <Button
+                    android:id="@+id/canvasButton2_3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_crop_2_3_black_24dp"
+                    android:gravity="center"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>
