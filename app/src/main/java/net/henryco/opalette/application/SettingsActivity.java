@@ -123,10 +123,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 								getPreferenceManager().getSharedPreferences().edit().putBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true).apply();
 								((SwitchPreference) preference).setChecked(true);
 							}).setPositiveButton(R.string.dialog_disable_anyway, (dialog, which) -> {
-								getPreferenceManager().getSharedPreferences().edit().putBoolean(GodConfig.PREF_KEY_ADS_ENABLE, false).apply();
-								((SwitchPreference) preference).setChecked(false);
-							}).create().show();
-				return (boolean) newValue;
+						getPreferenceManager().getSharedPreferences().edit().putBoolean(GodConfig.PREF_KEY_ADS_ENABLE, false).apply();
+						((SwitchPreference) preference).setChecked(false);
+					}).create().show();
+				return true;
 			});
 			findPreference(GodConfig.PREF_KEY_CONTACT).setOnPreferenceClickListener(preference -> {
 				Intent i = new Intent(Intent.ACTION_SEND);

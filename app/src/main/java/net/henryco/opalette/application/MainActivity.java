@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity
 		imageView.setImageBitmap(bitmap);
 		String name = GodConfig.genDefaultImgFileName();
 		new OPallAlertDialog()
-				.message("")
+				.title("")
 				.content(imageView)
 				.positive(getResources().getString(R.string.save), () -> {
 					View v = new LinearLayout(this);

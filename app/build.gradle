@@ -183,6 +183,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'opall'
+            keyPassword 'ffe6bd'
+            storeFile file('/home/keystores/android.jks')
+            storePassword 'ffe6bd'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -190,13 +198,14 @@ android {
         minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
-        versionName "1.1.0 release"
+        versionName '1.1.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions {
             enabled true
         }
-
         vectorDrawables.useSupportLibrary = true
+        signingConfig signingConfigs.config
+        versionNameSuffix 'release'
     }
     buildTypes {
         release {
@@ -208,10 +217,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -222,10 +233,8 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
     compile 'com.android.support:preference-v7:25.3.1'
     compile 'me.priyesh:chroma:1.0.2'
-
     compile 'com.google.android.gms:play-services-ads:10.2.1'
     compile 'com.google.android.gms:play-services-plus:10.2.1'
-
     compile 'com.google.firebase:firebase-crash:10.2.1'
     compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.google.firebase:firebase-ads:10.2.1'
@@ -233,8 +242,6 @@ dependencies {
     compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.google.firebase:firebase-auth:10.2.1'
     compile 'com.google.firebase:firebase-config:10.2.1'
-
-
     testCompile 'junit:junit:4.12'
 }
 
