@@ -21,6 +21,9 @@
     <string name="title_activity_gradient">GradientActivity</string>
     <string name="title_activity_proto">ProtoActivity</string>
 
+    <string name="banner_ad_unit_id">ca-app-pub-4990940783684568/6355131933</string>
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -44,7 +47,7 @@
     <string name="dialog_exit_accept">Leave anyway</string>
     <string name="dialog_exit_decline">Stay</string>
     <string name="dialog_disable_ads_info">
-        If you disable ads, then poor student from a third world country will lose his sole source of income. Seriously.
+        If you disable ads, then poor student from a third world country will lose his sole source of income.\nSeriously.
     </string>
     <string name="dialog_keep_enabled">Keep enabled</string>
     <string name="dialog_disable_anyway">Disable ads</string>

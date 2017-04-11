@@ -195,6 +195,7 @@ import net.henryco.opalette.api.glES.render.graphics.fbo.OPallFBOCreator;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.Texture;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
@@ -334,6 +335,8 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 			bundle.putString(FirebaseAnalytics.Param.CONTENT, infoFilter.getFilterAnalyticsData());
 			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, GodConfig.Analytics.TYPE_CUSTOM_COLOR_PREFS);
 			instance.getFireBase().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+			Utils.log(bundle.toString());
+			Utils.log(infoFilter.getFilterAnalyticsData());
 		}
 		return imageBuffer;
 	}

@@ -202,6 +202,9 @@ import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
@@ -219,6 +222,7 @@ public class StartUpActivity extends AppCompatActivity
 
 	public static final long SPLASH_LOADING_TIME = 1500;
 	public static final long RESUME_ACTIVITY_DELAY = 1000;
+
 	private StartUpActivity parentActivity;
 
 	public static final class BitmapPack {
@@ -278,7 +282,7 @@ public class StartUpActivity extends AppCompatActivity
 
 
 	private void initSplash() {
-		findViewById(R.id.adView).setVisibility(View.GONE);
+		findViewById(R.id.startUpAdViewBottom).setVisibility(View.GONE);
 		findViewById(R.id.imageButtonGall).setVisibility(View.GONE);
 		findViewById(R.id.textView).setVisibility(View.GONE);
 		findViewById(R.id.firstPickLayout).setVisibility(View.GONE);
@@ -312,7 +316,6 @@ public class StartUpActivity extends AppCompatActivity
 //			TODO ADD CAMERA SOURCE
 //			AppCompatDialogFragment pickImageDialog = new PickImageDialog();
 //			pickImageDialog.show(getSupportFragmentManager(), "pickImageDialog");
-
 			Utils.loadGalleryImageActivity(this);
 			new Handler().postDelayed(this::enableButtons, 150);
 		}, 175);
@@ -324,7 +327,6 @@ public class StartUpActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start_up_activiy);
-
 		parentActivity = this;
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
@@ -459,8 +461,13 @@ public class StartUpActivity extends AppCompatActivity
 	private int adsTimes = 0;
 	private void loadAds() {
 		boolean ads = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true);
-		if (adsTimes++ > 0 && ads) findViewById(R.id.adView).setVisibility(View.VISIBLE);
-		else findViewById(R.id.adView).setVisibility(View.GONE);
+		final AdView bottomAdView = (AdView) findViewById(R.id.startUpAdViewBottom);
+		bottomAdView.loadAd(new AdRequest.Builder().build());
+		if (adsTimes++ > 0 && ads) bottomAdView.setVisibility(View.VISIBLE);
+		else {
+			bottomAdView.destroy();
+			bottomAdView.setVisibility(View.GONE);
+		}
 		Utils.log("ADS stat["+adsTimes+"]: " + ads);
 	}
 
@@ -468,9 +475,15 @@ public class StartUpActivity extends AppCompatActivity
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true))
-			findViewById(R.id.adView).setVisibility(View.GONE);
-		else if (adsTimes > 1) findViewById(R.id.adView).setVisibility(View.VISIBLE);
+		final AdView addView = (AdView) findViewById(R.id.startUpAdViewBottom);
+		if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true)) {
+			addView.destroy();
+			addView.setVisibility(View.GONE);
+		} else if (adsTimes > 1) {
+			addView.loadAd(new AdRequest.Builder().build());
+			addView.setVisibility(View.VISIBLE);
+		}
+
 		if (isClosed) {
 			new Handler().postDelayed(this::loadControlViews, RESUME_ACTIVITY_DELAY);
 			isClosed = false;

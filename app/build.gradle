@@ -190,7 +190,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "1.1.0 release"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions {
             enabled true

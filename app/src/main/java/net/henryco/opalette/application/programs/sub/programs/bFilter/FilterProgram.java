@@ -77,7 +77,6 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	private List<FilterPipeLiner> filterPipeLine;
 
 	private boolean pipeLineStatus;
-	private boolean analyticsEnable;
 
 	private AppMainProto instance;
 
@@ -124,7 +123,6 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, GodConfig.Analytics.TYPE_COLOR_FILTER);
 			instance.getFireBase().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 		}
-
 		proxyRenderData.setStateUpdated();
 	}
 
