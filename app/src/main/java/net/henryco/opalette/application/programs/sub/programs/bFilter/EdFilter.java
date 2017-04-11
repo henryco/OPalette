@@ -236,6 +236,19 @@ public class EdFilter {
 		this.alpha = 1f;
 	}
 
+	public static final String NAME_ANONYMOUS = "ANONYMOUS";
+	public EdFilter(final float gammaCorrection, final float contrast,
+					final float hue, final float sat, final float lig,
+					final boolean bw_enable,
+					final GLESUtils.Color min,
+					final GLESUtils.Color max,
+					final GLESUtils.Color add) {
+		this(NAME_ANONYMOUS, -1, gammaCorrection, contrast, hue, sat, lig, bw_enable);
+		setMax(max.r, max.g, max.b);
+		setMin(min.r, min.g, min.b);
+		setAdd(add.r, add.g, add.b);
+	}
+
 
 	private EdFilter setAdd(final Vec add) {
 		return setAdd(add.r, add.g, add.b);
@@ -298,16 +311,41 @@ public class EdFilter {
 		return copy;
 	}
 
+	public int getID() {
+		return name.hashCode();
+	}
+
+
+	public String getFilterAnalyticsData() {
+		return "EdFilter{" +
+				"add=" + add +
+				", min=" + min +
+				", max=" + max +
+				", bw_enable=" + bw_enable +
+				", contrast=" + contrast +
+				", gammaCorrection=" + gammaCorrection +
+				", lightness=" + lightness +
+				", saturation=" + saturation +
+				", hue=" + hue +
+				", alpha=" + alpha +
+				'}';
+	}
+
 	@Override
 	public String toString() {
 		return "EdFilter{" +
 				"name='" + name + '\'' +
+				", color=" + color +
 				", add=" + add +
 				", min=" + min +
 				", max=" + max +
 				", bw_enable=" + bw_enable +
 				", contrast=" + contrast +
 				", gammaCorrection=" + gammaCorrection +
+				", lightness=" + lightness +
+				", saturation=" + saturation +
+				", hue=" + hue +
+				", alpha=" + alpha +
 				'}';
 	}
 }

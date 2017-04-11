@@ -19,9 +19,12 @@
 package net.henryco.opalette.application.programs.sub.programs.bFilter;
 
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
@@ -55,7 +58,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtocol, FilterControl.EdFilterHolder {
 
-
 	private long id = methods.genID(FilterProgram.class);
 	private ProxyRenderData<Texture> proxyRenderData = new ProxyRenderData<>();
 
@@ -75,7 +77,9 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	private List<FilterPipeLiner> filterPipeLine;
 
 	private boolean pipeLineStatus;
+	private boolean analyticsEnable;
 
+	private AppMainProto instance;
 
 	private static final int FILTER_PREV_SIZE = GodConfig.DEFAULT_FILTER_PREVIEW_ICON_SIZE;
 
@@ -112,6 +116,15 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	public void setFilter(EdFilter filter, TextView textView) {
 		this.actualTextView = textView;
 		this.actualFilter = filter;
+
+		if (instance.getFireBase() != null) {
+			Bundle bundle = new Bundle();
+			bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, filter.getID());
+			bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, filter.name);
+			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, GodConfig.Analytics.TYPE_COLOR_FILTER);
+			instance.getFireBase().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+		}
+
 		proxyRenderData.setStateUpdated();
 	}
 
@@ -129,6 +142,8 @@ public class FilterProgram implements AppSubProgram<AppMainProto>, AppSubProtoco
 	// TODO: 05/04/17 ADD FILTERS PIPE-LINE
 	@Override // TODO: 05/04/17 ADD GAUSSIAN BLUR
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
+
+		instance = context;
 
 		firstTime = true;
 		pipeLineStatus = true;

@@ -182,6 +182,7 @@
 
 package net.henryco.opalette.application.programs.sub.programs.aImage;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -190,12 +191,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -205,6 +209,7 @@ import net.henryco.opalette.application.proto.AppMainProto;
  */
 
 public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
+
 
 	private static final int img_button_res = R.drawable.ic_aspect_ratio_white_24dp;
 	private static final int txt_button_res = R.string.control_canvas_size;
@@ -321,4 +326,14 @@ public class CanvasSizeControl extends AppAutoSubControl<AppMainProto> {
 	}
 
 
+	@Override
+	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
+
+		if (context.getFireBase() != null) {
+			Bundle bundle = new Bundle();
+			bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, actual);
+			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, GodConfig.Analytics.TYPE_CANVAS_DIMENSION);
+			context.getFireBase().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+		}
+	}
 }

@@ -49,4 +49,16 @@ public class GodConfig {
 	public static final String PREF_KEY_ADS_ENABLE = "addsEnableSwitch";
 	public static final String PREF_KEY_VERSION = "pref_version";
 	public static final String PREF_KEY_CONTACT = "pref_contact";
+	public static final String PREF_KEY_ANALYTICS_ENABLE = "sendAnalytics";
+
+
+	public static final class Analytics {
+
+		public static final String TYPE_COLOR_FILTER = "color_filter";
+		public static final String TYPE_CANVAS_DIMENSION = "canvas_dim";
+		public static final String TYPE_PALETTE_BAR_ORIENTATION = "palette_bar_orientation";
+		public static final String TYPE_CUSTOM_COLOR_PREFS = "color_filter_custom_prefs";
+		public static final String TYPE_SCREEN_SIZE = "screen_size";
+
+	}
 }

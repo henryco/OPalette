@@ -25,6 +25,12 @@
         android:title="@string/pref_adds_title"/>
 
     <SwitchPreference
+        android:defaultValue="true"
+        android:key="sendAnalytics"
+        android:title="@string/pref_send_analytics"
+        android:summary="@string/pref_analytics_info"/>
+
+    <SwitchPreference
         android:defaultValue="false"
         android:key="saveAfterShareSwitch"
         android:title="@string/pref_save_after_share_title"/>

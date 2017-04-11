@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
+import net.henryco.opalette.api.utils.Utils;
 
 /**
  * Created by HenryCo on 06/04/17.
@@ -117,7 +118,7 @@ public class PixelatedTexture extends OPallTextureExtended {
 
 	@Override
 	protected void render(int program, Camera2D camera) {
-		System.out.println(pixelsNumb);
+		Utils.log("pxNumb: "+pixelsNumb);
 		GLES20.glUniform1f(GLES20.glGetUniformLocation(program, u_pixelsNumb), pixelsNumb);
 		GLES20.glUniform2f(GLES20.glGetUniformLocation(program, u_dPix), pixel_dx, pixel_dy);
 	}

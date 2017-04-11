@@ -1,0 +1,50 @@
+{
+  "project_info": {
+    "project_number": "414586897860",
+    "firebase_url": "https://opalette-c06fe.firebaseio.com",
+    "project_id": "opalette-c06fe",
+    "storage_bucket": "opalette-c06fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414586897860:android:7e6967569db4a031",
+        "android_client_info": {
+          "package_name": "net.henryco.opalette"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414586897860-bult13upa1dfii4ffbn4o7881b52lqgc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.henryco.opalette",
+            "certificate_hash": "bf82ff626c83a4f546ff35fca7b12d2fbda499df"
+          }
+        },
+        {
+          "client_id": "414586897860-8u5ain1983a0m4greqq9ob2qrdt7asqb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5O2MarXAtuzdIuvxEIw64oc4QyMMiXps"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

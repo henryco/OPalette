@@ -184,7 +184,10 @@ package net.henryco.opalette.application.proto;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.view.MenuItem;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.henryco.opalette.api.glES.glSurface.view.OPallSurfaceActivity;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
@@ -199,4 +202,6 @@ public interface AppMainProto extends OPallSurfaceActivity {
 	void switchToScrollOptionsView();
 	void setTopControlButton(OPallConsumer<MenuItem> buttonConsumer, Runnable ... action);
 	void setResultBitmap(Bitmap bitmap);
+
+	@Nullable FirebaseAnalytics getFireBase();
 }

@@ -232,7 +232,6 @@ public class StartUpActivity extends AppCompatActivity
 		}
 	}
 
-
 	private void disableButtons() {
 		findViewById(R.id.imageButtonGall).setOnClickListener(v -> {});
 		findViewById(R.id.textView).setOnClickListener(v -> {});
@@ -325,6 +324,7 @@ public class StartUpActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start_up_activiy);
+
 		parentActivity = this;
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
@@ -461,7 +461,7 @@ public class StartUpActivity extends AppCompatActivity
 		boolean ads = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true);
 		if (adsTimes++ > 0 && ads) findViewById(R.id.adView).setVisibility(View.VISIBLE);
 		else findViewById(R.id.adView).setVisibility(View.GONE);
-		System.out.println("ADS stat["+adsTimes+"]: " + ads);
+		Utils.log("ADS stat["+adsTimes+"]: " + ads);
 	}
 
 

@@ -182,8 +182,11 @@
 
 package net.henryco.opalette.application.programs.sub.programs.color;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
@@ -195,8 +198,10 @@ import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
+import net.henryco.opalette.application.programs.sub.programs.bFilter.EdFilter;
 import net.henryco.opalette.application.proto.AppMainProto;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -216,6 +221,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 
 	private OPallRequester feedBackListener;
 	private AppSubProgramHolder holder;
+	private AppMainProto instance;
 
 
 	private boolean pipeLineStatus;
@@ -249,6 +255,7 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 
+		instance = context;
 		firstTime = true;
 		pipeLineStatus = true;
 
@@ -305,8 +312,29 @@ public class ColorProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 		return imageBuffer.getTexture();
 	}
 
+
 	@Nullable @Override
 	public OPallRenderable getFinalRenderData() {
+
+		if (instance.getFireBase() != null) {
+
+			EdFilter infoFilter = new EdFilter(
+					imageTexture.getGammaCorrection(),
+					imageTexture.getContrast(),
+					imageTexture.getHue(),
+					imageTexture.getSaturation(),
+					imageTexture.getLightness(),
+					imageTexture.isBwEnable(),
+					imageTexture.min,
+					imageTexture.max,
+					imageTexture.add
+			);
+
+			Bundle bundle = new Bundle();
+			bundle.putString(FirebaseAnalytics.Param.CONTENT, infoFilter.getFilterAnalyticsData());
+			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, GodConfig.Analytics.TYPE_CUSTOM_COLOR_PREFS);
+			instance.getFireBase().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+		}
 		return imageBuffer;
 	}
 }

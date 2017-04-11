@@ -182,8 +182,11 @@
 
 package net.henryco.opalette.application.programs.sub.programs.aImage;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.henryco.opalette.api.glES.camera.Camera2D;
 import net.henryco.opalette.api.glES.render.OPallRenderable;
@@ -197,6 +200,7 @@ import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.requester.OPallRequester;
 import net.henryco.opalette.api.utils.requester.Request;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.programs.sub.AppSubProgram;
 import net.henryco.opalette.application.programs.sub.AppSubProtocol;
 import net.henryco.opalette.application.proto.AppMainProto;
@@ -222,7 +226,6 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	private AppSubProgramHolder holder;
 
 	private final float[] defDim = {0,0};
-
 
 	private boolean pipeLineStatus;
 	private boolean pipeLineUpDated;
@@ -259,11 +262,17 @@ public class ImageProgram implements AppSubProgram<AppMainProto>, AppSubProtocol
 	}
 
 
-
 	@Override
 	public void create(@Nullable GL10 gl, int width, int height, AppMainProto context) {
 
 		if (feedBackListener == null) throw new RuntimeException("FeedBackListener(OPallRequester) == NULL!");
+
+		if (context.getFireBase() != null) {
+			Bundle bundle = new Bundle();
+			bundle.putIntArray(FirebaseAnalytics.Param.CONTENT, new int[]{width, height});
+			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, GodConfig.Analytics.TYPE_SCREEN_SIZE);
+			context.getFireBase().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+		}
 
 		pipeLineUpDated = true;
 		pipeLineStatus = true;

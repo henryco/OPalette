@@ -29,6 +29,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import java.io.File;
@@ -106,6 +107,10 @@ public class Utils {
 		return (T) arr;
 	}
 
+	public static String log(String log) {
+		Log.i("info", log);
+		return log;
+	}
 
 	public static String getLineFromString(String line, int n) {
 		String returnString = "";

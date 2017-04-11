@@ -23,6 +23,7 @@ import android.opengl.GLES20;
 
 import net.henryco.opalette.api.glES.render.OPallRenderable;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.OPallTexture;
+import net.henryco.opalette.api.utils.Utils;
 
 import java.nio.IntBuffer;
 
@@ -122,7 +123,7 @@ public interface OPallFBO extends OPallRenderable {
 			String msg = fboName+"OK";
 			if (status != GLES20.GL_FRAMEBUFFER_COMPLETE)
 				msg = fboName+status+"\n"+GLES20.glGetError();
-			if (out) System.out.println(msg);
+			if (out) Utils.log(msg);
 			return msg;
 		}
 		public static String finishAndCheckStat(boolean out) {

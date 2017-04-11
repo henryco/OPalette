@@ -44,7 +44,7 @@
     <string name="dialog_exit_accept">Leave anyway</string>
     <string name="dialog_exit_decline">Stay</string>
     <string name="dialog_disable_ads_info">
-        If you disable ads, then poor student from a third world country will lose his sole source of income.
+        If you disable ads, then poor student from a third world country will lose his sole source of income. Seriously.
     </string>
     <string name="dialog_keep_enabled">Keep enabled</string>
     <string name="dialog_disable_anyway">Disable ads</string>
@@ -139,8 +139,9 @@
     <string name="pref_save_after_share_title">Save image after sharing</string>
     <string name="pref_send_mail">Send feedback, report a bug or just contact.</string>
     <string name="pref_no_email_installed">"There are no email clients installed."</string>
-
-
+    <string name="pref_send_analytics">Send anonymous analytics data</string>
+    <string name="pref_analytics_info">This is depersonalized data
+        \nlike filters preferences helps \nimprove filters quality.</string>
 
     <!-- Strings related to Settings -->
 

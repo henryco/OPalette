@@ -23,6 +23,7 @@ package net.henryco.opalette.api.glES.camera;
  * Created by root on 13/02/17.
  */
 
+import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 
 /**
@@ -64,11 +65,11 @@ public class Camera2D {
     public Camera2D set(int width, int height){
 		this.width = width;
 		this.height = height;
-		System.out.println(width + " : " + height);
+		Utils.log(width + " : " + height);
 		pxFacX = 1 / (width * 0.5f);
 		pxFacY = 1 / (height * 0.5f);
-		System.out.println(pxFacX + " :: " + pxFacY);
-        return this;
+		Utils.log(pxFacX + " :: " + pxFacY);
+		return this;
     }
 
 

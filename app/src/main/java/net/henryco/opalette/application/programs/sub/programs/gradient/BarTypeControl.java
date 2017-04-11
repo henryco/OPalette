@@ -18,6 +18,7 @@
 
 package net.henryco.opalette.application.programs.sub.programs.gradient;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -25,11 +26,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.OPallAnimated;
 import net.henryco.opalette.api.utils.lambda.consumers.OPallConsumer;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.application.conf.GodConfig;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -49,8 +53,6 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 		super(target_layer, img_button_res, txt_button_res);
 		this.palette = palette;
 	}
-
-
 
 
 	@Override
@@ -137,4 +139,15 @@ public class BarTypeControl extends AppAutoSubControl<AppMainProto> {
 		OPallViewInjector.inject(context.getActivityContext(), controls);
 	}
 
+
+	@Override
+	public void onFragmentDestroyed(Fragment fragment, AppMainProto context) {
+
+		if (context.getFireBase() != null) {
+			Bundle bundle = new Bundle();
+			bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, palette.getOrientation());
+			bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, GodConfig.Analytics.TYPE_PALETTE_BAR_ORIENTATION);
+			context.getFireBase().logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+		}
+	}
 }

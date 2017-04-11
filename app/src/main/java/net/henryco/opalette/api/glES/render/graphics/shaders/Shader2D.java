@@ -122,7 +122,7 @@ public abstract class Shader2D implements OPallShader {
 
 
     public void outErrorLog() {
-		System.out.println("GLSL SHADER: "+getErrorLog());
+		Utils.log("GLSL SHADER: "+getErrorLog());
     }
 	public String getErrorLog() {
 		return GLES20.glGetShaderInfoLog(program);

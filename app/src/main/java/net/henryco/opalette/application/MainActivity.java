@@ -191,6 +191,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -204,6 +205,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.glSurface.renderers.universal.OPallUniRenderer;
@@ -227,6 +230,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
 		implements AppMainProto, ProgramPipeLine.AppProgramProtocol {
 
+	private FirebaseAnalytics firebaseAnalytics;
 
 	private final RequestSender stateRequester = new RequestSender();
 
@@ -248,6 +252,11 @@ public class MainActivity extends AppCompatActivity
 	private final int topOptButtonId = 7321;
 	private final Runnable topBarButtonDefaultAction = () -> stateRequester.sendRequest(new Request(get_bitmap_from_program));
 
+
+	@Nullable @Override
+	public FirebaseAnalytics getFireBase() {
+		return firebaseAnalytics;
+	}
 
 	@Override
 	public void setResultBitmap(Bitmap bitmap) {
@@ -291,7 +300,7 @@ public class MainActivity extends AppCompatActivity
 	private static int notifications = 1;
 	private static void createSaveSuccessNotification(Context context, String name) {
 
-		String title =context.getResources().getString(R.string.notification_save_success);
+		String title = context.getResources().getString(R.string.notification_save_success);
 		NotificationCompat.Builder b = new NotificationCompat.Builder(context);
 		b.setAutoCancel(true)
 				.setVibrate(new long[]{0})
@@ -314,8 +323,13 @@ public class MainActivity extends AppCompatActivity
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		System.out.println("SAVE AFTER SHARE stat: "
-				+ PreferenceManager.getDefaultSharedPreferences(this).getBoolean(GodConfig.PREF_KEY_SAVE_AFTER, false));
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		if (preferences.getBoolean(GodConfig.PREF_KEY_ANALYTICS_ENABLE, false)) {
+			Utils.log("ANALYTICS ENABLE");
+			firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+		} else firebaseAnalytics = null;
+
+		Utils.log("SAVE AFTER SHARE stat: "+preferences.getBoolean(GodConfig.PREF_KEY_SAVE_AFTER, false));
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
