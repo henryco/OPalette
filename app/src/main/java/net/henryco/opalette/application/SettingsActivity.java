@@ -66,9 +66,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 				.commit();
 	}
 
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
+
 	private void setupActionBar() {
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
@@ -88,9 +86,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public boolean onIsMultiPane() {
 		return isXLargeTablet(this);
