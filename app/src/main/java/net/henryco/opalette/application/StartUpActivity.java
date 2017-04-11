@@ -183,6 +183,7 @@
 package net.henryco.opalette.application;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -198,6 +199,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 
 import net.henryco.opalette.R;
@@ -217,7 +219,7 @@ public class StartUpActivity extends AppCompatActivity
 
 	public static final long SPLASH_LOADING_TIME = 1500;
 	public static final long RESUME_ACTIVITY_DELAY = 1000;
-
+	private StartUpActivity parentActivity;
 
 	public static final class BitmapPack {
 		private static Bitmap pushUpBitmap = null;
@@ -323,7 +325,7 @@ public class StartUpActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start_up_activiy);
-
+		parentActivity = this;
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.DARK)));
@@ -344,17 +346,42 @@ public class StartUpActivity extends AppCompatActivity
 		return true;
 	}
 
+
+	private static final String[] DISCARD_IMG_TYPES = {"gif", ".gif", "GIF", ".GIF"};
+	private static final long DEFAULT_ERR_DIALOG_SHOW_DELAY_MS = 300;
+	private static boolean checkImgType(String type) {
+		for (String t: DISCARD_IMG_TYPES) if (t.equalsIgnoreCase(type)) return false;
+		return true;
+	}
+
+
+	private final Runnable wrongTypeDialog = () -> new Handler().postDelayed(() -> {
+		try {
+			parentActivity.runOnUiThread(() -> new OPallAlertDialog()
+					.title(getResources().getString(R.string.dialog_oops))
+					.message(getResources().getString(R.string.dialog_wrong_img_type))
+					.positive(getResources().getString(R.string.ok))
+					.show(getSupportFragmentManager(), "wrong img type dialog"));
+		} catch (Exception ignored) {}
+	}, DEFAULT_ERR_DIALOG_SHOW_DELAY_MS);
+
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
 				Intent intent = new Intent(this, MainActivity.class);
 				BitmapPack.pushUpBitmap = Utils.loadIntentBitmap(this, data);
-				System.out.println("TYPE: "+data.getType());
 
-				closeAction();
-				startActivity(intent);
-				close();
+				ContentResolver cR = getContentResolver();
+				MimeTypeMap mime = MimeTypeMap.getSingleton();
+				if (!checkImgType(mime.getExtensionFromMimeType(cR.getType(data.getData()))))
+					wrongTypeDialog.run();
+				else {
+					closeAction();
+					startActivity(intent);
+					close();
+				}
 			}
 		}
 	}
@@ -375,7 +402,8 @@ public class StartUpActivity extends AppCompatActivity
 				new OPallAlertDialog()
 						.title(getResources().getString(R.string.about))
 						.message(Utils.getSourceAssetsText(GodConfig.DEF_VERSION_FILE, this) +
-								"\n\n" + Utils.getSourceAssetsText(GodConfig.DEF_ABOUT_FILE, this)
+								"\n\n" + Utils.getSourceAssetsText(GodConfig.DEF_ABOUT_FILE, this) +
+								"\n" + Utils.getSourceAssetsText(GodConfig.DEF_MAILTO_FILE, this)
 						).positive(getResources().getString(R.string.close))
 				.show(getSupportFragmentManager(), "About dialog");
 				return true;

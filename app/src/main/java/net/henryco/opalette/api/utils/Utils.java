@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -105,6 +106,18 @@ public class Utils {
 		return (T) arr;
 	}
 
+
+	public static String getLineFromString(String line, int n) {
+		String returnString = "";
+		Scanner scanner = new Scanner(line);
+		int i = 0;
+		while (scanner.hasNextLine()) {
+			returnString = scanner.nextLine();
+			if (i++ == n) break;
+		}
+		scanner.close();
+		return returnString;
+	}
 
     public static String getSourceAssetsText(String file, Context context) {
         try {

@@ -33,6 +33,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.utils.Utils;
@@ -111,6 +112,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 			PreferenceManager.setDefaultValues(getActivity(), R.xml.preference, false);
 
 			String VERSION = Utils.getSourceAssetsText(GodConfig.DEF_VERSION_FILE, getActivity());
+			String MAILTO = Utils.getLineFromString(Utils.getSourceAssetsText(GodConfig.DEF_MAILTO_FILE, getActivity()), 0);
 			findPreference(GodConfig.PREF_KEY_VERSION).setSummary(VERSION);
 			findPreference(GodConfig.PREF_KEY_ADS_ENABLE).setOnPreferenceChangeListener((preference, newValue) -> {
 				if (!(boolean) newValue)
@@ -125,6 +127,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 								((SwitchPreference) preference).setChecked(false);
 							}).create().show();
 				return (boolean) newValue;
+			});
+			findPreference(GodConfig.PREF_KEY_CONTACT).setOnPreferenceClickListener(preference -> {
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("message/rfc822");
+				i.putExtra(Intent.EXTRA_EMAIL  , new String[]{MAILTO});
+				i.putExtra(Intent.EXTRA_SUBJECT, "");
+				i.putExtra(Intent.EXTRA_TEXT   , "");
+				try {
+					startActivity(Intent.createChooser(i, "Send mail..."));
+				} catch (android.content.ActivityNotFoundException ex) {
+					Toast.makeText(getActivity(), R.string.pref_no_email_installed, Toast.LENGTH_SHORT).show();
+				}
+				return true;
 			});
 		}
 

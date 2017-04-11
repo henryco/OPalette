@@ -30,9 +30,16 @@
         android:title="@string/pref_save_after_share_title"/>
 
     <Preference
+        android:key="pref_contact"
+        android:selectable="true"
+        android:title="Contact"
+        android:summary="@string/pref_send_mail"/>
+
+    <Preference
         android:key="pref_version"
         android:selectable="false"
         android:title="Version"
         android:summary=""/>
+
 
 </PreferenceScreen>

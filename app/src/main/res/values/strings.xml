@@ -49,6 +49,9 @@
     <string name="dialog_keep_enabled">Keep enabled</string>
     <string name="dialog_disable_anyway">Disable ads</string>
     <string name="dialog_understand">I understand</string>
+    <string name="dialog_oops">Oooops, something goes wrong</string>
+    <string name="dialog_wrong_img_type">Application does not support animated image files.</string>
+    <string name="ok">OK</string>
 
 
     <string name="control_top_bar_button_reset">Reset</string>
@@ -134,8 +137,8 @@
     <string name="pref_adds_title">Enable ads</string>
     <string name="pref_adds_info">Remember, developers wants to eat too.</string>
     <string name="pref_save_after_share_title">Save image after sharing</string>
-
-
+    <string name="pref_send_mail">Send feedback, report a bug or just contact.</string>
+    <string name="pref_no_email_installed">"There are no email clients installed."</string>
 
 
 

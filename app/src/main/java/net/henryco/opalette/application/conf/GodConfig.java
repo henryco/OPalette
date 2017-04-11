@@ -43,10 +43,10 @@ public class GodConfig {
 
 	public static final String DEF_VERSION_FILE = "VERSION";
 	public static final String DEF_ABOUT_FILE = "ABOUT.txt";
-
+	public static final String DEF_MAILTO_FILE = "MAILTO";
 
 	public static final String PREF_KEY_SAVE_AFTER = "saveAfterShareSwitch";
 	public static final String PREF_KEY_ADS_ENABLE = "addsEnableSwitch";
 	public static final String PREF_KEY_VERSION = "pref_version";
-
+	public static final String PREF_KEY_CONTACT = "pref_contact";
 }
