@@ -79,6 +79,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 		}
 	}
 
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		int id = item.getItemId();
@@ -118,10 +119,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 							.setMessage(R.string.dialog_disable_ads_info)
 							.setNegativeButton(R.string.dialog_keep_enabled, (dialog, which) -> {
 								getPreferenceManager().getSharedPreferences().edit().putBoolean(GodConfig.PREF_KEY_ADS_ENABLE, true).apply();
-								((SwitchPreference)preference).setChecked(true);
-							}).setPositiveButton(R.string.dialog_disable_anyway, (dialog, which) -> {})
-					.create().show();
-				return true;
+								((SwitchPreference) preference).setChecked(true);
+							}).setPositiveButton(R.string.dialog_disable_anyway, (dialog, which) -> {
+								getPreferenceManager().getSharedPreferences().edit().putBoolean(GodConfig.PREF_KEY_ADS_ENABLE, false).apply();
+								((SwitchPreference) preference).setChecked(false);
+							}).create().show();
+				return (boolean) newValue;
 			});
 		}
 

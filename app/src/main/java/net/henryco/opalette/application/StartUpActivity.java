@@ -350,6 +350,8 @@ public class StartUpActivity extends AppCompatActivity
 			if (requestCode == Utils.activity.REQUEST_PICK_IMAGE) {
 				Intent intent = new Intent(this, MainActivity.class);
 				BitmapPack.pushUpBitmap = Utils.loadIntentBitmap(this, data);
+				System.out.println("TYPE: "+data.getType());
+
 				closeAction();
 				startActivity(intent);
 				close();
