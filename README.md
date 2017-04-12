@@ -1,6 +1,5 @@
 # O!Palette!
 <br>
-<br>
 <b>update6 (12.04.17): </b><br>
 Well, project finaly rolled to the release!<br>
 ![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/1.png)
@@ -23,4 +22,3 @@ First project visual identity<br>
 ![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/firstLook.png)
 <br>
 
-![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/skeleton.png)
