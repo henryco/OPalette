@@ -6,16 +6,16 @@ First project visual identity<br>
 ![screen](https://raw.githubusercontent.com/henryco/OPalette/master/logo/identity.png)
 <br><br><br><br><br>
 <b>update4 (9.03.17): </b><br>
-![screen](https://raw.githubusercontent.com/henryco/OPalette/master/opall1a.png)
+![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/opall1a.png)
 <br><br><br><br><br>
 <b>update 3: </b><br>
-![screen](https://raw.githubusercontent.com/henryco/OPalette/master/picker.png)
+![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/picker.png)
 <br><br><br><br><br>
 <b>update 2: </b><br>
-![screen](https://raw.githubusercontent.com/henryco/OPalette/master/secondLook.png)
+![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/secondLook.png)
 <br><br><br><br><br>
 <b>update 1: </b><br>
-![screen](https://raw.githubusercontent.com/henryco/OPalette/master/firstLook.png)
+![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/firstLook.png)
 <br>
 
-![screen](https://raw.githubusercontent.com/henryco/OPalette/master/skeleton.png)
+![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/skeleton.png)
