@@ -1,7 +1,7 @@
 # O!Palette!
 <br>
 <b>update6 (12.04.17): </b><br>
-<b>Well, project finaly rolled to the release!</b><br>
+<b>Well, project finaly rolled to the release!</b><br><br><br>
 
 <b>update5 (11.03.17): </b><br>
 First project visual identity<br>
