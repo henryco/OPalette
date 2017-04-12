@@ -308,8 +308,6 @@ public class EdTexture extends OPallTextureExtended  {
 			"    vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
 			"    if (color.a != 0.) {\n" +
 			"\n" +
-			"\n" +
-			"\n" +
 			"        color.r = pow(max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r), u_gammaCorrection);\n" +
 			"        color.g = pow(max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g), u_gammaCorrection);\n" +
 			"        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);\n" +
