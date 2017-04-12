@@ -1,5 +1,5 @@
 # O!Palette!
-Work in progress...<br>
+<br>
 <br>
 <b>update6 (12.04.17): </b><br>
 Well, project finaly rolled to the release!
