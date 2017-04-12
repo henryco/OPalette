@@ -398,15 +398,19 @@ public class StartUpActivity extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-
-
 			case R.id.startMenuAbout: {
+				String appVersion = GodConfig.JSON_CONF.APP_NAME + " v" +
+						GodConfig.JSON_CONF.APP_VERSION_NUMB + " "+
+						GodConfig.JSON_CONF.APP_VERSION_TAG + ".";
+				String about = "\n\n" + Utils.getSourceAssetsText(GodConfig.DEF_ABOUT_FILE, this);
+				String mails = "";
+				for (String s: GodConfig.JSON_CONF.APP_DEV_MAILS) mails += "\n"+s;
+				for (String s: GodConfig.JSON_CONF.APP_OTHER_MAILS) mails += "\n"+s;
+
 				new OPallAlertDialog()
 						.title(getResources().getString(R.string.about))
-						.message(Utils.getSourceAssetsText(GodConfig.DEF_VERSION_FILE, this) +
-								"\n\n" + Utils.getSourceAssetsText(GodConfig.DEF_ABOUT_FILE, this) +
-								"\n" + Utils.getSourceAssetsText(GodConfig.DEF_MAILTO_FILE, this)
-						).positive(getResources().getString(R.string.close))
+						.message(appVersion + about + mails)
+						.positive(getResources().getString(R.string.close))
 				.show(getSupportFragmentManager(), "About dialog");
 				return true;
 			}

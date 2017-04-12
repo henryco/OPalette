@@ -23,6 +23,10 @@ uniform int u_thresholdEnable;
 uniform int u_thresholdColor;
 
 
+float lum(vec3 color) {
+    return (0.299*color.r + 0.587*color.g + 0.114*color.b);
+}
+
 vec3 RGBToHSL(in vec3 color) {
 	vec3 hsl; // init to 0 to avoid warnings ? (and reverse if + remove first part)
 
@@ -31,6 +35,7 @@ vec3 RGBToHSL(in vec3 color) {
 	float d = fmax - fmin;             //Delta RGB value
 
 	hsl.z = (fmax + fmin) / 2.0; // Lum
+//	hsl.z = lum(color);
 
 	if (d == 0.0) {	//This is a gray, no chroma...
 		hsl.x = 0.0;	// Hue
@@ -95,6 +100,13 @@ void main() {
     vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;
     if (color.a != 0.) {
 
+
+
+        color.r = pow(max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r), u_gammaCorrection);
+        color.g = pow(max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g), u_gammaCorrection);
+        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);
+        color.a = u_alpha;
+
         if (u_saturation != 0. || u_lightness != 0. || u_hue != 0.) {
             color.rgb = RGBToHSL(color.rgb);
             color.r += u_hue * 0.5; // [(H),s,l]
@@ -103,10 +115,6 @@ void main() {
             color.rgb = HSLToRGB(color.rgb);
         }
 
-        color.r = pow(max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r), u_gammaCorrection);
-        color.g = pow(max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g), u_gammaCorrection);
-        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);
-        color.a = u_alpha;
         if (u_bwEnable == 1 || u_thresholdEnable == 1) {
             float val = dot(vec3(1.), color.rgb) * 0.3333;
 

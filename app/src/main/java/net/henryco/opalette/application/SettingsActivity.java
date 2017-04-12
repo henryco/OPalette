@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -36,7 +37,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import net.henryco.opalette.R;
-import net.henryco.opalette.api.utils.Utils;
 import net.henryco.opalette.application.conf.GodConfig;
 
 /**
@@ -111,8 +111,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 			setHasOptionsMenu(true);
 			PreferenceManager.setDefaultValues(getActivity(), R.xml.preference, false);
 
-			String VERSION = Utils.getSourceAssetsText(GodConfig.DEF_VERSION_FILE, getActivity());
-			String MAILTO = Utils.getLineFromString(Utils.getSourceAssetsText(GodConfig.DEF_MAILTO_FILE, getActivity()), 0);
+			final String VERSION = GodConfig.JSON_CONF.APP_NAME
+					+ " v" + GodConfig.JSON_CONF.APP_VERSION_NUMB +
+					" " + GodConfig.JSON_CONF.APP_VERSION_TAG + ".";
+			final String MAILTO = GodConfig.JSON_CONF.APP_DEV_MAILS[0];
+			final String DONATE = GodConfig.JSON_CONF.APP_DONATE_URL;
+			final String GITHUB = GodConfig.JSON_CONF.APP_GITHUB_URL;
+
 			findPreference(GodConfig.PREF_KEY_VERSION).setSummary(VERSION);
 			findPreference(GodConfig.PREF_KEY_ADS_ENABLE).setOnPreferenceChangeListener((preference, newValue) -> {
 				if (!(boolean) newValue)
@@ -139,6 +144,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 				} catch (android.content.ActivityNotFoundException ex) {
 					Toast.makeText(getActivity(), R.string.pref_no_email_installed, Toast.LENGTH_SHORT).show();
 				}
+				return true;
+			});
+
+			findPreference(GodConfig.PREF_KEY_DONATE).setOnPreferenceClickListener(preference -> {
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(DONATE));
+				startActivity(i);
+				return true;
+			});
+
+			findPreference(GodConfig.PREF_KEY_GITHUB).setOnPreferenceClickListener(preference -> {
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(GITHUB));
+				startActivity(i);
 				return true;
 			});
 		}

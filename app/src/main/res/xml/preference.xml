@@ -43,6 +43,19 @@
         android:summary="@string/pref_send_mail"/>
 
     <Preference
+        android:key="pref_github"
+        android:selectable="true"
+        android:title="@string/pref_github"
+        android:summary="@string/pref_github_info"/>
+
+    <Preference
+        android:key="pref_donate"
+        android:selectable="true"
+        android:title="@string/pref_donate"
+        android:summary="@string/pref_donate_info"/>
+
+
+    <Preference
         android:key="pref_version"
         android:selectable="false"
         android:title="Version"

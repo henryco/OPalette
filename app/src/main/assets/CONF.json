@@ -1,0 +1,16 @@
+{
+  "app": {
+    "name": "O!Palette!",
+    "version": {
+      "numb": "1.1.0",
+      "tag": "release"
+    }
+  },
+
+  "donate": "https://www.paypal.me/henryCoDev",
+  "github": "https://github.com/henryco/OPalette",
+  "mail_to": {
+    "dev": ["henrycoDev@gmail.com"],
+    "other": ["hd2files@gmail.com"]
+  }
+}

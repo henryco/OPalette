@@ -231,6 +231,10 @@ public class EdTexture extends OPallTextureExtended  {
 			"uniform int u_thresholdColor;\n" +
 			"\n" +
 			"\n" +
+			"float lum(vec3 color) {\n" +
+			"    return (0.299*color.r + 0.587*color.g + 0.114*color.b);\n" +
+			"}\n" +
+			"\n" +
 			"vec3 RGBToHSL(in vec3 color) {\n" +
 			"\tvec3 hsl; // init to 0 to avoid warnings ? (and reverse if + remove first part)\n" +
 			"\n" +
@@ -239,6 +243,7 @@ public class EdTexture extends OPallTextureExtended  {
 			"\tfloat d = fmax - fmin;             //Delta RGB value\n" +
 			"\n" +
 			"\thsl.z = (fmax + fmin) / 2.0; // Lum\n" +
+			"//\thsl.z = lum(color);\n" +
 			"\n" +
 			"\tif (d == 0.0) {\t//This is a gray, no chroma...\n" +
 			"\t\thsl.x = 0.0;\t// Hue\n" +
@@ -303,6 +308,13 @@ public class EdTexture extends OPallTextureExtended  {
 			"    vec4 color = texture2D(u_Texture0, v_TexCoordinate).rgba;\n" +
 			"    if (color.a != 0.) {\n" +
 			"\n" +
+			"\n" +
+			"\n" +
+			"        color.r = pow(max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r), u_gammaCorrection);\n" +
+			"        color.g = pow(max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g), u_gammaCorrection);\n" +
+			"        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);\n" +
+			"        color.a = u_alpha;\n" +
+			"\n" +
 			"        if (u_saturation != 0. || u_lightness != 0. || u_hue != 0.) {\n" +
 			"            color.rgb = RGBToHSL(color.rgb);\n" +
 			"            color.r += u_hue * 0.5; // [(H),s,l]\n" +
@@ -311,10 +323,6 @@ public class EdTexture extends OPallTextureExtended  {
 			"            color.rgb = HSLToRGB(color.rgb);\n" +
 			"        }\n" +
 			"\n" +
-			"        color.r = pow(max(min(u_maxColor.r, correction(color.r + u_addColor.r)), u_minColor.r), u_gammaCorrection);\n" +
-			"        color.g = pow(max(min(u_maxColor.g, correction(color.g + u_addColor.g)), u_minColor.g), u_gammaCorrection);\n" +
-			"        color.b = pow(max(min(u_maxColor.b, correction(color.b + u_addColor.b)), u_minColor.b), u_gammaCorrection);\n" +
-			"        color.a = u_alpha;\n" +
 			"        if (u_bwEnable == 1 || u_thresholdEnable == 1) {\n" +
 			"            float val = dot(vec3(1.), color.rgb) * 0.3333;\n" +
 			"\n" +

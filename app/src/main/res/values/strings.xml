@@ -141,12 +141,16 @@
     <string name="pref_adds_info">Remember, developers wants to eat too.</string>
     <string name="pref_save_after_share_title">Save image after sharing</string>
     <string name="pref_save_after_share_info">Automatically save images after sharing.</string>
+    <string name="pref_donate">Donate</string>
+    <string name="pref_github">Github page</string>
+    <string name="pref_github_info">Source code and license.</string>
+    <string name="pref_donate_info">You can support me, if you enjoyed this app.</string>
     <string name="pref_email_contact">Email contact</string>
     <string name="pref_send_mail">Send email feedback, report a bug or just contact.</string>
     <string name="pref_no_email_installed">"There are no email clients installed."</string>
     <string name="pref_send_analytics">Send anonymous analytics data</string>
     <string name="pref_analytics_info">This is depersonalized data
-        \nlike filters preferences helps \nimprove filters quality.</string>
+        \nlike filters preferences, might help \nimprove filters quality.</string>
 
     <!-- Strings related to Settings -->
 
