@@ -1,6 +1,11 @@
 # O!Palette!
 Work in progress...<br>
 <br>
+<b>update6 (12.04.17): </b><br>
+Well, project finaly rolled to the release!
+![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/1.png)
+<br>
+
 <b>update5 (11.03.17): </b><br>
 First project visual identity<br>
 ![screen](https://raw.githubusercontent.com/henryco/OPalette/master/logo/identity.png)
