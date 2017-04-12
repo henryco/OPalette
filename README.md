@@ -3,6 +3,8 @@
 <b>update6 (12.04.17): </b><br>
 <b>Well, project finaly rolled to the release!</b><br>
 <br>
+![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/1.png)
+<br>
 
 <b>update5 (11.03.17): </b><br>
 First project visual identity<br>
