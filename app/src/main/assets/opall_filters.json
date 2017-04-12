@@ -1,20 +1,247 @@
 {
 	"type": "t255",
 	"filters": [{
-		"name": "filter1",
-		"color": "#FFFFFFFF",
-		"contrast": "0",
-		"gamma": "1",
-		"hue": "0",
-		"saturation": "0",
-		"lightness": "0",
-		"bw": "false",
-		"min": ["0", "0", "0"],
-		"max": ["255", "255", "255"],
-		"add": ["0", "0", "0"]
+		"name": "EBS533D",
+		"color": "#ba68c8",
+		"add": ["-4", "-10", "8"],
+		"saturation": "35",
+		"lightness": "-2",
+		"contrast": "5"
 	}, {
-		"name": "RM_075",
+		"name": "STS900P",
+		"color": "#212121",
+		"add": ["6", "-4", "6"],
+		"saturation": "70",
+		"contrast": "20",
+		"gamma": "0.9"
+	}, {
+		"name": "STL133A",
+		"color": "#80cbc4",
+		"add": ["4", "-4", "10"],
+		"saturation": "30",
+		"lightness": "10",
+		"contrast": "30"
+	}, {
+		"name": "BBM211S",
+		"color": "#424242",
+		"contrast": "-2",
+		"gamma": "1.05",
+		"hue": "-8",
+		"saturation": "12",
+		"lightness": "10",
+		"bw": "true",
+		"min": ["71", "8", "8"],
+		"max": ["255", "255", "255"],
+		"add": ["-10", "-14", "-14"]
+	}, {
+		"name": "BTS211A",
+		"color": "#616161",
+		"add": ["2", "0", "4"],
+		"min": ["52", "38", "64"],
+		"gamma": "0.9",
+		"lightness": "40",
+		"saturation": "-100"
+	},{
+		"name": "ETM176L",
+		"color": "#90caf9",
+		"add": ["4", "-4", "10"],
+		"saturation": "-10",
+		"lightness": "8",
+		"gamma": "0.9",
+		"min": ["0", "30", "30"]
+	}, {
+		"name": "STM320P",
+		"color": "#e0e0e0",
+		"saturation": "28",
+		"contrast": "10",
+		"add": ["0", "0", "10"],
+		"min": ["60", "0", "50"]
+	}, {
+		"name": "SNM750R",
 		"color": "#b71c1c",
 		"min": ["75", "0", "0"]
+	}, {
+		"name": "STA100R",
+		"color": "#ef5350",
+		"add": ["10", "0", "0"]
+	}, {
+		"name": "STS200R",
+		"color": "#e53935",
+		"add": ["10", "0", "0"],
+		"saturation": "20",
+		"lightness": "10"
+	}, {
+		"name": "SNM101R",
+		"color": "#ffcdd2",
+		"min": ["100", "0", "0"]
+	}, {
+		"name": "STA161S",
+		"color": "#ef9a9a",
+		"add": ["14", "0", "8"],
+		"contrast": "10"
+	}, {
+		"name": "STA102B",
+		"color": "#bbdefb",
+		"add": ["0", "0", "10"]
+	}, {
+		"name": "STM500S",
+		"color": "#f44336",
+		"add": ["0", "0", "10"],
+		"min": ["90", "0", "0"]
+	}, {
+		"name": "SBL250A",
+		"color": "#7986cb",
+		"add": ["0", "0", "10"],
+		"lightness": "-15"
+	}, {
+		"name": "SBS262C",
+		"color": "7986cb",
+		"lightness": "-15",
+		"saturation": "28",
+		"add": ["0", "0", "10"]
+	}, {
+		"name": "STS150R",
+		"color": "#e53935",
+		"add": ["10", "0", "0"],
+		"saturation": "20"
+	}, {
+		"name": "SBS223A",
+		"color": "#9fa8da",
+		"lightness": "-15",
+		"saturation": "28",
+		"contrast": "20",
+		"add": ["0", "0", "10"]
+	}, {
+		"name": "SBM460C",
+		"color": "#3f51b5",
+		"contrast": "20",
+		"lightness": "-16",
+		"saturation": "28",
+		"add": ["0", "0", "10"],
+		"min": ["0", "0", "50"]
+	}, {
+		"name": "SNG260P",
+		"color": "#e0e0e0",
+		"gamma": "1.35",
+		"contrast": "5",
+		"lightness": "1",
+		"saturation": "20"
+	}, {
+		"name": "STG140B",
+		"color": "#c5cae9",
+		"gamma": "1.35",
+		"contrast": "5",
+		"lightness": "1",
+		"saturation": "20",
+		"min": ["18", "17", "23"]
+	}, {
+		"name": "STS181C",
+		"color": "#c5cae9",
+		"gamma": "1.35",
+		"contrast": "-10",
+		"lightness": "1",
+		"saturation": "50",
+		"min": ["18", "17", "23"]
+	}, {
+		"name": "SNM801R",
+		"color": "#e53935",
+		"min": ["80", "0", "0"]
+	}, {
+		"name": "SBM702R",
+		"color": "#b71c1c",
+		"min": ["80", "0", "0"],
+		"lightness": "-10"
+	}, {
+		"name": "STC190F",
+		"color": "#80cbc4",
+		"add": ["2", "-4", "0"],
+		"saturation": "30",
+		"contrast": "56",
+		"gamma": "1.35"
+
+	}, {
+		"name": "SBG902P",
+		"color": "#cfd8dc",
+		"add": ["-6", "-2", "4"],
+		"saturation": "20",
+		"contrast": "20",
+		"gamma": "0.9"
+	}, {
+		"name": "STG901P",
+		"color": "#212121",
+		"add": ["6", "-2", "6"],
+		"saturation": "20",
+		"contrast": "20",
+		"gamma": "0.9"
+	}, {
+		"name": "SBS100F",
+		"color": "#cfd8dc",
+		"add": ["0", "-10", "0"],
+		"saturation": "30"
+	}, {
+		"name": "STS201F",
+		"color": "#eeeeee",
+		"add": ["0", "-10", "0"],
+		"saturation": "30",
+		"lightness": "20"
+	}, {
+		"name": "SBS101E",
+		"color": "#c8e6c9",
+		"add": ["0", "-10", "0"],
+		"saturation": "-40",
+		"lightness": "20",
+		"contrast": "20"
+	}, {
+		"name": "SBM102L",
+		"color": "#bdbdbd",
+		"add": ["0", "-10", "0"],
+		"saturation": "-40",
+		"lightness": "20",
+		"contrast": "20",
+		"gamma": "0.95",
+		"min": ["50", "0", "60"]
+	}, {
+		"name": "SBM124P",
+		"color": "#bdbdbd",
+		"add": ["0", "-10", "0"],
+		"saturation": "-40",
+		"lightness": "20",
+		"contrast": "20",
+		"gamma": "0.95",
+		"min": ["49", "47", "38"]
+	}, {
+		"name": "SNM134P",
+		"color": "#f8bbd0",
+		"add": ["12", "-10", "-2"],
+		"saturation": "-40",
+		"lightness": "20",
+		"contrast": "20",
+		"gamma": "0.95",
+		"min": ["49", "47", "38"]
+	}, {
+		"name": "SNS224D",
+		"color": "#f8bbd0",
+		"add": ["12", "-10", "-2"],
+		"saturation": "-40",
+		"lightness": "20",
+		"contrast": "20",
+		"gamma": "1.4",
+		"min": ["11", "0", "11"]
+	}, {
+		"name": "STS233Z",
+		"color": "#9fa8da",
+		"add": ["4", "-4", "10"],
+		"saturation": "-40",
+		"lightness": "10",
+		"contrast": "30",
+		"min": ["0", "0", "21"]
+	}, {
+		"name": "STM1823E",
+		"color": "#90caf9",
+		"add": ["4", "-4", "10"],
+		"saturation": "-40",
+		"lightness": "20",
+		"gamma": "0.8",
+		"min": ["0", "47", "45"]
 	}]
 }

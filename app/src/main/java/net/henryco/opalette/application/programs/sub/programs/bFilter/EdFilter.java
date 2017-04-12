@@ -100,10 +100,15 @@ public class EdFilter {
 			if (type255) corrector = f -> f / 255f;
 			else corrector = Float::floatValue;
 
+			ArrayList<String> nameList = new ArrayList<>();
+
 			JSONArray filters = data.getJSONArray("filters");
 			for (int i = 0; i < filters.length(); i++) {
 				JSONObject filter = filters.getJSONObject(i);
 				String f_name = filter.getString("name");
+				if (nameList.contains(f_name)) throw new RuntimeException
+						("FILTER NAME: " +f_name+" is already exist at position: "+i);
+				nameList.add(f_name);
 				boolean bw = false;
 				float contrast = 1f;
 				float gamma = 1f;
