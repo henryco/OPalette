@@ -221,7 +221,7 @@ public class StartUpActivity extends AppCompatActivity
 
 
 	public static final long SPLASH_LOADING_TIME = 1500;
-	public static final long RESUME_ACTIVITY_DELAY = 1000;
+	public static final long RESUME_ACTIVITY_DELAY = 200;
 
 	private StartUpActivity parentActivity;
 
@@ -266,14 +266,14 @@ public class StartUpActivity extends AppCompatActivity
 
 	private void loadControlViews() {
 		findViewById(R.id.firstPickLayout).setVisibility(View.VISIBLE);
+		loadAds();
 		View text = findViewById(R.id.textView);
 		text.setVisibility(View.VISIBLE);
 		text.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
+		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
 		text.setOnClickListener(this::imagePickAction);
 		findViewById(R.id.imageButtonGall).setVisibility(View.VISIBLE);
-		findViewById(R.id.imageButtonGall).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in));
 		enableButtons();
-		loadAds();
 	}
 
 

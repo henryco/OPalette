@@ -117,6 +117,9 @@ public class BlurControl  extends AppAutoSubControl<AppMainProto> {
 			@Override
 			protected void onInject(AppMainProto context, View view) {
 
+				final TextView inf = (TextView) view.findViewById(R.id.palette_text_info);
+				inf.setText(R.string.blur_region_multi_touch_info);
+
 				final TextView reg = (TextView) view.findViewById(R.id.paletteTextRegion);
 				final TextView non = (TextView) view.findViewById(R.id.paletteTextNone);
 				final Button regButton = (Button) view.findViewById(R.id.bwButtonOn);

@@ -103,7 +103,8 @@
     <string name="camera">Camera</string>
     <string name="disable">Disable</string>
     <string name="enable">Enable</string>
-    <string name="palette_region_multi_touch_info">Use multi-touch to select a palette region.</string>
+    <string name="blur_region_multi_touch_info">Use multi-touch to select blur region.</string>
+    <string name="palette_region_multi_touch_info">Use multi-touch to select palette region.</string>
     <string name="palette_pick_warn">You have to select palette type first</string>
     <string name="line">Line</string>
     <string name="none">None</string>

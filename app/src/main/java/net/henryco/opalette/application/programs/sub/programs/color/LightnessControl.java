@@ -51,7 +51,8 @@ public class LightnessControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		InjectableSeekBar lgtBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(txt_button_res));
-		lgtBar.setDefaultPoint(0, 50);
+//		WE CLAMP LIGHTNESS ONLY FORM 0 TO 100
+//		lgtBar.setDefaultPoint(0, 50);
 		lgtBar.onBarCreate(bar -> bar.setProgress(lgtBar.de_norm(texture.getLightness())));
 		lgtBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			texture.setAddLightness(lgtBar.norm(progress));
