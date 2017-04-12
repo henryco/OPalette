@@ -2,7 +2,7 @@
 <br>
 <b>update6 (12.04.17): </b><br>
 Well, project finaly rolled to the release!<br>
-![screen](OPalette/promo/release/1.png)
+![screen](promo/release/1.png)
 <br>
 
 <b>update5 (11.03.17): </b><br>
