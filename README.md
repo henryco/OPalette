@@ -1,8 +1,30 @@
-# O!Palette!
-<br>
-<b>update6 (12.04.17): </b><br>
-<b>Well, project finaly rolled to the release!</b><br><br><br>
+# &nbsp;O!Palette!<br> <a href='https://play.google.com/store/apps/details?id=net.henryco.opalette&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' heigth="15%" width="15%"/></a> <br>
 
+<h4>A simple application that allows you to create a color palette based on the image, supports color and convolutional filters, as well as various kinds of image transformation, such as pixelization, dithering, blurring and all possible color settings.</h4>
+<br>
+<br><b>update6 (12.04.17): </b><br>
+<b>Well, project finaly rolled to the release!</b><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/1.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/2.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/3.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/4.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/5.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/6.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/7.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/8.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/9.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/10.png'/>
+
+<br><br><br><br><br>
 <b>update5 (11.03.17): </b><br>
 First project visual identity<br>
 ![screen](https://raw.githubusercontent.com/henryco/OPalette/master/logo/identity.png)
