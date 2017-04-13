@@ -6,6 +6,8 @@
 <b>Well, project finaly rolled to the release!</b><br>
 <img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/1.png'/>
 <br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/example_dark.png'/>
+<br><br>
 <img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/2.png'/>
 <br><br>
 <img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/3.png'/>
