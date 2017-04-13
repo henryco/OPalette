@@ -1,4 +1,4 @@
-# O!Palette! <a href='https://play.google.com/store/apps/details?id=net.henryco.opalette&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' heigth="12%" width="12%" style="padding:5px;"/></a>  <br>
+# O!Palette! <a href='https://play.google.com/store/apps/details?id=net.henryco.opalette&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' heigth="12%" width="12%" style="padding:30px;"/></a>  <br>
 
 
 <b>update6 (12.04.17): </b><br>
