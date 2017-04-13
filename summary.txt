@@ -1,1 +1,0 @@
-A simple application that allows you to create a color palette based on the image, supports color and convolutional filters, as well as various kinds of image transformation, such as pixelization, dithering, blurring and all possible color settings.
