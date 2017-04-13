@@ -2,11 +2,26 @@
 <br><b>update6 (12.04.17): </b><br>
 <b>Well, project finaly rolled to the release!</b><br>
 <img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/1.png'/>
-<br>
+<br><br>
 <img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/2.png'/>
-<br>
+<br><br>
 <img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/3.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/4.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/5.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/6.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/7.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/8.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/9.png'/>
+<br><br>
+<img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/10.png'/>
 
+<br><br><br><br><br>
 <b>update5 (11.03.17): </b><br>
 First project visual identity<br>
 ![screen](https://raw.githubusercontent.com/henryco/OPalette/master/logo/identity.png)
