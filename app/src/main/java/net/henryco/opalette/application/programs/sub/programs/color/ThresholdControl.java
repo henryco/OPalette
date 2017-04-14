@@ -52,7 +52,7 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 
-		InjectableSeekBar bar = new InjectableSeekBar(view, "Threshold Level");
+		InjectableSeekBar bar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(txt_button_res));
 		bar.onBarCreate(seekBar -> {
 			seekBar.setProgress(bar.de_norm(texture.getThreshold()));
 			seekBar.setEnabled(texture.isThresholdEnable());
@@ -66,7 +66,7 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 			@Override
 			protected void onInject(AppMainProto context, View view) {
 				TextView textView = (TextView) view.findViewById(R.id.switcherText);
-				textView.setText(R.string.threshold_colored);
+				textView.setText(R.string.transparency);
 
 				Switch switcher = (Switch) view.findViewById(R.id.switcherButton);
 				switcher.setChecked(texture.isThresholdColored());
@@ -76,17 +76,20 @@ public class ThresholdControl extends AppAutoSubControl<AppMainProto> {
 					context.getRenderSurface().update();
 				});
 
+				String dis = context.getActivityContext().getResources().getString(R.string.disable);
+				String enb = context.getActivityContext().getResources().getString(R.string.enable);
+
 				context.setTopControlButton(button -> button
 						.setVisible(true).setEnabled(true)
-						.setTitle(texture.isThresholdEnable() ? "Disable" : "Enable"), () -> {
+						.setTitle(texture.isThresholdEnable() ? dis : enb), () -> {
 							if (texture.isThresholdEnable()) {
-								context.setTopControlButton(b -> b.setTitle("Enable"));
+								context.setTopControlButton(b -> b.setTitle(enb));
 								texture.setThresholdEnable(false);
 								bar.setEnable(false);
 								switcher.setEnabled(false);
 								context.getRenderSurface().update();
 							} else {
-								context.setTopControlButton(b -> b.setTitle("Disable"));
+								context.setTopControlButton(b -> b.setTitle(dis));
 								texture.setThresholdEnable(true);
 								bar.setEnable(true);
 								switcher.setEnabled(true);

@@ -53,7 +53,7 @@ public class BackGroundControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 
-		InjectableColorButtons background = new InjectableColorButtons(view, "Background");
+		InjectableColorButtons background = new InjectableColorButtons(view, context.getActivityContext().getResources().getString(txt_button_res));
 		int col = color.hex();
 		background.setChecked(color.a != 0);
 		background.setButtonColor(col);

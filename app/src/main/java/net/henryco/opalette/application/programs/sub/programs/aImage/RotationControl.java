@@ -269,7 +269,8 @@ public class RotationControl extends AppAutoSubControl<AppMainProto> {
 			}
 		};
 
-		InjectableSeekBar angleBar = new InjectableSeekBar(view, "Angle").setDefaultPoint(0, (int) (max_angle * 0.5f)).setMax((int) max_angle);
+		String ang = context.getActivityContext().getResources().getString(R.string.angle);
+		InjectableSeekBar angleBar = new InjectableSeekBar(view, ang).setDefaultPoint(0, (int) (max_angle * 0.5f)).setMax((int) max_angle);
 		angleBar.onBarCreate(bar -> bar.setProgress(angleBar.de_norm(imgHolder.getRenderData().getRotation() / max_angle)));
 		angleBar.setBarListener(new OPallSeekBarListener().onStop(stop).onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {

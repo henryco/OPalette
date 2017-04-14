@@ -25,6 +25,7 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
+import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -61,7 +62,9 @@ public class BarCellControl extends AppAutoSubControl<AppMainProto> {
 
 		boolean active = palette.getOrientation() != OPalette.ORIENTATION_NONE && palette.isDiscrete();
 
-		InjectableSeekBar numBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_SMALL, "Number");
+		OPallFunction<String, Integer> getStringFunc = i -> context.getActivityContext().getResources().getString(i);
+
+		InjectableSeekBar numBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_SMALL, getStringFunc.apply(R.string.number));
 		numBar.setMax(MAX_CELLS - 1).setDiscrete(true);
 		numBar.setTextValuerCorrector(f -> f + 1);
 		numBar.onBarCreate(bar -> {
@@ -75,7 +78,7 @@ public class BarCellControl extends AppAutoSubControl<AppMainProto> {
 			}
 		}));
 
-		InjectableSeekBar marginBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_SMALL, "Margin");
+		InjectableSeekBar marginBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_SMALL, getStringFunc.apply(R.string.margin));
 		marginBar.onBarCreate(bar -> {
 			bar.setEnabled(active);
 			bar.setProgress(marginBar.de_norm(palette.getMargin_pct()));
@@ -87,7 +90,7 @@ public class BarCellControl extends AppAutoSubControl<AppMainProto> {
 			}
 		}));
 
-		InjectableSeekBar sizeBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_SMALL, "Cell Size");
+		InjectableSeekBar sizeBar = new InjectableSeekBar(view, InjectableSeekBar.TYPE_SMALL, getStringFunc.apply(R.string.cell_size));
 		sizeBar.onBarCreate(bar -> {
 			bar.setEnabled(palette.getOrientation() != OPalette.ORIENTATION_NONE);
 			bar.setProgress(sizeBar.de_norm(palette.getContentSize_pct()));

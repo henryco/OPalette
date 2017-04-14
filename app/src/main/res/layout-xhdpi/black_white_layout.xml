@@ -36,8 +36,6 @@
             android:id="@+id/bwButtonOn"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:background="@drawable/ic_lens_black_24dp"/>
 
@@ -45,11 +43,8 @@
             android:id="@+id/bwTextOn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/bwButtonOn"
-            android:layout_alignStart="@+id/bwButtonOn"
-            android:layout_below="@+id/bwButtonOn"
             android:layout_gravity="center"
-            android:text="ON"
+            android:text="@string/on"
             android:textAlignment="center"
             android:textColor="@color/black_overlay"/>
     </LinearLayout>
@@ -65,8 +60,6 @@
             android:id="@+id/bwButtonOff"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:background="@drawable/ic_panorama_fish_eye_black_24dp"/>
 
@@ -74,11 +67,8 @@
             android:id="@+id/bwTextOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/bwButtonOff"
-            android:layout_alignStart="@+id/bwButtonOff"
-            android:layout_below="@+id/bwButtonOff"
             android:layout_gravity="center"
-            android:text="OFF"
+            android:text="@string/off"
             android:textAlignment="center"
             android:textColor="@color/black_overlay"/>
     </LinearLayout>

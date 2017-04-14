@@ -248,9 +248,14 @@ public class TranslationControl extends AppAutoSubControl<AppMainProto> {
 		ConvolveTexture image = imgHolder.getRenderData();
 		int type = InjectableSeekBar.TYPE_SMALL;
 
-		InjectableSeekBar horBar = new InjectableSeekBar(view, type, "Horizontal").setDefaultPoint(0, 50);
-		InjectableSeekBar verBar = new InjectableSeekBar(view, type, "Vertical").setDefaultPoint(0, 50);
-		InjectableSeekBar zoomBar = new InjectableSeekBar(view, type, "Scale").setMax(100);
+
+		String ho = context.getActivityContext().getResources().getString(R.string.horizontal);
+		String ve = context.getActivityContext().getResources().getString(R.string.vertical);
+		String sc = context.getActivityContext().getResources().getString(R.string.scale);
+
+		InjectableSeekBar horBar = new InjectableSeekBar(view, type, ho).setDefaultPoint(0, 50);
+		InjectableSeekBar verBar = new InjectableSeekBar(view, type, ve).setDefaultPoint(0, 50);
+		InjectableSeekBar zoomBar = new InjectableSeekBar(view, type, sc).setMax(100);
 
 		updateFunc = () -> {
 			imgHolder.setStateUpdated();

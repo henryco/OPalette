@@ -78,8 +78,8 @@ public class PixelateControl extends AppAutoSubControl<AppMainProto> {
 		};
 
 		final int typeSmall = InjectableSeekBar.TYPE_SMALL;
-		final InjectableSeekBar pixBar = new InjectableSeekBar(view, typeSmall, "Pixels");
-		final InjectableSeekBar quantumBar = new InjectableSeekBar(view, typeSmall, "Pixel size").setMax(20);
+		final InjectableSeekBar pixBar = new InjectableSeekBar(view, typeSmall, getStringFunc.apply(R.string.texel_size));
+		final InjectableSeekBar quantumBar = new InjectableSeekBar(view, typeSmall, getStringFunc.apply(R.string.pixelation_leveL)).setMax(20);
 		final InjectableSeekBar ditherBar = new InjectableSeekBar(view, typeSmall, getStringFunc.apply(R.string.effect_scale_0_3));
 
 		final String disable = getStringFunc.apply(R.string.disable);

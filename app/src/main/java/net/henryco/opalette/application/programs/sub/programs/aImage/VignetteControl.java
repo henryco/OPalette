@@ -83,7 +83,8 @@ public class VignetteControl extends AppAutoSubControl<AppMainProto> {
 			}
 		}));
 
-		InjectableSeekBar radBar = new InjectableSeekBar(view, "Radius");
+
+		InjectableSeekBar radBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.radius));
 		radBar.setTextValuerCorrector(f -> f / 100);
 		radBar.onBarCreate(bar -> bar.setProgress(radBar.de_norm(vignette.getRadius())));
 		radBar.setBarListener(new OPallSeekBarListener().onProgress((seekBar, progress, fromUser) -> {

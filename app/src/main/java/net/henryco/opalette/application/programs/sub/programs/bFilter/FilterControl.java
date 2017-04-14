@@ -100,7 +100,7 @@ public class FilterControl extends AppSubControl<AppMainProto> {
 
 	private void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		InjectableSeekBar effectBar = new InjectableSeekBar(view, "Effect scale");
+		InjectableSeekBar effectBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.effect_scale));
 		effectBar.onBarCreate(bar -> bar.setProgress(effectBar.de_norm(filterHolder.getFilter().getAlpha())));
 		effectBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
 			if (fromUser) {

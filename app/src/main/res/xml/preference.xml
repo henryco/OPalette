@@ -58,7 +58,7 @@
     <Preference
         android:key="pref_version"
         android:selectable="false"
-        android:title="Version"
+        android:title="@string/pref_version"
         android:summary=""/>
 
 

@@ -29,7 +29,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
-        android:text="Canvas size"
+        android:text="@string/canvas_size"
         android:textColor="@color/black_overlay"
         android:textSize="12sp"
         android:visibility="visible"/>

@@ -60,8 +60,8 @@ public class BordersControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		InjectableSeekBar sizeBar = new InjectableSeekBar(view, "Size");
-		InjectableColorButtons border = new InjectableColorButtons(view, "Borders");
+		InjectableSeekBar sizeBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.size));
+		InjectableColorButtons border = new InjectableColorButtons(view, context.getActivityContext().getResources().getString(txt_button_res));
 
 		border.setChecked(borders.isVisible());
 		if (!borders.isVisible()) borders.color.set(new GLESUtils.Color(Color.TRANSPARENT));

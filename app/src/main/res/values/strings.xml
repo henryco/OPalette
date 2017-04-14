@@ -23,23 +23,10 @@
 
     <string name="banner_ad_unit_id">ca-app-pub-4990940783684568/6355131933</string>
 
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
-
     <string name="title_activity_start_up">StartUpActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-
     <string name="title_activity_start_up_activity">StartUpActivity</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-
     <string name="main_top_bar_button">next</string>
 
     <string name="dialog_are_u_sure">Are you sure?</string>
@@ -92,10 +79,29 @@
     <string name="control_dither">Dither</string>
 
 
+    <string name="add_red">Add red</string>
+    <string name="add_green">Add green</string>
+    <string name="add_blue">Add blue</string>
+    <string name="max_red">Red max</string>
+    <string name="max_green">Green max</string>
+    <string name="max_blue">Blue max</string>
+    <string name="min_red">Red min</string>
+    <string name="min_green">Green min</string>
+    <string name="min_blue">Blue min</string>
 
-
-
-
+    <string name="number">Number</string>
+    <string name="margin">Margin</string>
+    <string name="cell_size">Cell Size</string>
+    <string name="position">Position</string>
+    <string name="size">Size</string>
+    <string name="palette_background">Palette background</string>
+    <string name="radius">Radius</string>
+    <string name="scale">Scale</string>
+    <string name="angle">Angle</string>
+    <string name="bubble_size">Bubble size</string>
+    <string name="transparency">Transparency</string>
+    <string name="pixelation_leveL">Pixelation level</string>
+    <string name="texel_size">Texel size</string>
     <string name="transition_power">Transition power</string>
     <string name="blur_type">Blur type</string>
     <string name="apply">Apply</string>
@@ -153,78 +159,11 @@
     <string name="pref_analytics_info">This is depersonalized data
         \nlike filters preferences, might help \nimprove filters quality.</string>
 
-    <!-- Strings related to Settings -->
 
-    <!-- Example General settings -->
+
     <string name="pref_header_general">General</string>
 
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value"/>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_version">Version</string>
     <string name="threshold_colored">Threshold colored</string>
     <string name="click_to_start">Click to start.</string>
     <string name="click_to_start_image">Click to start image</string>
@@ -240,5 +179,12 @@
     <string name="_4_5">4 : 5</string>
     <string name="_3_4">3 : 4</string>
     <string name="_2_3">2 : 3</string>
+    <string name="canvas_size">Canvas size</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="flip_vertical">Flip Vertical</string>
+    <string name="flip_horizontal">Flip Horizontal</string>
+    <string name="grad_horizontal">Gradient \n horizontal</string>
+    <string name="grad_vertical">Gradient \n vertical</string>
 
 </resources>

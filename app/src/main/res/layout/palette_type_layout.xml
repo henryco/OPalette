@@ -26,8 +26,6 @@
         android:id="@+id/paletteTextInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
@@ -117,7 +115,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_below="@+id/paletteButtonGradHorizontal"
                     android:layout_centerHorizontal="true"
-                    android:text="Gradient \n horizontal"
+                    android:text="@string/grad_horizontal"
                     android:textColor="@color/black_overlay"/>
 
                 <Button
@@ -126,7 +124,6 @@
                     android:layout_height="60dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="1"
                     android:background="@drawable/ic_straighten_black_3_24dp"
                     android:gravity="center"/>
             </RelativeLayout>
@@ -146,7 +143,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_below="@+id/paletteButtonGradVertical"
                     android:layout_centerHorizontal="true"
-                    android:text="Gradient \n vertical"
+                    android:text="@string/grad_vertical"
                     android:textColor="@color/black_overlay"/>
 
                 <Button
@@ -155,7 +152,6 @@
                     android:layout_height="60dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="1"
                     android:background="@drawable/ic_straighten_black_4_24dp"
                     android:gravity="center"/>
             </RelativeLayout>
@@ -183,7 +179,6 @@
                     android:layout_height="60dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="1"
                     android:background="@drawable/ic_block_black_24dp"
                     android:gravity="center"/>
             </RelativeLayout>

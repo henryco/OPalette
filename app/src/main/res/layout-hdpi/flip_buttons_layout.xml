@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Flip Vertical"
+            android:text="@string/flip_vertical"
             android:textColor="@color/common_google_signin_btn_text_light_focused"
             android:textSize="12sp"/>
 
@@ -42,9 +42,6 @@
             android:id="@+id/flipVerticalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/flipHorizontalButton"
-            android:layout_alignBottom="@+id/flipHorizontalButton"
-            android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:textSize="12sp"
             android:theme="@style/DarkSwitch"/>
@@ -62,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Flip Horizontal"
+            android:text="@string/flip_horizontal"
             android:textColor="@color/common_google_signin_btn_text_light_focused"
             android:textSize="12sp"/>
 
@@ -70,9 +67,6 @@
             android:id="@+id/flipHorizontalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/flipHorizontalButton"
-            android:layout_alignBottom="@+id/flipHorizontalButton"
-            android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:textSize="12sp"
             android:theme="@style/DarkSwitch"/>

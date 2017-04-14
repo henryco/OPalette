@@ -53,7 +53,7 @@ public class PaletteColorControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		InjectableColorButtons background = new InjectableColorButtons(view, "Palette background");
+		InjectableColorButtons background = new InjectableColorButtons(view, context.getActivityContext().getResources().getString(R.string.palette_background));
 		int col = palette.getColor().hex();
 		background.setChecked(true);
 		background.setButtonColor(col);

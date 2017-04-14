@@ -59,8 +59,10 @@ public class BubbleControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		InjectableSeekBar squareBar = new InjectableSeekBar(view, "Bubble size");
-		InjectableSeekBar radBar = new InjectableSeekBar(view, "Radius");
+
+
+		InjectableSeekBar squareBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.bubble_size));
+		InjectableSeekBar radBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.radius));
 
 		final Runnable updateFunc = () -> {
 			proxyRenderData.setStateUpdated();

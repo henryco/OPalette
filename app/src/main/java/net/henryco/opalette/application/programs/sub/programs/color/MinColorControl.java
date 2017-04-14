@@ -189,6 +189,7 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -217,10 +218,12 @@ public class MinColorControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
+		OPallFunction<String, Integer> getStringFunc = i -> context.getActivityContext().getResources().getString(i);
+
 		int type = InjectableSeekBar.TYPE_SMALL;
-		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red min");
-		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, "Green min");
-		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, "Blue min");
+		InjectableSeekBar redBar = new InjectableSeekBar(view, type, getStringFunc.apply(R.string.min_red));
+		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, getStringFunc.apply(R.string.min_green));
+		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, getStringFunc.apply(R.string.min_blue));
 
 		redBar.setMax(255);
 		greenBar.setMax(255);

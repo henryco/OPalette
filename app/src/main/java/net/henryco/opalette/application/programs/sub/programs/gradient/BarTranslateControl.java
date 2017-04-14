@@ -63,7 +63,7 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
-		InjectableSeekBar moveBar = new InjectableSeekBar(view, "Position");
+		InjectableSeekBar moveBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.position));
 		moveBar.onBarCreate(bar -> {
 			bar.setProgress(moveBar.de_norm(palette.getPos_pct()));
 			bar.setEnabled(palette.getOrientation() != OPalette.ORIENTATION_NONE);
@@ -75,7 +75,7 @@ public class BarTranslateControl extends AppAutoSubControl<AppMainProto> {
 			}
 		}));
 
-		InjectableSeekBar sizeBar = new InjectableSeekBar(view, "Size");
+		InjectableSeekBar sizeBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.size));
 		sizeBar.onBarCreate(bar -> {
 			bar.setProgress(sizeBar.de_norm(palette.getSize_pct()));
 			bar.setEnabled(palette.getOrientation() != OPalette.ORIENTATION_NONE);

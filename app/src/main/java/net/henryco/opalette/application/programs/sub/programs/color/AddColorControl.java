@@ -189,6 +189,7 @@ import android.view.View;
 import net.henryco.opalette.R;
 import net.henryco.opalette.api.glES.render.graphics.shaders.textures.extend.EdTexture;
 import net.henryco.opalette.api.utils.GLESUtils;
+import net.henryco.opalette.api.utils.lambda.functions.OPallFunction;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
 import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableSeekBar;
@@ -216,10 +217,12 @@ public class AddColorControl extends AppAutoSubControl<AppMainProto> {
 	@Override
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
+		OPallFunction<String, Integer> getStringFunc = i -> context.getActivityContext().getResources().getString(i);
+
 		int type = InjectableSeekBar.TYPE_SMALL;
-		InjectableSeekBar redBar = new InjectableSeekBar(view, type, "Red add");
-		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, "Green add");
-		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, "Blue add");
+		InjectableSeekBar redBar = new InjectableSeekBar(view, type, getStringFunc.apply(R.string.add_red));
+		InjectableSeekBar greenBar = new InjectableSeekBar(view, type, getStringFunc.apply(R.string.add_green));
+		InjectableSeekBar blueBar = new InjectableSeekBar(view, type, getStringFunc.apply(R.string.add_blue));
 
 		redBar.setDefaultPoint(0, 50);
 		greenBar.setDefaultPoint(0, 50);
