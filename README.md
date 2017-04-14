@@ -1,4 +1,4 @@
-# &nbsp; <a href='https://play.google.com/store/apps/details?id=net.henryco.opalette&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' heigth="19%" width="19%"/></a> <br>
+# &nbsp;<a href='https://play.google.com/store/apps/details?id=net.henryco.opalette&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' heigth="19%" width="19%"/></a> <br>
 
 <h4>A simple application that allows you to create a color palette based on the image, supports color and convolutional filters, as well as various kinds of image transformation, such as pixelization, dithering, blurring and all possible color settings.</h4>
 <br>
