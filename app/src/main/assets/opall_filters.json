@@ -79,6 +79,12 @@
 		"gamma": "0.95",
 		"min": ["49", "47", "38"]
 	}, {
+		"name": "EBL213M",
+		"color": "#80deea",
+		"lightness": "50",
+		"saturation": "20",
+		"brightness": "-6"
+	}, {
 		"name": "STM381Q",
 		"color": "#81c784",
 		"add": ["14", "20", "14"],
@@ -88,12 +94,40 @@
 		"gamma": "0.7",
 		"min": ["100", "70", "90"]
 	}, {
+		"name": "LBS317M",
+		"color": "#90a4ae",
+		"saturation": "30",
+		"contrast": "-20",
+		"gamma": "0.85"
+	}, {
+		"name": "LNS342L",
+		"color": "#90a4ae",
+		"contrast": "-22",
+		"gamma": "0.85",
+		"lightness": "50",
+		"saturation": "60",
+		"brightness": "-2"
+	}, {
+		"name": "LBL863K",
+		"color": "#90a4ae",
+		"saturation": "-40",
+		"gamma": "0.4",
+		"contrast": "-20",
+		"lightness": "65",
+		"brightness": "-2"
+	}, {
 		"name": "STM320P",
 		"color": "#e0e0e0",
 		"saturation": "28",
 		"contrast": "10",
 		"add": ["0", "0", "10"],
 		"min": ["60", "0", "50"]
+	}, {
+		"name": "CTG667N",
+		"color": "#455a64",
+		"gamma": "1.6",
+		"contrast": "10",
+		"saturation": "30"
 	}, {
 		"name": "STM460C",
 		"color": "#3f51b5",
