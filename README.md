@@ -2,7 +2,7 @@
 
 <h4>A simple application that allows you to create a color palette based on the image, supports color and convolutional filters, as well as various kinds of image transformation, such as pixelization, dithering, blurring and all possible color settings.</h4>
 <br>
-<br><b>update6 (12.04.17): </b><br>
+<br><b>update 6 (12.04.17): </b><br>
 <b>Well, project finaly rolled to the release!</b><br>
 <img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/1.png'/>
 <br><br>
@@ -27,11 +27,11 @@
 <img alt="screen" src='https://raw.githubusercontent.com/henryco/OPalette/master/promo/release/10.png'/>
 
 <br><br><br><br><br>
-<b>update5 (11.03.17): </b><br>
+<b>update 5 (11.03.17): </b><br>
 First project visual identity<br>
 ![screen](https://raw.githubusercontent.com/henryco/OPalette/master/logo/identity.png)
 <br><br><br><br><br>
-<b>update4 (9.03.17): </b><br>
+<b>update 4 (9.03.17): </b><br>
 ![screen](https://raw.githubusercontent.com/henryco/OPalette/master/promo/opall1a.png)
 <br><br><br><br><br>
 <b>update 3: </b><br>
