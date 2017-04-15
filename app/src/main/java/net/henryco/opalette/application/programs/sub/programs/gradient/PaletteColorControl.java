@@ -28,7 +28,9 @@ import net.henryco.opalette.api.glES.render.graphics.units.OPalette;
 import net.henryco.opalette.api.utils.GLESUtils;
 import net.henryco.opalette.api.utils.dialogs.OPallAlertDialog;
 import net.henryco.opalette.api.utils.views.OPallViewInjector;
+import net.henryco.opalette.api.utils.views.widgets.OPallSeekBarListener;
 import net.henryco.opalette.application.injectables.InjectableColorButtons;
+import net.henryco.opalette.application.injectables.InjectableSeekBar;
 import net.henryco.opalette.application.programs.sub.programs.AppAutoSubControl;
 import net.henryco.opalette.application.proto.AppMainProto;
 
@@ -54,11 +56,22 @@ public class PaletteColorControl extends AppAutoSubControl<AppMainProto> {
 	protected void onFragmentCreate(View view, AppMainProto context, @Nullable Bundle savedInstanceState) {
 
 		InjectableColorButtons background = new InjectableColorButtons(view, context.getActivityContext().getResources().getString(R.string.palette_background));
-		int col = palette.getColor().hex();
-		background.setChecked(true);
-		background.setButtonColor(col);
-		background.applySwitch(aSwitch -> aSwitch.setVisibility(View.INVISIBLE));
+		InjectableSeekBar alphaBar = new InjectableSeekBar(view, context.getActivityContext().getResources().getString(R.string.alpha));
+		alphaBar.onBarCreate(b -> b.setProgress(alphaBar.de_norm(palette.getColor().a)));
+		alphaBar.setBarListener(new OPallSeekBarListener().onProgress((bar, progress, fromUser) -> {
+			if (fromUser) {
+				float r = palette.getColor().r;
+				float g = palette.getColor().g;
+				float b = palette.getColor().b;
+				float a = alphaBar.norm(progress);
+				palette.setColor(new GLESUtils.Color(new GLESUtils.Color(r, g, b, a).hex()));
+				background.setButtonColor(palette.getColor().hex());
+				context.getRenderSurface().update();
+			}
+		}));
 
+		background.setButtonColor(palette.getColor().hex());
+		background.applySwitch(aSwitch -> aSwitch.setVisibility(View.INVISIBLE));
 		background.setColorButtonListener(v -> runColorPicker(context.getActivityContext(), i -> {
 			if (palette.getOrientation() != OPalette.ORIENTATION_NONE) {
 				palette.setColor(new GLESUtils.Color(i));
@@ -70,12 +83,14 @@ public class PaletteColorControl extends AppAutoSubControl<AppMainProto> {
 		context.setTopControlButton(button -> button.setVisible(true).setEnabled(true).setTitle(R.string.control_top_bar_button_reset), () -> {
 			if (palette.getOrientation() != OPalette.ORIENTATION_NONE) {
 				palette.setColor(new GLESUtils.Color(Color.WHITE));
+				background.setChecked(true);
 				background.setButtonColor(Color.WHITE);
+				alphaBar.setProgress(alphaBar.de_norm(palette.getColor().a));
 				context.getRenderSurface().update();
 			}
 		});
 
-		OPallViewInjector.inject(context.getActivityContext(), background);
+		OPallViewInjector.inject(context.getActivityContext(), alphaBar, background);
 
 		if (palette.getOrientation() == OPalette.ORIENTATION_NONE) {
 			new OPallAlertDialog().message(context.getActivityContext().getResources().getString(R.string.palette_pick_warn))

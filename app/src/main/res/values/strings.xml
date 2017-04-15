@@ -89,6 +89,7 @@
     <string name="min_green">Green min</string>
     <string name="min_blue">Blue min</string>
 
+    <string name="alpha">Alpha</string>
     <string name="number">Number</string>
     <string name="margin">Margin</string>
     <string name="cell_size">Cell Size</string>
