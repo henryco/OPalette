@@ -242,16 +242,18 @@ public class Utils {
 			if (cachePath.exists()) deleteRecursive(cachePath);
 			cachePath.mkdirs();
 
-			FileOutputStream stream = new FileOutputStream(cachePath + "/"+file_name); // overwrites this image every time
+			FileOutputStream stream = new FileOutputStream(cachePath + "/" + file_name);
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 			stream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+
 		File imagePath = new File(activity.getCacheDir(), "images");
 		File newFile = new File(imagePath, file_name);
 		Uri contentUri = FileProvider.getUriForFile(activity, "net.henryco.opalette.fileprovider", newFile);
+
 
 		if (contentUri != null) {
 			Intent shareIntent = new Intent();
