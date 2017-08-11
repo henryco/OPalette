@@ -44,7 +44,7 @@ public class OPalette implements OPallRenderable {
 
 	private FrameBuffer barGradientBuffer;
 	private FrameBuffer barSrcBufferW;
-	private FrameBuffer barScrBufferH;
+	private FrameBuffer barSrcBufferH;
 
 	private OPallBar backBarW;
 	private OPallBar backBarH;
@@ -98,7 +98,7 @@ public class OPalette implements OPallRenderable {
 
 		barSrcBufferW = OPallFBOCreator.FrameBuffer()
 				.createFBO(w, buffer_quantum, w, h, false).beginFBO(GLESUtils::clear);
-		barScrBufferH = OPallFBOCreator.FrameBuffer()
+		barSrcBufferH = OPallFBOCreator.FrameBuffer()
 				.createFBO(buffer_quantum, h, w, h, false).beginFBO(GLESUtils::clear);
 
 		paletteTextureW = new PaletteTexture(PaletteTexture.TYPE_HORIZONTAL, w, h);
@@ -125,77 +125,75 @@ public class OPalette implements OPallRenderable {
 		if (orientation == ORIENTATION_NONE) return;
 		if (orientation == ORIENTATION_HORIZONTAL) {
 
-			paletteTextureW.set(0, renderData);
-			paletteTextureW.set(1, barSrcBufferW.getTexture());
-			paletteTextureW.setFocusOn(1);
-
-			barGradientBuffer.beginFBO(() -> {
-				GLESUtils.clear();
-				paletteTextureW.setDimension(scrW, scrH);
-				paletteTextureW.setRangeLineCoeffs(lineCoeffs);
-				paletteTextureW.setStart(scrH - backBarW.getPosY() + backBarW.getHeight());
-				paletteTextureW.setEnd(scrH - backBarW.getPosY());
-				paletteTextureW.render(camera);
-			});
-
-			backBarW.setRelativeSize(size_pct);
-			backBarW.setRelativePosition(pos_pct);
-			backBarW.setRelativeContentSize(content_pct);
-			cellPaletterW.setMargin_pct(margin_pct);
-			cellPaletterW.setCellNumb(cell_numb);
-
-			if (isDiscrete()) {
-				cellPaletterW.generate(barGradientBuffer.getTexture(), camera);
-				result.beginFBO(() -> {
-					GLESUtils.clear();
-					backBarW.render(camera, cellPaletterW, buffer_quantum);
-				});
-			} else result.beginFBO(() -> {
-				GLESUtils.clear();
-				backBarW.render(camera, barGradientBuffer, buffer_quantum);
-			});
+			renderPalette(camera,
+					cellPaletterW,
+					backBarW,
+					barSrcBufferW.getTexture(),
+					paletteTextureW,
+					scrH - backBarW.getPosY() + backBarW.getHeight(),
+					scrH - backBarW.getPosY()
+			);
 
 		} else if (orientation == ORIENTATION_VERTICAL) {
 
-			paletteTextureH.set(0, renderData);
-			paletteTextureH.set(1, barScrBufferH.getTexture());
-			paletteTextureH.setFocusOn(1);
+			renderPalette(camera,
+					cellPaletterH,
+					backBarH,
+					barSrcBufferH.getTexture(),
+					paletteTextureH,
+					backBarH.getPosX(),
+					backBarH.getWidth() + backBarH.getPosX()
+			);
 
-
-			barGradientBuffer.beginFBO(() -> {
-				GLESUtils.clear();
-				paletteTextureH.setDimension(scrW, scrH);
-				paletteTextureH.setRangeLineCoeffs(lineCoeffs);
-				paletteTextureH.setStart(backBarH.getPosX());
-				paletteTextureH.setEnd(backBarH.getWidth() + backBarH.getPosX());
-				paletteTextureH.render(camera);
-			});
-
-			backBarH.setRelativeSize(size_pct);
-			backBarH.setRelativePosition(pos_pct);
-			backBarH.setRelativeContentSize(content_pct);
-			cellPaletterH.setMargin_pct(margin_pct);
-			cellPaletterH.setCellNumb(cell_numb);
-
-			// TODO: 09/04/17 CAMERA X TRANSLATE COMPENSATION
-			if (isDiscrete()) {
-				cellPaletterH.generate(barGradientBuffer.getTexture(), camera);
-				result.beginFBO(() -> {
-					GLESUtils.clear();
-					backBarH.render(camera, cellPaletterH, buffer_quantum);
-				});
-			} else result.beginFBO(() -> {
-				GLESUtils.clear();
-				backBarH.render(camera, barGradientBuffer.getTexture(), buffer_quantum);
-			});
 		}
 		result.render(camera);
 	}
 
+
+	private void renderPalette(Camera2D camera,
+							   CellPaletter cellPaletter,
+							   OPallBar backBar,
+							   Texture barSrc,
+							   PaletteTexture paletteTexture,
+	                           float start,
+	                           float end) {
+
+		paletteTexture.set(0, renderData);
+		paletteTexture.set(1, barSrc);
+		paletteTexture.setFocusOn(1);
+
+		barGradientBuffer.beginFBO(() -> {
+			GLESUtils.clear();
+			paletteTexture.setDimension(scrW, scrH);
+			paletteTexture.setRangeLineCoeffs(lineCoeffs);
+			paletteTexture.setStart(start);
+			paletteTexture.setEnd(end);
+			paletteTexture.render(camera);
+		});
+
+		backBar.setRelativeSize(size_pct);
+		backBar.setRelativePosition(pos_pct);
+		backBar.setRelativeContentSize(content_pct);
+		cellPaletter.setMargin_pct(margin_pct);
+		cellPaletter.setCellNumb(cell_numb);
+
+		if (isDiscrete()) {
+			cellPaletter.generate(barGradientBuffer.getTexture(), camera);
+			result.beginFBO(() -> {
+				GLESUtils.clear();
+				backBar.render(camera, cellPaletter, buffer_quantum);
+			});
+		} else result.beginFBO(() -> {
+			GLESUtils.clear();
+			backBar.render(camera, barGradientBuffer, buffer_quantum);
+		});
+	}
+
+
+
 	public FrameBuffer getResultBuffer() {
 		return orientation == ORIENTATION_NONE ? null : result;
 	}
-
 
 
 	public OPalette setRelativeSize(float size_pct) {
@@ -327,4 +325,6 @@ public class OPalette implements OPallRenderable {
 	public int getHeight() {
 		return (int) scrH;
 	}
+
+
 }
